@@ -1,0 +1,21 @@
+{
+  "name": "shanhai-qitan",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "山海奇谭 —— 回合制 RPG（M1 战斗核心原型）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "assets": "node tools/gen-assets.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "pixi.js": "^8.22.0"
+  }
+}
