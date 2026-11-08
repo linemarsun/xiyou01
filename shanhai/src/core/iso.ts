@@ -175,6 +175,8 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   city_wall_v2: { ax: 0, ay: -5 },
   city_wall_corner: { ax: 0, ay: -6 },
   city_gate_tower: { ax: 15.5, ay: -5 },
+  // 7×7 鼓楼：anchor_px [229,602] - (spriteW/2, spriteH) = (0, -4)，画布底比足迹前底顶点低 4px
+  bell_tower: { ax: 0, ay: -4 },
 };
 
 export function isoSize(item: IsoItem): { w: number; h: number } {
