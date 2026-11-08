@@ -241,24 +241,27 @@ export function gateTowerLane(item: IsoItem): Array<{ gx: number; gy: number }> 
   return out;
 }
 
-/** 鼓楼底层券门：7×7 足迹正中 2×2 格可穿行（南北、东西两条券洞交汇于中心） */
+/**
+ * 鼓楼底层券门：7×7 足迹正中 3×3 格可穿行（南北、东西两条券洞交汇于中心）。
+ * 取中间三格而非两格：中线 = gx+3.5 与足迹几何中心重合，美术券洞（净宽 54px ≈ 0.84 格）居中无偏置。
+ */
 export function bellTowerLane(item: IsoItem): Array<{ gx: number; gy: number }> {
   const { w, h } = isoSize(item);
-  const x0 = item.gx + Math.floor((w - 2) / 2);
-  const y0 = item.gy + Math.floor((h - 2) / 2);
+  const x0 = item.gx + Math.floor((w - 3) / 2);
+  const y0 = item.gy + Math.floor((h - 3) / 2);
   const out: Array<{ gx: number; gy: number }> = [];
-  for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) out.push({ gx: x0 + dx, gy: y0 + dy });
+  for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 3; dx++) out.push({ gx: x0 + dx, gy: y0 + dy });
   return out;
 }
 
-/** 鼓楼券门可走的四向通道（从中心券洞直通足迹边缘，方便角色穿楼而过） */
+/** 鼓楼券门可走的四向通道（3 格宽，从中心券洞直通足迹边缘，方便角色穿楼而过） */
 export function bellTowerPassage(item: IsoItem): Array<{ gx: number; gy: number }> {
   const { w, h } = isoSize(item);
-  const cx = item.gx + Math.floor(w / 2) - 1;
-  const cy = item.gy + Math.floor(h / 2) - 1;
+  const cx = item.gx + Math.floor((w - 3) / 2);
+  const cy = item.gy + Math.floor((h - 3) / 2);
   const out: Array<{ gx: number; gy: number }> = [];
-  for (let dx = 0; dx < w; dx++) for (let d = 0; d < 2; d++) out.push({ gx: item.gx + dx, gy: cy + d });
-  for (let dy = 0; dy < h; dy++) for (let d = 0; d < 2; d++) out.push({ gx: cx + d, gy: item.gy + dy });
+  for (let dx = 0; dx < w; dx++) for (let d = 0; d < 3; d++) out.push({ gx: item.gx + dx, gy: cy + d });
+  for (let dy = 0; dy < h; dy++) for (let d = 0; d < 3; d++) out.push({ gx: cx + d, gy: item.gy + dy });
   return out;
 }
 
