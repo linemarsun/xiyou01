@@ -375,7 +375,7 @@ export function buildCollision(layout: IsoLayout): IsoCollision {
       continue;
     }
     const lane = new Set<string>(
-      item.type === 'gate_arch'
+      item.type === 'gate_arch' || item.type === 'paifang'
         ? archLane(item).map((c) => keyOf(c.gx, c.gy))
         : item.type === 'city_gate_tower'
           ? gateTowerLane(item).map((c) => keyOf(c.gx, c.gy))
@@ -405,6 +405,110 @@ export function isoWalkable(col: IsoCollision, g: IsoGrid, x: number, y: number)
   if (gx < 0 || gy < 0 || gx >= g.cols || gy >= g.rows) return false;
   const k = keyOf(gx, gy);
   return col.ground.has(k) && !col.blocked.has(k);
+}
+
+function cellWalkable(col: IsoCollision, g: IsoGrid, gx: number, gy: number): boolean {
+  if (gx < 0 || gy < 0 || gx >= g.cols || gy >= g.rows) return false;
+  const k = keyOf(gx, gy);
+  return col.ground.has(k) && !col.blocked.has(k);
+}
+
+/** 落在障碍里/网格外的目标：环形向外找最近的可走格（点击楼顶也能落到楼边） */
+export function nearestWalkableCell(
+  col: IsoCollision, g: IsoGrid, gx: number, gy: number, maxRadius = 12,
+): { gx: number; gy: number } | null {
+  if (cellWalkable(col, g, gx, gy)) return { gx, gy };
+  for (let r = 1; r <= maxRadius; r++) {
+    let best: { gx: number; gy: number } | null = null;
+    let bestD = Infinity;
+    for (let dy = -r; dy <= r; dy++) {
+      for (let dx = -r; dx <= r; dx++) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+        const cx = gx + dx;
+        const cy = gy + dy;
+        if (!cellWalkable(col, g, cx, cy)) continue;
+        const d = dx * dx + dy * dy;
+        if (d < bestD) { bestD = d; best = { gx: cx, gy: cy }; }
+      }
+    }
+    if (best) return best;
+  }
+  return null;
+}
+
+/** 两点间的世界直线是否全程可走（每 step 像素采样一次，用于拉直 A* 折线） */
+export function isoLineWalkable(
+  col: IsoCollision, g: IsoGrid, x0: number, y0: number, x1: number, y1: number, step = 6,
+): boolean {
+  const dist = Math.hypot(x1 - x0, y1 - y0);
+  const n = Math.max(1, Math.ceil(dist / step));
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    if (!isoWalkable(col, g, x0 + (x1 - x0) * t, y0 + (y1 - y0) * t)) return false;
+  }
+  return true;
+}
+
+/**
+ * 格级 BFS 寻路（4 邻接，等权 → 最短步数）。
+ * 返回 [起点之后 … 目标] 的格序列；不可达返回 null。
+ * 4 邻接在等距投影里正好是沿街的四个对角方向，走出来的折线天然贴着街道。
+ */
+export function findIsoPath(
+  col: IsoCollision, g: IsoGrid, from: { gx: number; gy: number }, to: { gx: number; gy: number },
+): Array<{ gx: number; gy: number }> | null {
+  if (!cellWalkable(col, g, from.gx, from.gy) || !cellWalkable(col, g, to.gx, to.gy)) return null;
+  const startKey = keyOf(from.gx, from.gy);
+  const goalKey = keyOf(to.gx, to.gy);
+  if (startKey === goalKey) return [];
+
+  const parent = new Map<string, string>();
+  const seen = new Set<string>([startKey]);
+  const queue: Array<{ gx: number; gy: number }> = [from];
+  let head = 0;
+  while (head < queue.length) {
+    const cur = queue[head++];
+    for (const [nx, ny] of [
+      [cur.gx + 1, cur.gy], [cur.gx - 1, cur.gy], [cur.gx, cur.gy + 1], [cur.gx, cur.gy - 1],
+    ]) {
+      const nk = keyOf(nx, ny);
+      if (seen.has(nk) || !cellWalkable(col, g, nx, ny)) continue;
+      seen.add(nk);
+      parent.set(nk, keyOf(cur.gx, cur.gy));
+      if (nk === goalKey) {
+        const out: Array<{ gx: number; gy: number }> = [];
+        let k = nk;
+        while (k !== startKey) {
+          const [px, py] = k.split(',').map(Number);
+          out.push({ gx: px, gy: py });
+          k = parent.get(k) ?? startKey;
+        }
+        return out.reverse();
+      }
+      queue.push({ gx: nx, gy: ny });
+    }
+  }
+  return null;
+}
+
+/** 折线拉直：删除可从当前点直线走到更远点的中间格，避免逐格顿挫 */
+export function simplifyIsoPath(
+  col: IsoCollision, g: IsoGrid, cells: Array<{ gx: number; gy: number }>,
+): Array<{ gx: number; gy: number }> {
+  if (cells.length <= 2) return cells;
+  const out: Array<{ gx: number; gy: number }> = [cells[0]];
+  let i = 0;
+  while (i < cells.length - 1) {
+    let j = cells.length - 1;
+    for (; j > i + 1; j--) {
+      const a = cellToWorld(g, cells[i].gx, cells[i].gy);
+      const b = cellToWorld(g, cells[j].gx, cells[j].gy);
+      if (isoLineWalkable(col, g, a.x, a.y, b.x, b.y)) break;
+    }
+    out.push(cells[j]);
+    i = j;
+  }
+  return out;
 }
 
 /** 把一块世界矩形转成格范围（视口裁剪用） */

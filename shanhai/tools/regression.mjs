@@ -735,7 +735,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(count('city_wall_corner'), 4, '四角转角构件（美术 city_wall_corner）');
   eq(count('gate_arch') + count('city_gate_tower'), 4, '四向城门各一座（3 拱门 + 1 城门楼）');
   const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower')].map((g) => `${g.gx},${g.gy}`));
-  ok(gateSet.has('62,0'), '北门对准南北主街轴线 (62,0)');
+  ok(gateSet.has('62,4'), '北门嵌在北墙门洞、对准南北主街轴线 (62,4)');
   ok(gateSet.has('62,121') && gateSet.has('4,63') && gateSet.has('120,63'), '南（城门楼）/西/东门');
   for (const b of [...pick('house'), ...pick('house_large'), ...pick('hall')]) {
     ok(b.gx >= 7 && b.gy >= 7 && b.gx + iso.isoSize(b).w <= 121 && b.gy + iso.isoSize(b).h <= 121,
@@ -744,14 +744,15 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   // 缺图建筑不生成：不再出现无顶方盒占位（旧 shop_small 67 件已从布局移除）
   eq(count('shop_small'), 0, '缺图小档铺面不再生成（避免无顶方盒）');
 
-  // —— 中心：鼓楼制高点 + 广场 + 牌坊 ——
+  // —— 中心：鼓楼制高点 + 广场 ——
   const bell = pick('bell_tower')[0];
   ok(bell, '中心鼓楼存在');
   eq(iso.ISO_TYPES.bell_tower.w, 7, '鼓楼足迹 7 格宽（≥5 的中心建筑）');
   eq(iso.ISO_TYPES.bell_tower.h, 7, '鼓楼足迹 7 格深（≥5 的中心建筑）');
   ok(iso.ISO_TYPES.bell_tower.height > iso.ISO_TYPES.city_gate_tower.height, '鼓楼宝顶为全城最高（高于南门楼）');
   ok(iso.ISO_TYPES.bell_tower.height > iso.ISO_TYPES.house.height * 2, '鼓楼高于民居两倍以上');
-  ok(count('paifang') >= 4, `牌坊 ${count('paifang')} 座（中心四向 + 市集/庙前）`);
+  // 牌坊暂用 gate_arch 贴图别名，等专用美术（两柱一枋、无两侧墙垛）到位后换图
+  ok(count('paifang') >= 4, `牌坊 ${count('paifang')} 座（中心四向 + 庙前）`);
   ok(pick('paifang').some((p) => Math.abs(p.gx - 54) <= 20 && Math.abs(p.gy - 63) <= 12), '中心广场有牌坊');
 
   // —— 四坊密度分化 ——
@@ -877,7 +878,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(!walk(bell.gx, bell.gy), '鼓楼足迹不可走');
   ok(walk(62, 62) && walk(63, 63), '鼓楼底层券门中心 2×2 可穿行');
   ok(!walk(66, 66), '券门通道以外的鼓楼足迹仍阻挡');
-  for (const [gx, gy, name] of [[63, 1, '北门'], [63, 122, '南门'], [5, 64, '西门'], [121, 64, '东门']]) {
+  for (const [gx, gy, name] of [[63, 6, '北门'], [63, 122, '南门'], [5, 64, '西门'], [121, 64, '东门']]) {
     ok(walk(gx, gy), `${name}拱洞通道可走`);
   }
   for (const [gx, gy] of [[8, 5], [60, 6], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5]]) {

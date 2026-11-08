@@ -9,12 +9,12 @@ import {
   artUrl, foregroundImageUrl, foregroundJsonUrl, isoHouseCandidates, isoModuleCandidates, mapArtLegacyUrl, mapArtUrl, WORLD_TILE_ART,
 } from '../core/art';
 import {
-  ISO_ANCHOR_OFFSET, ISO_TYPES, buildCollision, cellAt, cellRange, cellToWorld, expandLayout, footprintPolygon, frontVertex,
-  housePieces, isGroundType, isoSize, isoWalkable, keyOf,
+  ISO_ANCHOR_OFFSET, ISO_TYPES, buildCollision, cellAt, cellRange, cellToWorld, expandLayout, findIsoPath, footprintPolygon,
+  frontVertex, housePieces, isGroundType, isoLineWalkable, isoSize, isoWalkable, keyOf, nearestWalkableCell, simplifyIsoPath,
   type IsoCollision, type IsoItem, type IsoLayout,
 } from '../core/iso';
 import { planPath, type Point } from '../core/path';
-import { WORLD_SCALE as SCALE } from './scale';
+import { CHAR_SCALE_TIER, WORLD_SCALE as SCALE } from './scale';
 
 const VIEW_W = 1440;
 const VIEW_H = 900;
@@ -23,8 +23,10 @@ const MONSTER_SPEED = 34;
 
 /**
  * 精灵缩放档位统一由 CHAR_SCALE_TIER（见 ./scale）派生：
- * 当前 0.75 档 = 单帧 96px / 实体约 84px，占 900 屏高约 9.3%。锚点仍是脚底 0.94。
+ * 当前 1.00 档 = 实体约 112px，占 900 屏高约 12.4%。锚点仍是脚底 0.94。
+ * 交互半径按同一比例同步（旧值按 0.75 档书写）。
  */
+const CHAR_RANGE = CHAR_SCALE_TIER / 0.75;
 /** 纵向偏移换算：旧数值按 48 帧书写，新帧 128 → ×(128/48)（只作用于 scale 绑定的偏移，绝对值不动） */
 const OFF = 128 / 48;
 
@@ -43,6 +45,12 @@ interface Actor {
   root: Container;
   sprite: AnimatedSprite;
   baseScale: number;
+  /** manifest 里的动画表（帧序/fps） */
+  anims?: Record<string, AnimDef>;
+  /** 已预取的帧纹理，按动画名缓存；切动画时直接复用，避免每帧重建数组 */
+  frames?: Record<string, Texture[]>;
+  /** 当前动画名；相同则不再重启动画（否则每帧 gotoAndPlay(0) 会冻在第 0 帧） */
+  animName?: string;
   // 游荡参数（怪物）
   homeX?: number;
   homeY?: number;
@@ -68,6 +76,9 @@ interface IsoUnit {
   y: number;
   z: number;
   ground: boolean;
+  /** 近似精灵高度（px）与水平半宽（px），仅用于判断是否遮挡角色 */
+  height: number;
+  halfW: number;
 }
 
 export interface WorldHooks {
@@ -419,7 +430,7 @@ export class WorldRenderer {
       const fv = frontVertex(g, blk);
       register({
         key: `g:${k}`, item: blk, type: blk.type, order: 0,
-        dx: 0, dy: 0, x: fv.x, y: fv.y, z: -1000, ground: true,
+        dx: 0, dy: 0, x: fv.x, y: fv.y, z: -1000, ground: true, height: 0, halfW: 0,
       });
     }
 
@@ -429,9 +440,12 @@ export class WorldRenderer {
     for (const item of layout.items) {
       if (isGroundType(item.type)) continue;
       const fv = frontVertex(g, item);
+      const { w, h } = isoSize(item);
       register({
         key: `p:${index}`, item, type: item.type, variant: item.variant, facing: item.facing, order: 0,
         dx: 0, dy: 0, x: fv.x, y: fv.y, z: fv.y, ground: false,
+        height: ISO_TYPES[item.type]?.height ?? 64,
+        halfW: ((w + h) * g.tileW) / 4 + 32,
       });
       index++;
     }
@@ -1040,9 +1054,15 @@ export class WorldRenderer {
 
   private buildActor(x: number, y: number, defId: string, scale: number, manifest: Manifest): Actor {
     const cm = manifest[defId];
-    const tex = (anim: string) =>
-      (cm?.anims[anim]?.frames ?? []).map((f) => Assets.get(new URL(`/assets/${f}`, location.origin).href) as Texture);
-    const idle = tex('idle');
+    const frames: Record<string, Texture[]> = {};
+    if (cm) {
+      for (const [name, def] of Object.entries(cm.anims)) {
+        frames[name] = def.frames
+          .map((f) => Assets.get(new URL(`/assets/${f}`, location.origin).href) as Texture | undefined)
+          .filter((t): t is Texture => !!t);
+      }
+    }
+    const idle = frames.idle ?? [];
     const sprite = new AnimatedSprite(idle.length > 0 ? idle : [Texture.WHITE]);
     sprite.anchor.set(0.5, 0.94);
     sprite.scale.set(scale);
@@ -1053,29 +1073,86 @@ export class WorldRenderer {
     root.x = x;
     root.y = y;
     root.zIndex = y;
+    // 接触阴影随角色显示档位缩放（基准 0.75 档 = 30×9）
+    const sh = scale / 0.75;
     const shadow = new Graphics();
-    shadow.ellipse(0, -2, 30, 9).fill({ color: 0x0a0a10, alpha: 0.28 });
+    shadow.ellipse(0, -2, 30 * sh, 9 * sh).fill({ color: 0x0a0a10, alpha: 0.28 });
     root.addChild(shadow, sprite);
-    const actor: Actor = { root, sprite, baseScale: scale };
-    // 记录动画表供走路切换
-    (actor as Actor & { anims?: Record<string, { fps: number }> }).anims = cm?.anims;
+    const actor: Actor = {
+      root, sprite, baseScale: scale, anims: cm?.anims, frames,
+      animName: idle.length > 0 ? 'idle' : undefined,
+    };
     return actor;
   }
 
   private playAnim(a: Actor, name: 'idle' | 'walk'): void {
-    const anims = (a as Actor & { anims?: Record<string, { frames: string[]; fps: number }> }).anims;
-    const def = anims?.[name];
-    if (!def) return;
-    const frames = def.frames.map((f) => Assets.get(new URL(`/assets/${f}`, location.origin).href) as Texture);
-    if (frames.length === 0 || a.sprite.textures === frames) return;
+    if (a.animName === name) return;
+    const def = a.anims?.[name];
+    const frames = a.frames?.[name];
+    if (!def || !frames || frames.length === 0) return;
     a.sprite.textures = frames;
     a.sprite.animationSpeed = def.fps / 60;
     a.sprite.loop = true;
     a.sprite.gotoAndPlay(0);
+    a.animName = name;
   }
 
-  /** 规划到 (x,y) 的路径并立即开始走；当前策略为单段直线 + 可行走区钳制 */
+  /**
+   * 遮挡处理：角色走到高构件（房屋/树/城门/鼓楼）后侧时，把该构件平滑淡出，
+   * 让走在街面上的人物不被屋顶或树冠完全盖住；离开后恢复不透明。
+   */
+  private updateOccluders(dt: number): void {
+    const p = this.player?.root;
+    if (!p) return;
+    const step = Math.min(1, dt * 8);
+    for (const [key, node] of this.isoVisible) {
+      const unit = this.isoUnits.get(key);
+      if (!unit || unit.ground) continue;
+      const covered = unit.height > 120
+        && p.y < unit.z && p.y > unit.z - unit.height
+        && Math.abs(p.x - unit.x) < unit.halfW;
+      const target = covered ? 0.4 : 1;
+      if (Math.abs(node.alpha - target) < 0.01) node.alpha = target;
+      else node.alpha += (target - node.alpha) * step;
+    }
+  }
+
+  /**
+   * 等距地图：格级 BFS 绕开建筑/水/树，沿街与券门通道前进，折线再拉直；
+   * 旧单屏地图：仍用单段直线 + 边界钳制。
+   */
   private setPathTo(x: number, y: number): void {
+    const g = this.isoLayout?.grid;
+    const col = this.isoCollision;
+    if (g && col) {
+      const rawFrom = cellAt(g, this.player.root.x, this.player.root.y);
+      const rawTo = cellAt(g, x, y);
+      // 起点若因贴边/旧存档落在障碍格里，先就近找一个可走格，保证仍能走出去
+      const fromCell = nearestWalkableCell(col, g, rawFrom.gx, rawFrom.gy) ?? rawFrom;
+      const toCell = nearestWalkableCell(col, g, rawTo.gx, rawTo.gy);
+      if (toCell) {
+        const cells = findIsoPath(col, g, fromCell, toCell);
+        if (cells) {
+          const pts: Point[] = simplifyIsoPath(col, g, cells)
+            .map((c) => cellToWorld(g, c.gx, c.gy));
+          const targetWalkable = isoWalkable(col, g, x, y);
+          if (pts.length === 0) {
+            // 目标与脚下同格：能走就直接走到点击的精确位置，点在障碍上则原地停下
+            this.path = [];
+            this.targetX = targetWalkable ? x : this.player.root.x;
+            this.targetY = targetWalkable ? y : this.player.root.y;
+            return;
+          }
+          // 点击点本身可走时，最后一个 waypoint 落到精确落点，避免总停在格中心
+          const last = pts[pts.length - 1];
+          if (targetWalkable && isoLineWalkable(col, g, last.x, last.y, x, y)) pts.push({ x, y });
+          this.path = pts;
+          const first = this.path.shift();
+          if (first) { this.targetX = first.x; this.targetY = first.y; }
+          return;
+        }
+      }
+    }
     const plan = planPath(this.getPlayerPos(), { x, y }, this.map.bounds);
     this.path = plan.waypoints.slice();
     const first = this.path.shift();
@@ -1102,16 +1179,16 @@ export class WorldRenderer {
 
     // 点在路牌/怪物/NPC 附近时吸附走到目标点（点路牌=走进出口）
     for (const ex of this.map.exits) {
-      if (Math.hypot(ex.x - wx, ex.y - wy) < 110) { this.setPathTo(ex.x, ex.y); return; }
+      if (Math.hypot(ex.x - wx, ex.y - wy) < 110 * CHAR_RANGE) { this.setPathTo(ex.x, ex.y); return; }
     }
-    if (this.npc && Math.hypot(this.npc.root.x - wx, this.npc.root.y - wy) < 90) {
+    if (this.npc && Math.hypot(this.npc.root.x - wx, this.npc.root.y - wy) < 90 * CHAR_RANGE) {
       this.setPathTo(this.npc.root.x, this.npc.root.y); return;
     }
-    if (this.tavern && Math.hypot(this.tavern.root.x - wx, this.tavern.root.y - wy) < 90) {
+    if (this.tavern && Math.hypot(this.tavern.root.x - wx, this.tavern.root.y - wy) < 90 * CHAR_RANGE) {
       this.setPathTo(this.tavern.root.x, this.tavern.root.y); return;
     }
     for (const [, m] of this.monsters) {
-      if (Math.hypot(m.root.x - wx, m.root.y - wy) < 90) {
+      if (Math.hypot(m.root.x - wx, m.root.y - wy) < 90 * CHAR_RANGE) {
         this.setPathTo(m.root.x, m.root.y); return;
       }
     }
@@ -1189,15 +1266,20 @@ export class WorldRenderer {
         if (md < 4) {
           m.targetX = undefined;
           m.waitUntil = this.elapsed + 800 + Math.random() * 2200;
+          this.playAnim(m, 'idle');
         } else {
           const step = Math.min(md, MONSTER_SPEED * dt);
           m.root.x += (mdx / md) * step;
           m.root.y += (mdy / md) * step;
+          this.playAnim(m, 'walk');
           if (Math.abs(mdx) > 2) m.sprite.scale.x = Math.abs(m.baseScale) * (mdx < 0 ? -1 : 1);
         }
+      } else {
+        this.playAnim(m, 'idle');
       }
       m.root.zIndex = m.root.y;
     }
+    if (this.isoLayout) this.updateOccluders(dt);
     this.world.sortableChildren = true;
 
     // —— 摄像机跟随（钳制在地图内；俯瞰调试时锁定到 viewFocus） ——
@@ -1217,7 +1299,7 @@ export class WorldRenderer {
     // —— 触发检测 ——
     const pr = this.player.root;
     for (const [key, m] of this.monsters) {
-      if (Math.hypot(m.root.x - pr.x, m.root.y - pr.y) < 75) {
+      if (Math.hypot(m.root.x - pr.x, m.root.y - pr.y) < 75 * CHAR_RANGE) {
         this.engaged = true;
         this.inputEnabled = false;
         const groupKey = key.split(':').slice(0, 2).join(':');
@@ -1226,20 +1308,20 @@ export class WorldRenderer {
         return;
       }
     }
-    if (this.npc && !this.npcPrompted && Math.hypot(this.npc.root.x - pr.x, this.npc.root.y - pr.y) < 80) {
+    if (this.npc && !this.npcPrompted && Math.hypot(this.npc.root.x - pr.x, this.npc.root.y - pr.y) < 80 * CHAR_RANGE) {
       this.npcPrompted = true;
       this.targetX = pr.x;
       this.targetY = pr.y;
       this.hooks.onNpc();
-    } else if (this.npc && this.npcPrompted && Math.hypot(this.npc.root.x - pr.x, this.npc.root.y - pr.y) > 120) {
+    } else if (this.npc && this.npcPrompted && Math.hypot(this.npc.root.x - pr.x, this.npc.root.y - pr.y) > 120 * CHAR_RANGE) {
       this.npcPrompted = false;
     }
-    if (this.tavern && !this.tavernPrompted && Math.hypot(this.tavern.root.x - pr.x, this.tavern.root.y - pr.y) < 80) {
+    if (this.tavern && !this.tavernPrompted && Math.hypot(this.tavern.root.x - pr.x, this.tavern.root.y - pr.y) < 80 * CHAR_RANGE) {
       this.tavernPrompted = true;
       this.targetX = pr.x;
       this.targetY = pr.y;
       this.hooks.onTavern();
-    } else if (this.tavern && this.tavernPrompted && Math.hypot(this.tavern.root.x - pr.x, this.tavern.root.y - pr.y) > 120) {
+    } else if (this.tavern && this.tavernPrompted && Math.hypot(this.tavern.root.x - pr.x, this.tavern.root.y - pr.y) > 120 * CHAR_RANGE) {
       this.tavernPrompted = false;
     }
     for (const ex of this.map.exits) {
@@ -1280,6 +1362,7 @@ export class WorldRenderer {
       cols: number; rows: number; tileW: number; tileH: number;
       groundCells: number; blockedCells: number; units: number; visible: number; visibleSprites: number; modules: number;
       playerCell: { gx: number; gy: number }; playerZ: number; walkable: boolean;
+      playerAnim: { name: string; frame: number; frames: number; speed: number };
     } | null;
   } {
     const g = this.isoLayout?.grid;
@@ -1303,6 +1386,12 @@ export class WorldRenderer {
         playerCell: cellAt(g, this.player.root.x, this.player.root.y),
         playerZ: this.player.root.zIndex,
         walkable: this.canWalk(this.player.root.x, this.player.root.y),
+        playerAnim: {
+          name: this.player.animName ?? '',
+          frame: this.player.sprite.currentFrame,
+          frames: this.player.sprite.textures.length,
+          speed: this.player.sprite.animationSpeed,
+        },
       } : null,
     };
   }
@@ -1344,6 +1433,10 @@ export class WorldRenderer {
   debugWalkFps(durationMs = 10000): Promise<{
     durationMs: number; avg: number; min: number; max: number; samples: number;
     visibleSprites: number; units: number;
+    /** 采样到的玩家动画名与帧号（验证 walk 序列是否真的在推进） */
+    animSamples: Array<{ name: string; frame: number }>;
+    /** 走完后的实际落点与剩余 waypoint（验证没有被建筑半路卡住） */
+    end: { x: number; y: number; gx: number; gy: number; pathRemaining: number };
   }> {
     const g = this.isoLayout?.grid;
     if (!g) return Promise.reject(new Error('非等距地图，无法走动测帧率'));
@@ -1354,11 +1447,13 @@ export class WorldRenderer {
     this.moveTo(b.x, b.y);
     const fps: number[] = [];
     const vis: number[] = [];
+    const animSamples: Array<{ name: string; frame: number }> = [];
     const start = performance.now();
     return new Promise((resolve) => {
       const timer = window.setInterval(() => {
         fps.push(this.app.ticker.FPS);
         vis.push(this.isoVisible.size + this.groundBatches.length);
+        animSamples.push({ name: this.player.animName ?? '', frame: this.player.sprite.currentFrame });
         if (performance.now() - start >= durationMs) {
           clearInterval(timer);
           const avg = fps.reduce((s, v) => s + v, 0) / Math.max(1, fps.length);
@@ -1370,6 +1465,12 @@ export class WorldRenderer {
             samples: fps.length,
             visibleSprites: Math.round(vis.reduce((s, v) => s + v, 0) / Math.max(1, vis.length)),
             units: this.isoUnits.size,
+            animSamples,
+            end: {
+              x: Math.round(this.player.root.x), y: Math.round(this.player.root.y),
+              ...cellAt(g, this.player.root.x, this.player.root.y),
+              pathRemaining: this.path.length,
+            },
           });
         }
       }, 250);
