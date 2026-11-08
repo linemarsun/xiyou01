@@ -1,0 +1,32 @@
+{
+ "name": "tree_pine",
+ "footprint": [
+  1,
+  1
+ ],
+ "height_px": 186,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "facing": "SW",
+ "sprite_size": [
+  70,
+  217
+ ],
+ "sprite_h_px": 197,
+ "ratio_to_char": 2.35,
+ "margins_px": [
+  2,
+  2,
+  1,
+  18
+ ],
+ "source": "text_to_image (green screen #00FF00) + chroma key/despill + scale + outline",
+ "outline_px": 2.5
+}

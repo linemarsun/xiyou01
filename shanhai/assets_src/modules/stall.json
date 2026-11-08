@@ -1,0 +1,30 @@
+{
+ "name": "stall",
+ "footprint": [
+  2,
+  2
+ ],
+ "height_px": 108,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "facing": "SW",
+ "sprite_size": [
+  154,
+  188
+ ],
+ "sprite_h_px": 183,
+ "ratio_to_char": 2.18,
+ "margins_px": [
+  1,
+  2,
+  2,
+  3
+ ]
+}

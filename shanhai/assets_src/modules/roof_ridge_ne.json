@@ -1,0 +1,44 @@
+{
+ "name": "roof_ridge",
+ "facing": "NE",
+ "footprint": [
+  4,
+  1
+ ],
+ "height_px": 210,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  4,
+  1
+ ],
+ "anchor_px": [
+  124,
+  91
+ ],
+ "anchor_note": "anchor_cell=足迹前底顶点（格）；anchor_px=sprite 内像素坐标",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": true,
+ "sprite_size": [
+  152,
+  97
+ ],
+ "sprite_h_px": 93,
+ "ratio_to_char": 1.11,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "正脊（NE 视角同源）",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null
+}

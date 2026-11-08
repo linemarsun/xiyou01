@@ -1,0 +1,44 @@
+{
+ "name": "tree_leaf",
+ "facing": "ALL",
+ "footprint": [
+  1,
+  1
+ ],
+ "height_px": 180,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  0,
+  1
+ ],
+ "anchor_px": [
+  41,
+  195
+ ],
+ "anchor_note": "1×1 足迹前底顶点；树干落在格心（anchor_px 比树根低 16px）",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "sprite_size": [
+  77,
+  179
+ ],
+ "sprite_h_px": 177,
+ "ratio_to_char": 2.11,
+ "margins_px": [
+  2,
+  2,
+  2,
+  0
+ ],
+ "source": "阔叶树：层叠叶团 + 顶光亮棱 + 暗描边，冠幅 66px / 总高 180px",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null
+}

@@ -1,0 +1,110 @@
+{
+ "name": "city_gate_tower",
+ "facing": "SW",
+ "footprint": [
+  4,
+  3
+ ],
+ "footprint_w": 4,
+ "footprint_h": 3,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  4,
+  3
+ ],
+ "anchor_px": [
+  128,
+  502
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  224,
+  508
+ ],
+ "sprite_h_px": 504,
+ "ratio_to_char": 6.0,
+ "margins_px": [
+  0,
+  2,
+  0,
+  2
+ ],
+ "source": "城门楼 4×3：条石基座 0-30 + 城台（墩台）30-238 + 券门洞（贯通，半宽 0.92 格、券脚 z=74、顶 z=104）+ 台面女墙 238-256 + 城楼下层 238-300（重檐第一层腰檐）+ 城楼上层 332-366 + 上层两坡顶 366-406",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": false,
+ "derive_op": "draw(real_geometry)",
+ "derived_from": null,
+ "tileable": false,
+ "attach": {
+  "axis": "u",
+  "span_cells": 4,
+  "straddle_cells": [
+   -1,
+   2
+  ],
+  "note": "塔足迹跨墙：城台 1 格压在墙身上、2 格向城外挑出；摆位时塔 v 前后沿 = 墙体外沿 +2 格，两侧墙段直接贴塔基"
+ },
+ "elevation": {
+  "base_z": 0,
+  "podium_top_z": 238,
+  "parapet_z": 256,
+  "eave_z": 300,
+  "ridge_z": 406,
+  "eave2_z": 366,
+  "ridge1_z": 332
+ },
+ "elevation_note": "城台顶 238（高出城墙垛口 14）；下层檐口 300 / 腰檐脊 332；上层檐口 366 / 正脊 406（全城最高，约为民居脊 210 的 1.93 倍）",
+ "arch": {
+  "half_width_cells": 0.92,
+  "spring_z": 74,
+  "top_z": 104,
+  "passable": true,
+  "clear_width_px": 59,
+  "clear_height_px": 104
+ },
+ "parts": [
+  "stone_base",
+  "podium",
+  "coping",
+  "arch",
+  "plaque",
+  "podium_parapet",
+  "lower_storey",
+  "lower_eave",
+  "upper_storey",
+  "upper_roof",
+  "ridge"
+ ],
+ "stack_order": [
+  "base",
+  "podium",
+  "coping",
+  "arch",
+  "plaque",
+  "lower_storey",
+  "lower_eave",
+  "upper_storey",
+  "upper_roof",
+  "parapet_side",
+  "parapet_front"
+ ],
+ "end_faces": {
+  "u=u0": "bleed 0.12 → 裁回（端头不描边）",
+  "u=u1": "bleed 0.12 → 裁回（端头不描边）"
+ },
+ "seams": {
+  "planes": [
+   "u"
+  ],
+  "note": "城台/基座/压顶沿 u 出血 0.12 格后裁回名义范围：与直墙拼接处无描边竖线，只剩结构分缝；进深方向（v）仍保留完整轮廓"
+ },
+ "detail_tiers": 4
+}

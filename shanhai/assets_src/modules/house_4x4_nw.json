@@ -1,0 +1,86 @@
+{
+ "name": "house_4x4_nw",
+ "facing": "NW",
+ "footprint": [
+  4,
+  4
+ ],
+ "footprint_w": 4,
+ "footprint_h": 4,
+ "elevation": {
+  "wall_h": 170,
+  "eave_z": 170,
+  "ridge_z": 210,
+  "overhang_px": 4.3
+ },
+ "height_px": 210,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  4,
+  4
+ ],
+ "anchor_px": [
+  137,
+  325
+ ],
+ "anchor_note": "足迹前底顶点 p(5,5)；屋檐与墙顶同标高（eave_z=wall_h=170），落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "sprite_size": [
+  273,
+  327
+ ],
+ "sprite_h_px": 323,
+ "ratio_to_char": 3.85,
+ "margins_px": [
+  4,
+  2,
+  0,
+  2
+ ],
+ "parts": [
+  "wall_wood_sw",
+  "wall_wood_se",
+  "roof_slope_nw",
+  "roof_slope_se",
+  "roof_ridge_se",
+  "roof_gable_sw",
+  "roof_gable_sw@v=1(平移 128,-64)"
+ ],
+ "stack_order": [
+  "wall",
+  "far_gable(v=1)",
+  "back_slope(NW)",
+  "near_gable(v=5)",
+  "lit_slope(SE)",
+  "ridge(v)"
+ ],
+ "ridge_axis": "v",
+ "ridge_line": "v∈[1,5] u=3 z=210",
+ "front_face": "背面（门在远侧墙，镜头不可见；两面均为背墙/侧墙）",
+ "end_faces": {
+  "v=1": "far_gable_sw@平移",
+  "v=5": "near_gable_sw"
+ },
+ "closure_note": "两端山墙底边贴 z=170、脊尖 z=210，与两坡端头齐平；背坡独立成图并压住远侧檐口，u/v 方向端面均由山墙封死，不靠水平镜像",
+ "source": "4×4 整屋：墙身 sw+se + 两端山墙 + 背坡 + 受光坡 + 单条正脊，按朝向重算",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "compose(real_geometry) + mirror_parts",
+ "derived_from": null,
+ "brightness_note": "镜像件均无 brightness_shift（原样镜像）；四朝向共用同一套墙面亮度，明暗差只由受光坡/背坡两件承担，太阳方位不随房屋朝向改变",
+ "mirror_parts": {
+  "roof_slope_se": "mirror_h(roof_slope_sw)",
+  "roof_slope_nw": "mirror_h(roof_slope_ne)",
+  "roof_ridge_se": "mirror_h(roof_ridge_sw)",
+  "roof_gable_sw": "mirror_h(roof_gable_se)"
+ },
+ "derive_note": "体块按真实几何重算（脊沿 v、两端山墙落在 v=1/v=5、右墙门脸贴 u=5），只复用既有 mirror_h 屋面件，不是把整张 sw 精灵水平翻转；锚点/尺寸与 sw 用时同一窗口",
+ "front_face_hidden": true
+}

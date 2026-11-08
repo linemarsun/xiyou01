@@ -1,0 +1,30 @@
+{
+ "name": "lantern_post",
+ "footprint": [
+  1,
+  1
+ ],
+ "height_px": 150,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "facing": "SW",
+ "sprite_size": [
+  55,
+  171
+ ],
+ "sprite_h_px": 159,
+ "ratio_to_char": 1.89,
+ "margins_px": [
+  1,
+  2,
+  17,
+  10
+ ]
+}

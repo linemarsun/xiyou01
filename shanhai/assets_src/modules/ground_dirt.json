@@ -1,0 +1,48 @@
+{
+ "name": "ground_dirt",
+ "facing": "ALL",
+ "footprint": [
+  1,
+  1
+ ],
+ "height_px": 0,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  1,
+  1
+ ],
+ "anchor_px": [
+  32,
+  31
+ ],
+ "anchor_note": "1×1 地块菱形前底顶点",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": {
+  "u": true,
+  "v": true,
+  "seam": "periodic"
+ },
+ "sprite_size": [
+  64,
+  32
+ ],
+ "sprite_h_px": 32,
+ "ratio_to_char": 0,
+ "margins_px": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "source": "土路：踩实土面 + 碎石亮棱 + 草根，96×96 严格周期",
+ "outline_px": 0,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null
+}

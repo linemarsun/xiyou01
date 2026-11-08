@@ -1,0 +1,81 @@
+{
+ "name": "house_4x4_ne_lattice",
+ "facing": "NE",
+ "footprint": [
+  4,
+  4
+ ],
+ "footprint_w": 4,
+ "footprint_h": 4,
+ "elevation": {
+  "wall_h": 170,
+  "eave_z": 170,
+  "ridge_z": 210,
+  "overhang_px": 4.3
+ },
+ "height_px": 210,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  4,
+  4
+ ],
+ "anchor_px": [
+  137,
+  325
+ ],
+ "anchor_note": "足迹前底顶点 p(5,5)；屋檐与墙顶同标高（eave_z=wall_h=170），落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "sprite_size": [
+  273,
+  327
+ ],
+ "sprite_h_px": 323,
+ "ratio_to_char": 3.85,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "parts": [
+  "wall_wood_sw",
+  "wall_wood_se",
+  "roof_slope_ne",
+  "roof_slope_sw",
+  "roof_ridge_sw",
+  "roof_gable_se",
+  "roof_gable_se@u=1(平移 -128,-64)"
+ ],
+ "stack_order": [
+  "wall",
+  "far_gable(u=1)",
+  "back_slope(NE)",
+  "near_gable(u=5)",
+  "lit_slope(SW)",
+  "ridge(u)"
+ ],
+ "ridge_axis": "u",
+ "ridge_line": "u∈[1,5] v=3 z=210",
+ "front_face": "背面（门在远侧墙，镜头不可见；两面均为背墙/侧墙）",
+ "end_faces": {
+  "u=1": "far_gable_se@平移",
+  "u=5": "near_gable_se"
+ },
+ "closure_note": "两端山墙底边贴 z=170、脊尖 z=210，与两坡端头齐平；背坡独立成图并压住远侧檐口，u/v 方向端面均由山墙封死，不靠水平镜像",
+ "source": "朝向 NE 的门脸在背面（镜头不可见），此件回退为基础屋身",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "compose(base_body)",
+ "derived_from": null,
+ "variant": "lattice",
+ "fallback": true,
+ "fallback_parts": "house_4x4_ne",
+ "fallback_reason": "前脸墙在远侧（门朝 NE），镜头看不到门脸，变体无视觉差异"
+}
