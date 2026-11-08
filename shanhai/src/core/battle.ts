@@ -20,6 +20,12 @@ import type {
 } from './types';
 import { ELEMENT_NAMES, resistKeyOf } from './types';
 
+/** 可直接指定规格的己方单位（出战召唤兽 / 雇佣同伴） */
+export interface AllySpec {
+  defId: string; name: string; emoji: string;
+  stats: UnitStats; resists: Resists; skillIds: string[];
+}
+
 export interface BattleOptions {
   encounterId: string; // ENCOUNTERS 的 id 或 'random'；世界模式传 'custom'
   classId: string;
@@ -34,12 +40,16 @@ export interface BattleOptions {
   sceneId?: string;
   /** 初始道具数量（默认各 3；世界模式传背包存量） */
   startItems?: { heal: number; mana: number };
-  /** 主角装备加成（世界模式由已穿装备汇总） */
+  /** 主角装备加成（世界模式由已穿装备汇总，只作用于主角） */
   playerBonus?: Partial<StatBonus>;
+  /** 出战召唤兽装备加成（只作用于宠物） */
+  petBonus?: Partial<StatBonus>;
   /** 师门法术等级（缺省按 1 级） */
   skillLevels?: Record<string, number>;
   /** 宠物个体规格（世界模式由召唤兽实例计算；不传则按 petId 查初始宠物表） */
-  petUnit?: { defId: string; name: string; emoji: string; stats: UnitStats; resists: Resists; skillIds: string[] };
+  petUnit?: AllySpec;
+  /** 雇佣同伴（世界模式酒馆系统；进入人物排，由玩家统一指挥） */
+  companions?: AllySpec[];
 }
 
 const SUFFIX = ['甲', '乙', '丙', '丁', '戊'];
@@ -108,7 +118,20 @@ export class Battle {
       const p = petById(opts.petId ?? 'linghu');
       return { defId: p.id, name: p.name, emoji: p.emoji, stats: p.stats, resists: p.resists, skillIds: p.skillIds };
     })();
-    this.addUnit(petSpec.defId, petSpec.name, petSpec.emoji, 'ally', 'pet', petSpec.stats, petSpec.resists, petSpec.skillIds);
+    const petB = opts.petBonus ?? {};
+    const petStats: UnitStats = {
+      hp: petSpec.stats.hp + (petB.hp ?? 0),
+      mp: petSpec.stats.mp + (petB.mp ?? 0),
+      atk: petSpec.stats.atk + (petB.atk ?? 0),
+      def: petSpec.stats.def + (petB.def ?? 0),
+      mag: petSpec.stats.mag + (petB.mag ?? 0),
+      spd: petSpec.stats.spd + (petB.spd ?? 0),
+    };
+    this.addUnit(petSpec.defId, petSpec.name, petSpec.emoji, 'ally', 'pet', petStats, petSpec.resists, petSpec.skillIds);
+
+    for (const c of opts.companions ?? []) {
+      this.addUnit(c.defId, c.name, c.emoji, 'ally', 'companion', c.stats, c.resists, c.skillIds);
+    }
 
     const dupCount = new Map<string, number>();
     for (const mid of members) {
@@ -277,7 +300,7 @@ export class Battle {
       case 'catch': {
         // 只有玩家方可以收服野怪；头目（王）不可收服
         const target = this.resolveTarget(actor, effective.targetId, 'foe');
-        if (!target || actor.side !== 'ally' || target.tag !== 'monster') break;
+        if (!target || actor.tag !== 'player' || target.tag !== 'monster') break;
         if (target.defId === 'shanxiaowang') {
           events.push({ t: 'catchFail', targetId: target.id, chance: 0 });
           break;

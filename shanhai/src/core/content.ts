@@ -28,7 +28,7 @@ const sk = (
 ): Skill => ({ id, name, desc, kind, target, element: 'physical', mpCost, ...extra });
 
 export const SKILLS: Record<string, Skill> = {
-  // —— 缉妖司（人族 · 武技 + 三控：混乱/封印/昏睡，对应大话人族法术体系） ——
+  // —— 青崖剑宗（人族 · 武技 + 三控：混乱/封印/昏睡，对应大话人族法术体系） ——
   jy_zhan: sk('jy_zhan', '缚妖斩', '锁链刀法（威力随法术等级提升）。', 'physical', 'enemy', 15, { power: 1.55 }),
   jy_ding: sk('jy_ding', '定魂符', '封印系：使敌人无法行动（命中/回合随等级提升）。', 'status', 'enemy', 24,
     { status: { kind: 'seal', baseHit: 72, rounds: 2 } }),
@@ -67,6 +67,14 @@ export const SKILLS: Record<string, Skill> = {
   lei_luo: sk('lei_luo', '落雷', '雷系单体法术，威力 128。', 'magic', 'enemy', 24, { element: 'thunder', power: 128 }),
   lei_feng: sk('lei_feng', '疾风突', '风系群体法术，打击所有敌人，威力 66。', 'magic', 'enemyAll', 30, { element: 'wind', power: 66 }),
 
+  // —— 炼妖可领悟的通用召唤兽技能（模块 3） ——
+  pt_xue: sk('pt_xue', '噬血爪', '撕咬并汲取气血，造成 135% 攻击力的物理伤害并回复其中 35%。', 'physical', 'enemy', 18,
+    { power: 1.35, drain: 0.35 }),
+  pt_dun: sk('pt_dun', '玄岩甲', '凝出岩甲，2 回合内受到的伤害降低 35%。', 'buff', 'self', 16,
+    { buff: { kind: 'defUp', percent: 35, rounds: 2 } }),
+  pt_lei: sk('pt_lei', '引雷诀', '雷系单体法术，威力 105。', 'magic', 'enemy', 22,
+    { element: 'thunder', power: 105 }),
+
   // —— 怪物 ——
   m_yao: sk('m_yao', '撕咬', '野性撕咬，造成 125% 攻击力的物理伤害。', 'physical', 'enemy', 0, { power: 1.25 }),
   m_xiong: sk('m_xiong', '熊掌重击', '沉重熊掌，造成 160% 攻击力的物理伤害。', 'physical', 'enemy', 0, { power: 1.6 }),
@@ -90,29 +98,29 @@ export const ITEMS: Record<'heal' | 'mana', ItemDef> = {
 
 export const CLASSES: ClassDef[] = [
   {
-    id: 'xiake', name: '侠客', race: '人族', sect: '缉妖司', emoji: '⚔️',
-    desc: '官府缉妖司的刀客，一手缚妖刀法、一手朱符咒术，封得住身、乱得了心。',
+    id: 'xiake', name: '云岚', race: '人族', sect: '青崖剑宗', emoji: '⚔️',
+    desc: '云京剑府出身的人族剑客，一柄青锋、一道朱符，封得住身、乱得了心。',
     stats: { hp: 620, mp: 150, atk: 96, def: 62, mag: 30, spd: 55 },
     resists: r(30, 30, 28, 28, 20, 10, 10, 10, 10),
     skillIds: ['jy_zhan', 'jy_ding', 'jy_luan', 'jy_mi'],
   },
   {
-    id: 'lingguan', name: '灵官', race: '仙族', sect: '紫霄宫', emoji: '🔮',
-    desc: '紫霄宫座下的行法方士，风火雷水四系仙法样样精通，身板脆但爆发惊人。',
+    id: 'lingguan', name: '霜华', race: '仙族', sect: '琼霄仙府', emoji: '🔮',
+    desc: '琼霄仙府座下的行法仙侍，风火雷水四系仙法样样精通，身板清脆却爆发惊人。',
     stats: { hp: 470, mp: 300, atk: 42, def: 42, mag: 108, spd: 50 },
     resists: r(35, 35, 25, 25, 25, 15, 15, 15, 15),
     skillIds: ['zx_huo', 'zx_lei', 'zx_bing', 'zx_feng'],
   },
   {
-    id: 'moshi', name: '魔师', race: '魔族', sect: '血狼堡', emoji: '👹',
-    desc: '血狼堡的北荒魔战士，血厚抗揍，嚎啸增威之余更能摄血还身、越战越勇。',
+    id: 'moshi', name: '玄烬', race: '魔族', sect: '玄炎魔窟', emoji: '👹',
+    desc: '玄炎魔窟走出的北荒魔战士，墨刀厚重，嚎啸增威之余更能摄血还身、越战越勇。',
     stats: { hp: 620, mp: 170, atk: 88, def: 58, mag: 55, spd: 46 },
     resists: r(45, 30, 22, 22, 30, 12, 12, 12, 12),
     skillIds: ['xl_hou', 'xl_chui', 'xl_xue'],
   },
   {
-    id: 'wuzhu', name: '巫祝', race: '鬼族', sect: '酆都祠', emoji: '💀',
-    desc: '酆都祠里通幽冥的祭祝，勾魂废术、三尸蚀骨，让敌人求生不得、求法不能。',
+    id: 'wuzhu', name: '冥汐', race: '幽冥', sect: '忘川幽祠', emoji: '💀',
+    desc: '忘川幽祠里提青纸灯的引魂祭祝，勾魂废术、三尸蚀骨，让敌人求生不得、求法不能。',
     stats: { hp: 550, mp: 250, atk: 55, def: 50, mag: 98, spd: 52 },
     resists: r(30, 32, 26, 40, 40, 12, 12, 12, 12),
     skillIds: ['fd_ling', 'fd_gu', 'fd_huo'],
@@ -123,22 +131,22 @@ export const CLASSES: ClassDef[] = [
 
 export const PETS: PetDef[] = [
   {
-    id: 'linghu', name: '灵狐', emoji: '🦊',
-    desc: '机敏的小狐狸，出手奇快，会撒催眠粉让敌人昏睡。',
+    id: 'linghu', name: '白泽幼兽', emoji: '🦊',
+    desc: '月白淡青祥云纹的白泽幼兽，通灵敏慧，一缕迷粉便能令敌人昏睡。',
     stats: { hp: 380, mp: 160, atk: 55, def: 34, mag: 78, spd: 72 },
     resists: r(15, 15, 10, 10, 10, 5, 5, 5, 5),
     skillIds: ['cm_mian', 'cm_hu'],
   },
   {
-    id: 'yanjia', name: '岩甲兽', emoji: '🐗',
-    desc: '披着岩甲的莽兽，皮糙肉厚，是顶在前排的肉盾。',
+    id: 'yanjia', name: '赤焰灵狻', emoji: '🐗',
+    desc: '朱红赭金火焰鬃毛的灵狻，披岩甲般厚实，是顶在前排的肉盾。',
     stats: { hp: 660, mp: 110, atk: 74, def: 76, mag: 20, spd: 34 },
     resists: r(25, 20, 15, 15, 30, 8, 8, 8, 8),
     skillIds: ['yan_han', 'yan_bi'],
   },
   {
-    id: 'leisun', name: '雷隼', emoji: '🦅',
-    desc: '振翅带雷声的猛禽，速度快，雷击与风刃兼备。',
+    id: 'leisun', name: '青冥雷鸢', emoji: '🦅',
+    desc: '振翅带雷声的青冥雷鸢，速度极快，雷击与风刃兼备。',
     stats: { hp: 360, mp: 170, atk: 62, def: 32, mag: 86, spd: 80 },
     resists: r(12, 15, 10, 10, 5, 10, 10, 10, 10),
     skillIds: ['lei_luo', 'lei_feng'],
@@ -149,37 +157,37 @@ export const PETS: PetDef[] = [
 
 export const MONSTERS: Record<string, MonsterDef> = {
   yelang: {
-    id: 'yelang', name: '野狼', emoji: '🐺',
+    id: 'yelang', name: '青崖苍狼', emoji: '🐺',
     stats: { hp: 230, mp: 50, atk: 52, def: 30, mag: 20, spd: 66 },
     resists: r(10, 10, 8, 8, 20, 8, 8, 8, 8),
     skillIds: ['m_yao'],
   },
   heixiong: {
-    id: 'heixiong', name: '黑熊精', emoji: '🐻',
+    id: 'heixiong', name: '玄石熊罴', emoji: '🐻',
     stats: { hp: 460, mp: 80, atk: 64, def: 48, mag: 25, spd: 38 },
     resists: r(30, 20, 12, 12, 25, 10, 10, 10, 10),
     skillIds: ['m_xiong'],
   },
   kulou: {
-    id: 'kulou', name: '骷髅兵', emoji: '💀',
+    id: 'kulou', name: '忘川骨卒', emoji: '💀',
     stats: { hp: 220, mp: 40, atk: 48, def: 28, mag: 20, spd: 48 },
     resists: r(15, 30, 10, 50, 60, 8, 8, 8, 8),
     skillIds: ['m_guci'],
   },
   zhizhu: {
-    id: 'zhizhu', name: '蜘蛛精', emoji: '🕷️',
+    id: 'zhizhu', name: '幽丝蛛妖', emoji: '🕷️',
     stats: { hp: 330, mp: 120, atk: 44, def: 34, mag: 70, spd: 54 },
     resists: r(20, 20, 12, 12, 90, 10, 10, 10, 10),
     skillIds: ['m_duwu'],
   },
   shanxiao: {
-    id: 'shanxiao', name: '山魈', emoji: '🐵',
+    id: 'shanxiao', name: '玲珑山魈', emoji: '🐵',
     stats: { hp: 240, mp: 50, atk: 54, def: 34, mag: 20, spd: 58 },
     resists: r(12, 12, 10, 10, 15, 10, 10, 10, 10),
     skillIds: ['m_zhua'],
   },
   shanxiaowang: {
-    id: 'shanxiaowang', name: '千年山魈王', emoji: '🦍',
+    id: 'shanxiaowang', name: '洞天山魈王', emoji: '🦍',
     stats: { hp: 560, mp: 120, atk: 72, def: 52, mag: 40, spd: 52 },
     resists: r(40, 25, 15, 15, 30, 15, 15, 15, 15),
     skillIds: ['m_chui', 'm_hou'],
@@ -189,9 +197,9 @@ export const MONSTERS: Record<string, MonsterDef> = {
 // ===== 遭遇战 =====
 
 export const ENCOUNTERS: EncounterDef[] = [
-  { id: 'heifengling', name: '黑风岭劫道', desc: '两头野狼与一头黑熊精拦路', members: ['yelang', 'yelang', 'heixiong'] },
-  { id: 'luanzanggang', name: '乱葬岗魅影', desc: '两具骷髅兵与一只蜘蛛精游荡', members: ['kulou', 'kulou', 'zhizhu'] },
-  { id: 'shanxiao', name: '千年山魈', desc: '两只山魈护卫着它们的千年山魈王', members: ['shanxiao', 'shanxiao', 'shanxiaowang'] },
+  { id: 'heifengling', name: '青崖山道 · 拦路', desc: '两头青崖苍狼与一头玄石熊罴拦路', members: ['yelang', 'yelang', 'heixiong'] },
+  { id: 'luanzanggang', name: '渡忘川 · 魅影', desc: '两具忘川骨卒与一只幽丝蛛妖游荡', members: ['kulou', 'kulou', 'zhizhu'] },
+  { id: 'shanxiao', name: '玲珑洞天 · 山魈', desc: '两只玲珑山魈护卫着洞天山魈王', members: ['shanxiao', 'shanxiao', 'shanxiaowang'] },
 ];
 
 export function classById(id: string): ClassDef {

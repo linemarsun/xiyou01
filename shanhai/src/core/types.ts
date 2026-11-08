@@ -83,7 +83,7 @@ export interface Unit {
   name: string;
   emoji: string;
   side: Side;
-  tag: 'player' | 'pet' | 'monster';
+  tag: 'player' | 'pet' | 'monster' | 'companion';
   hp: number;
   maxHp: number;
   mp: number;

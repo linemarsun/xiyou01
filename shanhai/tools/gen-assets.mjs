@@ -1,13 +1,13 @@
 /**
- * 像素资产生成器：程序化生成全套风格统一的 Q 版精灵帧与场景图。
+ * 旧像素资产生成器（保留用于对照，不再写入正式素材目录）。
  *
- * 输出（public/assets/）：
+ * 输出（public/assets_legacy/）：
  *   sprites/<id>/<anim>_<i>.png   48x48 单帧（idle/attack/cast）
  *   scenes/<encounter>.png        960x520 斜透视战斗场景
- *   manifest.json                 动画清单（fps/帧序），渲染器按清单加载
+ *   manifest.json                 （旧契约）
  *
+ * 注意：正式素材由 assets_v2 管线提供到 public/assets/，本脚本禁止覆盖它。
  * 运行：node tools/gen-assets.mjs
- * 想换手绘/下载素材：按清单里的文件名逐张替换 PNG 即可，无需改代码。
  */
 import { PNG } from 'pngjs';
 import fs from 'node:fs';
@@ -15,7 +15,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const OUT = path.join(ROOT, 'public', 'assets');
+/** 改到 assets_legacy，避免 `npm run assets` 覆盖 assets_v2 写入的新契约素材 */
+const OUT = path.join(ROOT, 'public', 'assets_legacy');
 
 // ============ 基础工具 ============
 
@@ -504,35 +505,36 @@ function generateSprites() {
 
 // ============ 场景绘制 ============
 
+/* 国风主色：朱红 / 靛青 / 赭金 / 米白，明快通透（与 public/assets/art 的参考素材一致） */
 const SCENES = {
   heifengling: {
     seed: 101,
-    sky: ['#2e3f54', '#3d5570', '#54718c', '#7491a8'],
-    moon: '#d8e4ec',
-    ridges: ['#243244', '#2c4036', '#37503f'],
-    ground: '#4d5f3e',
-    groundAlt: '#465838',
-    clearing: '#5a6c48',
+    sky: ['#2f4a5c', '#3d5f72', '#587a8c', '#7b98a6'],
+    moon: '#f5ecd8',
+    ridges: ['#24384a', '#2f4a52', '#3d5f5c'],
+    ground: '#5c6b4a',
+    groundAlt: '#515f42',
+    clearing: '#6a7852',
     details: ['pines', 'stones'],
   },
   luanzanggang: {
     seed: 202,
-    sky: ['#1f1a2e', '#2c2440', '#3f3358', '#584a70'],
-    moon: '#e8e4d8',
-    ridges: ['#241d33', '#2e2642', '#3a3050'],
-    ground: '#4a4442',
-    groundAlt: '#423c3a',
-    clearing: '#554e4c',
+    sky: ['#2b2638', '#3a3350', '#4c4266', '#5f5478'],
+    moon: '#f0e6d2',
+    ridges: ['#2a2438', '#352d48', '#423a56'],
+    ground: '#4e4844',
+    groundAlt: '#46413e',
+    clearing: '#59524d',
     details: ['tombs', 'deadTrees', 'fog'],
   },
   shanxiao: {
     seed: 303,
-    sky: ['#7fb2c9', '#a5cbd8', '#cfe6df'],
-    sun: '#f5e9c8',
-    ridges: ['#3f6b52', '#4f7f5c', '#628f66'],
-    ground: '#5d8a4a',
-    groundAlt: '#548040',
-    clearing: '#6a9656',
+    sky: ['#f2e3c8', '#f7ecd6', '#fdf6e6'],
+    sun: '#d9913f',
+    ridges: ['#4a6a68', '#5c7f76', '#73978a'],
+    ground: '#7a8c58',
+    groundAlt: '#6f8050',
+    clearing: '#8b9c62',
     details: ['peak', 'bamboo', 'flowers'],
   },
 };
@@ -696,6 +698,8 @@ function drawScene(id) {
 const WW = 1440;
 const WH = 900;
 const WHORIZON = 430;
+/** 每个世界场景生成几个略有差异的 tile 变体，供分块卷轴轮换使用 */
+const WORLD_TILE_VARIANTS = 4;
 
 function drawHouse(g, x, y, s) {
   g.rect(x, y - 62 * s, 116 * s, 62 * s, '#9a7a52');
@@ -732,46 +736,47 @@ function drawLantern(g, x, y) {
 const WORLD_SCENES = {
   taoyuan: {
     seed: 401,
-    sky: ['#8fc3d8', '#a8d2dc', '#cfe6df'],
-    sun: '#f5e9c8',
-    ridges: ['#4a7a5c', '#5a8a66', '#6d9a72'],
-    ground: '#6a9450',
-    groundAlt: '#608948',
+    sky: ['#f3e2c2', '#f8ecd2', '#fdf5e2'],
+    sun: '#d9913f',
+    ridges: ['#4a6a68', '#5f7f76', '#73978a'],
+    ground: '#b9a878',
+    groundAlt: '#ab9a6c',
     details: ['houses', 'flowers'],
   },
   wild_heifeng: {
     seed: 402,
-    sky: ['#2e3f54', '#3d5570', '#54718c'],
-    moon: '#d8e4ec',
-    ridges: ['#243244', '#2c4036', '#37503f'],
-    ground: '#4d5f3e',
-    groundAlt: '#465838',
+    sky: ['#2f4a5c', '#3d5f72', '#5a7a8c'],
+    moon: '#f5ecd8',
+    ridges: ['#24384a', '#2f4a52', '#3d5f5c'],
+    ground: '#5c6b4a',
+    groundAlt: '#515f42',
     details: ['pines', 'stones'],
   },
   wild_luanzang: {
     seed: 403,
-    sky: ['#1f1a2e', '#2c2440', '#3f3358'],
-    moon: '#e8e4d8',
-    ridges: ['#241d33', '#2e2642', '#3a3050'],
-    ground: '#4a4442',
-    groundAlt: '#423c3a',
+    sky: ['#2b2638', '#3a3350', '#4c4266'],
+    moon: '#f0e6d2',
+    ridges: ['#2a2438', '#352d48', '#423a56'],
+    ground: '#4e4844',
+    groundAlt: '#46413e',
     details: ['tombs', 'deadTrees', 'fog'],
   },
   wild_shanxiao: {
     seed: 404,
-    sky: ['#7fb2c9', '#a5cbd8', '#cfe6df'],
-    sun: '#f5e9c8',
-    ridges: ['#3f6b52', '#4f7f5c', '#628f66'],
-    ground: '#5d8a4a',
-    groundAlt: '#548040',
+    sky: ['#f2e3c8', '#f7ecd6', '#fdf6e6'],
+    sun: '#d9913f',
+    ridges: ['#4a6a68', '#5c7f76', '#73978a'],
+    ground: '#7a8c58',
+    groundAlt: '#6f8050',
     details: ['peak', 'bamboo', 'flowers'],
   },
 };
 
-function drawWorldScene(id) {
+function drawWorldScene(id, variant = 0) {
   const S = WORLD_SCENES[id];
-  const rand = rng(S.seed);
+  const rand = rng(S.seed + variant * 977);
   const g = new Px(WW, WH);
+  const jx = () => (rand() - 0.5) * 160;
 
   for (let y = 0; y < WHORIZON; y++) {
     const t = (y / WHORIZON) * S.sky.length;
@@ -808,14 +813,14 @@ function drawWorldScene(id) {
 
   // 城镇建筑与摆设
   if (S.details.includes('houses')) {
-    drawHouse(g, 120, 400, 1.25);
-    drawHouse(g, 1050, 380, 1.15);
-    drawHouse(g, 580, 330, 0.95);
-    drawWell(g, 860, 340);
+    drawHouse(g, 120 + jx(), 400, 1.25);
+    drawHouse(g, 1050 + jx(), 380, 1.15);
+    drawHouse(g, 580 + jx(), 330, 0.95);
+    drawWell(g, 860 + jx(), 340);
     drawFence(g, 60, 480, 470);
     drawFence(g, 980, 1380, 460);
-    drawLantern(g, 620, 560);
-    drawLantern(g, 1020, 600);
+    drawLantern(g, 620 + jx(), 560);
+    drawLantern(g, 1020 + jx(), 600);
   }
   if (S.details.includes('pines')) {
     for (let i = 0; i < 14; i++) {
@@ -893,28 +898,37 @@ function drawWorldScene(id) {
 
   for (let y = 0; y < WH; y++) {
     for (let x = 0; x < WW; x++) {
-      const ex = Math.min(x, WW - x) / 150;
+      // 只做上下暗角，避免分块横向拼接时出现周期性暗边
       const ey = Math.min(y, WH - y) / 150;
-      const d = Math.min(1, Math.min(ex, ey));
+      const d = Math.min(1, ey);
       const a = (1 - d) * 0.4;
       if (a > 0.01) g.blend(x, y, '#1a140e', a);
     }
   }
 
-  g.save(path.join(OUT, 'scenes', `world_${id}.png`));
+  g.save(path.join(OUT, 'scenes', `world_${id}_${variant}.png`));
 }
 
 // ============ 主流程 ============
 
-fs.rmSync(OUT, { recursive: true, force: true });
+// 原地覆盖生成，不递归删除输出目录（保留手工替换的素材，也避开受限环境下的删除保护）。
+fs.mkdirSync(OUT, { recursive: true });
 const manifest = generateSprites();
 manifest.$scenes = {
   default: 'scenes/heifengling.png',
   ...Object.fromEntries(Object.keys(SCENES).map((k) => [k, `scenes/${k}.png`])),
-  ...Object.fromEntries(Object.keys(WORLD_SCENES).map((k) => [k, `scenes/world_${k}.png`])),
+  ...Object.fromEntries(Object.keys(WORLD_SCENES).map((k) => [k, `scenes/world_${k}_0.png`])),
 };
+manifest.$worldTiles = Object.fromEntries(
+  Object.keys(WORLD_SCENES).map((k) => [
+    k,
+    Array.from({ length: WORLD_TILE_VARIANTS }, (_, v) => `scenes/world_${k}_${v}.png`),
+  ]),
+);
 for (const id of Object.keys(SCENES)) drawScene(id);
-for (const id of Object.keys(WORLD_SCENES)) drawWorldScene(id);
+for (const id of Object.keys(WORLD_SCENES)) {
+  for (let v = 0; v < WORLD_TILE_VARIANTS; v++) drawWorldScene(id, v);
+}
 fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 1));
 
 const files = (function walk(dir) {
@@ -922,4 +936,4 @@ const files = (function walk(dir) {
     e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)],
   );
 })(OUT);
-console.log(`生成完毕：${files.length} 个文件 → public/assets/`);
+console.log(`生成完毕：${files.length} 个文件 → public/assets_legacy/`);

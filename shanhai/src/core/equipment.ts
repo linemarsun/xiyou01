@@ -8,6 +8,8 @@ export type EquipSlot = 'weapon' | 'armor' | 'accessory';
 export type StatKey = 'atk' | 'def' | 'mag' | 'spd' | 'hp';
 export type StatBonus = Record<StatKey, number> & { mp: number };
 
+export interface Affix { stat: StatKey; value: number; rare?: boolean }
+
 export interface EquipmentItem {
   uid: string;
   slot: EquipSlot;
@@ -15,12 +17,18 @@ export interface EquipmentItem {
   name: string;
   /** 固定基础属性（不随炼化变化） */
   base: Partial<Record<StatKey, number>>;
-  /** 词条：炼化重掷的部分 */
-  affixes: { stat: StatKey; value: number }[];
+  /** 词条：炼化重掷的部分；rare 为极品装备的稀有词条（数值翻倍） */
+  affixes: Affix[];
 }
 
 export const EQUIP_SLOTS: EquipSlot[] = ['weapon', 'armor', 'accessory'];
+/** 召唤兽不持械，只开放护甲与饰品两个部位 */
+export const PET_EQUIP_SLOTS: EquipSlot[] = ['armor', 'accessory'];
 export const SLOT_NAMES: Record<EquipSlot, string> = { weapon: '武器', armor: '护甲', accessory: '饰品' };
+
+/** 极品装备出现稀有词条的概率与数值倍率 */
+export const RARE_AFFIX_CHANCE = 0.25;
+export const RARE_AFFIX_MULT = 2;
 
 const TIER_NAMES = ['', '凡品', '良品', '极品'];
 const BASE_NAMES: Record<EquipSlot, string[]> = {
@@ -56,18 +64,25 @@ export function generateEquipment(tier: 1 | 2 | 3): EquipmentItem {
   return item;
 }
 
-/** 重掷词条（炼化）；返回新描述 */
+/** 重掷词条（炼化）；极品装备每次都有概率掷出稀有词条，返回新描述 */
 export function rerollAffixes(it: EquipmentItem): string {
   const n = Math.max(1, it.affixes.length);
   const scale = [4, 8, 13][it.tier - 1];
   const pool: StatKey[] = ['atk', 'def', 'mag', 'spd', 'hp'];
-  const affixes: { stat: StatKey; value: number }[] = [];
+  const affixes: Affix[] = [];
   for (let i = 0; i < n; i++) {
     const stat = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
-    affixes.push({ stat, value: scale + Math.floor(Math.random() * scale) });
+    const rare = it.tier === 3 && Math.random() < RARE_AFFIX_CHANCE;
+    const value = (scale + Math.floor(Math.random() * scale)) * (rare ? RARE_AFFIX_MULT : 1);
+    affixes.push({ stat, value, ...(rare ? { rare: true } : {}) });
   }
   it.affixes = affixes;
   return describeItem(it);
+}
+
+/** 是否含稀有词条（背包列表标记用） */
+export function hasRareAffix(it: EquipmentItem): boolean {
+  return it.affixes.some((a) => a.rare === true);
 }
 
 export function itemBonus(it: EquipmentItem): StatBonus {
@@ -82,7 +97,17 @@ export function describeItem(it: EquipmentItem): string {
   const parts = (Object.keys(b) as StatKey[])
     .filter((k) => b[k] !== 0)
     .map((k) => (k === 'hp' ? `气血+${b[k]}` : `${STAT_NAMES[k]}+${b[k]}`));
-  return `${it.name}（${parts.join(' ')}）`;
+  const rareMark = hasRareAffix(it) ? '★' : '';
+  return `${rareMark}${it.name}（${parts.join(' ')}）`;
+}
+
+/** 按怪物难度权重掷出掉落装备品阶（见 world.ts 的 DROP_TIER_WEIGHTS） */
+export function rollTier(weights: readonly [number, number, number]): 1 | 2 | 3 {
+  const total = weights[0] + weights[1] + weights[2];
+  const x = Math.random() * total;
+  if (x < weights[0]) return 1;
+  if (x < weights[0] + weights[1]) return 2;
+  return 3;
 }
 
 export function emptyBonus(): StatBonus {

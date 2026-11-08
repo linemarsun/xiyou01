@@ -22,7 +22,7 @@ body {
     linear-gradient(180deg, var(--bg1), var(--bg2));
   min-height: 100vh;
 }
-#app { max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; }
+#app { max-width: 1500px; margin: 0 auto; padding: 18px 16px 40px; }
 
 /* ===== 通用控件 ===== */
 .btn {
@@ -119,7 +119,21 @@ body {
   width: 100%;
   height: auto;
   display: block;
-  image-rendering: pixelated;
+  image-rendering: auto;
+}
+
+/* ===== 截图模式（?shot=1，仅开发用）：只留画布，品红外框供裁剪脚本定位 ===== */
+body.shot-mode { background: #000; overflow: hidden; }
+body.shot-mode .hud,
+body.shot-mode .dialogue,
+body.shot-mode .quest-chip,
+body.shot-mode .toast { display: none !important; }
+body.shot-mode .scene-host {
+  position: fixed; left: 48px; top: 44px; z-index: 99999;
+  box-sizing: border-box;
+  width: min(calc(100vw - 56px), calc(160vh - 84px));
+  border: 6px solid #ff00ff;
+  border-radius: 0;
 }
 
 .field {
@@ -272,3 +286,102 @@ body {
 }
 .bag-item { flex: 1; }
 .bag-sep { height: 6px; }
+
+/* ===== 国风主题（原创国风西游风格素材接入，模块 8） =====
+   主色：朱红 #a63d2f / 靛青 #2f4a5c / 赭金 #b8892f / 米白 #f7f0dd
+   面板用云纹木框图，叠浅色蒙版保证文字可读；按钮与卡片统一金边朱红。 */
+:root {
+  --bg1: #f7f0dd;
+  --bg2: #e8d9b8;
+  --panel: #fdf9ec;
+  --line: #c9a86a;
+  --ink: #332a20;
+  --ink2: #6b5a42;
+  --accent: #a63d2f;
+  --teal: #2f4a5c;
+  --gold: #b8892f;
+}
+body {
+  background:
+    radial-gradient(1200px 500px at 50% -100px, #fff8e6 0%, transparent 70%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+.setup, .dialogue, .end-panel, .hud {
+  background-image:
+    linear-gradient(rgba(253, 249, 236, .90), rgba(247, 240, 221, .94)),
+    url('/assets/art/ui/ui_panel_base.png');
+  background-size: 100% 100%;
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 2px rgba(184, 137, 47, .22), 0 6px 20px rgba(58, 42, 32, .14);
+}
+.game-title { color: #7d2c21; letter-spacing: 10px; }
+.game-title::after {
+  content: '';
+  display: block;
+  width: 240px; height: 26px; margin: 10px auto 0;
+  background: url('/assets/art/ui/ui_cloud_divider.png') center / contain no-repeat;
+}
+.btn {
+  background: linear-gradient(180deg, #fffdf4, #f0e0bd);
+  border: 2px solid var(--gold);
+  color: #3a2a20;
+  border-radius: 8px;
+}
+.btn:hover:not(:disabled) { background: linear-gradient(180deg, #fff8e0, #e9d3a4); border-color: #8f6a1f; }
+.btn.primary {
+  background: linear-gradient(180deg, #b84634, #8f2d22);
+  border-color: #7d2c21; color: #fff5e0;
+}
+.btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #c4523d, #9c3326); }
+.pick-card { border: 2px solid var(--line); background: rgba(253, 249, 236, .82); border-radius: 14px; }
+.pick-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px #a63d2f33, inset 0 0 0 1px var(--gold); }
+.pick-portrait {
+  display: block; width: 84px; height: 84px; margin: 0 auto 4px;
+  object-fit: contain; border-radius: 50%;
+  border: 2px solid var(--gold); background: #fffaf0;
+}
+.item-icon { width: 22px; height: 22px; vertical-align: -5px; margin-right: 4px; }
+.dialogue .dname { color: #8a2f2a; }
+.bheader .btitle { color: #7d2c21; }
+
+/* ===== 悬赏榜（任务界面，模块 10） =====
+   直接用参考素材的云纹胡桃木面板，深底米白字，去掉浅色蒙版；
+   竹简图标 + 云纹标题 + 任务卡 + 进度条 + 赏格清单。 */
+.dialogue.quest-panel {
+  background-color: #2e2119;
+  background-image: url('/assets/art/ui/ui_panel_base.png');
+  background-size: 100% 100%;
+  color: #f7ecd8;
+  border: 2px solid var(--gold);
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 2px rgba(184, 137, 47, .35), 0 10px 30px rgba(0, 0, 0, .42);
+  padding: 18px 22px;
+}
+.quest-body { min-width: 320px; }
+.quest-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.quest-seal { width: 54px; height: 54px; object-fit: contain; flex: 0 0 54px; }
+.quest-title {
+  font-family: "STZhongsong", "SimSun", serif;
+  font-size: 21px; letter-spacing: 3px; color: #f0d089;
+  text-shadow: 0 1px 2px #0008;
+}
+.quest-npc { font-size: 12px; color: #d8c49c; margin-top: 3px; letter-spacing: 1px; }
+.quest-card {
+  border: 1px solid rgba(184, 137, 47, .55);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 10px 0 12px;
+  background: rgba(20, 14, 10, .38);
+}
+.quest-name { font-size: 16px; font-weight: bold; color: #f4d98a; letter-spacing: 1px; }
+.quest-desc { font-size: 13px; line-height: 1.75; color: #e8dcc0; margin: 7px 0; }
+.quest-progress { font-size: 13px; color: #f7ecd8; }
+.quest-bar {
+  height: 10px; border-radius: 6px; margin: 9px 0;
+  background: #1a120c; border: 1px solid #8a6a2a; overflow: hidden;
+}
+.quest-bar-fill { height: 100%; background: linear-gradient(90deg, #a63d2f, #d9913f); }
+.quest-reward { font-size: 12.5px; color: #e8c56a; }
+.quest-text { font-size: 14px; line-height: 1.85; margin: 10px 0 14px; color: #f7ecd8; }
+.dialogue.quest-panel .cmd-row { justify-content: flex-end; }

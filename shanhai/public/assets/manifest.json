@@ -1,8 +1,8 @@
 {
  "xiake": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -20,7 +20,7 @@
      "sprites/xiake/walk_2.png",
      "sprites/xiake/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -28,26 +28,38 @@
      "sprites/xiake/attack_0.png",
      "sprites/xiake/attack_1.png",
      "sprites/xiake/attack_2.png",
-     "sprites/xiake/attack_3.png"
+     "sprites/xiake/attack_3.png",
+     "sprites/xiake/attack_4.png",
+     "sprites/xiake/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/xiake/cast_0.png",
      "sprites/xiake/cast_1.png",
-     "sprites/xiake/cast_2.png"
+     "sprites/xiake/cast_2.png",
+     "sprites/xiake/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/xiake/dead_0.png",
+     "sprites/xiake/dead_1.png",
+     "sprites/xiake/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "lingguan": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -65,7 +77,7 @@
      "sprites/lingguan/walk_2.png",
      "sprites/lingguan/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -73,26 +85,38 @@
      "sprites/lingguan/attack_0.png",
      "sprites/lingguan/attack_1.png",
      "sprites/lingguan/attack_2.png",
-     "sprites/lingguan/attack_3.png"
+     "sprites/lingguan/attack_3.png",
+     "sprites/lingguan/attack_4.png",
+     "sprites/lingguan/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/lingguan/cast_0.png",
      "sprites/lingguan/cast_1.png",
-     "sprites/lingguan/cast_2.png"
+     "sprites/lingguan/cast_2.png",
+     "sprites/lingguan/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/lingguan/dead_0.png",
+     "sprites/lingguan/dead_1.png",
+     "sprites/lingguan/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "moshi": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -110,7 +134,7 @@
      "sprites/moshi/walk_2.png",
      "sprites/moshi/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -118,26 +142,38 @@
      "sprites/moshi/attack_0.png",
      "sprites/moshi/attack_1.png",
      "sprites/moshi/attack_2.png",
-     "sprites/moshi/attack_3.png"
+     "sprites/moshi/attack_3.png",
+     "sprites/moshi/attack_4.png",
+     "sprites/moshi/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/moshi/cast_0.png",
      "sprites/moshi/cast_1.png",
-     "sprites/moshi/cast_2.png"
+     "sprites/moshi/cast_2.png",
+     "sprites/moshi/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/moshi/dead_0.png",
+     "sprites/moshi/dead_1.png",
+     "sprites/moshi/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "wuzhu": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -155,7 +191,7 @@
      "sprites/wuzhu/walk_2.png",
      "sprites/wuzhu/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -163,26 +199,38 @@
      "sprites/wuzhu/attack_0.png",
      "sprites/wuzhu/attack_1.png",
      "sprites/wuzhu/attack_2.png",
-     "sprites/wuzhu/attack_3.png"
+     "sprites/wuzhu/attack_3.png",
+     "sprites/wuzhu/attack_4.png",
+     "sprites/wuzhu/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/wuzhu/cast_0.png",
      "sprites/wuzhu/cast_1.png",
-     "sprites/wuzhu/cast_2.png"
+     "sprites/wuzhu/cast_2.png",
+     "sprites/wuzhu/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/wuzhu/dead_0.png",
+     "sprites/wuzhu/dead_1.png",
+     "sprites/wuzhu/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "linghu": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -200,7 +248,7 @@
      "sprites/linghu/walk_2.png",
      "sprites/linghu/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -208,26 +256,38 @@
      "sprites/linghu/attack_0.png",
      "sprites/linghu/attack_1.png",
      "sprites/linghu/attack_2.png",
-     "sprites/linghu/attack_3.png"
+     "sprites/linghu/attack_3.png",
+     "sprites/linghu/attack_4.png",
+     "sprites/linghu/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/linghu/cast_0.png",
      "sprites/linghu/cast_1.png",
-     "sprites/linghu/cast_2.png"
+     "sprites/linghu/cast_2.png",
+     "sprites/linghu/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/linghu/dead_0.png",
+     "sprites/linghu/dead_1.png",
+     "sprites/linghu/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "yanjia": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -240,10 +300,12 @@
    },
    "walk": {
     "frames": [
-     "sprites/yanjia/idle_0.png",
-     "sprites/yanjia/idle_1.png"
+     "sprites/yanjia/walk_0.png",
+     "sprites/yanjia/walk_1.png",
+     "sprites/yanjia/walk_2.png",
+     "sprites/yanjia/walk_3.png"
     ],
-    "fps": 4,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -251,27 +313,38 @@
      "sprites/yanjia/attack_0.png",
      "sprites/yanjia/attack_1.png",
      "sprites/yanjia/attack_2.png",
-     "sprites/yanjia/attack_3.png"
+     "sprites/yanjia/attack_3.png",
+     "sprites/yanjia/attack_4.png",
+     "sprites/yanjia/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
-     "sprites/yanjia/attack_0.png",
-     "sprites/yanjia/attack_1.png",
-     "sprites/yanjia/attack_2.png",
-     "sprites/yanjia/attack_3.png"
+     "sprites/yanjia/cast_0.png",
+     "sprites/yanjia/cast_1.png",
+     "sprites/yanjia/cast_2.png",
+     "sprites/yanjia/cast_3.png"
     ],
-    "fps": 10,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/yanjia/dead_0.png",
+     "sprites/yanjia/dead_1.png",
+     "sprites/yanjia/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "leisun": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -284,10 +357,12 @@
    },
    "walk": {
     "frames": [
-     "sprites/leisun/idle_0.png",
-     "sprites/leisun/idle_1.png"
+     "sprites/leisun/walk_0.png",
+     "sprites/leisun/walk_1.png",
+     "sprites/leisun/walk_2.png",
+     "sprites/leisun/walk_3.png"
     ],
-    "fps": 4,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -295,27 +370,38 @@
      "sprites/leisun/attack_0.png",
      "sprites/leisun/attack_1.png",
      "sprites/leisun/attack_2.png",
-     "sprites/leisun/attack_3.png"
+     "sprites/leisun/attack_3.png",
+     "sprites/leisun/attack_4.png",
+     "sprites/leisun/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
-     "sprites/leisun/attack_0.png",
-     "sprites/leisun/attack_1.png",
-     "sprites/leisun/attack_2.png",
-     "sprites/leisun/attack_3.png"
+     "sprites/leisun/cast_0.png",
+     "sprites/leisun/cast_1.png",
+     "sprites/leisun/cast_2.png",
+     "sprites/leisun/cast_3.png"
     ],
-    "fps": 10,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/leisun/dead_0.png",
+     "sprites/leisun/dead_1.png",
+     "sprites/leisun/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "yelang": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -328,10 +414,12 @@
    },
    "walk": {
     "frames": [
-     "sprites/yelang/idle_0.png",
-     "sprites/yelang/idle_1.png"
+     "sprites/yelang/walk_0.png",
+     "sprites/yelang/walk_1.png",
+     "sprites/yelang/walk_2.png",
+     "sprites/yelang/walk_3.png"
     ],
-    "fps": 4,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -339,27 +427,38 @@
      "sprites/yelang/attack_0.png",
      "sprites/yelang/attack_1.png",
      "sprites/yelang/attack_2.png",
-     "sprites/yelang/attack_3.png"
+     "sprites/yelang/attack_3.png",
+     "sprites/yelang/attack_4.png",
+     "sprites/yelang/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
-     "sprites/yelang/attack_0.png",
-     "sprites/yelang/attack_1.png",
-     "sprites/yelang/attack_2.png",
-     "sprites/yelang/attack_3.png"
+     "sprites/yelang/cast_0.png",
+     "sprites/yelang/cast_1.png",
+     "sprites/yelang/cast_2.png",
+     "sprites/yelang/cast_3.png"
     ],
-    "fps": 10,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/yelang/dead_0.png",
+     "sprites/yelang/dead_1.png",
+     "sprites/yelang/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "heixiong": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -372,10 +471,12 @@
    },
    "walk": {
     "frames": [
-     "sprites/heixiong/idle_0.png",
-     "sprites/heixiong/idle_1.png"
+     "sprites/heixiong/walk_0.png",
+     "sprites/heixiong/walk_1.png",
+     "sprites/heixiong/walk_2.png",
+     "sprites/heixiong/walk_3.png"
     ],
-    "fps": 4,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -383,27 +484,38 @@
      "sprites/heixiong/attack_0.png",
      "sprites/heixiong/attack_1.png",
      "sprites/heixiong/attack_2.png",
-     "sprites/heixiong/attack_3.png"
+     "sprites/heixiong/attack_3.png",
+     "sprites/heixiong/attack_4.png",
+     "sprites/heixiong/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
-     "sprites/heixiong/attack_0.png",
-     "sprites/heixiong/attack_1.png",
-     "sprites/heixiong/attack_2.png",
-     "sprites/heixiong/attack_3.png"
+     "sprites/heixiong/cast_0.png",
+     "sprites/heixiong/cast_1.png",
+     "sprites/heixiong/cast_2.png",
+     "sprites/heixiong/cast_3.png"
     ],
-    "fps": 10,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/heixiong/dead_0.png",
+     "sprites/heixiong/dead_1.png",
+     "sprites/heixiong/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "kulou": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -421,7 +533,7 @@
      "sprites/kulou/walk_2.png",
      "sprites/kulou/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -429,26 +541,38 @@
      "sprites/kulou/attack_0.png",
      "sprites/kulou/attack_1.png",
      "sprites/kulou/attack_2.png",
-     "sprites/kulou/attack_3.png"
+     "sprites/kulou/attack_3.png",
+     "sprites/kulou/attack_4.png",
+     "sprites/kulou/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/kulou/cast_0.png",
      "sprites/kulou/cast_1.png",
-     "sprites/kulou/cast_2.png"
+     "sprites/kulou/cast_2.png",
+     "sprites/kulou/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/kulou/dead_0.png",
+     "sprites/kulou/dead_1.png",
+     "sprites/kulou/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "zhizhu": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -461,10 +585,12 @@
    },
    "walk": {
     "frames": [
-     "sprites/zhizhu/idle_0.png",
-     "sprites/zhizhu/idle_1.png"
+     "sprites/zhizhu/walk_0.png",
+     "sprites/zhizhu/walk_1.png",
+     "sprites/zhizhu/walk_2.png",
+     "sprites/zhizhu/walk_3.png"
     ],
-    "fps": 4,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -472,27 +598,38 @@
      "sprites/zhizhu/attack_0.png",
      "sprites/zhizhu/attack_1.png",
      "sprites/zhizhu/attack_2.png",
-     "sprites/zhizhu/attack_3.png"
+     "sprites/zhizhu/attack_3.png",
+     "sprites/zhizhu/attack_4.png",
+     "sprites/zhizhu/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
-     "sprites/zhizhu/attack_0.png",
-     "sprites/zhizhu/attack_1.png",
-     "sprites/zhizhu/attack_2.png",
-     "sprites/zhizhu/attack_3.png"
+     "sprites/zhizhu/cast_0.png",
+     "sprites/zhizhu/cast_1.png",
+     "sprites/zhizhu/cast_2.png",
+     "sprites/zhizhu/cast_3.png"
     ],
-    "fps": 10,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/zhizhu/dead_0.png",
+     "sprites/zhizhu/dead_1.png",
+     "sprites/zhizhu/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "shanxiao": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -510,7 +647,7 @@
      "sprites/shanxiao/walk_2.png",
      "sprites/shanxiao/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -518,26 +655,38 @@
      "sprites/shanxiao/attack_0.png",
      "sprites/shanxiao/attack_1.png",
      "sprites/shanxiao/attack_2.png",
-     "sprites/shanxiao/attack_3.png"
+     "sprites/shanxiao/attack_3.png",
+     "sprites/shanxiao/attack_4.png",
+     "sprites/shanxiao/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/shanxiao/cast_0.png",
      "sprites/shanxiao/cast_1.png",
-     "sprites/shanxiao/cast_2.png"
+     "sprites/shanxiao/cast_2.png",
+     "sprites/shanxiao/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/shanxiao/dead_0.png",
+     "sprites/shanxiao/dead_1.png",
+     "sprites/shanxiao/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "shanxiaowang": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -555,7 +704,7 @@
      "sprites/shanxiaowang/walk_2.png",
      "sprites/shanxiaowang/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -563,26 +712,38 @@
      "sprites/shanxiaowang/attack_0.png",
      "sprites/shanxiaowang/attack_1.png",
      "sprites/shanxiaowang/attack_2.png",
-     "sprites/shanxiaowang/attack_3.png"
+     "sprites/shanxiaowang/attack_3.png",
+     "sprites/shanxiaowang/attack_4.png",
+     "sprites/shanxiaowang/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/shanxiaowang/cast_0.png",
      "sprites/shanxiaowang/cast_1.png",
-     "sprites/shanxiaowang/cast_2.png"
+     "sprites/shanxiaowang/cast_2.png",
+     "sprites/shanxiaowang/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/shanxiaowang/dead_0.png",
+     "sprites/shanxiaowang/dead_1.png",
+     "sprites/shanxiaowang/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
  },
  "elder": {
   "frameSize": [
-   48,
-   48
+   128,
+   128
   ],
   "anims": {
    "idle": {
@@ -600,7 +761,7 @@
      "sprites/elder/walk_2.png",
      "sprites/elder/walk_3.png"
     ],
-    "fps": 9,
+    "fps": 9.0,
     "loop": true
    },
    "attack": {
@@ -608,30 +769,32 @@
      "sprites/elder/attack_0.png",
      "sprites/elder/attack_1.png",
      "sprites/elder/attack_2.png",
-     "sprites/elder/attack_3.png"
+     "sprites/elder/attack_3.png",
+     "sprites/elder/attack_4.png",
+     "sprites/elder/attack_5.png"
     ],
-    "fps": 12,
+    "fps": 12.0,
     "loop": false
    },
    "cast": {
     "frames": [
      "sprites/elder/cast_0.png",
      "sprites/elder/cast_1.png",
-     "sprites/elder/cast_2.png"
+     "sprites/elder/cast_2.png",
+     "sprites/elder/cast_3.png"
     ],
-    "fps": 8,
+    "fps": 8.0,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/elder/dead_0.png",
+     "sprites/elder/dead_1.png",
+     "sprites/elder/dead_2.png"
+    ],
+    "fps": 8.0,
     "loop": false
    }
   }
- },
- "$scenes": {
-  "default": "scenes/heifengling.png",
-  "heifengling": "scenes/heifengling.png",
-  "luanzanggang": "scenes/luanzanggang.png",
-  "shanxiao": "scenes/shanxiao.png",
-  "taoyuan": "scenes/world_taoyuan.png",
-  "wild_heifeng": "scenes/world_wild_heifeng.png",
-  "wild_luanzang": "scenes/world_wild_luanzang.png",
-  "wild_shanxiao": "scenes/world_wild_shanxiao.png"
  }
 }

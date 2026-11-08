@@ -10,14 +10,16 @@ import { STATUS_META } from '../core/types';
 import { effectiveSkill, describeSkillAt } from '../core/skill';
 import { h } from './dom';
 import { BattleRenderer } from '../render/battle-renderer';
+import { audio } from '../audio/audio';
+import { ITEM_ART, artUrl } from '../core/art';
 
 const DELAYS: Record<BattleEvent['t'], number> = {
   roundStart: 620,
   actionStart: 380,
   actSkip: 460,
   actOverride: 460,
-  cast: 540,
-  attack: 380,
+  cast: 560,
+  attack: 520,
   defend: 360,
   damage: 500,
   heal: 500,
@@ -26,7 +28,7 @@ const DELAYS: Record<BattleEvent['t'], number> = {
   statusResist: 400,
   statusEnd: 260,
   poisonTick: 500,
-  death: 700,
+  death: 900,
   catchSuccess: 620,
   catchFail: 440,
   itemUsed: 480,
@@ -49,6 +51,10 @@ export interface BattleFinishInfo {
 /** 世界模式钩子：战斗结束时结算奖励/任务/存档，返回展示用摘要行 */
 export interface BattleHooks {
   finish: (info: BattleFinishInfo) => { lines: string[] };
+  /** 挂机模式：本场战斗自动开启自动战斗，无需玩家每场手点 */
+  autoBattle?: boolean;
+  /** 玩家在战斗内关掉自动战斗时回调（用于终止挂机） */
+  onAutoOff?: () => void;
 }
 
 export class BattleScreen {
@@ -89,10 +95,17 @@ export class BattleScreen {
 
   static async create(root: HTMLElement, opts: BattleOptions, onExit: () => void, hooks: BattleHooks | null = null): Promise<BattleScreen> {
     const battle = new Battle(opts);
+    audio.setScene('battle');
     const sceneHost = h('div', { class: 'scene-host' });
     const renderer = await BattleRenderer.create(sceneHost, battle.sceneKey, battle.snapshot());
     const screen = new BattleScreen(root, opts, onExit, renderer, battle, hooks);
     screen.buildSkeleton(sceneHost);
+    screen.seedLog();
+    if (hooks?.autoBattle) {
+      screen.auto = true;
+      screen.autoBtn.textContent = '⏸ 自动 开';
+      screen.autoBtn.classList.add('auto-on');
+    }
     screen.syncFromBattle();
     screen.renderState();
     screen.startCommandPhase();
@@ -111,6 +124,7 @@ export class BattleScreen {
     this.auto = !this.auto;
     this.autoBtn.textContent = this.auto ? '⏸ 自动 开' : '▶ 自动 关';
     this.autoBtn.classList.toggle('auto-on', this.auto);
+    if (!this.auto) this.hooks?.onAutoOff?.();
 
     if (this.auto) {
       // 指挥阶段中开启：立即接管本回合；结算播放中开启：下一回合生效
@@ -169,6 +183,15 @@ export class BattleScreen {
       },
     }, '速度 ×1');
 
+    const soundBtn = h('button', {
+      class: 'btn small',
+      onclick: () => {
+        const m = audio.toggleMute();
+        soundBtn.textContent = m ? '🔇 音效' : '🔊 音效';
+        audio.play('click');
+      },
+    }, audio.isMuted() ? '🔇 音效' : '🔊 音效');
+
     this.roundEl = h('span', {}, '第 1 回合');
     const header = h('div', { class: 'bheader' },
       h('div', { class: 'btitle' }, `⚔ 山海奇谭 · ${this.battle.encounterName}`),
@@ -176,6 +199,7 @@ export class BattleScreen {
       h('div', { class: 'bspace' }),
       this.autoBtn,
       this.speedBtn,
+      soundBtn,
     );
 
     this.bannerEl = h('div', { class: 'banner' }, '');
@@ -209,6 +233,17 @@ export class BattleScreen {
     this.logEl.append(line);
     while (this.logEl.children.length > 250) this.logEl.firstChild?.remove();
     this.logEl.scrollTop = this.logEl.scrollHeight;
+  }
+
+  /** 指挥阶段先把战场信息写进记录面板，避免开局整块空白 */
+  private seedLog(): void {
+    const units = this.battle.snapshot();
+    const allies = units.filter((u) => u.side === 'ally').map((u) => u.name).join('、');
+    const foes = units.filter((u) => u.side === 'enemy').map((u) => u.name).join('、');
+    this.log(`⚔ 遭遇：${this.battle.encounterName}`, 'sys');
+    this.log(`我方：${allies}`, 'good');
+    this.log(`敌方：${foes}`, 'warn');
+    this.log('为每位同伴下达指令，再点「出手」结算。', 'sys');
   }
 
   private setBanner(text: string): void {
@@ -322,7 +357,8 @@ export class BattleScreen {
         disabled: this.battle.items[itemId] <= 0,
         title: def.desc,
         onclick: () => this.beginTarget({ kind: 'item', itemId }),
-      }, `${def.name} ×${this.battle.items[itemId]}`));
+      }, h('img', { class: 'item-icon', src: artUrl(ITEM_ART[itemId]), alt: '' }),
+        `${def.name} ×${this.battle.items[itemId]}`));
     }
     row.append(h('button', { class: 'btn small', onclick: () => this.renderCmdPanel() }, '返回'));
     this.cmdEl.append(row);
@@ -426,6 +462,7 @@ export class BattleScreen {
     for (const ev of events) {
       this.applyStateToUi(ev);
       this.applyEvent(ev);
+      audio.playEvent(ev);
       this.renderer.playEvent(ev);
       this.renderState();
       await this.sleep(DELAYS[ev.t]);
@@ -586,7 +623,8 @@ export class BattleScreen {
     const sub = h('div', { class: 'end-sub' },
       `${won ? '🎉' : '💀'} ${this.battle.encounterName} · 共 ${this.battle.round} 回合`,
       h('br'),
-            `阵容：${classById(this.opts.classId).name} + ${this.opts.petUnit?.name ?? (this.opts.petId ? petById(this.opts.petId).name : '宠物')} · 种子 ${this.battle.seed}`,
+            `阵容：${classById(this.opts.classId).name} + ${this.opts.petUnit?.name ?? (this.opts.petId ? petById(this.opts.petId).name : '宠物')}`
+            + ` · 同伴 ${this.opts.companions?.length ?? 0} 名 · 种子 ${this.battle.seed}`,
     );
     const buttons = h('div', { class: 'end-btns' });
 

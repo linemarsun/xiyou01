@@ -1,22 +1,38 @@
 import '../style.css';
 import { clearSave, loadGame, newGame, type GameState } from '../core/world';
 import { simulateAll } from '../core/sim';
+import { CLASSES, PETS } from '../core/content';
 import { h } from './dom';
 import { WorldScreen } from './world-screen';
 import { renderSetup, type SetupResult } from './setup-screen';
+import { audio } from '../audio/audio';
 
 const app = document.getElementById('app')!;
+
+// 浏览器自动播放策略：首次用户交互才创建/恢复 AudioContext
+document.addEventListener('pointerdown', () => audio.unlock(), { once: true });
+document.addEventListener('keydown', () => audio.unlock(), { once: true });
 
 if (location.hash === '#sim') {
   renderSim();
 } else {
-  showSetup();
+  // 开发态截图辅助：?play=1 以默认配置直接开局，免去点击开局界面
+  const devPlay = import.meta.env.DEV
+    ? new URLSearchParams(location.search).get('play')
+    : null;
+  if (devPlay) {
+    clearSave();
+    void showWorld(newGame({ classId: CLASSES[0].id, petId: PETS[0].id, playerName: '测试少侠' }));
+  } else {
+    showSetup();
+  }
 }
 
 // hash 变化（如进入/退出 #sim）时整体重载，路由判断在启动时进行
 window.addEventListener('hashchange', () => location.reload());
 
 function showSetup(): void {
+  audio.setScene('setup');
   const save = loadGame();
   renderSetup(app, {
     hasSave: !!save,
@@ -29,16 +45,7 @@ function showSetup(): void {
 }
 
 function showWorld(gs: GameState): void {
-  void WorldScreen.create(app, gs, { onExitToSetup: () => showSetup() }).then((ws) => {
-    if (import.meta.env.DEV) {
-      (window as unknown as Record<string, unknown>).__shanhai = {
-        state: () => ws.getState(),
-        playerPos: () => ws.playerPos(),
-        info: () => ws.debugInfo(),
-        moveTo: (x: number, y: number) => ws.debugMoveTo(x, y),
-      };
-    }
-  });
+  void WorldScreen.create(app, gs, { onExitToSetup: () => showSetup() });
 }
 
 /** 数值仿真报告（地址栏 #sim 进入）：批量跑完整战斗，看各职业胜率 */
@@ -59,7 +66,7 @@ function renderSim(): void {
   const results = simulateAll('linghu', 36);
   const dt = Math.round(performance.now() - t0);
   const lines = [
-    `宠物固定：灵狐 ｜ 每职业 36 场（三种遭遇轮换）｜ 耗时 ${dt}ms`,
+    `灵兽固定：${PETS[0].name} ｜ 每职业 36 场（三种遭遇轮换）｜ 耗时 ${dt}ms`,
     '',
     ...results.map((r) =>
       `${r.className}：胜率 ${(r.wins / r.total * 100).toFixed(0)}%（${r.wins}/${r.total}）`

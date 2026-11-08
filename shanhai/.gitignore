@@ -1,2 +1,8 @@
 node_modules/
 dist/
+.vite/
+
+# 临时截图 / 调试产物
+screenshots/
+temp_2026*/
+*.log

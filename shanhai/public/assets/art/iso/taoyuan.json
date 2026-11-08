@@ -1,0 +1,7212 @@
+{
+  "grid": {
+    "cols": 128,
+    "rows": 128,
+    "tileW": 64,
+    "tileH": 32,
+    "ox": 4096,
+    "oy": 16
+  },
+  "rules": {
+    "streetWidth": 10,
+    "houseClearanceFromStreetCenter": 5,
+    "roofLift": 0
+  },
+  "items": [
+    {
+      "type": "ground_grass",
+      "gx": 0,
+      "gy": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "type": "ground_stone",
+      "gx": 4,
+      "gy": 59,
+      "w": 117,
+      "h": 10
+    },
+    {
+      "type": "ground_stone",
+      "gx": 59,
+      "gy": 4,
+      "w": 10,
+      "h": 117
+    },
+    {
+      "type": "ground_stone",
+      "gx": 56,
+      "gy": 56,
+      "w": 16,
+      "h": 16
+    },
+    {
+      "type": "ground_stone",
+      "gx": 34,
+      "gy": 34,
+      "w": 14,
+      "h": 14
+    },
+    {
+      "type": "ground_stone",
+      "gx": 34,
+      "gy": 69,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_stone",
+      "gx": 2,
+      "gy": 62,
+      "w": 4,
+      "h": 6
+    },
+    {
+      "type": "ground_stone",
+      "gx": 122,
+      "gy": 62,
+      "w": 4,
+      "h": 6
+    },
+    {
+      "type": "ground_stone",
+      "gx": 62,
+      "gy": 119,
+      "w": 6,
+      "h": 5
+    },
+    {
+      "type": "ground_stone",
+      "gx": 28,
+      "gy": 7,
+      "w": 4,
+      "h": 52
+    },
+    {
+      "type": "ground_stone",
+      "gx": 7,
+      "gy": 28,
+      "w": 46,
+      "h": 4
+    },
+    {
+      "type": "ground_stone",
+      "gx": 84,
+      "gy": 7,
+      "w": 4,
+      "h": 52
+    },
+    {
+      "type": "ground_stone",
+      "gx": 70,
+      "gy": 22,
+      "w": 48,
+      "h": 4
+    },
+    {
+      "type": "ground_stone",
+      "gx": 70,
+      "gy": 40,
+      "w": 48,
+      "h": 4
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 40,
+      "gy": 81,
+      "w": 3,
+      "h": 5
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 7,
+      "gy": 84,
+      "w": 26,
+      "h": 4
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 7,
+      "gy": 106,
+      "w": 26,
+      "h": 3
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 72,
+      "gy": 74,
+      "w": 10,
+      "h": 4
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 114,
+      "gy": 88,
+      "w": 3,
+      "h": 22
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 70,
+      "gy": 104,
+      "w": 26,
+      "h": 4
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 72,
+      "gy": 112,
+      "w": 3,
+      "h": 8
+    },
+    {
+      "type": "ground_water",
+      "gx": 88,
+      "gy": 86,
+      "w": 26,
+      "h": 18
+    },
+    {
+      "type": "ground_water",
+      "gx": 70,
+      "gy": 94,
+      "w": 14,
+      "h": 10
+    },
+    {
+      "type": "ground_water",
+      "gx": 86,
+      "gy": 74,
+      "w": 4,
+      "h": 12
+    },
+    {
+      "type": "ground_water",
+      "gx": 96,
+      "gy": 108,
+      "w": 16,
+      "h": 8
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 71,
+      "gy": 9,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 71,
+      "gy": 27,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 71,
+      "gy": 45,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 89,
+      "gy": 9,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 89,
+      "gy": 27,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 89,
+      "gy": 45,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 105,
+      "gy": 9,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 105,
+      "gy": 45,
+      "w": 12,
+      "h": 12
+    },
+    {
+      "type": "ground_stone",
+      "gx": 34,
+      "gy": 86,
+      "w": 12,
+      "h": 8
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 7,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 13,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 19,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 25,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 31,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 37,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 43,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 49,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 55,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 60,
+      "gy": 5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 65,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 71,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 77,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 83,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 89,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 95,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 101,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 107,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 113,
+      "gy": 5,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 119,
+      "gy": 5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 7,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 13,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 19,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 25,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 31,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 37,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 43,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 49,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 55,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 60,
+      "gy": 121,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 66,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 72,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 78,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 84,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 90,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 96,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 102,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 108,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 114,
+      "gy": 121,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 119,
+      "gy": 121,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 7,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 13,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 19,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 25,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 31,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 37,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 43,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 49,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 55,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 5,
+      "gy": 61,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 66,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 72,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 78,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 84,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 90,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 96,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 102,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 108,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 5,
+      "gy": 114,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 5,
+      "gy": 119,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 7,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 13,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 19,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 25,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 31,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 37,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 43,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 49,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 55,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 121,
+      "gy": 61,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 66,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 72,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 78,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 84,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 90,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 96,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 102,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 108,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v6",
+      "gx": 121,
+      "gy": 114,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 121,
+      "gy": 119,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_corner",
+      "gx": 5,
+      "gy": 5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_corner",
+      "gx": 121,
+      "gy": 5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_corner",
+      "gx": 5,
+      "gy": 121,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_corner",
+      "gx": 121,
+      "gy": 121,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "gate_arch",
+      "gx": 62,
+      "gy": 0,
+      "w": 3,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "gate_arch",
+      "gx": 4,
+      "gy": 63,
+      "w": 3,
+      "h": 3,
+      "facing": "se"
+    },
+    {
+      "type": "gate_arch",
+      "gx": 120,
+      "gy": 63,
+      "w": 3,
+      "h": 3,
+      "facing": "nw"
+    },
+    {
+      "type": "city_gate_tower",
+      "gx": 62,
+      "gy": 121,
+      "w": 4,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "bell_tower",
+      "gx": 60,
+      "gy": 60,
+      "w": 7,
+      "h": 7
+    },
+    {
+      "type": "paifang",
+      "gx": 52,
+      "gy": 57,
+      "w": 3,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "paifang",
+      "gx": 70,
+      "gy": 57,
+      "w": 3,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "paifang",
+      "gx": 52,
+      "gy": 66,
+      "w": 3,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "paifang",
+      "gx": 70,
+      "gy": 66,
+      "w": 3,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "well",
+      "gx": 56,
+      "gy": 58
+    },
+    {
+      "type": "stele",
+      "gx": 56,
+      "gy": 56,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "lantern_post",
+      "gx": 54,
+      "gy": 54
+    },
+    {
+      "type": "lantern_post",
+      "gx": 73,
+      "gy": 54
+    },
+    {
+      "type": "lantern_post",
+      "gx": 54,
+      "gy": 73
+    },
+    {
+      "type": "lantern_post",
+      "gx": 73,
+      "gy": 73
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 8,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 14,
+      "gy": 8,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 20,
+      "gy": 8,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 14,
+      "w": 4,
+      "h": 4,
+      "facing": "ne",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 14,
+      "gy": 14,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 20,
+      "gy": 14,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 20,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 14,
+      "gy": 20,
+      "w": 4,
+      "h": 4,
+      "facing": "ne",
+      "variant": "carved",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 20,
+      "gy": 20,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 38,
+      "gy": 8,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 44,
+      "gy": 8,
+      "w": 4,
+      "h": 4,
+      "facing": "ne",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 38,
+      "gy": 14,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 44,
+      "gy": 14,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 38,
+      "gy": 20,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 44,
+      "gy": 20,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 38,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 14,
+      "gy": 38,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 20,
+      "gy": 38,
+      "w": 4,
+      "h": 4,
+      "facing": "ne",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 44,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 14,
+      "gy": 44,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 20,
+      "gy": 44,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "stall",
+      "gx": 36,
+      "gy": 36,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 39,
+      "gy": 36,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 42,
+      "gy": 36,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 45,
+      "gy": 36,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 48,
+      "gy": 36,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 36,
+      "gy": 39,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 39,
+      "gy": 39,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 42,
+      "gy": 39,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 45,
+      "gy": 39,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 48,
+      "gy": 39,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 36,
+      "gy": 42,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 39,
+      "gy": 42,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 42,
+      "gy": 42,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 45,
+      "gy": 42,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 48,
+      "gy": 42,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 36,
+      "gy": 45,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 39,
+      "gy": 45,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 42,
+      "gy": 45,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 45,
+      "gy": 45,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 48,
+      "gy": 45,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 36,
+      "gy": 48,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 39,
+      "gy": 48,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 42,
+      "gy": 48,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "stall",
+      "gx": 45,
+      "gy": 48,
+      "w": 2,
+      "h": 2,
+      "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 48,
+      "gy": 48,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
+    },
+    {
+      "type": "crate",
+      "gx": 35,
+      "gy": 37
+    },
+    {
+      "type": "crate",
+      "gx": 35,
+      "gy": 40
+    },
+    {
+      "type": "crate",
+      "gx": 35,
+      "gy": 43
+    },
+    {
+      "type": "crate",
+      "gx": 35,
+      "gy": 46
+    },
+    {
+      "type": "crate",
+      "gx": 35,
+      "gy": 49
+    },
+    {
+      "type": "crate",
+      "gx": 38,
+      "gy": 35
+    },
+    {
+      "type": "crate",
+      "gx": 41,
+      "gy": 35
+    },
+    {
+      "type": "crate",
+      "gx": 44,
+      "gy": 35
+    },
+    {
+      "type": "crate",
+      "gx": 47,
+      "gy": 35
+    },
+    {
+      "type": "crate",
+      "gx": 50,
+      "gy": 37
+    },
+    {
+      "type": "crate",
+      "gx": 50,
+      "gy": 40
+    },
+    {
+      "type": "crate",
+      "gx": 50,
+      "gy": 43
+    },
+    {
+      "type": "crate",
+      "gx": 50,
+      "gy": 46
+    },
+    {
+      "type": "crate",
+      "gx": 50,
+      "gy": 49
+    },
+    {
+      "type": "crate",
+      "gx": 38,
+      "gy": 50
+    },
+    {
+      "type": "crate",
+      "gx": 41,
+      "gy": 50
+    },
+    {
+      "type": "crate",
+      "gx": 44,
+      "gy": 50
+    },
+    {
+      "type": "crate",
+      "gx": 47,
+      "gy": 50
+    },
+    {
+      "type": "well",
+      "gx": 35,
+      "gy": 35
+    },
+    {
+      "type": "lantern_post",
+      "gx": 13,
+      "gy": 13
+    },
+    {
+      "type": "lantern_post",
+      "gx": 51,
+      "gy": 13
+    },
+    {
+      "type": "lantern_post",
+      "gx": 13,
+      "gy": 51
+    },
+    {
+      "type": "lantern_post",
+      "gx": 51,
+      "gy": 51
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 8,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 14,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 20,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 26,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 32,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 38,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 44,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 54,
+      "gy": 50,
+      "w": 4,
+      "h": 4,
+      "facing": "se",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 54,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 20,
+      "gy": 54,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 38,
+      "gy": 54,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 44,
+      "gy": 54,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "shop",
+      "tint": 14542591
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 72,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 72,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 74,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 74,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 76,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 78,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 80,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 80,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 82,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 82,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 10,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 10,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 12,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 12,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 14,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 14,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 16,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 16,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 18,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 18,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 72,
+      "gy": 10,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 10,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 72,
+      "gy": 16,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 16,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 14,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 76,
+      "gy": 12
+    },
+    {
+      "type": "lantern_post",
+      "gx": 76,
+      "gy": 20
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 72,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 72,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 74,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 74,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 76,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 78,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 80,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 80,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 82,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 82,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 28,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 28,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 30,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 30,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 32,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 32,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 34,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 34,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 36,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 36,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 72,
+      "gy": 28,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 28,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 72,
+      "gy": 34,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 34,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 32,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 76,
+      "gy": 30
+    },
+    {
+      "type": "lantern_post",
+      "gx": 76,
+      "gy": 38
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 72,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 74,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 74,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 76,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 78,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 80,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 80,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 82,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 82,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 46,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 46,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 48,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 48,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 50,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 50,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 52,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 52,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 70,
+      "gy": 54,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 83,
+      "gy": 54,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 72,
+      "gy": 46,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 46,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 52,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 50,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 76,
+      "gy": 48
+    },
+    {
+      "type": "lantern_post",
+      "gx": 76,
+      "gy": 56
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 90,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 90,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 92,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 92,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 94,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 96,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 98,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 98,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 100,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 100,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 10,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 10,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 12,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 12,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 14,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 14,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 16,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 16,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 18,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 18,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 90,
+      "gy": 10,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 96,
+      "gy": 10,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 90,
+      "gy": 16,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 96,
+      "gy": 16,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 14,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 94,
+      "gy": 12
+    },
+    {
+      "type": "lantern_post",
+      "gx": 94,
+      "gy": 20
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 90,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 90,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 92,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 92,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 94,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 96,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 98,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 98,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 100,
+      "gy": 26,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 100,
+      "gy": 39,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 28,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 28,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 30,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 30,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 32,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 32,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 34,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 34,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 36,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 36,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 90,
+      "gy": 28,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 96,
+      "gy": 28,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 90,
+      "gy": 34,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 96,
+      "gy": 34,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 32,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 94,
+      "gy": 30
+    },
+    {
+      "type": "lantern_post",
+      "gx": 94,
+      "gy": 38
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 90,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 90,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 92,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 92,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 94,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 96,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 98,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 98,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 100,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 100,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 46,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 46,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 48,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 48,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 50,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 50,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 52,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 52,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 88,
+      "gy": 54,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 101,
+      "gy": 54,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 90,
+      "gy": 46,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 96,
+      "gy": 46,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 90,
+      "gy": 52,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 96,
+      "gy": 52,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 16748395
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 50,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 94,
+      "gy": 48
+    },
+    {
+      "type": "lantern_post",
+      "gx": 94,
+      "gy": 56
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 106,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 106,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 108,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 108,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 110,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 112,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 114,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 114,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 116,
+      "gy": 8,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 116,
+      "gy": 21,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 10,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 10,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 12,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 12,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 14,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 14,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 16,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 16,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 18,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 18,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 106,
+      "gy": 10,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 112,
+      "gy": 10,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 106,
+      "gy": 16,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 112,
+      "gy": 16,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "carved",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 110,
+      "gy": 14,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 110,
+      "gy": 12
+    },
+    {
+      "type": "lantern_post",
+      "gx": 110,
+      "gy": 20
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 106,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 106,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 108,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 108,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 110,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 112,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 114,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 114,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 116,
+      "gy": 44,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 116,
+      "gy": 57,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 46,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 46,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 48,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 48,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 50,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 50,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 52,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 52,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 104,
+      "gy": 54,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 117,
+      "gy": 54,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "house",
+      "gx": 106,
+      "gy": 46,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 112,
+      "gy": 46,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 106,
+      "gy": 52,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 112,
+      "gy": 52,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "tree",
+      "gx": 110,
+      "gy": 50,
+      "variant": "leaf"
+    },
+    {
+      "type": "well",
+      "gx": 110,
+      "gy": 48
+    },
+    {
+      "type": "lantern_post",
+      "gx": 110,
+      "gy": 56
+    },
+    {
+      "type": "tree",
+      "gx": 104,
+      "gy": 30,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 110,
+      "gy": 26,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 116,
+      "gy": 32,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 104,
+      "gy": 38,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 36,
+      "variant": "leaf"
+    },
+    {
+      "type": "fence",
+      "gx": 102,
+      "gy": 26,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 102,
+      "gy": 30,
+      "w": 1,
+      "h": 8
+    },
+    {
+      "type": "fence",
+      "gx": 118,
+      "gy": 26,
+      "w": 1,
+      "h": 8
+    },
+    {
+      "type": "hall",
+      "gx": 36,
+      "gy": 94,
+      "w": 8,
+      "h": 8,
+      "variant": "stone",
+      "tint": 14542591
+    },
+    {
+      "type": "hall",
+      "gx": 22,
+      "gy": 104,
+      "w": 6,
+      "h": 6,
+      "variant": "stone",
+      "tint": 14542591
+    },
+    {
+      "type": "hall",
+      "gx": 12,
+      "gy": 86,
+      "w": 6,
+      "h": 6,
+      "variant": "stone",
+      "tint": 14542591
+    },
+    {
+      "type": "paifang",
+      "gx": 41,
+      "gy": 69,
+      "w": 3,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "incense",
+      "gx": 38,
+      "gy": 76
+    },
+    {
+      "type": "incense",
+      "gx": 38,
+      "gy": 80
+    },
+    {
+      "type": "incense",
+      "gx": 38,
+      "gy": 84
+    },
+    {
+      "type": "incense",
+      "gx": 44,
+      "gy": 76
+    },
+    {
+      "type": "incense",
+      "gx": 44,
+      "gy": 80
+    },
+    {
+      "type": "incense",
+      "gx": 44,
+      "gy": 84
+    },
+    {
+      "type": "stele",
+      "gx": 37,
+      "gy": 72,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "stele",
+      "gx": 37,
+      "gy": 76,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "stele",
+      "gx": 37,
+      "gy": 80,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "stele",
+      "gx": 45,
+      "gy": 72,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "stele",
+      "gx": 45,
+      "gy": 76,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "stele",
+      "gx": 45,
+      "gy": 80,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "type": "fence",
+      "gx": 33,
+      "gy": 70,
+      "w": 1,
+      "h": 18
+    },
+    {
+      "type": "fence",
+      "gx": 46,
+      "gy": 70,
+      "w": 1,
+      "h": 18
+    },
+    {
+      "type": "fence",
+      "gx": 33,
+      "gy": 104,
+      "w": 1,
+      "h": 8
+    },
+    {
+      "type": "fence",
+      "gx": 8,
+      "gy": 84,
+      "w": 1,
+      "h": 4
+    },
+    {
+      "type": "fence",
+      "gx": 8,
+      "gy": 106,
+      "w": 1,
+      "h": 3
+    },
+    {
+      "type": "house",
+      "gx": 12,
+      "gy": 106,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 48,
+      "gy": 108,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 30,
+      "gy": 112,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 16748395
+    },
+    {
+      "type": "house",
+      "gx": 8,
+      "gy": 116,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 44,
+      "gy": 116,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 18,
+      "gy": 96,
+      "w": 4,
+      "h": 4,
+      "facing": "sw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "well",
+      "gx": 30,
+      "gy": 84
+    },
+    {
+      "type": "tree",
+      "gx": 8,
+      "gy": 74,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 8,
+      "gy": 96,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 8,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 20,
+      "gy": 74,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 28,
+      "gy": 92,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 32,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 88,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 102,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 44,
+      "gy": 108,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 18,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 96,
+      "variant": "leaf"
+    },
+    {
+      "type": "house",
+      "gx": 74,
+      "gy": 72,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 112,
+      "gy": 74,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 76,
+      "gy": 114,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 14542591
+    },
+    {
+      "type": "house",
+      "gx": 116,
+      "gy": 90,
+      "w": 4,
+      "h": 4,
+      "facing": "nw",
+      "variant": "lattice",
+      "tint": 16748395
+    },
+    {
+      "type": "bridge",
+      "gx": 86,
+      "gy": 88,
+      "w": 3,
+      "h": 5
+    },
+    {
+      "type": "bridge",
+      "gx": 96,
+      "gy": 108,
+      "w": 3,
+      "h": 5
+    },
+    {
+      "type": "bridge",
+      "gx": 70,
+      "gy": 98,
+      "w": 3,
+      "h": 5
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 70,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 70,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 73,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 73,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 76,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 79,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 79,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 82,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 85,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 88,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 88,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 88,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 88,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 88,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 88,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 88,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 88,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 91,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 91,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 91,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 91,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 91,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 91,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 91,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 94,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 94,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 94,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 97,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 97,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 97,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 100,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 100,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 100,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 103,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 103,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 103,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 106,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 106,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 109,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 109,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 109,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 109,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 109,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 109,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 115,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 115,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 115,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 115,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 70,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 73,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 76,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 79,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 82,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 85,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 88,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 91,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 94,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 97,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 100,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 103,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 106,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 115,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 118,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 72,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 79,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 86,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 93,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 100,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 107,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 114,
+      "gy": 72
+    },
+    {
+      "type": "rock",
+      "gx": 72,
+      "gy": 79
+    },
+    {
+      "type": "rock",
+      "gx": 93,
+      "gy": 79
+    },
+    {
+      "type": "rock",
+      "gx": 107,
+      "gy": 79
+    },
+    {
+      "type": "rock",
+      "gx": 114,
+      "gy": 79
+    },
+    {
+      "type": "rock",
+      "gx": 72,
+      "gy": 86
+    },
+    {
+      "type": "rock",
+      "gx": 79,
+      "gy": 86
+    },
+    {
+      "type": "rock",
+      "gx": 86,
+      "gy": 86
+    },
+    {
+      "type": "rock",
+      "gx": 114,
+      "gy": 86
+    },
+    {
+      "type": "rock",
+      "gx": 72,
+      "gy": 93
+    },
+    {
+      "type": "rock",
+      "gx": 79,
+      "gy": 93
+    },
+    {
+      "type": "rock",
+      "gx": 86,
+      "gy": 93
+    },
+    {
+      "type": "rock",
+      "gx": 114,
+      "gy": 93
+    },
+    {
+      "type": "rock",
+      "gx": 86,
+      "gy": 100
+    },
+    {
+      "type": "rock",
+      "gx": 114,
+      "gy": 100
+    },
+    {
+      "type": "rock",
+      "gx": 72,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 79,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 86,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 93,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 100,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 107,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 114,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 72,
+      "gy": 114
+    },
+    {
+      "type": "rock",
+      "gx": 86,
+      "gy": 114
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 9,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 9,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 50,
+      "gy": 9
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 12,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 12,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 15,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 34,
+      "gy": 15
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 16,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 26,
+      "gy": 18
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 18,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 50,
+      "gy": 19
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 21,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 21,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 22,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 24,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 24,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 25,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 26,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 26,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 26,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 18,
+      "gy": 26
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 26,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 26,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 37,
+      "gy": 26,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 40,
+      "gy": 26,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 43,
+      "gy": 26
+    },
+    {
+      "type": "tree",
+      "gx": 46,
+      "gy": 26,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 106,
+      "gy": 28
+    },
+    {
+      "type": "tree",
+      "gx": 113,
+      "gy": 28,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 116,
+      "gy": 28
+    },
+    {
+      "type": "tree",
+      "gx": 109,
+      "gy": 29,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 107,
+      "gy": 31,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 112,
+      "gy": 31,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 110,
+      "gy": 32,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 33,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 34,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 34,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 15,
+      "gy": 34
+    },
+    {
+      "type": "tree",
+      "gx": 18,
+      "gy": 34,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 34,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 34,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 50,
+      "gy": 34
+    },
+    {
+      "type": "tree",
+      "gx": 108,
+      "gy": 34,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 113,
+      "gy": 34,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 35,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 116,
+      "gy": 35,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 36,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 37,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 108,
+      "gy": 37,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 114,
+      "gy": 37,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 111,
+      "gy": 38
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 40,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 26,
+      "gy": 43
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 46,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 49,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 9,
+      "gy": 50
+    },
+    {
+      "type": "tree",
+      "gx": 16,
+      "gy": 50,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 19,
+      "gy": 50
+    },
+    {
+      "type": "tree",
+      "gx": 22,
+      "gy": 50,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 25,
+      "gy": 52,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 34,
+      "gy": 52,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 16,
+      "gy": 53
+    },
+    {
+      "type": "tree",
+      "gx": 14,
+      "gy": 54,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 50,
+      "gy": 54
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 55,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 34,
+      "gy": 55
+    },
+    {
+      "type": "tree",
+      "gx": 17,
+      "gy": 56,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 14,
+      "gy": 57,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 57,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 71,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 71,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 71,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 18,
+      "gy": 71
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 71,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 71,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 71,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 30,
+      "gy": 71,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 71,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 71,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 11,
+      "gy": 74,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 14,
+      "gy": 74,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 17,
+      "gy": 74,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 23,
+      "gy": 74,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 74,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 29,
+      "gy": 74,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 74,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 74,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 74,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 76,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 77,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 12,
+      "gy": 77
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 77,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 18,
+      "gy": 77,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 77,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 77,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 27,
+      "gy": 77
+    },
+    {
+      "type": "tree",
+      "gx": 30,
+      "gy": 77,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 77,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 52,
+      "gy": 77
+    },
+    {
+      "type": "rock",
+      "gx": 55,
+      "gy": 79
+    },
+    {
+      "type": "rock",
+      "gx": 9,
+      "gy": 80
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 80,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 80,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 18,
+      "gy": 80,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 80,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 24,
+      "gy": 80
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 80,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 30,
+      "gy": 80,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 49,
+      "gy": 80
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 80,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 82,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 83,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 83,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 36,
+      "gy": 84,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 85,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 86,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 86,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 88,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 53,
+      "gy": 89,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 9,
+      "gy": 90
+    },
+    {
+      "type": "tree",
+      "gx": 20,
+      "gy": 90,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 23,
+      "gy": 90,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 90,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 29,
+      "gy": 90
+    },
+    {
+      "type": "tree",
+      "gx": 32,
+      "gy": 90,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 48,
+      "gy": 90,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 91,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 56,
+      "gy": 91,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 54,
+      "gy": 92,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 93,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 20,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 23,
+      "gy": 93,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 26,
+      "gy": 93
+    },
+    {
+      "type": "rock",
+      "gx": 31,
+      "gy": 93
+    },
+    {
+      "type": "tree",
+      "gx": 48,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 94,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 15,
+      "gy": 94
+    },
+    {
+      "type": "tree",
+      "gx": 18,
+      "gy": 94,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 94,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 94,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 29,
+      "gy": 95
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 95,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 96,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 96,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 32,
+      "gy": 96,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 46,
+      "gy": 96,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 96,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 11,
+      "gy": 97,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 14,
+      "gy": 97,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 30,
+      "gy": 98,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 98,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 99,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 99,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 99,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 46,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 49,
+      "gy": 99,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 52,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 100,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 100,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 30,
+      "gy": 101,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 55,
+      "gy": 101,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 102,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 18,
+      "gy": 102,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 102,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 102,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 27,
+      "gy": 102
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 102,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 46,
+      "gy": 102,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 53,
+      "gy": 102,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 12,
+      "gy": 103,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 103,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 30,
+      "gy": 104
+    },
+    {
+      "type": "tree",
+      "gx": 36,
+      "gy": 104,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 104,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 42,
+      "gy": 104,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 56,
+      "gy": 104,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 45,
+      "gy": 105,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 48,
+      "gy": 105,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 105,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 54,
+      "gy": 105
+    },
+    {
+      "type": "tree",
+      "gx": 36,
+      "gy": 107,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 107,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 42,
+      "gy": 107
+    },
+    {
+      "type": "rock",
+      "gx": 57,
+      "gy": 107
+    },
+    {
+      "type": "tree",
+      "gx": 54,
+      "gy": 108,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 36,
+      "gy": 110,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 39,
+      "gy": 110
+    },
+    {
+      "type": "tree",
+      "gx": 42,
+      "gy": 110,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 110,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 18,
+      "gy": 111
+    },
+    {
+      "type": "tree",
+      "gx": 45,
+      "gy": 111,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 54,
+      "gy": 111,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 11,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 14,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 112,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 112,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 27,
+      "gy": 112
+    },
+    {
+      "type": "rock",
+      "gx": 36,
+      "gy": 113
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 113,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 42,
+      "gy": 113,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 113,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 17,
+      "gy": 114,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 45,
+      "gy": 114
+    },
+    {
+      "type": "tree",
+      "gx": 48,
+      "gy": 114,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 114,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 54,
+      "gy": 114,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 14,
+      "gy": 115
+    },
+    {
+      "type": "tree",
+      "gx": 20,
+      "gy": 115,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 23,
+      "gy": 115,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 26,
+      "gy": 115,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 36,
+      "gy": 116,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 116,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 42,
+      "gy": 116,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 116,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 117,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 53,
+      "gy": 117,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 14,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "rock",
+      "gx": 21,
+      "gy": 118
+    },
+    {
+      "type": "tree",
+      "gx": 24,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 118,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 30,
+      "gy": 118,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 37,
+      "gy": 119,
+      "variant": "pine"
+    },
+    {
+      "type": "rock",
+      "gx": 40,
+      "gy": 119
+    },
+    {
+      "type": "tree",
+      "gx": 56,
+      "gy": 119,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 9,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 9,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 9,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 9,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 15,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 15,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 15,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 15,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 21,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 21,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 21,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 21,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 27,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 27,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 27,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 27,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 33,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 33,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 33,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 33,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 39,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 39,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 39,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 39,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 45,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 45,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 45,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 45,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 45,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 45,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 45,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 45,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 51,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 51,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 51,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 51,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 51,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 57,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 57,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 57,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 57,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 57,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 63,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 63,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 63,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 63,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 63,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 63,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 69,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 69,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 69,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 69,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 69,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 69,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 69,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 69,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 75,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 75,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 75,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 75,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 75,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 75,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 75,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 75,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 81,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 81,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 81,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 81,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 81,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 81,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 81,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 81,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 87,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 87,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 87,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 87,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 87,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 87,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 87,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 87,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 99,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 105,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 105,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 105,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 105,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 111,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 111,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 111,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 111,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 117,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 117,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 117,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 117,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 123,
+      "gy": 1,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 123,
+      "gy": 3,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 123,
+      "gy": 125,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 123,
+      "gy": 127,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 1,
+      "gy": 123,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 3,
+      "gy": 123,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 125,
+      "gy": 123,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 127,
+      "gy": 123,
+      "variant": "leaf"
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 import { CLASSES, PETS, SKILLS } from '../core/content';
 import type { ClassDef, PetDef, Resists } from '../core/types';
 import { h } from './dom';
+import { audio } from '../audio/audio';
+import { CLASS_ART, PET_ART, artUrl } from '../core/art';
 
 export interface SetupResult {
   classId: string;
@@ -41,6 +43,10 @@ export function renderSetup(root: HTMLElement, handlers: SetupHandlers): void {
     grid: HTMLElement,
     onPick: () => void,
   ): HTMLElement => {
+    const art = CLASS_ART[item.id] ?? PET_ART[item.id];
+    const portrait = art
+      ? h('img', { class: 'pick-portrait', src: artUrl(art.portrait), alt: item.name })
+      : h('div', { class: 'pick-emoji' }, item.emoji);
     const card = h(
       'div',
       {
@@ -52,7 +58,7 @@ export function renderSetup(root: HTMLElement, handlers: SetupHandlers): void {
           onPick();
         },
       },
-      h('div', { class: 'pick-emoji' }, item.emoji),
+      portrait,
       h('div', { class: 'pick-name' }, item.name, h('span', { class: 'race' }, extra)),
       h('div', { class: 'pick-desc' }, item.desc),
       h('div', { class: 'pick-skills' }, item.skillIds.map((id) => SKILLS[id]?.name ?? id).join(' · ')),
@@ -86,10 +92,19 @@ export function renderSetup(root: HTMLElement, handlers: SetupHandlers): void {
     },
   }, '开 始 冒 险');
 
+  const soundBtn = h('button', {
+    class: 'btn small',
+    onclick: () => {
+      const muted = audio.toggleMute();
+      soundBtn.textContent = muted ? '🔇 音效 关' : '🔊 音效 开';
+      audio.play('click');
+    },
+  }, audio.isMuted() ? '🔇 音效 关' : '🔊 音效 开');
+
   root.append(
     h('div', { class: 'setup' },
       h('h1', { class: 'game-title' }, '山 海 奇 谭'),
-      h('div', { class: 'game-sub' }, '回合制 RPG · M2 大地图探索'),
+      h('div', { class: 'game-sub' }, '国风回合制 · 云京启程 · 五族道法'),
       hasSave && onContinue
         ? h('div', { style: 'margin-bottom:10px' },
             h('button', { class: 'btn primary big', onclick: () => onContinue() }, '继 续 冒 险'),
@@ -99,7 +114,7 @@ export function renderSetup(root: HTMLElement, handlers: SetupHandlers): void {
       h('div', { class: 'sec-label' }, '① 名号'), nameInput,
       h('div', { class: 'sec-label' }, '② 选择门派职业'), classGrid,
       h('div', { class: 'sec-label' }, '③ 选择宠物'), petGrid,
-      h('div', { class: 'sec-label' }), startBtn,
+      h('div', { class: 'sec-label' }), startBtn, soundBtn,
       h('div', { class: 'game-foot' }, '提示：数值可在 src/core/content.ts 中调整；地址栏加 #sim 可跑批量数值仿真'),
     ),
   );
