@@ -739,9 +739,14 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(wallSegs >= 60, `城墙段 ${wallSegs} 件（6 格 ${count('city_wall_u6') + count('city_wall_v6')} + 2 格 ${count('city_wall_u2') + count('city_wall_v2')}）`);
   ok(count('city_wall_u6') > 0 && count('city_wall_v6') > 0, '直段 u/v 两向都用到美术模块');
   eq(count('city_wall_corner'), 4, '四角转角构件（美术 city_wall_corner）');
-  eq(count('gate_arch') + count('city_gate_tower'), 4, '四向城门各一座（3 拱门 + 1 城门楼）');
-  const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower')].map((g) => `${g.gx},${g.gy}`));
-  ok(gateSet.has('62,4'), '北门嵌在北墙门洞、对准南北主街轴线 (62,4)');
+  eq(count('gate_arch') + count('city_gate_tower') + count('city_gate_wide'), 4,
+    '四向城门各一座（2 拱门 + 南城门楼 + 北宽城门楼）');
+  const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower'), ...pick('city_gate_wide')]
+    .map((g) => `${g.gx},${g.gy}`));
+  ok(gateSet.has('59,4'), '北门 = 宽城门楼，开口与南北主街同宽 (x59..68)');
+  // 宽城门楼高于城墙：正脊 406 > 城墙垛口 224（城门比城墙矮不合理）
+  ok(iso.ISO_TYPES.city_gate_wide.height > iso.ISO_TYPES.city_wall_u6.height,
+    '北城门楼标高高于城墙');
   ok(gateSet.has('62,121') && gateSet.has('4,63') && gateSet.has('120,63'), '南（城门楼）/西/东门');
   for (const b of [...pick('house'), ...pick('house_large'), ...pick('hall')]) {
     ok(b.gx >= 7 && b.gy >= 7 && b.gx + iso.isoSize(b).w <= 121 && b.gy + iso.isoSize(b).h <= 121,
@@ -891,8 +896,12 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   for (const [gx, gy, name] of [[63, 6, '北门'], [63, 122, '南门'], [5, 64, '西门'], [121, 64, '东门']]) {
     ok(walk(gx, gy), `${name}拱洞通道可走`);
   }
-  for (const [gx, gy] of [[8, 5], [60, 6], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5]]) {
-    ok(!walk(gx, gy), `城墙 (${gx},${gy}) 应阻挡`);
+  // 宽城门楼：券洞 8 列与主街同宽（x60..67 全部可穿），两侧墩柱阻挡
+  for (const [gx, gy] of [[60, 5], [63, 4], [67, 5], [66, 6]]) {
+    ok(walk(gx, gy), `北门宽券洞 (${gx},${gy}) 可走`);
+  }
+  for (const [gx, gy] of [[8, 5], [59, 5], [68, 5], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5]]) {
+    ok(!walk(gx, gy), `城墙/墩柱 (${gx},${gy}) 应阻挡`);
   }
   const house = pick('house')[0];
   ok(!walk(house.gx, house.gy), `房屋足迹 (${house.gx},${house.gy}) 不可走`);
@@ -1050,10 +1059,10 @@ function isoScene(id) {
 /** 格坐标 → 世界坐标必须按「该图自己的格网」换算 */
 const isoAt = (id, gx, gy) => iso.cellToWorld(world.isoGridOf(id), gx, gy);
 const countType = (id, type) => isoScene(id).layout.items.filter((i) => i.type === type).length;
-/** 边界带：距任意一条边 ≤1 格；云京北门嵌在城墙线上（券洞 62,4），门洞一带视作边界 */
+/** 边界带：距任意一条边 ≤1 格；云京北门嵌在城墙线上（宽城门楼 x59..68，券洞 gy4..6），门洞一带视作边界 */
 const isBorder = (id, gx, gy) => {
   const g = world.isoGridOf(id);
-  if (id === 'taoyuan' && gx === 62 && gy >= 1 && gy <= 5) return true;
+  if (id === 'taoyuan' && gx >= 59 && gx <= 68 && gy >= 1 && gy <= 5) return true;
   return gx <= 1 || gy <= 1 || gx >= g.cols - 2 || gy >= g.rows - 2;
 };
 

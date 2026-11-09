@@ -308,80 +308,80 @@
       "h": 2
     },
     {
-      "type": "city_wall_u6",
+      "type": "city_wall_u2",
       "gx": 55,
       "gy": 5,
-      "w": 6,
+      "w": 2,
       "h": 2
     },
     {
       "type": "city_wall_u2",
-      "gx": 60,
+      "gx": 57,
       "gy": 5,
       "w": 2,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 65,
+      "gx": 69,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 71,
+      "gx": 75,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 77,
+      "gx": 81,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 83,
+      "gx": 87,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 89,
+      "gx": 93,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 95,
+      "gx": 99,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 101,
+      "gx": 105,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 107,
+      "gx": 111,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
-      "type": "city_wall_u6",
-      "gx": 113,
+      "type": "city_wall_u2",
+      "gx": 117,
       "gy": 5,
-      "w": 6,
+      "w": 2,
       "h": 2
     },
     {
@@ -840,10 +840,10 @@
       "h": 2
     },
     {
-      "type": "gate_arch",
-      "gx": 62,
+      "type": "city_gate_wide",
+      "gx": 59,
       "gy": 4,
-      "w": 3,
+      "w": 10,
       "h": 3,
       "facing": "sw"
     },

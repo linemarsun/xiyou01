@@ -142,6 +142,8 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   city_wall_corner: { w: 2, h: 2, height: 232 },
   /** 美术城门楼 4×3：城台 + 券门洞 + 重檐城楼（正脊 406，全城最高） */
   city_gate_tower: { w: 4, h: 3, height: 406 },
+  /** 宽城门楼 10×3：与南北主街同宽（x59..68），宽券洞贯通，正脊 406 高于城墙垛口 224 */
+  city_gate_wide: { w: 10, h: 3, height: 406 },
   /** 全城制高点：中心鼓楼（三层重檐，7×7 足迹，底层券门可穿） */
   bell_tower: { w: 7, h: 7, height: 460 },
   /** 市集货箱 / 庙前石碑 */
@@ -175,6 +177,8 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   city_wall_v2: { ax: 0, ay: -5 },
   city_wall_corner: { ax: 0, ay: -6 },
   city_gate_tower: { ax: 15.5, ay: -5 },
+  // 10×3 宽城门楼：anchor_px [320,598] - (spriteW/2=208, spriteH=604) = (112, -6)
+  city_gate_wide: { ax: 112, ay: -6 },
   // 7×7 鼓楼：anchor_px [229,602] - (spriteW/2, spriteH) = (0, -4)，画布底比足迹前底顶点低 4px
   bell_tower: { ax: 0, ay: -4 },
 };
@@ -238,6 +242,18 @@ export function gateTowerLane(item: IsoItem): Array<{ gx: number; gy: number }> 
   const x0 = item.gx + Math.floor((w - 2) / 2);
   const out: Array<{ gx: number; gy: number }> = [];
   for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 2; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
+  return out;
+}
+
+/**
+ * 宽城门楼券洞通道：10×3 足迹中间 8 列全部可走（券洞半宽 3.6 格，两侧各留 1 格墩柱），
+ * 与主街同宽——整条街都能穿门，不再出现「10 格宽的路对着 1 格宽的门洞」。
+ */
+export function wideGateLane(item: IsoItem): Array<{ gx: number; gy: number }> {
+  const { w, h } = isoSize(item);
+  const x0 = item.gx + Math.floor((w - 8) / 2);
+  const out: Array<{ gx: number; gy: number }> = [];
+  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 8; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
   return out;
 }
 
@@ -384,11 +400,13 @@ export function buildCollision(layout: IsoLayout): IsoCollision {
         ? archLane(item).map((c) => keyOf(c.gx, c.gy))
         : item.type === 'city_gate_tower'
           ? gateTowerLane(item).map((c) => keyOf(c.gx, c.gy))
-          : item.type === 'bell_tower'
-            ? bellTowerPassage(item).map((c) => keyOf(c.gx, c.gy))
-            : item.type === 'bridge'
-            ? cells.map((c) => keyOf(c.gx, c.gy))
-            : [],
+          : item.type === 'city_gate_wide'
+            ? wideGateLane(item).map((c) => keyOf(c.gx, c.gy))
+            : item.type === 'bell_tower'
+              ? bellTowerPassage(item).map((c) => keyOf(c.gx, c.gy))
+              : item.type === 'bridge'
+              ? cells.map((c) => keyOf(c.gx, c.gy))
+              : [],
     );
     for (const c of cells) {
       const k = keyOf(c.gx, c.gy);

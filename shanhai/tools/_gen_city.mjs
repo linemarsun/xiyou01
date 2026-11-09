@@ -135,9 +135,9 @@ const wallRun = (x, y, w, h) => {
   for (; len - i >= 2; i += 2) seg(i, 2);
   if (len - i === 1) seg(i - 1, 2);
 };
-// 北门在 x62..64（对准南北主街 x59..68），南北墙各留 3 格门洞
-wallRun(7, 5, 55, 2);     // 北墙西段 7..61
-wallRun(65, 5, 56, 2);    // 北墙东段 65..120
+// 北门开口与南北主街（x59..68）同宽：西段 7..58 / 东段 69..120，宽城门楼跨 x59..68
+wallRun(7, 5, 52, 2);     // 北墙西段 7..58
+wallRun(69, 5, 52, 2);    // 北墙东段 69..120
 wallRun(7, 121, 55, 2);   // 南墙西段 7..61
 wallRun(66, 121, 55, 2);  // 南墙东段 66..120
 wallRun(5, 7, 2, 56);     // 西墙北段
@@ -148,11 +148,13 @@ for (const [x, y] of [[5, 5], [121, 5], [5, 121], [121, 121]]) {
   items.push({ type: 'city_wall_corner', gx: x, gy: y, w: 2, h: 2 });
   for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) placed.add(key(x + dx, y + dy));
 }
-// 北门必须嵌在北墙门洞（gx62..64 / gy5..6）里：footprint 落在 gy4..6，与东西门同理外沿 1 格
-items.push({ type: 'gate_arch', gx: 62, gy: 4, w: 3, h: 3, facing: 'sw' });
+// 北门必须嵌在北墙开口（gx59..68 / gy5..6）里：宽城门楼 footprint 落在 gy4..6，
+// 与主街同宽（10 格），券洞贯通 ~8 格，正脊 406 高于城墙垛口 224
+items.push({ type: 'city_gate_wide', gx: 59, gy: 4, w: 10, h: 3, facing: 'sw' });
 items.push({ type: 'gate_arch', gx: 4, gy: 63, w: 3, h: 3, facing: 'se' });
 items.push({ type: 'gate_arch', gx: 120, gy: 63, w: 3, h: 3, facing: 'nw' });
 items.push({ type: 'city_gate_tower', gx: 62, gy: 121, w: 4, h: 3, facing: 'sw' });
+for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 10; dx++) placed.add(key(59 + dx, 4 + dy));
 for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(62 + dx, 121 + dy));
 
 // ---------- 中心：鼓楼（7×7 三层）+ 环绕广场 + 牌坊 ----------
