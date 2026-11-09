@@ -1,0 +1,61 @@
+{
+ "name": "city_gate_wide_v",
+ "facing": "SW",
+ "footprint": [
+  3,
+  10
+ ],
+ "footprint_w": 3,
+ "footprint_h": 10,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  3,
+  10
+ ],
+ "anchor_px": [
+  96,
+  597
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  416,
+  603
+ ],
+ "sprite_h_px": 599,
+ "ratio_to_char": 7.13,
+ "margins_px": [
+  0,
+  2,
+  0,
+  2
+ ],
+ "source": "宽城门楼（v 向 · 西/东门）3×10：条石基座 0-30 + 城台 30-238 + 宽券洞（贯通，半宽 3.6 格、券脚 z=92、券顶 z≈211，砖砌内壁 + 远口透光 + 地面光池）+ 匾额 + 城楼下层 238-300（腰檐）+ 上层 332-366 + 两坡顶 366-406 + 台面女墙；正脊 406 高于城墙垛口 224；券洞开在 u1 立面，足迹与东西主街同宽",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": false,
+ "derive_op": "draw(real_geometry)",
+ "derived_from": null,
+ "tileable": false,
+ "arch": {
+  "half_width_cells": 3.6,
+  "spring_z": 92,
+  "top_z": 210.8,
+  "passable": true,
+  "clear_width_px": 230,
+  "clear_height_px": 92,
+  "axis": "u"
+ },
+ "elevation": {
+  "podium_top_z": 238,
+  "eave_z": 300,
+  "ridge_z": 406
+ },
+ "note": "镜像朝向件：券洞朝 SE（u1 面），西/东门共用（相机只见 SE 面）"
+}

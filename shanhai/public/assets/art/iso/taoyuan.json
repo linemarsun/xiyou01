@@ -588,81 +588,81 @@
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 5,
       "gy": 55,
       "w": 2,
-      "h": 6
+      "h": 2
     },
     {
       "type": "city_wall_v2",
       "gx": 5,
-      "gy": 61,
+      "gy": 57,
       "w": 2,
       "h": 2
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 66,
+      "gy": 69,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 72,
+      "gy": 75,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 78,
+      "gy": 81,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 84,
+      "gy": 87,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 90,
+      "gy": 93,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 96,
+      "gy": 99,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 102,
+      "gy": 105,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 108,
+      "gy": 111,
       "w": 2,
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 5,
-      "gy": 114,
+      "gy": 117,
       "w": 2,
-      "h": 6
+      "h": 2
     },
     {
       "type": "city_wall_v2",
@@ -728,81 +728,81 @@
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 121,
       "gy": 55,
       "w": 2,
-      "h": 6
+      "h": 2
     },
     {
       "type": "city_wall_v2",
       "gx": 121,
-      "gy": 61,
+      "gy": 57,
       "w": 2,
       "h": 2
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 66,
+      "gy": 69,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 72,
+      "gy": 75,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 78,
+      "gy": 81,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 84,
+      "gy": 87,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 90,
+      "gy": 93,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 96,
+      "gy": 99,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 102,
+      "gy": 105,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 108,
+      "gy": 111,
       "w": 2,
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 121,
-      "gy": 114,
+      "gy": 117,
       "w": 2,
-      "h": 6
+      "h": 2
     },
     {
       "type": "city_wall_v2",
@@ -842,31 +842,31 @@
     {
       "type": "city_gate_wide",
       "gx": 59,
-      "gy": 4,
+      "gy": 5,
       "w": 10,
       "h": 3,
       "facing": "sw"
     },
     {
-      "type": "gate_arch",
-      "gx": 4,
-      "gy": 63,
+      "type": "city_gate_wide_v",
+      "gx": 5,
+      "gy": 59,
       "w": 3,
-      "h": 3,
+      "h": 10,
       "facing": "se"
     },
     {
-      "type": "gate_arch",
+      "type": "city_gate_wide_v",
       "gx": 120,
-      "gy": 63,
+      "gy": 59,
       "w": 3,
-      "h": 3,
-      "facing": "nw"
+      "h": 10,
+      "facing": "se"
     },
     {
       "type": "city_gate_tower",
       "gx": 62,
-      "gy": 121,
+      "gy": 120,
       "w": 4,
       "h": 3,
       "facing": "sw"

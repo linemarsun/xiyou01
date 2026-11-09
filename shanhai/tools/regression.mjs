@@ -739,15 +739,19 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(wallSegs >= 60, `城墙段 ${wallSegs} 件（6 格 ${count('city_wall_u6') + count('city_wall_v6')} + 2 格 ${count('city_wall_u2') + count('city_wall_v2')}）`);
   ok(count('city_wall_u6') > 0 && count('city_wall_v6') > 0, '直段 u/v 两向都用到美术模块');
   eq(count('city_wall_corner'), 4, '四角转角构件（美术 city_wall_corner）');
-  eq(count('gate_arch') + count('city_gate_tower') + count('city_gate_wide'), 4,
-    '四向城门各一座（2 拱门 + 南城门楼 + 北宽城门楼）');
-  const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower'), ...pick('city_gate_wide')]
-    .map((g) => `${g.gx},${g.gy}`));
-  ok(gateSet.has('59,4'), '北门 = 宽城门楼，开口与南北主街同宽 (x59..68)');
+  eq(count('gate_arch') + count('city_gate_tower') + count('city_gate_wide') + count('city_gate_wide_v'), 4,
+    '四向城门各一座（南城门楼 + 北/西/东宽城门楼，城台制式统一）');
+  const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower'), ...pick('city_gate_wide'),
+    ...pick('city_gate_wide_v')].map((g) => `${g.gx},${g.gy}`));
+  ok(gateSet.has('59,5'), '北门 = 宽城门楼，开口与南北主街同宽 (x59..68)、外侧与城墙齐平 (gy5..7)');
   // 宽城门楼高于城墙：正脊 406 > 城墙垛口 224（城门比城墙矮不合理）
   ok(iso.ISO_TYPES.city_gate_wide.height > iso.ISO_TYPES.city_wall_u6.height,
     '北城门楼标高高于城墙');
-  ok(gateSet.has('62,121') && gateSet.has('4,63') && gateSet.has('120,63'), '南（城门楼）/西/东门');
+  ok(gateSet.has('62,120') && gateSet.has('5,59') && gateSet.has('120,59'),
+    '南（城门楼，外侧齐平 gy120..122）/ 西 / 东门（v 向宽城门楼，开口与东西主街同宽 y59..68）');
+  // 四门城台外侧都与城墙外面齐平：北/南门凸向城内 1 排，西/东门凸向城内 1 列
+  ok(iso.ISO_TYPES.city_gate_wide_v.height === iso.ISO_TYPES.city_gate_wide.height,
+    '东西门与北门同一标高体系');
   for (const b of [...pick('house'), ...pick('house_large'), ...pick('hall')]) {
     ok(b.gx >= 7 && b.gy >= 7 && b.gx + iso.isoSize(b).w <= 121 && b.gy + iso.isoSize(b).h <= 121,
       `房屋不得贴边/入墙: ${b.type} (${b.gx},${b.gy})`);
@@ -893,19 +897,21 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   for (const [fx, fy, tx, ty, name] of [[63, 57, 63, 66, '南北'], [57, 63, 66, 63, '东西']]) {
     ok(iso.findIsoPath(col, layout.grid, { gx: fx, gy: fy }, { gx: tx, gy: ty }) !== null, `鼓楼 ${name} 方向 BFS 可穿行`);
   }
-  for (const [gx, gy, name] of [[63, 6, '北门'], [63, 122, '南门'], [5, 64, '西门'], [121, 64, '东门']]) {
-    ok(walk(gx, gy), `${name}拱洞通道可走`);
+  // 四门券洞通道：北门（x60..67 × gy5..7）/ 南门（中 2 列）/ 西东门（y60..67 × gx5..7 / gx120..122）
+  for (const [gx, gy, name] of [[63, 6, '北门'], [63, 121, '南门'], [6, 63, '西门'], [121, 63, '东门']]) {
+    ok(walk(gx, gy), `${name}券洞通道可走`);
   }
-  // 宽城门楼：券洞 8 列与主街同宽（x60..67 全部可穿），两侧墩柱阻挡
-  for (const [gx, gy] of [[60, 5], [63, 4], [67, 5], [66, 6]]) {
-    ok(walk(gx, gy), `北门宽券洞 (${gx},${gy}) 可走`);
+  // 宽城门楼：券洞与主街同宽（北门 x60..67 全部可穿，东西门 y60..67 全部可穿），两侧墩柱阻挡
+  for (const [gx, gy] of [[60, 6], [67, 5], [60, 7], [67, 7], [5, 60], [7, 67], [120, 60], [122, 67]]) {
+    ok(walk(gx, gy), `宽券洞 (${gx},${gy}) 可走`);
   }
-  for (const [gx, gy] of [[8, 5], [59, 5], [68, 5], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5]]) {
+  for (const [gx, gy] of [[8, 5], [59, 5], [68, 5], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5],
+    [59, 6], [68, 7], [5, 59], [7, 59], [120, 59], [122, 68]]) {
     ok(!walk(gx, gy), `城墙/墩柱 (${gx},${gy}) 应阻挡`);
   }
   const house = pick('house')[0];
   ok(!walk(house.gx, house.gy), `房屋足迹 (${house.gx},${house.gy}) 不可走`);
-  const gate = pick('gate_arch')[0];
+  const gate = pick('paifang')[0];   // 牌坊复用 3×3 拱门贴图，拱洞机制与旧 gate_arch 一致
   const arch = iso.archCell(gate);
   ok(walk(arch.gx, arch.gy), '拱洞格可走');
   ok(!walk(gate.gx, gate.gy), '门柱格不可走');

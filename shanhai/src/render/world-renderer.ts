@@ -557,7 +557,7 @@ export class WorldRenderer {
       if (unit.item.tint !== undefined) sp.tint = unit.item.tint;
       // 城门楼与左右直墙衔接：图端头仍带一条深色描边，这里把精灵横向补 2px（左右各 1px）
       // 压住接缝。城墙直段本身不加裁边/外扩补丁。
-      if (unit.item.type === 'city_gate_tower' && tex.width > 0) {
+      if ((unit.item.type === 'city_gate_tower' || unit.item.type === 'city_gate_wide') && tex.width > 0) {
         sp.scale.x = (tex.width + 2) / tex.width;
       }
       return sp;

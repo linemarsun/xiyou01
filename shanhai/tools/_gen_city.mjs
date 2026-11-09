@@ -135,27 +135,36 @@ const wallRun = (x, y, w, h) => {
   for (; len - i >= 2; i += 2) seg(i, 2);
   if (len - i === 1) seg(i - 1, 2);
 };
+// 四门统一制式：城台外侧与城墙外面齐平、向城内凸出 1 排（内侧读作凸出的城台），
+// 券洞开在朝城内的立面上；开口与对应主街同轴同宽。
 // 北门开口与南北主街（x59..68）同宽：西段 7..58 / 东段 69..120，宽城门楼跨 x59..68
 wallRun(7, 5, 52, 2);     // 北墙西段 7..58
 wallRun(69, 5, 52, 2);    // 北墙东段 69..120
 wallRun(7, 121, 55, 2);   // 南墙西段 7..61
 wallRun(66, 121, 55, 2);  // 南墙东段 66..120
-wallRun(5, 7, 2, 56);     // 西墙北段
-wallRun(5, 66, 2, 55);    // 西墙南段
-wallRun(121, 7, 2, 56);   // 东墙北段
-wallRun(121, 66, 2, 55);  // 东墙南段
+// 东西墙开口与东西主街（y59..68）同宽：北段 7..58 / 南段 69..120
+wallRun(5, 7, 2, 52);     // 西墙北段 7..58
+wallRun(5, 69, 2, 52);    // 西墙南段 69..120
+wallRun(121, 7, 2, 52);   // 东墙北段 7..58
+wallRun(121, 69, 2, 52);  // 东墙南段 69..120
 for (const [x, y] of [[5, 5], [121, 5], [5, 121], [121, 121]]) {
   items.push({ type: 'city_wall_corner', gx: x, gy: y, w: 2, h: 2 });
   for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) placed.add(key(x + dx, y + dy));
 }
-// 北门必须嵌在北墙开口（gx59..68 / gy5..6）里：宽城门楼 footprint 落在 gy4..6，
-// 与主街同宽（10 格），券洞贯通 ~8 格，正脊 406 高于城墙垛口 224
-items.push({ type: 'city_gate_wide', gx: 59, gy: 4, w: 10, h: 3, facing: 'sw' });
-items.push({ type: 'gate_arch', gx: 4, gy: 63, w: 3, h: 3, facing: 'se' });
-items.push({ type: 'gate_arch', gx: 120, gy: 63, w: 3, h: 3, facing: 'nw' });
-items.push({ type: 'city_gate_tower', gx: 62, gy: 121, w: 4, h: 3, facing: 'sw' });
-for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 10; dx++) placed.add(key(59 + dx, 4 + dy));
-for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(62 + dx, 121 + dy));
+// 北门：宽城门楼 10×3，落位 gy5..7 —— 外侧（gy5）与北墙外面齐平，向城内凸出 1 排（gy7）
+items.push({ type: 'city_gate_wide', gx: 59, gy: 5, w: 10, h: 3, facing: 'sw' });
+// 西/东门：宽城门楼 v 向 3×10，开口与东西主街（y59..68）同宽；
+// 西门落位 gx5..7（外侧 gx5 与西墙外面齐平、向城内凸 1 列），东门 gx120..122（外侧 gx123 齐平）
+items.push({ type: 'city_gate_wide_v', gx: 5, gy: 59, w: 3, h: 10, facing: 'se' });
+items.push({ type: 'city_gate_wide_v', gx: 120, gy: 59, w: 3, h: 10, facing: 'se' });
+// 南门：城门楼 4×3，落位 gy120..122 —— 外侧（gy123）与南墙外面齐平，向城内凸 1 排（gy120）
+items.push({ type: 'city_gate_tower', gx: 62, gy: 120, w: 4, h: 3, facing: 'sw' });
+for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 10; dx++) placed.add(key(59 + dx, 5 + dy));
+for (let dy = 0; dy < 10; dy++) for (let dx = 0; dx < 3; dx++) {
+  placed.add(key(5 + dx, 59 + dy));
+  placed.add(key(120 + dx, 59 + dy));
+}
+for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(62 + dx, 120 + dy));
 
 // ---------- 中心：鼓楼（7×7 三层）+ 环绕广场 + 牌坊 ----------
 // 暂用 gate_arch 城门贴图别名（art.ts），等专用 paifang 美术（两柱一枋、无两侧墙垛）到位后再换图。

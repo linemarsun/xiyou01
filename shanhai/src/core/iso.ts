@@ -144,6 +144,8 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   city_gate_tower: { w: 4, h: 3, height: 406 },
   /** 宽城门楼 10×3：与南北主街同宽（x59..68），宽券洞贯通，正脊 406 高于城墙垛口 224 */
   city_gate_wide: { w: 10, h: 3, height: 406 },
+  /** 宽城门楼 v 向 3×10（西/东门）：券洞开在 u1 立面，与东西主街（y59..68）同宽 */
+  city_gate_wide_v: { w: 3, h: 10, height: 406 },
   /** 全城制高点：中心鼓楼（三层重檐，7×7 足迹，底层券门可穿） */
   bell_tower: { w: 7, h: 7, height: 460 },
   /** 市集货箱 / 庙前石碑 */
@@ -179,6 +181,8 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   city_gate_tower: { ax: 15.5, ay: -5 },
   // 10×3 宽城门楼：anchor_px [320,598] - (spriteW/2=208, spriteH=604) = (112, -6)
   city_gate_wide: { ax: 112, ay: -6 },
+  // 3×10 宽城门楼（v 向）：anchor_px [96,597] - (208, 603) = (-112, -6)
+  city_gate_wide_v: { ax: -112, ay: -6 },
   // 7×7 鼓楼：anchor_px [229,602] - (spriteW/2, spriteH) = (0, -4)，画布底比足迹前底顶点低 4px
   bell_tower: { ax: 0, ay: -4 },
 };
@@ -246,14 +250,20 @@ export function gateTowerLane(item: IsoItem): Array<{ gx: number; gy: number }> 
 }
 
 /**
- * 宽城门楼券洞通道：10×3 足迹中间 8 列全部可走（券洞半宽 3.6 格，两侧各留 1 格墩柱），
+ * 宽城门楼券洞通道：长边中间 8 格全部可走（券洞半宽 3.6 格，两侧各留 1 格墩柱），
  * 与主街同宽——整条街都能穿门，不再出现「10 格宽的路对着 1 格宽的门洞」。
+ * u 向（10×3）通中间 8 列 × 全部 3 行；v 向（3×10）通全部 3 列 × 中间 8 行。
  */
 export function wideGateLane(item: IsoItem): Array<{ gx: number; gy: number }> {
   const { w, h } = isoSize(item);
-  const x0 = item.gx + Math.floor((w - 8) / 2);
   const out: Array<{ gx: number; gy: number }> = [];
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 8; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
+  if (w >= h) {
+    const x0 = item.gx + Math.floor((w - 8) / 2);
+    for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 8; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
+  } else {
+    const y0 = item.gy + Math.floor((h - 8) / 2);
+    for (let dy = 0; dy < 8; dy++) for (let dx = 0; dx < w; dx++) out.push({ gx: item.gx + dx, gy: y0 + dy });
+  }
   return out;
 }
 
@@ -400,7 +410,7 @@ export function buildCollision(layout: IsoLayout): IsoCollision {
         ? archLane(item).map((c) => keyOf(c.gx, c.gy))
         : item.type === 'city_gate_tower'
           ? gateTowerLane(item).map((c) => keyOf(c.gx, c.gy))
-          : item.type === 'city_gate_wide'
+          : item.type === 'city_gate_wide' || item.type === 'city_gate_wide_v'
             ? wideGateLane(item).map((c) => keyOf(c.gx, c.gy))
             : item.type === 'bell_tower'
               ? bellTowerPassage(item).map((c) => keyOf(c.gx, c.gy))

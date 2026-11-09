@@ -347,55 +347,102 @@ def droop(n, rise):
     return (-32.0 * n, 16.0 * n + rise)
 
 
-def arch_open(d, uc, vf, half, z_spring, z_floor=0):
-    """在 v=vf 立面上画券门洞：暗部 + 内层远拱 + 两条侧壁透视线 + 券石圈 + 门槛石。"""
-    def q(u, z):
-        return S(u, vf, z)
-    dark = (26, 22, 20)
+def _arch_pts(pt, ac, half, z_spring, z_floor):
+    """券洞立面多边形：左底 → 右底 → 右券脚 → 半圆券顶 → 左券脚。"""
     arc = []
     for i in range(25):
         a = math.pi * i / 24.0
-        arc.append(q(uc + half * math.cos(a), z_spring + half * 33.0 * math.sin(a)))
-    pts = [q(uc - half, z_floor), q(uc + half, z_floor)] + arc
-    poly(d, pts, dark)
-    # 内层远拱（整体缩 0.80 并上移 4px，读作隧洞尽头）
-    iq = lambda u, z: (uc + (u - uc) * 0.80, z * 1.0)
-    inner = []
-    for i in range(19):
-        a = math.pi * i / 18.0
-        inner.append(q(uc + half * 0.72 * math.cos(a), z_spring * 0.96 + half * 23.5 * math.sin(a)))
-    ip = [q(uc - half * 0.72, z_floor + 2), q(uc + half * 0.72, z_floor + 2)] + inner
-    poly(d, ip, (44, 38, 34))
-    # 侧壁透视线（从洞口底角指向内拱底角）+ 地面
-    for sx in (-1, 1):
-        a0 = q(uc + sx * half, z_floor + 1)
-        a1 = q(uc + sx * half * 0.72, z_floor + 3)
-        d.line([a0, (a1[0] + sx * 3, a1[1] - 2)], fill=(70, 62, 54), width=2)
-    poly(d, [q(uc - half * 0.72, z_floor + 2), q(uc + half * 0.72, z_floor + 2),
-             (q(uc + half * 0.72, z_floor + 2)[0] + 9, q(uc + half * 0.72, z_floor + 2)[1] - 6),
-             (q(uc - half * 0.72, z_floor + 2)[0] + 9, q(uc - half * 0.72, z_floor + 2)[1] - 6)],
-         (86, 74, 60))
-    # 券石圈：沿券顶一圈浅石块
+        arc.append(pt(ac + half * math.cos(a), z_spring + half * 33.0 * math.sin(a)))
+    return [pt(ac - half, z_floor), pt(ac + half, z_floor)] + arc
+
+
+def arch_open(d, ac, mf, half, z_spring, z_floor=0, depth=3, axis='v', brick=None):
+    """券门隧洞（亮色版）：砖砌内壁 + 远口透光 + 地面光池 + 券石圈。
+
+    axis='v'：洞开在 v=mf 立面（ac 为截面中心的世界 u 坐标），隧洞向 -v 退 depth 格
+              —— u 向城门（北门宽城门楼 / 4×3 城门楼）。
+    axis='u'：洞开在 u=mf 立面（ac 为截面中心的世界 v 坐标），隧洞向 -u 退 depth 格
+              —— v 向城门（东西门宽城门楼）。
+    隧洞内不再用黑色平涂：内壁用城墙砖色由近及远压暗，远口透出室外天光，
+    地面画门前光池； darkest 仍是砖影 (74,63,52)，不再是 (26,22,20) 的黑洞。
+    """
+    brick = brick or GATE_C
+    if axis == 'v':
+        pt = lambda a, z: S(a, mf, z)                 # 洞口立面
+        pf = lambda a, z: S(a, mf - depth, z)         # 远口（退 depth 格）
+    else:
+        pt = lambda a, z: S(mf, a, z)
+        pf = lambda a, z: S(mf - depth, a, z)
+    mouth = _arch_pts(pt, ac, half, z_spring, z_floor)
+    far = _arch_pts(pf, ac, half, z_spring, z_floor)
+    # 在独立图层上画洞内景象，再按洞口剪裁贴回
+    layer = Image.new('RGBA', (CW, CH), (0, 0, 0, 0))
+    t = ImageDraw.Draw(layer)
+
+    def lerp(p, q_, k):
+        return (p[0] + (q_[0] - p[0]) * k, p[1] + (q_[1] - p[1]) * k)
+
+    # 1 底色：券顶阴影带（最暗的砖影）
+    poly(t, mouth, mix(brick, DARK, 0.52))
+    # 2 远口透光：室外天光 + 远处地面
+    poly(t, far, (236, 227, 203))
+    poly(t, [pf(ac - half, z_floor), pf(ac + half, z_floor),
+             pf(ac + half, z_floor + 20), pf(ac - half, z_floor + 20)], (207, 193, 165))
+    t.line([pf(ac - half, z_floor + 20), pf(ac + half, z_floor + 20)],
+           fill=(186, 172, 146), width=2)
+    # 3 进深内壁（受光面）：从洞口券脚到远口券脚，分三段由亮到暗 + 砖缝
+    a0, b0 = pt(ac - half, z_floor), pt(ac - half, z_spring)
+    a1, b1 = pf(ac - half, z_floor), pf(ac - half, z_spring)
+    slices = (mix(brick, CREAM, 0.10), mix(brick, DARK, 0.22), mix(brick, DARK, 0.42))
+    for k in range(3):
+        p, q_, r, s_ = lerp(a0, a1, k / 3), lerp(b0, b1, k / 3), lerp(b0, b1, (k + 1) / 3), lerp(a0, a1, (k + 1) / 3)
+        poly(t, [p, q_, r, s_], slices[k])
+    zk = z_floor + 12.0
+    while zk < z_spring - 4:
+        t.line([lerp(a0, a1, 0.06) if zk < z_floor + 14 else pt(ac - half, zk),
+                lerp(a1, a0, 0.04) if zk < z_floor + 14 else pf(ac - half, zk)],
+               fill=mix(brick, DARK, 0.5), width=1)
+        zk += 12.0
+    # 4 券顶以上内壁（拱肩）：洞口左弧与远口左弧之间
+    haunch = mouth[2 + 12:] + far[2 + 12::-1]     # 左半弧（顶点→左券脚）
+    poly(t, haunch, mix(brick, DARK, 0.34))
+    # 5 洞内地面：石板 + 门前光池（近亮远暗）
+    fl0, fl1 = pt(ac - half, z_floor), pt(ac + half, z_floor)
+    fr0, fr1 = pf(ac - half, z_floor), pf(ac + half, z_floor)
+    pool = (mix(mix(STONE, DARK, 0.30), (255, 243, 212), 0.42),
+            mix(mix(STONE, DARK, 0.32), (255, 243, 212), 0.22),
+            mix(STONE, DARK, 0.38))
+    for k in range(3):
+        poly(t, [lerp(fl0, fr0, k / 3), lerp(fl1, fr1, k / 3),
+                 lerp(fl1, fr1, (k + 1) / 3), lerp(fl0, fr0, (k + 1) / 3)], pool[k])
+    for s_ in (0.22, 0.5, 0.78):
+        t.line([lerp(fl0, fr0, s_), lerp(fl1, fr1, s_)], fill=mix(STONE, DARK, 0.52), width=1)
+    # 按洞口剪裁，把洞内景象贴回主画布
+    mask = Image.new('L', (CW, CH), 0)
+    ImageDraw.Draw(mask).polygon(mouth, fill=255)
+    d._image.paste(layer, (0, 0), mask)
+    # 6 券石圈：沿洞口券顶一圈浅色券石（画在主画布，不被洞口剪裁）
     for i in range(13):
         a0 = math.pi * i / 13.0
         a1 = math.pi * (i + 0.86) / 13.0
-        b0 = q(uc + half * math.cos(a0), z_spring + half * 33.0 * math.sin(a0))
-        b1 = q(uc + half * math.cos(a1), z_spring + half * 33.0 * math.sin(a1))
-        c1 = q(uc + (half + 0.13) * math.cos(a1), z_spring + (half + 0.13) * 33.0 * math.sin(a1))
-        c0 = q(uc + (half + 0.13) * math.cos(a0), z_spring + (half + 0.13) * 33.0 * math.sin(a0))
+        b0 = pt(ac + half * math.cos(a0), z_spring + half * 33.0 * math.sin(a0))
+        b1 = pt(ac + half * math.cos(a1), z_spring + half * 33.0 * math.sin(a1))
+        c1 = pt(ac + (half + 0.13) * math.cos(a1), z_spring + (half + 0.13) * 33.0 * math.sin(a1))
+        c0 = pt(ac + (half + 0.13) * math.cos(a0), z_spring + (half + 0.13) * 33.0 * math.sin(a0))
         tone = STONE_T if i % 2 == 0 else mix(STONE_T, STONE, 0.42)
         poly(d, [b0, b1, c1, c0], tone)
         d.line([b0, b1], fill=mix(tone, DARK, 0.50), width=1)
-    # 直段两侧券肩
+    # 7 直段两侧券肩
     for sx in (-1, 1):
-        x0 = uc + sx * half
-        x1 = uc + sx * (half + 0.13)
-        poly(d, [q(x0, 0), q(x0, z_spring), q(x1, z_spring), q(x1, 0)],
+        x0 = ac + sx * half
+        x1 = ac + sx * (half + 0.13)
+        poly(d, [pt(x0, z_floor), pt(x0, z_spring), pt(x1, z_spring), pt(x1, z_floor)],
              STONE_T if sx < 0 else mix(STONE_T, STONE, 0.42))
-    # 门槛石
-    poly(d, [q(uc - half - 0.16, 0), q(uc + half + 0.16, 0),
-             q(uc + half + 0.16, 6), q(uc - half - 0.16, 6)], STONE_T)
-    d.line([q(uc - half - 0.16, 6), q(uc + half + 0.16, 6)], fill=mix(STONE, DARK, 0.45), width=2)
+    # 8 门槛石
+    poly(d, [pt(ac - half - 0.16, z_floor), pt(ac + half + 0.16, z_floor),
+             pt(ac + half + 0.16, z_floor + 6), pt(ac - half - 0.16, z_floor + 6)], STONE_T)
+    d.line([pt(ac - half - 0.16, z_floor + 6), pt(ac + half + 0.16, z_floor + 6)],
+           fill=mix(STONE, DARK, 0.45), width=2)
 
 
 def plaque_iso(d, uc, vf, halfw, z0, z1, dark=(40, 30, 24)):
