@@ -405,7 +405,7 @@ export class WorldRenderer {
       }
     }
     const groundPriority: Record<string, number> = {
-      ground_grass: 0, ground_dirt: 1, ground_water: 2, ground_stone: 3,
+      ground_grass: 0, ground_dirt: 1, ground_water: 2, ground_stone: 3, ground_marble: 3,
     };
     const blocks = new Map<string, IsoItem>();
     for (const cell of groundCells.values()) {
@@ -517,6 +517,7 @@ export class WorldRenderer {
       ground_stone: 0x585461,
       ground_dirt: 0x695440,
       ground_water: 0x30586a,
+      ground_marble: 0xbcb4a4,
     };
     const groups = new Map<string, number[][]>();
     for (const k of needed) {
@@ -597,6 +598,7 @@ export class WorldRenderer {
       ground_stone: 0x585461,
       ground_dirt: 0x695440,
       ground_water: 0x30586a,
+      ground_marble: 0xbcb4a4,
     };
     const fill = palette[unit.item.type] ?? 0x4a4450;
     const gfx = new Graphics();

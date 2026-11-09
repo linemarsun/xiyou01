@@ -165,6 +165,23 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   well: { w: 1, h: 1, height: 74 },
   incense: { w: 1, h: 1, height: 96 },
   rock: { w: 1, h: 1, height: 44 },
+  /** 宫城主殿 6×6：三层汉白玉台基（烘焙进贴图）+ 朱红殿身 + 金色重檐，正脊 ~496 */
+  palace_hall: { w: 6, h: 6, height: 500 },
+  /** 宫城配殿 4×4：一层台基 + 红身金顶，正脊 ~316 */
+  palace_hall_s: { w: 4, h: 4, height: 320 },
+  /** 宫门 4×2：红墙券门隧洞（亮色，贯通）+ 门楼金顶 ~322 */
+  palace_gate: { w: 4, h: 2, height: 322 },
+  /** 宫城角楼 2×2：红墙墩台 + 攒尖金顶 + 宝顶 */
+  palace_corner: { w: 2, h: 2, height: 340 },
+  /** 宫墙直段：朱红墙身 + 黄瓦帽（高 150，低于城墙 224） */
+  palace_wall_u6: { w: 6, h: 2, height: 150 },
+  palace_wall_u2: { w: 2, h: 2, height: 150 },
+  palace_wall_v2: { w: 2, h: 2, height: 150 },
+  palace_wall_v6: { w: 2, h: 6, height: 150 },
+  /** 白塔 3×3：汉白玉塔身五层挑檐 + 攒尖金顶，总高 ~700（新城制高点） */
+  pagoda: { w: 3, h: 3, height: 700 },
+  /** 汉白玉广场地面（宫城内铺地） */
+  ground_marble: { w: 1, h: 1, ground: true },
 };
 
 /**
@@ -185,6 +202,16 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   city_gate_wide_v: { ax: -112, ay: -6 },
   // 7×7 鼓楼：anchor_px [229,602] - (spriteW/2, spriteH) = (0, -4)，画布底比足迹前底顶点低 4px
   bell_tower: { ax: 0, ay: -4 },
+  // —— 宫城族（palace.py 烘焙，ax = anchor_px.x - spriteW/2, ay = anchor_px.y - spriteH）——
+  palace_hall: { ax: 0, ay: -32 },        // 504×686, anchor [252,654]
+  palace_hall_s: { ax: 0, ay: -19 },      // 324×453, anchor [162,434]
+  palace_gate: { ax: 32, ay: -5 },        // 206×426, anchor [135,421]
+  palace_corner: { ax: 0, ay: -5 },       // 142×422, anchor [71,417]
+  palace_wall_u6: { ax: 64, ay: -5 },     // 256×275, anchor [192,270]
+  palace_wall_u2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
+  palace_wall_v2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
+  palace_wall_v6: { ax: -64, ay: -5 },    // 256×275, anchor [64,270]
+  pagoda: { ax: -0.5, ay: -21 },          // 267×756, anchor [133,735]
 };
 
 export function isoSize(item: IsoItem): { w: number; h: number } {
@@ -408,7 +435,7 @@ export function buildCollision(layout: IsoLayout): IsoCollision {
     const lane = new Set<string>(
       item.type === 'gate_arch' || item.type === 'paifang'
         ? archLane(item).map((c) => keyOf(c.gx, c.gy))
-        : item.type === 'city_gate_tower'
+        : item.type === 'city_gate_tower' || item.type === 'palace_gate'
           ? gateTowerLane(item).map((c) => keyOf(c.gx, c.gy))
           : item.type === 'city_gate_wide' || item.type === 'city_gate_wide_v'
             ? wideGateLane(item).map((c) => keyOf(c.gx, c.gy))

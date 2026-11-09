@@ -1,0 +1,51 @@
+{
+ "name": "pagoda",
+ "facing": "SW",
+ "footprint": [
+  3,
+  3
+ ],
+ "footprint_w": 3,
+ "footprint_h": 3,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  3,
+  3
+ ],
+ "anchor_px": [
+  133,
+  735
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  267,
+  756
+ ],
+ "sprite_h_px": 752,
+ "ratio_to_char": 8.95,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "白塔 3×3：须弥座 0-30 + 五层白石塔身（挑檐青瓦）+ 攒尖金顶 + 宝顶，总高 ~700",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": false,
+ "derive_op": "draw(real_geometry)",
+ "derived_from": null,
+ "tileable": false,
+ "elevation": {
+  "tier1_top": 116,
+  "top_z": 700
+ },
+ "note": "全城制高点（参考图右上古塔）"
+}
