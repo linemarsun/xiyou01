@@ -387,6 +387,24 @@ body {
 .dialogue.quest-panel .cmd-row { justify-content: flex-end; }
 
 /* ===== 舆图（地图查看）：纯 CSS + Canvas 自绘，不依赖图片素材 ===== */
+/* HUD 舆图按钮：鎏金描边 + 微光呼吸，比普通按钮更醒目；展开时反色提示 */
+.hud .btn.map-btn {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, #fff8e0, #f7ecc8);
+  font-weight: 600;
+  animation: mapBtnGlow 2.6s ease-in-out infinite;
+}
+.hud .btn.map-btn:hover { background: #fffdf0; }
+.hud .btn.map-btn.active {
+  background: var(--gold);
+  border-color: #8a651f;
+  color: #fff;
+  animation: none;
+}
+@keyframes mapBtnGlow {
+  0%, 100% { box-shadow: 0 0 0 0 #b8892f00; }
+  50% { box-shadow: 0 0 8px 1px #b8892f66; }
+}
 .dialogue.map-panel {
   /* 居中浮层：不排在 900px 画布下方，点开即可看到（大屏/小屏都能滚动查看） */
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);

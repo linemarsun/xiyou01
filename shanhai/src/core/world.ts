@@ -142,16 +142,18 @@ interface BaseLayout {
 
 /**
  * 等距图的尺寸与 bounds 由各自 ISO_GRIDS 推导（见 expandMap），这里只写格坐标。
- * 所有出入口都贴在格网边界带：gx ∈ {1, cols-2} 或 gy ∈ {1, rows-2}；
+ * 出入口一般贴在格网边界带：gx ∈ {1, cols-2} 或 gy ∈ {1, rows-2}；
+ * 例外：云京的出城口嵌在北城墙线上（城门券洞 gx=62, gy≈4），以画面城门为准。
  * 成对的路牌互为对方落点，玩家一进图就站在回程路牌上。
  */
 const BASE_MAPS: Record<string, BaseLayout> = {
   taoyuan: {
     name: '云京', scene: 'taoyuan',
-    // 128×128 城制样板；北门石坊券洞下 cell(16,1) 是唯一的出城口
+    // 128×128 城制样板；北城门券洞在 cell(62,4)（城墙线 gy≈4），
+    // 路牌放门洞北沿 cell(62,3)：城内北上穿过券洞即触发，与画面城门严格对齐
     iso: { layout: 'iso/taoyuan.json' },
     spawns: [],
-    exits: [isoExit('taoyuan', 16, 1, 'wild_heifeng', 32, 1, '青崖山道')],
+    exits: [isoExit('taoyuan', 62, 3, 'wild_heifeng', 32, 1, '青崖山道')],
     npc: isoNpc('taoyuan', 32, 32, '玄鹤长老'),
     tavern: isoNpc('taoyuan', 32, 20, '云京酒肆掌柜'),
   },
@@ -170,7 +172,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_heifeng', 116, 62, ['heixiong']),
     ],
     exits: [
-      isoExit('wild_heifeng', 32, 1, 'taoyuan', 16, 1, '云京'),
+      isoExit('wild_heifeng', 32, 1, 'taoyuan', 62, 3, '云京'),
       isoExit('wild_heifeng', 1, 62, 'wild_luanzang', 11, 1, '渡忘川'),
       isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '玲珑洞天'),
     ],
@@ -213,7 +215,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     spawns: [],
     exits: [
       isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '渡忘川'),
-      isoExit('difu', 40, 110, 'taoyuan', 16, 1, '还阳 · 云京'),
+      isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 云京'),
     ],
     npc: isoNpc('difu', 40, 72, '孟婆'),
   },

@@ -1050,9 +1050,10 @@ function isoScene(id) {
 /** 格坐标 → 世界坐标必须按「该图自己的格网」换算 */
 const isoAt = (id, gx, gy) => iso.cellToWorld(world.isoGridOf(id), gx, gy);
 const countType = (id, type) => isoScene(id).layout.items.filter((i) => i.type === type).length;
-/** 边界带：距任意一条边 ≤1 格 */
+/** 边界带：距任意一条边 ≤1 格；云京北门嵌在城墙线上（券洞 62,4），门洞一带视作边界 */
 const isBorder = (id, gx, gy) => {
   const g = world.isoGridOf(id);
+  if (id === 'taoyuan' && gx === 62 && gy >= 1 && gy <= 5) return true;
   return gx <= 1 || gy <= 1 || gx >= g.cols - 2 || gy >= g.rows - 2;
 };
 

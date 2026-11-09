@@ -41,12 +41,13 @@ function mulberry32(seed) {
 }
 
 /**
- * 每图的完整定义。anchors 全部落在边界带（距边 ≤1 格）：
+ * 每图的完整定义。anchors 一般落在边界带（距边 ≤1 格）：
  *   gx ∈ {1, cols-2} 或 gy ∈ {1, rows-2}。
+ * 例外：云京的出城口嵌在北城墙线上（城门券洞 gx=62, gy≈4），路牌/落点取门洞 (62,3)。
  * 拓扑（成对的路牌互为对方落点，玩家一进图就站在回程路牌上）：
- *   云京(16,1) ⇄ 山道(32,1)
+ *   云京城门(62,3) ⇄ 山道(32,1)
  *   山道(1,62) ⇄ 忘川(11,1)      山道(126,62) ⇄ 洞天(1,52)
- *   忘川(73,126) ⇄ 地府(40,1)     地府(40,110) → 云京(16,1)（单向还阳）
+ *   忘川(73,126) ⇄ 地府(40,1)     地府(40,110) → 云京城门(62,3)（单向还阳）
  */
 const THEMES = [
   {
@@ -69,7 +70,7 @@ const THEMES = [
         { gx: 116, gy: 62, group: ['heixiong'] },
       ],
       exits: [
-        { gx: 32, gy: 1, to: 'taoyuan', toGx: 16, toGy: 1, label: '云京' },
+        { gx: 32, gy: 1, to: 'taoyuan', toGx: 62, toGy: 3, label: '云京' },
         { gx: 1, gy: 62, to: 'wild_luanzang', toGx: 11, toGy: 1, label: '渡忘川' },
         { gx: 126, gy: 62, to: 'wild_shanxiao', toGx: 1, toGy: 52, label: '玲珑洞天' },
       ],
@@ -250,7 +251,7 @@ const THEMES = [
       spawns: [],
       exits: [
         { gx: 40, gy: 1, to: 'wild_luanzang', toGx: 73, toGy: 126, label: '渡忘川' },
-        { gx: 40, gy: 110, to: 'taoyuan', toGx: 16, toGy: 1, label: '还阳 · 云京' },
+        { gx: 40, gy: 110, to: 'taoyuan', toGx: 62, toGy: 3, label: '还阳 · 云京' },
       ],
       npc: { gx: 40, gy: 72, name: '孟婆' },
     },

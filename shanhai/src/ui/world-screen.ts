@@ -85,6 +85,8 @@ export class WorldScreen {
   private skillPanelEl!: HTMLElement;
   private tavernPanelEl!: HTMLElement;
   private mapPanel: MapPanel | null = null;
+  private mapBtn: HTMLButtonElement | null = null;
+  private keyHandler: ((e: KeyboardEvent) => void) | null = null;
 
   private constructor(root: HTMLElement, gs: GameState, hooks: { onExitToSetup: () => void }) {
     this.root = root;
@@ -221,7 +223,10 @@ export class WorldScreen {
         h('span', { class: 'spacer' }),
         this.questEl,
         h('button', { class: 'btn small', onclick: () => this.openQuestBoard() }, '📜 悬赏'),
-        h('button', { class: 'btn small', onclick: () => this.toggleMapPanel() }, '🗺 舆图'),
+        this.mapBtn = h('button', {
+          class: 'btn small map-btn', title: '查看舆图（快捷键 M）',
+          onclick: () => this.toggleMapPanel(),
+        }, '🗺 舆图 (M)'),
         this.autoBtn,
         this.allocBtn,
         h('button', { class: 'btn small', onclick: () => this.toggleSkillPanel() }, '📜 道法'),
@@ -239,15 +244,39 @@ export class WorldScreen {
       this.dialogueEl,
       this.mapPanel.el,
     );
+
+    // 快捷键：M 开关舆图（输入框聚焦时不触发）
+    this.keyHandler = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        this.toggleMapPanel();
+      }
+    };
+    document.addEventListener('keydown', this.keyHandler);
+  }
+
+  /** 统一销毁地图面板与全局键盘监听（战斗衔接 / 切图 / 回主菜单共用） */
+  private teardownWorldUi(): void {
+    this.mapPanel?.dispose();
+    if (this.keyHandler) {
+      document.removeEventListener('keydown', this.keyHandler);
+      this.keyHandler = null;
+    }
   }
 
   // ===== 舆图（地图查看 + 点图寻路） =====
 
   private toggleMapPanel(): void {
     if (!this.mapPanel) return;
-    if (this.mapPanel.isOpen) { this.mapPanel.hide(); return; }
-    this.closePanels();
-    this.mapPanel.show();
+    if (this.mapPanel.isOpen) { this.mapPanel.hide(); }
+    else {
+      this.closePanels();
+      this.mapPanel.show();
+    }
+    this.mapBtn?.classList.toggle('active', this.mapPanel.isOpen);
+    audio.play('click');
   }
 
   // ===== 挂机（自动寻路 + 自动战斗 + 跨图巡游） =====
@@ -791,7 +820,7 @@ export class WorldScreen {
   }
 
   private backToSetup(): void {
-    this.mapPanel?.dispose();
+    this.teardownWorldUi();
     const pos = this.renderer?.getPlayerPos();
     if (pos) {
       this.gs.px = pos.x;
@@ -903,7 +932,7 @@ export class WorldScreen {
 
   private async onEncounter(group: string[], groupKey: string): Promise<void> {
     this.clearAutoStep();
-    this.mapPanel?.dispose();
+    this.teardownWorldUi();
     await this.fade(true);
     const pos = this.renderer!.getPlayerPos();
     this.gs.px = pos.x;
@@ -974,7 +1003,7 @@ export class WorldScreen {
 
   private async travel(exit: MapExit): Promise<void> {
     this.clearAutoStep();
-    this.mapPanel?.dispose();
+    this.teardownWorldUi();
     await this.fade(true);
     this.gs.mapId = exit.to;
     this.gs.px = exit.toX;
