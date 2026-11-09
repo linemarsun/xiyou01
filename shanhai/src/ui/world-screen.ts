@@ -801,7 +801,7 @@ export class WorldScreen {
     this.dialogueEl.append(
       h('div', { class: 'quest-body' },
         h('div', { class: 'quest-title' }, '地府 · 忘川渡口'),
-        h('div', { class: 'quest-text' }, '孟婆递来一碗温热的汤：「阳寿未尽，魂且归来。往东还阳，回云京去吧。」'),
+        h('div', { class: 'quest-text' }, '孟婆递来一碗温热的汤：「阳寿未尽，魂且归来。沿黄泉道往南，尽头的还阳牌可回云京；往北过奈何桥，便又到忘川了。」'),
       ),
       h('div', { class: 'cmd-row' },
         h('button', { class: 'btn small', onclick: () => this.closeDialogue() }, '谢过孟婆'),
@@ -914,10 +914,11 @@ export class WorldScreen {
           groupKey,
         );
         if (defeated) {
-          // 战败重生：dead 播完后淡出，魂魄传送到地府孟婆身旁
+          // 战败重生：dead 播完后淡出，魂魄传送到地府孟婆身旁（等距地图用格坐标换算的落点）
+          const mengpo = WORLD_MAPS.difu.npc;
           this.gs.mapId = 'difu';
-          this.gs.px = 720;
-          this.gs.py = 700;
+          this.gs.px = mengpo ? mengpo.x - 64 : 4096;
+          this.gs.py = mengpo ? mengpo.y + 32 : 2064;
           saveGame(this.gs);
           summary.lines.push('你力竭倒下——魂魄被引至地府忘川，孟婆就在身旁。');
         }

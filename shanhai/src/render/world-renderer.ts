@@ -614,9 +614,9 @@ export class WorldRenderer {
     if (unit.item.type === 'tree') this.drawTree(c, H, unit.variant);
     else if (unit.item.type === 'stall') this.drawStall(c, base, H, unit.variant);
     else if (unit.item.type === 'well') this.drawWell(c, H);
-    else if (unit.item.type === 'bridge') this.drawBridge(c, base);
+    else if (unit.item.type === 'bridge') this.drawBridge(c, base, unit.variant);
     else if (unit.item.type === 'incense') this.drawIncense(c, H);
-    else if (unit.item.type === 'rock') this.drawRock(c, H);
+    else if (unit.item.type === 'rock') this.drawRock(c, H, unit.variant);
     else if (unit.item.type === 'city_wall' || unit.item.type === 'wall_corner') this.drawWall(c, base, H, unit.item);
     else if (unit.item.type === 'bell_tower') this.drawBellTower(c, base, H);
     else if (unit.item.type === 'crate') this.drawCrate(c, H);
@@ -641,18 +641,40 @@ export class WorldRenderer {
     c.addChild(gfx);
   }
 
-  /** 石桥占位：石桥面 + 两侧栏板（桥面格可走，见 iso.buildCollision） */
-  private drawBridge(c: Container, base: number[]): void {
+  /**
+   * 石桥占位：水下桥基 + 石板缝桥面 + 两侧栏板与望柱。
+   * variant='dark' 用于幽冥场景（冷灰石），缺省为暖灰青石。
+   * 桥面格可走，见 iso.buildCollision。
+   */
+  private drawBridge(c: Container, base: number[], variant?: string): void {
     const [bx, by, rx, ry, fx, fy, lx, ly] = base;
+    const dark = variant === 'dark';
+    const deck = dark ? 0x6b6570 : 0x9a907c;
+    const rail = dark ? 0x4e4956 : 0x7c715e;
     const gfx = new Graphics();
-    // 桥面：足迹整体抬高 14px，模拟水面以上的一层石台
-    gfx.poly([bx, by - 14, rx, ry - 14, fx, fy - 14, lx, ly - 14]).fill(0x8a8694)
-      .stroke({ width: 1, color: 0x1c1a20, alpha: 0.8 });
-    // 左右栏板（沿桥向的两条）
-    gfx.poly([lx, ly - 14, fx, fy - 14, fx, fy - 44, lx, ly - 44]).fill(0x76727d)
-      .stroke({ width: 1, color: 0x1c1a20, alpha: 0.7 });
-    gfx.poly([rx, ry - 14, fx, fy - 14, fx, fy - 44, rx, ry - 44]).fill(0x5a5661)
-      .stroke({ width: 1, color: 0x1c1a20, alpha: 0.7 });
+    // 水下桥基：比桥面低 10px 的暗色轮廓，读出「架在水面之上」
+    gfx.poly([bx, by - 10, rx, ry - 10, fx, fy - 10, lx, ly - 10])
+      .fill(0x2e2b33).stroke({ width: 1, color: 0x1c1a20, alpha: 0.6 });
+    gfx.poly([bx, by - 14, rx, ry - 14, fx, fy - 14, lx, ly - 14])
+      .fill(deck).stroke({ width: 1.5, color: 0x241f1a, alpha: 0.85 });
+    // 双向石板缝，把整块斜板读成一排石板
+    for (let i = 1; i <= 3; i++) {
+      const t = i / 4;
+      gfx.moveTo(bx + (rx - bx) * t, by - 14 + (ry - by) * t)
+        .lineTo(lx + (fx - lx) * t, ly - 14 + (fy - ly) * t)
+        .stroke({ width: 1, color: 0x3b342b, alpha: 0.45 });
+      gfx.moveTo(bx + (lx - bx) * t, by - 14 + (ly - by) * t)
+        .lineTo(rx + (fx - rx) * t, ry - 14 + (fy - ry) * t)
+        .stroke({ width: 1, color: 0x3b342b, alpha: 0.45 });
+    }
+    gfx.poly([lx, ly - 14, fx, fy - 14, fx, fy - 40, lx, ly - 40])
+      .fill(rail).stroke({ width: 1, color: 0x1c1a20, alpha: 0.75 });
+    gfx.poly([rx, ry - 14, fx, fy - 14, fx, fy - 40, rx, ry - 40])
+      .fill(dark ? 0x403b47 : 0x655c4c).stroke({ width: 1, color: 0x1c1a20, alpha: 0.75 });
+    for (const [px, py] of [[lx, ly], [fx, fy], [rx, ry]]) {
+      gfx.rect(px - 3, py - 48, 6, 10).fill(0xb9ad92)
+        .stroke({ width: 1, color: 0x241f1a, alpha: 0.8 });
+    }
     c.addChild(gfx);
   }
 
@@ -668,13 +690,28 @@ export class WorldRenderer {
     c.addChild(gfx);
   }
 
-  /** 山石占位：灰色不规则叠石 */
-  private drawRock(c: Container, H: number): void {
+  /**
+   * 山石占位：按场景换色（moss 青苔 / dark 幽冥 / crystal 洞天晶石），
+   * 缺省保持云京的灰石画法。
+   */
+  private drawRock(c: Container, H: number, variant?: string): void {
+    const palettes: Record<string, { face: number; light: number; top: number }> = {
+      moss: { face: 0x637154, light: 0x82936a, top: 0xa3b487 },
+      dark: { face: 0x4b4753, light: 0x635d6b, top: 0x7b7484 },
+      crystal: { face: 0x536b7c, light: 0x7fa2b6, top: 0xc2dfe9 },
+    };
+    const p = palettes[variant ?? ''] ?? { face: 0x7a7680, light: 0x928e99, top: 0xa8a4ae };
+    const h = variant === 'crystal' ? H * 1.5 : H;
     const gfx = new Graphics();
-    gfx.poly([-20, 0, -12, -H * 0.75, 2, -H, 16, -H * 0.62, 20, 0])
-      .fill(0x7a7680).stroke({ width: 1, color: 0x1c1a20, alpha: 0.8 });
-    gfx.poly([-8, -H * 0.3, -2, -H * 0.78, 10, -H * 0.42]).fill(0x928e99)
+    gfx.poly([-20, 0, -12, -h * 0.75, 2, -h, 16, -h * 0.62, 20, 0])
+      .fill(p.face).stroke({ width: 1, color: 0x1c1a20, alpha: 0.8 });
+    gfx.poly([-8, -h * 0.3, -2, -h * 0.78, 10, -h * 0.42]).fill(p.light)
       .stroke({ width: 1, color: 0x1c1a20, alpha: 0.4 });
+    gfx.ellipse(0, -h * 0.86, 8, 4).fill({ color: p.top, alpha: 0.85 });
+    if (variant === 'crystal') {
+      gfx.poly([-4, -h * 0.72, 2, -h * 1.16, 8, -h * 0.7]).fill(0xd7eef7)
+        .stroke({ width: 1, color: 0x3b5868, alpha: 0.7 });
+    }
     c.addChild(gfx);
   }
 
@@ -877,11 +914,18 @@ export class WorldRenderer {
     c.addChild(gfx);
   }
 
-  /** 树占位：树干 + 分层树冠（pine 尖冠 / leaf 圆冠） */
+  /** 树占位：树干 + 分层树冠（pine 尖冠 / leaf 圆冠 / dead 枯枝） */
   private drawTree(c: Container, H: number, variant?: string): void {
     const gfx = new Graphics();
     gfx.roundRect(-4, -H * 0.34, 8, H * 0.34, 3).fill(0x4a3324);
-    if (variant === 'leaf') {
+    if (variant === 'dead') {
+      // 忘川 / 地府的枯木：无冠，只留一主干与几道斜枝
+      gfx.roundRect(-5, -H * 0.78, 10, H * 0.5, 3).fill(0x54473b)
+        .stroke({ width: 1, color: 0x241d17, alpha: 0.85 });
+      for (const [x, y] of [[-20, -H * 0.86], [19, -H * 0.9], [-13, -H * 1.02], [12, -H * 1.05]]) {
+        gfx.moveTo(0, -H * 0.6).lineTo(x, y).stroke({ width: 3.5, color: 0x54473b });
+      }
+    } else if (variant === 'leaf') {
       gfx.ellipse(-12, -H * 0.52, 20, 18).fill(0x4a6a3c).stroke({ width: 1, color: 0x2b4227, alpha: 0.8 });
       gfx.ellipse(12, -H * 0.56, 20, 18).fill(0x3f5f35).stroke({ width: 1, color: 0x2b4227, alpha: 0.8 });
       gfx.ellipse(0, -H * 0.76, 22, 20).fill(0x50733f).stroke({ width: 1, color: 0x2b4227, alpha: 0.8 });

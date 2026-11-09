@@ -10,6 +10,7 @@ import {
 } from './equipment';
 import { SKILL_MAX_LEVEL, skillUpgradeCost } from './skill';
 import type { WalkBounds } from './path';
+import { cellToWorld, type IsoGrid } from './iso';
 import type { UnitStats, Resists } from './types';
 
 // ===== 地图 =====
@@ -70,6 +71,41 @@ export const DEFAULT_SEGMENTS = 8;
 
 export const DEFAULT_WALK_BOUNDS: WalkBounds = { minX: 60, maxX: TILE_W - 60, minY: 478, maxY: 862 };
 
+/**
+ * 一景一制：每张等距地图有自己的格网。cols/rows 不同 ⇒ 菱形轮廓的胖瘦与歪斜方向不同，
+ * 世界尺寸也不同（都参考云京 128×128 的量级）。字段必须与 iso/<id>.json 的 grid 逐项一致，
+ * 由 tools/regression.mjs 校验。ox = rows*tileW/2、oy = tileH/2 保证菱形四角贴住世界边界。
+ */
+export const ISO_GRIDS: Record<string, IsoGrid> = {
+  taoyuan:       { cols: 128, rows: 128, tileW: 64, tileH: 32, ox: 4096, oy: 16 },
+  wild_heifeng:  { cols: 128, rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
+  wild_luanzang: { cols: 96,  rows: 128, tileW: 64, tileH: 32, ox: 4096, oy: 16 },
+  wild_shanxiao: { cols: 104, rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
+  difu:          { cols: 80,  rows: 112, tileW: 64, tileH: 32, ox: 3584, oy: 16 },
+};
+/** 云京格网：保留旧名以兼容外部引用与历史存档换算 */
+export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
+
+export function isoGridOf(mapId: string): IsoGrid {
+  return ISO_GRIDS[mapId] ?? ISO_GRIDS.taoyuan;
+}
+/** 由格网推导菱形世界尺寸（cell(0,0) 上顶点在 y=0，最右/最下顶点贴 w/h） */
+export function isoWorldSize(g: IsoGrid): { w: number; h: number } {
+  return { w: (g.cols + g.rows) * g.tileW / 2, h: (g.cols + g.rows) * g.tileH / 2 };
+}
+
+/** 格坐标 → 世界坐标：源图用自己格网，跨图落点用目标图格网 */
+const at = (mapId: string, gx: number, gy: number) => cellToWorld(isoGridOf(mapId), gx, gy);
+const isoSpawn = (mapId: string, gx: number, gy: number, group: string[]): MapSpawn => ({ group, ...at(mapId, gx, gy) });
+const isoNpc = (mapId: string, gx: number, gy: number, name: string) => ({ ...at(mapId, gx, gy), name });
+const isoExit = (
+  mapId: string, gx: number, gy: number, to: string, toGx: number, toGy: number, label: string, r = 80,
+): MapExit => {
+  const p = at(mapId, gx, gy);
+  const q = at(to, toGx, toGy);
+  return { x: p.x, y: p.y, r, to, toX: q.x, toY: q.y, label };
+};
+
 interface BaseLayout {
   name: string;
   scene: string;
@@ -89,64 +125,82 @@ interface BaseLayout {
   iso?: { layout: string };
 }
 
-/** 基础布局仍用原 1440×900 坐标书写，便于维护与调平衡 */
+/**
+ * 等距图的尺寸与 bounds 由各自 ISO_GRIDS 推导（见 expandMap），这里只写格坐标。
+ * 所有出入口都贴在格网边界带：gx ∈ {1, cols-2} 或 gy ∈ {1, rows-2}；
+ * 成对的路牌互为对方落点，玩家一进图就站在回程路牌上。
+ */
 const BASE_MAPS: Record<string, BaseLayout> = {
   taoyuan: {
     name: '云京', scene: 'taoyuan',
-    // 等距构件地图：128×128 格，世界 (128+128)*32 × (128+128)*16 = 8192×4096；内容全部来自布局 JSON
-    width: 8192, height: 4096,
+    // 128×128 城制样板；北门石坊券洞下 cell(16,1) 是唯一的出城口
     iso: { layout: 'iso/taoyuan.json' },
-    walk: { minY: 60, maxY: 4036 },
     spawns: [],
-    // 城门（gx15,gy0 三门石坊）拱洞下方 cell(16,1) → 世界 (4576, 288)：向北出城
-    exits: [{ x: 4576, y: 288, r: 80, to: 'wild_heifeng', toX: 720, toY: 540, label: '青崖山道' }],
-    // 长老在 Q1 市集广场中心 cell(32,32)；酒肆在广场北沿临街 cell(32,20)
-    npc: { x: 4096, y: 1040, name: '玄鹤长老' },
-    tavern: { x: 4480, y: 848, name: '云京酒肆掌柜' },
+    exits: [isoExit('taoyuan', 16, 1, 'wild_heifeng', 32, 1, '青崖山道')],
+    npc: isoNpc('taoyuan', 32, 32, '玄鹤长老'),
+    tavern: isoNpc('taoyuan', 32, 20, '云京酒肆掌柜'),
   },
+  /** 青崖山道 128×96：盘山之字栈道，三口分别在北 / 西 / 东边界 */
   wild_heifeng: {
     name: '青崖山道', scene: 'wild_heifeng',
-    walk: { minY: 500, maxY: 862 },
+    iso: { layout: 'iso/wild_heifeng.json' },
     spawns: [
-      { group: ['yelang'], x: 400, y: 570 },
-      { group: ['yelang'], x: 880, y: 720 },
-      { group: ['yelang', 'yelang'], x: 1080, y: 580 },
-      { group: ['heixiong'], x: 620, y: 780 },
+      isoSpawn('wild_heifeng', 32, 12, ['yelang']),
+      isoSpawn('wild_heifeng', 32, 22, ['yelang', 'yelang']),
+      isoSpawn('wild_heifeng', 72, 14, ['yelang']),
+      isoSpawn('wild_heifeng', 58, 44, ['heixiong']),
+      isoSpawn('wild_heifeng', 40, 64, ['yelang']),
+      isoSpawn('wild_heifeng', 22, 64, ['yelang', 'yelang']),
+      isoSpawn('wild_heifeng', 104, 52, ['yelang']),
+      isoSpawn('wild_heifeng', 116, 62, ['heixiong']),
     ],
     exits: [
-      { x: 200, y: 852, r: 70, to: 'taoyuan', toX: 3584, toY: 784, label: '云京' },
-      { x: 1372, y: 620, r: 70, to: 'wild_luanzang', toX: 150, toY: 620, label: '渡忘川' },
-      { x: 1100, y: 500, r: 70, to: 'wild_shanxiao', toX: 720, toY: 800, label: '玲珑洞天' },
+      isoExit('wild_heifeng', 32, 1, 'taoyuan', 16, 1, '云京'),
+      isoExit('wild_heifeng', 1, 62, 'wild_luanzang', 11, 1, '渡忘川'),
+      isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '玲珑洞天'),
     ],
   },
+  /** 渡忘川 96×128：忘川斜贯，北渡口通山道、南渡口通幽都 */
   wild_luanzang: {
     name: '渡忘川', scene: 'wild_luanzang',
-    walk: { minY: 500, maxY: 862 },
+    iso: { layout: 'iso/wild_luanzang.json' },
     spawns: [
-      { group: ['kulou'], x: 460, y: 580 },
-      { group: ['kulou', 'kulou'], x: 760, y: 640 },
-      { group: ['zhizhu'], x: 1120, y: 680 },
+      isoSpawn('wild_luanzang', 17, 20, ['kulou']),
+      isoSpawn('wild_luanzang', 53, 40, ['kulou', 'kulou']),
+      isoSpawn('wild_luanzang', 48, 56, ['zhizhu']),
+      isoSpawn('wild_luanzang', 45, 76, ['kulou']),
+      isoSpawn('wild_luanzang', 81, 96, ['zhizhu', 'kulou']),
+      isoSpawn('wild_luanzang', 65, 116, ['zhizhu']),
     ],
-    exits: [{ x: 65, y: 620, r: 70, to: 'wild_heifeng', toX: 1280, toY: 620, label: '青崖山道' }],
+    exits: [
+      isoExit('wild_luanzang', 11, 1, 'wild_heifeng', 1, 62, '青崖山道'),
+      isoExit('wild_luanzang', 73, 126, 'difu', 40, 1, '幽都 · 忘川渡口'),
+    ],
   },
+  /** 玲珑洞天 104×104：环形洞厅 + 四向放射石阶，只有西口通山道 */
   wild_shanxiao: {
     name: '玲珑洞天', scene: 'wild_shanxiao',
-    walk: { minY: 500, maxY: 862 },
+    iso: { layout: 'iso/wild_shanxiao.json' },
     spawns: [
-      { group: ['shanxiao'], x: 500, y: 580 },
-      { group: ['shanxiao', 'shanxiao'], x: 860, y: 700 },
-      { group: ['shanxiaowang'], x: 1150, y: 600 },
+      isoSpawn('wild_shanxiao', 52, 20, ['shanxiao']),
+      isoSpawn('wild_shanxiao', 52, 38, ['shanxiao', 'shanxiao']),
+      isoSpawn('wild_shanxiao', 52, 86, ['shanxiao']),
+      isoSpawn('wild_shanxiao', 52, 92, ['shanxiaowang']),
+      isoSpawn('wild_shanxiao', 84, 52, ['shanxiao', 'shanxiao']),
+      isoSpawn('wild_shanxiao', 20, 52, ['shanxiao']),
     ],
-    exits: [{ x: 720, y: 852, r: 70, to: 'wild_heifeng', toX: 1100, toY: 570, label: '青崖山道' }],
+    exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '青崖山道')],
   },
-  /** 地府：战败重生点。地图素材未到位时渲染器用占位底色，不影响流程闭环 */
+  /** 地府 80×112：一条黄泉直道贯穿南北，北口回忘川、南口还阳回云京 */
   difu: {
     name: '地府 · 忘川渡口', scene: 'difu',
-    segments: 1,
-    walk: { minY: 560, maxY: 866 },
+    iso: { layout: 'iso/difu.json' },
     spawns: [],
-    exits: [{ x: 1320, y: 800, r: 80, to: 'taoyuan', toX: 3584, toY: 784, label: '还阳 · 云京' }],
-    npc: { x: 620, y: 680, name: '孟婆' },
+    exits: [
+      isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '渡忘川'),
+      isoExit('difu', 40, 110, 'taoyuan', 16, 1, '还阳 · 云京'),
+    ],
+    npc: isoNpc('difu', 40, 72, '孟婆'),
   },
 };
 
@@ -158,12 +212,15 @@ function expandMap(id: string, base: BaseLayout): WorldMap {
   const minY = base.walk?.minY ?? DEFAULT_WALK_BOUNDS.minY;
   const maxY = base.walk?.maxY ?? DEFAULT_WALK_BOUNDS.maxY;
 
-  // 等距构件地图：整张图由布局 JSON 描述，不再按区段重复
+  // 等距构件地图：大小由该图自己的格网推导；bounds 覆盖整个菱形，
+  // 具体可走性完全交给布局碰撞（边界格 y 可低至 16px，不能被旧卷轴的 60px 内缩裁掉）
   if (base.iso) {
+    const isoSize = isoWorldSize(isoGridOf(id));
+    const iw = isoSize.w, ih = isoSize.h;
     return {
       id, name: base.name, scene: base.scene,
-      segments: Math.max(1, Math.round(w / TILE_W)), w, h,
-      bounds: { minX: 60, maxX: w - 60, minY, maxY },
+      segments: Math.max(1, Math.round(iw / TILE_W)), w: iw, h: ih,
+      bounds: { minX: 0, maxX: iw, minY: 0, maxY: ih },
       spawns: base.spawns.map((s) => ({ group: [...s.group], x: s.x, y: s.y })),
       exits: base.exits.map((e) => ({ ...e })),
       npc: base.npc ? { ...base.npc } : undefined,

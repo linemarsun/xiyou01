@@ -3,8 +3,9 @@
  * 用 esbuild 把 src/core/ 打成 ESM 后直接在 Node 里跑，覆盖：
  *   任务链三环 / 战斗结算 / 存档迁移 / 成长与装备 / 师门 / 召唤兽 /
  *   战斗可复现性 / 捕捉规则 / 素材清单契约 / 装备补全 / 炼妖 / 组队同伴 /
- *   音频事件映射与 BGM 常量 / 寻路规划 / 挂机决策 / 分块大地图与素材清单 /
- *   国风美术映射与素材文件完整性 / 世界观文案统一 / 国风地图与悬赏榜数据。
+ *   音频事件映射与 BGM 常量 / 寻路规划 / 挂机决策 / 等距地图与素材清单 /
+ *   国风美术映射与素材文件完整性 / 世界观文案统一 / 国风地图与悬赏榜数据 /
+ *   一景一制（独立格网、边界出入口、专属路网、全锚点 BFS 连通、主题区分）。
  * 运行：npm test   （新增玩法模块时请在本文件补对应断言）
  */
 import { build } from 'esbuild';
@@ -684,23 +685,27 @@ test('挂机决策：清图跨图 / 任务达成回镇 / 丹药耗尽 / 全链�
   eq(autoplay.nextAutoAction(done).kind, 'stop', '任务链完成停止');
 });
 
-console.log('\n[12] 等距构件地图（模块 7）');
-test('卷轴尺寸常量与各地图区段一致（旧分块模式已移除）', () => {
-  eq(world.DEFAULT_SEGMENTS, 8, '默认 8 个区段');
+console.log('\n[12] 等距构件地图（模块 7 / 模块 12 一景一制）');
+test('五图等距规格各自按格网推导；卷轴常量只留给旧素材回退', () => {
+  eq(world.DEFAULT_SEGMENTS, 8, '默认 8 个区段（旧分块素材口径）');
   eq(world.TILE_W, 1440, '区段宽'); eq(world.TILE_H, 900, '区段高');
-  eq(world.MAP_H, 900, '纵向保持 900（与视口等高）');
-  for (const m of Object.values(world.WORLD_MAPS)) {
-    eq(m.bounds.maxX, m.w - 60, `${m.name} 可行走区随宽度扩展`);
-    if (m.iso) {
-      // 等距构件地图：世界尺寸由配置给出，内容由布局 JSON 给出
-      ok(m.segments >= 1, `${m.name} 区段折算（小地图/挂机仍按区段用）`);
-      ok(!('chunks' in m) && !('chunkW' in m), `${m.name} 不再使用分块字段`);
-    } else {
-      eq(m.w, world.TILE_W * m.segments, `${m.name} 宽`);
-      eq(m.h, world.MAP_H, `${m.name} 高`);
-    }
+  eq(world.MAP_H, 900, '旧区段高');
+  const sizes = new Set();
+  for (const [id, m] of Object.entries(world.WORLD_MAPS)) {
+    const g = world.isoGridOf(id);
+    const sz = world.isoWorldSize(g);
+    ok(m.iso?.layout, `${m.name} 已启用等距布局`);
+    eq(m.w, sz.w, `${m.name} 等距世界宽由自己的格网推导`);
+    eq(m.h, sz.h, `${m.name} 等距世界高由自己的格网推导`);
+    eq(m.bounds.minX, 0, `${m.name} 边界格不被横向内缩裁掉`);
+    eq(m.bounds.maxX, m.w, `${m.name} 可行走区覆盖整个菱形`);
+    eq(m.bounds.minY, 0, `${m.name} 边界格不被纵向内缩裁掉`);
+    eq(m.bounds.maxY, m.h, `${m.name} 纵向覆盖整个菱形`);
+    ok(m.segments >= 1, `${m.name} 区段折算（挂机与旧素材仍按区段用）`);
+    ok(!('chunks' in m) && !('chunkW' in m), `${m.name} 不再使用分块字段`);
+    sizes.add(`${m.w}x${m.h}`);
   }
-  eq(world.WORLD_MAPS.difu.segments, 1, '地府占位单段');
+  ok(sizes.size >= 4, `五图世界尺寸不再完全一致（${[...sizes].join(' / ')}）`);
   ok(world.WORLD_MAPS.difu.npc?.name === '孟婆', '地府孟婆已注册');
 });
 
@@ -969,10 +974,10 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   }
 });
 
-test('怪组与出口按区段补充，且都落在本图可行走区内', () => {
+test('怪组与出口落在各图自己的可行走区内，且沿专属路网铺开', () => {
   const heifeng = world.WORLD_MAPS.wild_heifeng;
-  ok(heifeng.spawns.length >= 24, `黑风岭怪组数 ${heifeng.spawns.length}（原 4 组 × 8 区段）`);
-  ok(heifeng.exits.length >= 9, '多组出口分布在不同区段');
+  ok(heifeng.spawns.length >= 8, `青崖山道怪组数 ${heifeng.spawns.length}（沿之字栈道铺开）`);
+  ok(heifeng.exits.length >= 3, '云京 / 渡忘川 / 玲珑洞天三个边界出口');
   for (const m of Object.values(world.WORLD_MAPS)) {
     for (const s of m.spawns) {
       ok(s.x >= m.bounds.minX && s.x <= m.bounds.maxX && s.y >= m.bounds.minY && s.y <= m.bounds.maxY,
@@ -981,20 +986,21 @@ test('怪组与出口按区段补充，且都落在本图可行走区内', () =>
     for (const e of m.exits) {
       ok(e.x >= m.bounds.minX && e.x <= m.bounds.maxX && e.y >= m.bounds.minY && e.y <= m.bounds.maxY,
         `${m.name} 路牌 (${e.x},${e.y}) 在本图可行走区内`);
+      ok(world.isWalkable(world.WORLD_MAPS[e.to], e.toX, e.toY),
+        `${m.name} → ${e.label} 跨图落点在目标图 bounds 内`);
     }
   }
-  ok(world.WORLD_MAPS.taoyuan.npc, '长老仍在起点区段');
-  ok(world.WORLD_MAPS.taoyuan.tavern, '酒馆仍在起点区段');
-  ok(new Set(heifeng.spawns.map((s) => Math.floor(s.x / world.TILE_W))).size === heifeng.segments,
-    '每个区段都有怪组');
+  ok(world.WORLD_MAPS.taoyuan.npc, '长老仍在市集广场');
+  ok(world.WORLD_MAPS.taoyuan.tavern, '酒馆仍在广场北沿');
+  ok(new Set(heifeng.spawns.map((s) => `${s.x}`)).size >= 6, '怪组分布在栈道不同路段（非区段复制）');
 });
 
 test('跨图 BFS 在大地图上仍可达；旧存档坐标仍合法', () => {
   for (const id of Object.keys(world.WORLD_MAPS)) {
     if (id === 'taoyuan') continue;
-    ok(autoplay.routeExit(id, 'taoyuan'), `${id} 能回到桃源镇`);
+    ok(autoplay.routeExit(id, 'taoyuan'), `${id} 能回到云京`);
   }
-  ok(autoplay.routeExit('taoyuan', 'wild_heifeng'), '桃源镇能出城');
+  ok(autoplay.routeExit('taoyuan', 'wild_heifeng'), '云京能出城');
   const b = world.WORLD_MAPS.taoyuan.bounds;
   const g = world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '回归测试' });
   ok(g.px >= b.minX && g.px <= b.maxX && g.py >= b.minY && g.py <= b.maxY, '新档出生点落在可行走区内');
@@ -1020,6 +1026,193 @@ test('战斗背景存在（art/battle/<region>.png）', () => {
   for (const id of ['wild_heifeng', 'wild_luanzang', 'wild_shanxiao']) {
     ok(existsSync(path.join(dir, `${id}.png`)), `缺战斗背景 ${id}.png`);
   }
+});
+
+console.log('\n[12b] 一景一制：独立格网 / 边界出入口 / 专属路网（模块 12）');
+const ISO_REGIONS = ['wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu'];
+const sceneCache = new Map();
+/** 读布局 → 展开 → 碰撞；同一张图只解析一次 */
+function isoScene(id) {
+  if (sceneCache.has(id)) return sceneCache.get(id);
+  const m = world.WORLD_MAPS[id];
+  const raw = JSON.parse(readFileSync(path.join(ROOT, 'public/assets/art', m.iso.layout), 'utf8'));
+  const layout = iso.expandLayout(raw);
+  const col = iso.buildCollision(layout);
+  const walk = (gx, gy) => {
+    const p = iso.cellToWorld(layout.grid, gx, gy);
+    return iso.isoWalkable(col, layout.grid, p.x, p.y);
+  };
+  const value = { m, raw, layout, col, walk, walkXY: (x, y) => iso.isoWalkable(col, layout.grid, x, y) };
+  sceneCache.set(id, value);
+  return value;
+}
+/** 格坐标 → 世界坐标必须按「该图自己的格网」换算 */
+const isoAt = (id, gx, gy) => iso.cellToWorld(world.isoGridOf(id), gx, gy);
+const countType = (id, type) => isoScene(id).layout.items.filter((i) => i.type === type).length;
+/** 边界带：距任意一条边 ≤1 格 */
+const isBorder = (id, gx, gy) => {
+  const g = world.isoGridOf(id);
+  return gx <= 1 || gy <= 1 || gx >= g.cols - 2 || gy >= g.rows - 2;
+};
+
+test('一景一制：五图各有独立格网，尺寸/形状参考云京但互不相同', () => {
+  const city = world.ISO_GRIDS.taoyuan;
+  eq(city.cols, 128, '云京列（基准）'); eq(city.rows, 128, '云京行（基准）');
+  eq(world.ISO_GRID, city, '旧 ISO_GRID 别名仍指向云京');
+  const shapes = new Set();
+  for (const [id, m] of Object.entries(world.WORLD_MAPS)) {
+    const g = world.isoGridOf(id);
+    const raw = isoScene(id).raw;
+    for (const [k, v] of Object.entries(g)) eq(raw.grid[k], v, `${m.name} 布局 grid.${k} 与 ISO_GRIDS 一致`);
+    eq(g.tileW, 64, `${m.name} 菱形宽`); eq(g.tileH, 32, `${m.name} 菱形高 2:1`);
+    eq(g.ox, g.rows * 32, `${m.name} ox 使左顶点贴 x=0`);
+    eq(g.oy, 16, `${m.name} oy 使上顶点贴 y=0`);
+    // 规模参考云京 8192×4096，但不必一致
+    ok(m.w >= 8192 * 0.7 && m.w <= 8192, `${m.name} 宽 ${m.w} 与云京同量级`);
+    ok(m.h >= 4096 * 0.7 && m.h <= 4096, `${m.name} 高 ${m.h} 与云京同量级`);
+    shapes.add(`${g.cols}x${g.rows}`);
+  }
+  eq(shapes.size, 5, `五张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
+  for (const id of ISO_REGIONS) {
+    const { raw, layout } = isoScene(id);
+    ok(Array.isArray(raw.anchors?.spawns) && Array.isArray(raw.anchors?.exits), `${id} 布局带玩法锚点`);
+    ok(layout.items.length >= 400 && layout.items.length <= 1500, `${id} 构件数 ${layout.items.length}（视口裁剪可控）`);
+    ok(raw.signature && raw.tagline, `${id} 声明了专属路网签名`);
+  }
+});
+
+test('地图切换的出口与入口全部贴在格网边界，且落点落在对方边界路牌上', () => {
+  let n = 0;
+  for (const [id, m] of Object.entries(world.WORLD_MAPS)) {
+    for (const e of m.exits) {
+      const target = world.WORLD_MAPS[e.to];
+      ok(target, `${m.name} 路牌 ${e.label} 的目标图存在`);
+      const from = iso.cellAt(world.isoGridOf(id), e.x, e.y);
+      const to = iso.cellAt(world.isoGridOf(e.to), e.toX, e.toY);
+      ok(isBorder(id, from.gx, from.gy), `${m.name} 出口 ${e.label} (${from.gx},${from.gy}) 在边界`);
+      ok(isBorder(e.to, to.gx, to.gy), `${m.name} → ${e.label} 入口 (${to.gx},${to.gy}) 在边界`);
+      ok(target.exits.some((te) => Math.abs(te.x - e.toX) < 1 && Math.abs(te.y - e.toY) < 1),
+        `${m.name} → ${e.label} 的落点正好是对方边界路牌（可立即回程）`);
+      n++;
+    }
+  }
+  ok(n >= 9, `出入口总数 ${n}（含新开的忘川 ⇄ 幽都水路）`);
+  for (const id of Object.keys(world.WORLD_MAPS)) {
+    if (id === 'taoyuan') continue;
+    ok(autoplay.routeExit(id, 'taoyuan'), `${id} 能沿边界路牌回到云京`);
+  }
+  ok(autoplay.routeExit('taoyuan', 'difu'), '云京可经山道 → 忘川 → 幽都');
+});
+
+test('布局锚点与 world.ts 玩法坐标逐条一致（怪组 / 边界路牌 / 跨图落点 / NPC）', () => {
+  for (const id of ISO_REGIONS) {
+    const { m, raw, walk } = isoScene(id);
+    const a = raw.anchors;
+    eq(m.spawns.length, a.spawns.length, `${m.name} 怪组数`);
+    a.spawns.forEach((s, i) => {
+      const p = isoAt(id, s.gx, s.gy);
+      eq(m.spawns[i].x, p.x, `${m.name} 怪组 ${i} x`);
+      eq(m.spawns[i].y, p.y, `${m.name} 怪组 ${i} y`);
+      eq(m.spawns[i].group.join(','), s.group.join(','), `${m.name} 怪组 ${i} 阵容`);
+      ok(walk(s.gx, s.gy), `${m.name} 怪组 ${i} 所在格可走`);
+    });
+    eq(m.exits.length, a.exits.length, `${m.name} 路牌数`);
+    a.exits.forEach((e, i) => {
+      // 源格用本图格网，落点用目标图格网（两张图尺寸不同，绝不能共用一套换算）
+      const p = isoAt(id, e.gx, e.gy);
+      const q = isoAt(e.to, e.toGx, e.toGy);
+      eq(m.exits[i].x, p.x, `${m.name} 路牌 ${i} x`);
+      eq(m.exits[i].y, p.y, `${m.name} 路牌 ${i} y`);
+      eq(m.exits[i].to, e.to, `${m.name} 路牌 ${i} 目标图`);
+      eq(m.exits[i].toX, q.x, `${m.name} 路牌 ${i} 落点 x`);
+      eq(m.exits[i].toY, q.y, `${m.name} 路牌 ${i} 落点 y`);
+      eq(m.exits[i].label, e.label, `${m.name} 路牌 ${i} 文案`);
+      ok(isBorder(id, e.gx, e.gy), `${m.name} 路牌 ${i} 锚点在边界`);
+      ok(isBorder(e.to, e.toGx, e.toGy), `${m.name} 路牌 ${i} 落点在对方边界`);
+    });
+    if (a.npc) {
+      const p = isoAt(id, a.npc.gx, a.npc.gy);
+      eq(m.npc?.x, p.x, `${m.name} NPC x`);
+      eq(m.npc?.y, p.y, `${m.name} NPC y`);
+      eq(m.npc?.name, a.npc.name, `${m.name} NPC 名`);
+    }
+  }
+});
+
+test('五图所有玩法点与跨图落点都落在等距可走格', () => {
+  for (const [id] of Object.entries(world.WORLD_MAPS)) {
+    const { m, walkXY } = isoScene(id);
+    for (const s of m.spawns) ok(walkXY(s.x, s.y), `${m.name} 怪组 (${s.x},${s.y}) 可走`);
+    for (const e of m.exits) ok(walkXY(e.x, e.y), `${m.name} 路牌 ${e.label} 可走`);
+    if (m.npc) ok(walkXY(m.npc.x, m.npc.y), `${m.name} NPC 可走`);
+    if (m.tavern) ok(walkXY(m.tavern.x, m.tavern.y), `${m.name} 酒肆可走`);
+  }
+  for (const m of Object.values(world.WORLD_MAPS)) {
+    for (const e of m.exits) {
+      ok(isoScene(e.to).walkXY(e.toX, e.toY), `${m.name} → ${e.label} 落点可走`);
+    }
+  }
+  const mengpo = world.WORLD_MAPS.difu.npc;
+  ok(isoScene('difu').walkXY(mengpo.x - 64, mengpo.y + 32), '战败重生落点（孟婆身旁）可走');
+});
+
+test('四张布局：构件不越界、全部边界出入口与玩法点两两 BFS 连通', () => {
+  for (const id of ISO_REGIONS) {
+    const { layout, col, raw, walk } = isoScene(id);
+    for (const it of layout.items) {
+      const s = iso.isoSize(it);
+      ok(it.gx >= 0 && it.gy >= 0 && it.gx + s.w <= layout.grid.cols && it.gy + s.h <= layout.grid.rows,
+        `${id} 构件越界: ${it.type} (${it.gx},${it.gy}) ${s.w}×${s.h}`);
+    }
+    const pts = [
+      ...raw.anchors.exits.map((e) => ({ gx: e.gx, gy: e.gy, name: `出口 ${e.label}` })),
+      ...raw.anchors.spawns.map((s) => ({ gx: s.gx, gy: s.gy, name: `怪组 (${s.gx},${s.gy})` })),
+      ...(raw.anchors.npc ? [{ gx: raw.anchors.npc.gx, gy: raw.anchors.npc.gy, name: `NPC ${raw.anchors.npc.name}` }] : []),
+    ];
+    const from = { gx: pts[0].gx, gy: pts[0].gy };
+    for (const p of pts) ok(walk(p.gx, p.gy), `${id} ${p.name} 可走`);
+    for (let i = 1; i < pts.length; i++) {
+      ok(iso.findIsoPath(col, layout.grid, from, { gx: pts[i].gx, gy: pts[i].gy }) !== null,
+        `${id} ${pts[0].name} ⇄ ${pts[i].name} 路网连通`);
+    }
+    // 水面 / 桥面 / 牌坊券洞：只对该图实际存在的构件校验
+    const water = layout.items.find((it) => it.type === 'ground_water');
+    if (water) ok(!walk(water.gx, water.gy), `${id} 水面不可走`);
+    const bridge = layout.items.find((it) => it.type === 'bridge');
+    if (bridge) ok(walk(bridge.gx + 1, bridge.gy + 2), `${id} 桥面可走`);
+    const arch = layout.items.find((it) => it.type === 'paifang');
+    if (arch) ok(walk(arch.gx + 1, arch.gy + 1), `${id} 牌坊券洞可穿行`);
+  }
+});
+
+test('四景路网与地标各具特色，不再共用十字广场 / 中心券门', () => {
+  const sigs = new Set(ISO_REGIONS.map((id) => isoScene(id).raw.signature));
+  eq(sigs.size, 4, `四种专属路网签名（${[...sigs].join(' / ')}）`);
+  const mixes = ISO_REGIONS.map((id) =>
+    ['ground_grass', 'ground_dirt', 'ground_stone', 'ground_water'].map((t) => countType(id, t)).join('/'));
+  eq(new Set(mixes).size, 4, '四图地表铺装组合互不相同');
+  for (const id of ISO_REGIONS) {
+    eq(countType(id, 'gate_arch'), 0, `${id} 不再摆统一中心券门`);
+    ok(countType(id, 'hall') >= 1, `${id} 有专属大殿地标`);
+  }
+  ok(countType('wild_heifeng', 'tree') > countType('wild_heifeng', 'rock') * 1.5, '青崖山道：林海');
+  eq(countType('wild_heifeng', 'paifang'), 3, '青崖山道：三个山口各一牌坊');
+  eq(countType('wild_heifeng', 'bridge'), 4, '青崖山道：三溪一涧的石桥');
+  eq(isoScene('wild_heifeng').raw.signature, 'switchback-ridge', '之字盘山签名');
+
+  ok(countType('wild_luanzang', 'ground_water') > 80 && countType('wild_luanzang', 'bridge') >= 6,
+    '渡忘川：斜河水网 + 六渡石桥');
+  ok(countType('wild_luanzang', 'fence') >= 20, '渡忘川：两岸芦苇');
+  eq(isoScene('wild_luanzang').raw.signature, 'diagonal-river', '斜河双堤签名');
+
+  ok(countType('wild_shanxiao', 'rock') > 600, '玲珑洞天：晶壁围合');
+  eq(countType('wild_shanxiao', 'stairs'), 4, '玲珑洞天：四条放射石阶');
+  ok(countType('wild_shanxiao', 'city_wall_u6') >= 4, '玲珑洞天：真实城墙洞壁');
+  eq(isoScene('wild_shanxiao').raw.signature, 'ring-cavern', '环形洞厅签名');
+
+  ok(countType('difu', 'stele') >= 20 && countType('difu', 'lantern_post') >= 30, '地府：碑阵与引魂灯');
+  eq(countType('difu', 'bridge'), 1, '地府：唯独奈何桥');
+  eq(isoScene('difu').raw.signature, 'straight-road', '黄泉直道签名');
 });
 
 console.log('\n[13] 国风美术映射（模块 8）');
@@ -1082,7 +1275,7 @@ test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
   eq(content.CLASSES[0].stats.hp, 620, '职业数值');
   eq(content.MONSTERS.yelang.stats.hp, 230, '怪物数值');
   eq(world.DEFAULT_SEGMENTS, 8, '地图区段');
-  eq(world.WORLD_MAPS.taoyuan.bounds.maxX, world.WORLD_MAPS.taoyuan.w - 60, '可行走区');
+  eq(world.WORLD_MAPS.taoyuan.bounds.maxX, world.WORLD_MAPS.taoyuan.w, '可行走区覆盖整个菱形');
 });
 
 test('新世界观命名与 NPC 对话到位', () => {
