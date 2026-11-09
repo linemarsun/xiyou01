@@ -4,7 +4,8 @@
  *   任务链三环 / 战斗结算 / 存档迁移 / 成长与装备 / 师门 / 召唤兽 /
  *   战斗可复现性 / 捕捉规则 / 素材清单契约 / 装备补全 / 炼妖 / 组队同伴 /
  *   音频事件映射与 BGM 常量 / 寻路规划 / 挂机决策 / 分块大地图与素材清单 /
- *   国风美术映射与素材文件完整性 / 世界观文案统一 / 国风地图与悬赏榜数据。
+ *   国风美术映射与素材文件完整性 / 世界观文案统一 / 国风地图与悬赏榜数据 /
+ *   等距 A* 寻路 / 跨图落点「落地即弹回」保护。
  * 运行：npm test   （新增玩法模块时请在本文件补对应断言）
  */
 import { build } from 'esbuild';
@@ -29,7 +30,7 @@ const entry = [
   './src/core/types.ts', './src/core/equipment.ts', './src/core/skill.ts',
   './src/core/ai.ts', './src/core/rng.ts', './src/core/sim.ts',
   './src/core/audio-map.ts', './src/core/path.ts', './src/core/autoplay.ts',
-  './src/core/art.ts', './src/core/iso.ts',
+  './src/core/art.ts', './src/core/iso.ts', './src/core/iso-path.ts',
 ].map((p, i) => `export * as m${i} from '${p}';`).join('\n');
 
 const bundled = await build({
@@ -38,8 +39,8 @@ const bundled = await build({
 });
 const code = bundled.outputFiles[0].text;
 const mod = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
-const [world, battle, content, types, equipment, skill, ai, rng, sim, audiomap, pathutil, autoplay, art, iso] =
-  [mod.m0, mod.m1, mod.m2, mod.m3, mod.m4, mod.m5, mod.m6, mod.m7, mod.m8, mod.m9, mod.m10, mod.m11, mod.m12, mod.m13];
+const [world, battle, content, types, equipment, skill, ai, rng, sim, audiomap, pathutil, autoplay, art, iso, isopath] =
+  [mod.m0, mod.m1, mod.m2, mod.m3, mod.m4, mod.m5, mod.m6, mod.m7, mod.m8, mod.m9, mod.m10, mod.m11, mod.m12, mod.m13, mod.m14];
 
 // ---- 迷你测试框架 ----
 let passed = 0;
@@ -964,10 +965,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   }
 });
 
-test('怪组与出口按区段补充，且都落在本图可行走区内', () => {
-  const heifeng = world.WORLD_MAPS.wild_heifeng;
-  ok(heifeng.spawns.length >= 24, `黑风岭怪组数 ${heifeng.spawns.length}（原 4 组 × 8 区段）`);
-  ok(heifeng.exits.length >= 9, '多组出口分布在不同区段');
+test('怪组与出口都落在本图可行走区内（等距 / 横版分别判定）', () => {
   for (const m of Object.values(world.WORLD_MAPS)) {
     for (const s of m.spawns) {
       ok(s.x >= m.bounds.minX && s.x <= m.bounds.maxX && s.y >= m.bounds.minY && s.y <= m.bounds.maxY,
@@ -978,10 +976,13 @@ test('怪组与出口按区段补充，且都落在本图可行走区内', () =>
         `${m.name} 路牌 (${e.x},${e.y}) 在本图可行走区内`);
     }
   }
-  ok(world.WORLD_MAPS.taoyuan.npc, '长老仍在起点区段');
-  ok(world.WORLD_MAPS.taoyuan.tavern, '酒馆仍在起点区段');
-  ok(new Set(heifeng.spawns.map((s) => Math.floor(s.x / world.TILE_W))).size === heifeng.segments,
-    '每个区段都有怪组');
+  ok(world.WORLD_MAPS.taoyuan.npc, '云京长老仍在');
+  ok(world.WORLD_MAPS.taoyuan.tavern, '云京酒肆仍在');
+  // 横版分块地图（多段）才按区段复制怪组与路牌；等距构件地图不复制
+  for (const m of Object.values(world.WORLD_MAPS).filter((x) => !x.iso && x.segments > 1)) {
+    ok(m.spawns.length >= m.segments, `${m.name} 每段都有怪组`);
+    ok(m.exits.length >= 2, `${m.name} 多组出口`);
+  }
 });
 
 test('跨图 BFS 在大地图上仍可达；旧存档坐标仍合法', () => {
@@ -1113,6 +1114,126 @@ test('悬赏榜所需数据完整（任务名 / 描述 / 进度 / 奖赏）', ()
     ok(Object.keys(q.rewardItems).length > 0, `${q.id} 有奖赏`);
   }
   ok(world.dialogueFor(fresh()).actions.some((a) => a.kind === 'accept'), '有接取动作');
+});
+
+console.log('\n[16] 等距青崖山道（模块 12）');
+test('云京与青崖山道都是等距构件地图，布局文件合法', () => {
+  const isoMaps = Object.values(world.WORLD_MAPS).filter((m) => m.iso);
+  ok(isoMaps.length >= 2, `等距地图数 ${isoMaps.length}`);
+  for (const m of isoMaps) {
+    eq(m.w, 8192, `${m.name} 宽`);
+    eq(m.h, 4096, `${m.name} 高`);
+    const f = path.join(ROOT, 'public/assets/art', m.iso.layout);
+    ok(existsSync(f), `${m.name} 布局文件存在 ${m.iso.layout}`);
+    const d = JSON.parse(readFileSync(f, 'utf8'));
+    eq(d.grid.cols, 128, `${m.name} 网格列`);
+    eq(d.grid.rows, 128, `${m.name} 网格行`);
+    eq(d.grid.tileW, 64, `${m.name} 菱形宽`);
+    eq(d.grid.tileH, 32, `${m.name} 菱形高`);
+    ok(Array.isArray(d.items) && d.items.length > 100, `${m.name} 布局构件数 ${d.items.length}`);
+  }
+});
+
+test('青崖山道主题构件齐全，跨图落点对齐等距坐标', () => {
+  const f = path.join(ROOT, 'public/assets/art', 'iso/wild_heifeng.json');
+  const d = JSON.parse(readFileSync(f, 'utf8'));
+  const n = (t) => d.items.filter((i) => i.type === t).length;
+  ok(n('ground_dirt') >= 5, 'S 形折返山径');
+  ok(n('ground_water') >= 3, '溪涧水带');
+  ok(n('bridge') >= 2, '溪涧木桥与崖道悬桥');
+  ok(n('tree') >= 400, '松林');
+  ok(n('rock') >= 60, '山石');
+  ok(n('stairs') >= 4 && n('fence') >= 3, '崖道石阶与护栏');
+  ok(n('house') >= 2 && n('paifang') >= 2, '小庙 / 山门 / 崖口牌坊');
+  ok(d.items.some((i) => i.type === 'tree' && i.variant === 'pine'), '松树取 tree_pine 贴图');
+  const heifeng = world.WORLD_MAPS.wild_heifeng;
+  eq(heifeng.spawns.length, 4, '四组怪');
+  eq(heifeng.exits.length, 3, '三个出口');
+  eq(world.WORLD_MAPS.taoyuan.exits[0].toX, 4000, '云京→山道落点 x（须远离山道回城路牌）');
+  eq(world.WORLD_MAPS.taoyuan.exits[0].toY, 608, '云京→山道落点 y');
+  for (const src of ['wild_luanzang', 'wild_shanxiao']) {
+    const back = world.WORLD_MAPS[src].exits.find((e) => e.to === 'wild_heifeng');
+    ok(back && back.toX >= heifeng.bounds.minX && back.toX <= heifeng.bounds.maxX,
+      `${src} 回山道落点在等距界内`);
+  }
+});
+
+test('山道怪组、出口与跨图落点都落在碰撞层可走格', () => {
+  const f = path.join(ROOT, 'public/assets/art', 'iso/wild_heifeng.json');
+  const layout = JSON.parse(readFileSync(f, 'utf8'));
+  const col = iso.buildCollision(layout);
+  const m = world.WORLD_MAPS.wild_heifeng;
+  const walkable = (x, y) => iso.isoWalkable(col, layout.grid, x, y);
+  for (const s of m.spawns) ok(walkable(s.x, s.y), `怪组 (${s.x},${s.y}) 可走`);
+  for (const e of m.exits) ok(walkable(e.x, e.y), `出口 (${e.x},${e.y}) 可走`);
+  const entries = [
+    world.WORLD_MAPS.taoyuan.exits[0],
+    ...['wild_luanzang', 'wild_shanxiao'].map((id) => world.WORLD_MAPS[id].exits.find((e) => e.to === 'wild_heifeng')),
+  ];
+  for (const e of entries) {
+    ok(e && walkable(e.toX, e.toY), `入山道落点 (${e?.toX},${e?.toY}) 可走`);
+  }
+});
+
+test('所有跨图落点都不压在目标图出口触发圈内（不会「落地即弹回」）', () => {
+  let count = 0;
+  for (const src of Object.values(world.WORLD_MAPS)) {
+    for (const e of src.exits) {
+      const dest = world.WORLD_MAPS[e.to];
+      ok(dest, `${src.id} 的出口目标 ${e.to} 存在`);
+      ok(world.isWalkable(dest, e.toX, e.toY),
+        `${src.id}→${dest.name} 落点 (${e.toX},${e.toY}) 在目标图可行走区内`);
+      const blocked = world.exitsSuppressedOnArrival(dest, { x: e.toX, y: e.toY });
+      eq(blocked.length, 0,
+        `${src.id}→${dest.name} 落点必须避开目标图全部路牌（否则抵达当帧被传回）`);
+      count++;
+    }
+  }
+  ok(count >= 10, `覆盖跨图出口 ${count} 条`);
+  // 保护函数本身：旧版 bug 落点 (4224,336) 正好压在山道「回云京」路牌上
+  ok(world.exitsSuppressedOnArrival(world.WORLD_MAPS.wild_heifeng, { x: 4224, y: 336 }).length > 0,
+    '落地屏蔽能识别旧的互撞落点');
+  eq(world.exitsSuppressedOnArrival(world.WORLD_MAPS.wild_heifeng, { x: 4000, y: 608 }).length, 0,
+    '新落点无需屏蔽');
+});
+
+test('等距 A* 绕开城墙，从云京起点可走到出城路牌', () => {
+  const f = path.join(ROOT, 'public/assets/art', 'iso/taoyuan.json');
+  const layout = iso.expandLayout(JSON.parse(readFileSync(f, 'utf8')));
+  const col = iso.buildCollision(layout);
+  const g = layout.grid;
+  const map = world.WORLD_MAPS.taoyuan;
+  const start = { x: 3584, y: 784 };
+  const gate = map.exits[0];
+  ok(!isopath.isoLineClear(col, g, start, { x: gate.x, y: gate.y }), '起点到城门的直线确实被城墙挡住');
+  const plan = isopath.planIsoPath(col, g, start, { x: gate.x, y: gate.y }, map.bounds);
+  ok(plan.found, 'A* 找到绕行路径');
+  ok(plan.waypoints.length >= 2 && plan.cells > 20, `路径为多段绕行（${plan.waypoints.length} 段 / ${plan.cells} 格）`);
+  let prev = start;
+  for (const w of plan.waypoints) {
+    ok(isopath.isoLineClear(col, g, prev, w), `路径段 (${Math.round(w.x)},${Math.round(w.y)}) 全程可走`);
+    prev = w;
+  }
+  ok(Math.hypot(prev.x - gate.x, prev.y - gate.y) < gate.r, '终点进入城门路牌触发圈');
+  ok(isopath.nearestWalkablePoint(col, g, { x: 4096, y: 2048 }) !== null, '舆图点击落点可就近吸附');
+});
+
+test('等距 A* 从入山落点可走到青崖山道全部三个出口', () => {
+  const f = path.join(ROOT, 'public/assets/art', 'iso/wild_heifeng.json');
+  const layout = iso.expandLayout(JSON.parse(readFileSync(f, 'utf8')));
+  const col = iso.buildCollision(layout);
+  const g = layout.grid;
+  const map = world.WORLD_MAPS.wild_heifeng;
+  const start = { x: 4000, y: 608 };
+  for (const e of map.exits) {
+    const plan = isopath.planIsoPath(col, g, start, { x: e.x, y: e.y }, map.bounds);
+    ok(plan.found, `从入山口可走到「${e.label}」路牌`);
+    let prev = start;
+    for (const w of plan.waypoints) {
+      ok(isopath.isoLineClear(col, g, prev, w), `「${e.label}」路径段可走`);
+      prev = w;
+    }
+  }
 });
 
 console.log(`\n=== 结果：${passed} 通过 / ${failures.length} 失败 ===\n`);

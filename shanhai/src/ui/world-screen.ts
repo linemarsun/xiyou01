@@ -58,6 +58,7 @@ const ALLOC_BONUS_TEXT: Record<keyof AllocStats, (n: number) => string> = {
 import { nextAutoAction } from '../core/autoplay';
 import { ICON_ART, artUrl } from '../core/art';
 import { WorldRenderer } from '../render/world-renderer';
+import { MapPanel } from './map-panel';
 import { audio } from '../audio/audio';
 import { h } from './dom';
 
@@ -83,6 +84,7 @@ export class WorldScreen {
   private allocPanelEl!: HTMLElement;
   private skillPanelEl!: HTMLElement;
   private tavernPanelEl!: HTMLElement;
+  private mapPanel: MapPanel | null = null;
 
   private constructor(root: HTMLElement, gs: GameState, hooks: { onExitToSetup: () => void }) {
     this.root = root;
@@ -179,6 +181,15 @@ export class WorldScreen {
     this.skillPanelEl = h('div', { class: 'dialogue', style: 'display:none' });
     this.tavernPanelEl = h('div', { class: 'dialogue', style: 'display:none' });
     this.sceneHost = h('div', { class: 'scene-host' });
+    // 舆图：hooks 全部惰性读取渲染器，create 完成前也安全
+    this.mapPanel = new MapPanel(this.map, {
+      getPlayer: () => this.renderer?.getPlayerPos() ?? { x: this.gs.px, y: this.gs.py },
+      getTarget: () => this.renderer?.getTargetPos() ?? { x: this.gs.px, y: this.gs.py },
+      getMonsters: () => this.renderer?.monsterPositions() ?? [],
+      getOverview: () => this.renderer?.overviewData() ?? null,
+      goto: (p) => this.renderer?.moveTo(p.x, p.y),
+      toast: (text) => this.toast(text),
+    });
     this.allocBtn = h('button', {
       class: 'btn small',
       onclick: () => this.toggleAllocPanel(),
@@ -210,6 +221,7 @@ export class WorldScreen {
         h('span', { class: 'spacer' }),
         this.questEl,
         h('button', { class: 'btn small', onclick: () => this.openQuestBoard() }, '📜 悬赏'),
+        h('button', { class: 'btn small', onclick: () => this.toggleMapPanel() }, '🗺 舆图'),
         this.autoBtn,
         this.allocBtn,
         h('button', { class: 'btn small', onclick: () => this.toggleSkillPanel() }, '📜 道法'),
@@ -225,7 +237,17 @@ export class WorldScreen {
       this.skillPanelEl,
       this.tavernPanelEl,
       this.dialogueEl,
+      this.mapPanel.el,
     );
+  }
+
+  // ===== 舆图（地图查看 + 点图寻路） =====
+
+  private toggleMapPanel(): void {
+    if (!this.mapPanel) return;
+    if (this.mapPanel.isOpen) { this.mapPanel.hide(); return; }
+    this.closePanels();
+    this.mapPanel.show();
   }
 
   // ===== 挂机（自动寻路 + 自动战斗 + 跨图巡游） =====
@@ -606,6 +628,7 @@ export class WorldScreen {
     this.skillPanelEl.style.display = 'none';
     this.tavernPanelEl.style.display = 'none';
     this.dialogueEl.style.display = 'none';
+    this.mapPanel?.hide();
   }
 
   private equippedIn(slot: EquipSlot): EquipmentItem | undefined {
@@ -768,6 +791,7 @@ export class WorldScreen {
   }
 
   private backToSetup(): void {
+    this.mapPanel?.dispose();
     const pos = this.renderer?.getPlayerPos();
     if (pos) {
       this.gs.px = pos.x;
@@ -879,6 +903,7 @@ export class WorldScreen {
 
   private async onEncounter(group: string[], groupKey: string): Promise<void> {
     this.clearAutoStep();
+    this.mapPanel?.dispose();
     await this.fade(true);
     const pos = this.renderer!.getPlayerPos();
     this.gs.px = pos.x;
@@ -948,6 +973,7 @@ export class WorldScreen {
 
   private async travel(exit: MapExit): Promise<void> {
     this.clearAutoStep();
+    this.mapPanel?.dispose();
     await this.fade(true);
     this.gs.mapId = exit.to;
     this.gs.px = exit.toX;

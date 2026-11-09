@@ -385,3 +385,42 @@ body {
 .quest-reward { font-size: 12.5px; color: #e8c56a; }
 .quest-text { font-size: 14px; line-height: 1.85; margin: 10px 0 14px; color: #f7ecd8; }
 .dialogue.quest-panel .cmd-row { justify-content: flex-end; }
+
+/* ===== 舆图（地图查看）：纯 CSS + Canvas 自绘，不依赖图片素材 ===== */
+.dialogue.map-panel {
+  /* 居中浮层：不排在 900px 画布下方，点开即可看到（大屏/小屏都能滚动查看） */
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 55; width: min(780px, 94vw); max-height: 92vh; overflow-y: auto;
+  margin: 0;
+  background: linear-gradient(180deg, #fdf9ec, #f3e9d0);
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  box-shadow: 0 0 0 100vmax rgba(12, 12, 18, .5), 0 14px 44px #0007,
+              inset 0 0 0 4px #fdf9ec, inset 0 0 0 5px #d9c9a3;
+  padding: 16px 20px 14px;
+}
+.map-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.map-head .dname { margin-bottom: 0; font-size: 17px; letter-spacing: 2px; }
+.map-coord { font-size: 12px; color: var(--ink2); }
+.map-canvas {
+  display: block; width: 100%; height: auto; aspect-ratio: 2 / 1;
+  border: 1px solid #8a6a2a; border-radius: 8px;
+  background: #1b2320; cursor: crosshair;
+}
+.map-legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: 12px; color: var(--ink2); margin: 8px 0 4px;
+}
+.map-hint { color: #8a7a5e; font-style: italic; }
+.map-section-title {
+  font-size: 13px; font-weight: bold; color: #7d2c21;
+  letter-spacing: 2px; margin: 12px 0 7px;
+  border-left: 3px solid var(--accent); padding-left: 8px;
+}
+.map-exits { display: flex; gap: 8px; flex-wrap: wrap; }
+.map-graph {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: radial-gradient(420px 160px at 50% 20%, #f7f0dd, #e6d8b6);
+  padding: 4px 8px 0; overflow: hidden;
+}
+.map-graph svg { display: block; }

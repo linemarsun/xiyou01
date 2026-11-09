@@ -4,7 +4,7 @@
  */
 import { Application, AnimatedSprite, Assets, Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { GameState, MapExit, WorldMap } from '../core/world';
-import { TILE_W, TILE_H, activePet, isWalkable } from '../core/world';
+import { TILE_W, TILE_H, activePet, isWalkable, exitsSuppressedOnArrival } from '../core/world';
 import {
   artUrl, foregroundImageUrl, foregroundJsonUrl, isoHouseCandidates, isoModuleCandidates, mapArtLegacyUrl, mapArtUrl, WORLD_TILE_ART,
 } from '../core/art';
@@ -14,6 +14,7 @@ import {
   type IsoCollision, type IsoItem, type IsoLayout,
 } from '../core/iso';
 import { planPath, type Point } from '../core/path';
+import { planIsoPath } from '../core/iso-path';
 import { WORLD_SCALE as SCALE } from './scale';
 
 const VIEW_W = 1440;
@@ -115,6 +116,8 @@ export class WorldRenderer {
   private engaged = false;
   private npcPrompted = false;
   private tavernPrompted = false;
+  /** 落地时压在触发圈内的出口下标：玩家先离开触发圈再重新武装，杜绝"落地即弹回" */
+  private exitSuppressed = new Set<number>();
   private elapsed = 0;
   private destroyed = false;
   private inputEnabled = true;
@@ -231,6 +234,8 @@ export class WorldRenderer {
     // 玩家
     this.player = this.buildActor(this.gs.px, this.gs.py, this.gs.classId, SCALE.player, manifest);
     this.world.addChild(this.player.root);
+    // 切图 / 战斗返回都可能落（或存档）在出口触发圈内：这些出口先屏蔽，走开后才重新生效
+    this.exitSuppressed = new Set(exitsSuppressedOnArrival(this.map, this.getPlayerPos()));
 
     // 出战宠物跟随（世界里也展示，与战斗同一套 sprite）
     const pet = activePet(this.gs);
@@ -1074,10 +1079,22 @@ export class WorldRenderer {
     a.sprite.gotoAndPlay(0);
   }
 
-  /** 规划到 (x,y) 的路径并立即开始走；当前策略为单段直线 + 可行走区钳制 */
+  /**
+   * 规划到 (x,y) 的路径并立即开始走：
+   * - 等距构件图有城墙/水面，用碰撞层 A* 绕行 + 视线平滑（点城门路牌能真正走到）
+   * - 旧横版区段图没有障碍数据，保持单段直线 + 边界钳制
+   */
   private setPathTo(x: number, y: number): void {
-    const plan = planPath(this.getPlayerPos(), { x, y }, this.map.bounds);
-    this.path = plan.waypoints.slice();
+    const from = this.getPlayerPos();
+    let waypoints: Point[];
+    const g = this.isoLayout?.grid;
+    if (g && this.isoCollision) {
+      const plan = planIsoPath(this.isoCollision, g, from, { x, y }, this.map.bounds);
+      waypoints = plan.found ? plan.waypoints : planPath(from, { x, y }, this.map.bounds).waypoints;
+    } else {
+      waypoints = planPath(from, { x, y }, this.map.bounds).waypoints;
+    }
+    this.path = waypoints.slice();
     const first = this.path.shift();
     if (first) {
       this.targetX = first.x;
@@ -1133,10 +1150,17 @@ export class WorldRenderer {
       const step = Math.min(dist, WALK_SPEED * dt);
       const nx = px + (dx / dist) * step;
       const ny = py + (dy / dist) * step;
-      // 分轴滑步：先 x 后 y，任一轴被建筑/地图边界挡住时仍可沿另一轴滑动
+      // 优先按真实方向整步前进（A* 斜向 waypoint 不能拆轴，否则可能落进对角格被挡）；
+      // 只有整步被挡时才退回分轴滑步，保证仍能沿墙滑行
       let moved = false;
-      if (this.canWalk(nx, py)) { this.player.root.x = nx; moved = true; }
-      if (this.canWalk(this.player.root.x, ny)) { this.player.root.y = ny; moved = true; }
+      if (this.canWalk(nx, ny)) {
+        this.player.root.x = nx;
+        this.player.root.y = ny;
+        moved = true;
+      } else {
+        if (this.canWalk(nx, py)) { this.player.root.x = nx; moved = true; }
+        if (this.canWalk(this.player.root.x, ny)) { this.player.root.y = ny; moved = true; }
+      }
       if (!moved) {
         // 前方不可走：清空路径原地待命，避免对着墙持续抖动
         this.path = [];
@@ -1242,8 +1266,15 @@ export class WorldRenderer {
     } else if (this.tavern && this.tavernPrompted && Math.hypot(this.tavern.root.x - pr.x, this.tavern.root.y - pr.y) > 120) {
       this.tavernPrompted = false;
     }
-    for (const ex of this.map.exits) {
-      if (Math.hypot(ex.x - pr.x, ex.y - pr.y) < ex.r) {
+    for (let i = 0; i < this.map.exits.length; i++) {
+      const ex = this.map.exits[i];
+      const d = Math.hypot(ex.x - pr.x, ex.y - pr.y);
+      if (this.exitSuppressed.has(i)) {
+        // 先走出触发圈（留 40px 余量）才重新武装，避免落地后被立刻传回上一张图
+        if (d > ex.r + 40) this.exitSuppressed.delete(i);
+        continue;
+      }
+      if (d < ex.r) {
         this.engaged = true;
         this.inputEnabled = false;
         this.hooks.onExit(ex);
@@ -1268,6 +1299,21 @@ export class WorldRenderer {
   /** 玩家当前地图坐标（战斗衔接、切图、存档用） */
   getPlayerPos(): { x: number; y: number } {
     return { x: this.player.root.x, y: this.player.root.y };
+  }
+
+  /** 舆图面板：当前移动目标（显示"寻路中"箭头） */
+  getTargetPos(): Point { return { x: this.targetX, y: this.targetY }; }
+
+  /** 舆图面板：怪物实时位置（会游荡，比出生点准确） */
+  monsterPositions(): Point[] {
+    return [...this.monsters.values()].map((a) => ({ x: a.root.x, y: a.root.y }));
+  }
+
+  /** 舆图面板：等距布局与碰撞层（只读引用，横版图返回 null） */
+  overviewData(): { layout: IsoLayout; collision: IsoCollision } | null {
+    return this.isoLayout && this.isoCollision
+      ? { layout: this.isoLayout, collision: this.isoCollision }
+      : null;
   }
 
   /** 调试：内部状态（DEV 构建的 window 句柄用） */

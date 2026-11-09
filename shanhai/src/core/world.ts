@@ -58,6 +58,21 @@ export function isWalkable(map: WorldMap, x: number, y: number): boolean {
 }
 
 /**
+ * 切图落地保护：若落点正好压在某个出口路牌的触发圈内，抵达当帧就会被再次传送，
+ * 表现为「去不了那张图 / 一进去就弹回来」。渲染器据此在玩家首次离开触发圈前屏蔽这些出口。
+ * margin 给一点余量，避免站在圈边缘反复触发。
+ */
+export function exitsSuppressedOnArrival(
+  map: WorldMap, p: { x: number; y: number }, margin = 40,
+): number[] {
+  const out: number[] = [];
+  map.exits.forEach((e, i) => {
+    if (Math.hypot(e.x - p.x, e.y - p.y) < e.r + margin) out.push(i);
+  });
+  return out;
+}
+
+/**
  * 横向分块卷轴：每张地图由若干 1440×900 的「区段」横向拼接（逐段索引取图，不做镜像）。
  * 新素材到位前，同一张 1440×900 图会被重复用于每个区段（不裁切、不缩放）。
  * 只改 BASE_MAPS 的 segments 即可调整宽度；纵向保持 900（与视口等高，无纵向滚动）。
@@ -99,24 +114,29 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     walk: { minY: 60, maxY: 4036 },
     spawns: [],
     // 城门（gx15,gy0 三门石坊）拱洞下方 cell(16,1) → 世界 (4576, 288)：向北出城
-    exits: [{ x: 4576, y: 288, r: 80, to: 'wild_heifeng', toX: 720, toY: 540, label: '青崖山道' }],
+    // 落点必须离目标图所有出口路牌都足够远，否则"落地即弹回"（见 exitsSuppressedOnArrival）
+    exits: [{ x: 4576, y: 288, r: 80, to: 'wild_heifeng', toX: 4000, toY: 608, label: '青崖山道' }],
     // 长老在 Q1 市集广场中心 cell(32,32)；酒肆在广场北沿临街 cell(32,20)
     npc: { x: 4096, y: 1040, name: '玄鹤长老' },
     tavern: { x: 4480, y: 848, name: '云京酒肆掌柜' },
   },
   wild_heifeng: {
     name: '青崖山道', scene: 'wild_heifeng',
-    walk: { minY: 500, maxY: 862 },
+    // 等距构件地图：与云京同规格 8192×4096，S 形折返山径 / 松林 / 溪涧木桥 / 崖道栈桥，
+    // 布局由 tools/_gen_heifeng.mjs 生成，见 art/iso/wild_heifeng.json。
+    width: 8192, height: 4096,
+    iso: { layout: 'iso/wild_heifeng.json' },
+    walk: { minY: 60, maxY: 4036 },
     spawns: [
-      { group: ['yelang'], x: 400, y: 570 },
-      { group: ['yelang'], x: 880, y: 720 },
-      { group: ['yelang', 'yelang'], x: 1080, y: 580 },
-      { group: ['heixiong'], x: 620, y: 780 },
+      { group: ['yelang'], x: 3776, y: 816 },
+      { group: ['yelang'], x: 3584, y: 1552 },
+      { group: ['yelang', 'yelang'], x: 2688, y: 2000 },
+      { group: ['heixiong'], x: 3392, y: 2736 },
     ],
     exits: [
-      { x: 200, y: 852, r: 70, to: 'taoyuan', toX: 3584, toY: 784, label: '云京' },
-      { x: 1372, y: 620, r: 70, to: 'wild_luanzang', toX: 150, toY: 620, label: '渡忘川' },
-      { x: 1100, y: 500, r: 70, to: 'wild_shanxiao', toX: 720, toY: 800, label: '玲珑洞天' },
+      { x: 4224, y: 336, r: 80, to: 'taoyuan', toX: 3584, toY: 784, label: '云京' },
+      { x: 4096, y: 3664, r: 80, to: 'wild_luanzang', toX: 240, toY: 620, label: '渡忘川' },
+      { x: 3136, y: 1904, r: 80, to: 'wild_shanxiao', toX: 720, toY: 560, label: '玲珑洞天' },
     ],
   },
   wild_luanzang: {
@@ -127,7 +147,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       { group: ['kulou', 'kulou'], x: 760, y: 640 },
       { group: ['zhizhu'], x: 1120, y: 680 },
     ],
-    exits: [{ x: 65, y: 620, r: 70, to: 'wild_heifeng', toX: 1280, toY: 620, label: '青崖山道' }],
+    exits: [{ x: 65, y: 620, r: 70, to: 'wild_heifeng', toX: 4032, toY: 3440, label: '青崖山道' }],
   },
   wild_shanxiao: {
     name: '玲珑洞天', scene: 'wild_shanxiao',
@@ -137,7 +157,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       { group: ['shanxiao', 'shanxiao'], x: 860, y: 700 },
       { group: ['shanxiaowang'], x: 1150, y: 600 },
     ],
-    exits: [{ x: 720, y: 852, r: 70, to: 'wild_heifeng', toX: 1100, toY: 570, label: '青崖山道' }],
+    exits: [{ x: 720, y: 852, r: 70, to: 'wild_heifeng', toX: 3136, toY: 1712, label: '青崖山道' }],
   },
   /** 地府：战败重生点。地图素材未到位时渲染器用占位底色，不影响流程闭环 */
   difu: {

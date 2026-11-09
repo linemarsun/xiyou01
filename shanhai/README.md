@@ -45,8 +45,13 @@ npm run assets   # 重新生成像素素材（public/assets/）
 - **模块 8 国风美术风格**：接入「原创国风西游」引擎素材（云纹木框 UI、Q版头像、国风图标、满幅战斗背景），CSS 与程序化场景统一到朱红/靛青/赭金/米白；映射集中在 `src/core/art.ts`。
 - **模块 9 世界观文案统一**：地名/任务/NPC/怪物/职业/灵兽统一到云京五族设定，id 与数值不变、老存档兼容。
 - **模块 10 国风地图与悬赏榜**：世界地图改用参考满幅国风背景（奇偶列镜像拼接无缝），任务界面改云纹木框悬赏榜（任务卡/进度条/赏格），HUD「📜 悬赏」可随时只读查看。
+- **模块 11 新基线（main）**：`128×128 RGBA` 精细国风单帧（266 张、五动作含 `dead`）、等距 2:1 菱形地图体系（`core/iso.ts`）、统一显示档位（`render/scale.ts`）、`assets_src/` 素材源与出图脚本入库。
+- **模块 12 等距青崖山道**：按云京风格把 `wild_heifeng` 改为 8192×4096 等距构件地图（S 形折返山径、松林、溪涧双桥、崖道栈桥、山门小庙），布局由 `tools/_gen_heifeng.mjs` 生成；回归 58/58。
+- **模块 13 跨图修复 + 舆图**：修好「云京→青崖山道」（落点互撞导致落地即弹回 + 城墙挡住直线路径），等距图接入碰撞层 A* 绕行；HUD 新增「🗺 舆图」——当前地图俯瞰、玩家/怪组/出口标记、点图自动寻路、本境通路与四境全图节点；回归 61/61。
 
-素材全部由 `tools/gen-assets.mjs` **程序化生成**（风格统一的原创像素画，零版权风险）：改生成器调色板/造型参数后跑 `npm run assets`；或按 `public/assets/manifest.json` 清单里的文件名逐张替换 PNG，代码无需改动。详见 [使用方式.md 第 7 节](./docs/使用方式.md)。
+当前素材为 **`128×128` 精细国风单帧**，源文件在 `assets_src/`（含等距城制构件与规范文档），产出在 `public/assets/sprites/`，清单 `public/assets/manifest.json` 定义 `frameSize` 与每动作帧序列/帧率/循环；`tools/gen-assets.mjs` 保留程序化像素回退能力。等距地图布局在 `public/assets/art/iso/*.json`，由 `tools/_gen_city.mjs`（云京）与 `tools/_gen_heifeng.mjs`（青崖山道）生成。详见 [使用方式.md 第 7 节](./docs/使用方式.md) 与 [PROGRESS.md](./PROGRESS.md)。
+
+> 注：模块 7 / 10 章节描述的是旧横版分块卷轴实现；云京与青崖山道现为等距构件地图，横版 tile 作为其余地图与缺图回退保留。
 
 ## 架构（为联机预留）
 
@@ -54,23 +59,27 @@ npm run assets   # 重新生成像素素材（public/assets/）
 src/core/    纯逻辑层，禁止 import DOM
   rng.ts       可种子化随机数（同种子+同指令 ⇒ 同结果，可回放可同步）
   audio-map.ts 战斗事件 → 音效名（纯函数，供浏览器音频层与回归断言消费）
-  path.ts      waypoint 路径规划（当前单段直线 + 边界钳制，可替换为 A*）
+  path.ts      waypoint 路径抽象（横版图：单段直线 + 边界钳制）
+  iso-path.ts  等距碰撞层 A* 寻路（8 向 / 不切墙角 / 视线平滑）
   autoplay.ts  挂机决策纯函数（找怪 / 跨图 / 交任务 / 停止）
   art.ts       国风素材映射与主色（纯数据配置）
+  iso.ts       等距 2:1 菱形格：构件/碰撞/深度排序/格↔世界坐标换算
   types.ts     单位/技能/指令/事件类型 —— 指令与事件全是可序列化纯对象
   content.ts   全部数值与文案（调平衡只改这里）
   battle.ts    战斗引擎：resolveRound(playerCommands) => BattleEvent[]
   ai.ts        敌方 AI（纯函数，将来可原样跑在服务器）
   skill.ts     师门法术等级换算
   equipment.ts 装备生成/词条/加成
-  world.ts     地图（分块卷轴 WORLD_SCALE）、任务、掉落、存档（localStorage）
+  world.ts     地图（等距布局 / 横版卷轴）、跨图落点保护、任务、掉落、存档（localStorage）
   sim.ts       数值仿真（批量 AI vs AI）
 src/render/  PixiJS 2.5D 渲染层
   battle-renderer.ts  场景/精灵/血条/Y排序/光环/倒地
-  world-renderer.ts   大地图卷动/走路/游荡/触发
+  world-renderer.ts   等距城制分层 + 大地图卷动/走路/游荡/触发（横版 tile 回退）
+  scale.ts            角色显示档位唯一常量 CHAR_SCALE_TIER
   particles.ts        法术特效（汇聚/爆散/上升气泡）
   tween.ts            极简补间动画
 src/ui/      浏览器层：选人、世界 HUD/面板、指挥面板、战斗日志、事件流播放
+  map-panel.ts  舆图面板：Canvas 地形俯瞰 / 标记 / 点图寻路 / 四境全图
 src/audio/   Web Audio 音频层：三档 BGM、事件音效、静音偏好
 tools/gen-assets.mjs  像素资产生成器
 tools/regression.mjs  Node 侧全链回归自检
@@ -81,7 +90,7 @@ docs/        功能说明 / 接口说明 / 使用方式
 
 ## 路线图（与 PROGRESS.md 一致）
 
-- **待办**：**M4 联机**（服务端技术栈 / 部署方式 / 协议范围需先确认）。（任务链回归、装备补全、宠物炼妖、组队同伴、音乐音效、自动挂机、分块大地图、国风美术、世界观文案、国风地图与悬赏榜已分别由模块 1~10 完成。）
+- **待办**：**M4 联机**（服务端技术栈 / 部署方式 / 协议范围需先确认）。（模块 1~13 均已完成：全链回归、装备补全、炼妖、组队同伴、音乐音效、自动挂机、分块大地图、国风美术、世界观文案、国风地图与悬赏榜、128 精细画风与等距云京、等距青崖山道、跨图修复与舆图。）
 - **更远期**：云存档、帮派、摆摊等更多系统。
 
 ## 数值速查
