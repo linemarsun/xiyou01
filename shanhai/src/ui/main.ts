@@ -1,5 +1,5 @@
 import '../style.css';
-import { clearSave, loadGame, newGame, type GameState } from '../core/world';
+import { clearSave, loadGame, newGame, WORLD_MAPS, type GameState } from '../core/world';
 import { simulateAll } from '../core/sim';
 import { CLASSES, PETS } from '../core/content';
 import { h } from './dom';
@@ -16,13 +16,24 @@ document.addEventListener('keydown', () => audio.unlock(), { once: true });
 if (location.hash === '#sim') {
   renderSim();
 } else {
-  // 开发态截图辅助：?play=1 以默认配置直接开局，免去点击开局界面
+  // 开发态截图辅助：?play=1 直接开局；可叠加 ?map=<id> 直达任意场景，
+  // 并把角色落到该图第一个边界出入口旁，方便验收各图边界与渲染。
   const devPlay = import.meta.env.DEV
     ? new URLSearchParams(location.search).get('play')
     : null;
   if (devPlay) {
+    const params = new URLSearchParams(location.search);
+    const devMap = params.get('map');
     clearSave();
-    void showWorld(newGame({ classId: CLASSES[0].id, petId: PETS[0].id, playerName: '测试少侠' }));
+    const gs = newGame({ classId: CLASSES[0].id, petId: PETS[0].id, playerName: '测试少侠' });
+    if (devMap && WORLD_MAPS[devMap]) {
+      const def = WORLD_MAPS[devMap];
+      const portal = def.exits[0];
+      gs.mapId = devMap;
+      gs.px = portal ? portal.x : def.w / 2;
+      gs.py = portal ? portal.y : def.h / 2;
+    }
+    void showWorld(gs);
   } else {
     showSetup();
   }

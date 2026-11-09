@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "node tools/regression.mjs",
-    "assets": "node tools/gen-assets.mjs"
+    "assets": "node tools/gen-assets.mjs",
+    "maps": "node tools/gen-iso-maps.mjs"
   },
   "devDependencies": {
     "pngjs": "^7.0.0",

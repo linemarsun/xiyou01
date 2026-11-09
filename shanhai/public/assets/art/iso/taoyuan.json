@@ -842,7 +842,7 @@
     {
       "type": "gate_arch",
       "gx": 62,
-      "gy": 0,
+      "gy": 4,
       "w": 3,
       "h": 3,
       "facing": "sw"

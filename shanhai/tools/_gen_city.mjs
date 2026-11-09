@@ -148,13 +148,15 @@ for (const [x, y] of [[5, 5], [121, 5], [5, 121], [121, 121]]) {
   items.push({ type: 'city_wall_corner', gx: x, gy: y, w: 2, h: 2 });
   for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) placed.add(key(x + dx, y + dy));
 }
-items.push({ type: 'gate_arch', gx: 62, gy: 0, w: 3, h: 3, facing: 'sw' });
+// 北门必须嵌在北墙门洞（gx62..64 / gy5..6）里：footprint 落在 gy4..6，与东西门同理外沿 1 格
+items.push({ type: 'gate_arch', gx: 62, gy: 4, w: 3, h: 3, facing: 'sw' });
 items.push({ type: 'gate_arch', gx: 4, gy: 63, w: 3, h: 3, facing: 'se' });
 items.push({ type: 'gate_arch', gx: 120, gy: 63, w: 3, h: 3, facing: 'nw' });
 items.push({ type: 'city_gate_tower', gx: 62, gy: 121, w: 4, h: 3, facing: 'sw' });
 for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(62 + dx, 121 + dy));
 
 // ---------- 中心：鼓楼（7×7 三层）+ 环绕广场 + 牌坊 ----------
+// 暂用 gate_arch 城门贴图别名（art.ts），等专用 paifang 美术（两柱一枋、无两侧墙垛）到位后再换图。
 const bellOk = put({ type: 'bell_tower', gx: 60, gy: 60, w: 7, h: 7 }, { allowStone: true });
 for (const [x, y] of [[52, 57], [70, 57], [52, 66], [70, 66]]) {
   put({ type: 'paifang', gx: x, gy: y, w: 3, h: 3, facing: 'sw' }, { allowStone: true });
