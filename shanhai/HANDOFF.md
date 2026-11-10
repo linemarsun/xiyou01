@@ -2,16 +2,16 @@
 doc: HANDOFF
 schema: 1
 updated: 2026-11-10
-updated_at: "2026-11-10 19:55 +08:00"
+updated_at: "2026-11-10 20:15 +08:00"
 repo: https://github.com/linemarsun/xiyou01
 branch: main
-baseline_main: ec859fec8ae4667f80f7ebf69391e120d2f1e108
-baseline_tag: v0.13.1
-this_release: v0.13.2
-tests: 67/67
+baseline_main: edb7045cee9dbf7a1d5a9c178a47f903767b4ad1
+baseline_tag: v0.13.2
+this_release: v0.14.0
+tests: 69/69
 build: pass
-repo_files: 968
-repo_png: 778
+repo_files: 971
+repo_png: 780
 node: v22.22.2
 local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，与远端历史不连通，勿直接 git push
 ---
@@ -31,8 +31,8 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 | 项目是什么 | 大话西游式 2D 回合制 RPG，原创美术/文案；`core/` 纯逻辑层为联机预留，单机流程已完整跑通 |
 | 代码在哪 | `https://github.com/linemarsun/xiyou01`，主分支 `main`，应用根目录是仓库内的 `shanhai/` |
 | 现在到哪一步 | 五张等距地图「一景一制」已完成（v0.12.0）；远端 v0.13.0 起转向**真实宫城美术素材**，本阶段目标是把程序化占位逐步替换成真实 PNG |
-| 基线 | 远端 `main = ec859fe` / 最新 tag `v0.13.2`（`v0.13.1` 引入本文件，`v0.13.0` 为宫城素材族） |
-| 健康度 | `npm test` 67/67、`npm run build` 通过；968 个文件（含 778 张 PNG） |
+| 基线 | 远端 `main = edb7045` / 最新 tag `v0.14.0`（`v0.13.2` 为上一个基线；`v0.13.0` 宫城素材族） |
+| 健康度 | `npm test` 69/69、`npm run build` 通过；971 个文件（含 780 张 PNG） |
 | 本环境最大坑 | git 智能协议被代理拦截（`clone/fetch/push` 502），只能走 codeload + GitHub API；本地 `.git` 是快照重建的独立根提交，**不能常规 push** |
 
 ---
@@ -56,6 +56,8 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 | A3 | 新素材登记进 `core/iso.ts` 类型/候选与 `public/assets/art/iso/*.json` 布局，`npm run maps` 仍幂等 | 两次运行 `npm run maps` 后 `git diff` 为空；`npm test` 布局合法性断言 | ⬜ 未开始 |
 | A4 | 不退化：`npm test` ≥ 67、`npm run build` 通过、五图可走、跨图出入口仍贴边界 | 第 4.3 节自检清单 | ✅ 当前满足 |
 | A5 | 素材文件 + 出图脚本一并入仓，随提交打 tag | `node tools/gh-sync.mjs status` 与 `git tag` | ✅  tooling 已具备 |
+
+> **v0.14.0 阶段进展**：三种树形（`leaf` / `pine` / `dead`）现在全部有真实 PNG —— 新增 `tree_leaf.png`、`tree_dead.png`（`tree_pine.png` 原有），由零依赖的 `tools/gen-tree-art.mjs` 生成（`npm run trees`，幂等）。程序化占位只保留为缺图回退。这是 G-NOW 的第一批落地素材；A1 的其余构件仍未开始。
 
 ### 1.3 长期约束（用户明确要求，任何阶段都不得违反）
 
@@ -100,6 +102,7 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 | 2026-11-10 | 下拉同步 | codeload 快照：48 增/覆盖、918 跳过、0 删除；966 文件按 git blob sha 与远端 tree 完全一致 | `npm test` 67/67、`npm run build` 通过；本地快照提交 `4b21699`，工作区干净 |
 | 2026-11-10 | 目标固化与交接（本文件） | `HANDOFF.md` + `tools/gh-sync.mjs` + README / PROGRESS 口径修正；+2 文件（966 → 968） | tag **`v0.13.1`** → `ec859fe` |
 | 2026-11-10 | 状态快照校正 | front matter 的基线 sha / tag / 文件数改为推送后的真实值 | tag **`v0.13.2`** |
+| 2026-11-10 | 模块 13 · 云京道路净空 + 树木美术 | 迁移 5 栋压在窄路上的建筑并清理 12 件挡路小摆件；新增 `tree_leaf.png` / `tree_dead.png` + 零依赖生成器；渲染层加确定性色差/镜像；回归 67 → 69 | tag **`v0.14.0`** |
 
 ### 2.2 本轮地图任务：用户诉求 → 落地对照
 
@@ -116,7 +119,8 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 - **本轮自有改动（模块 11 / 12）没有生成、也没有上传任何新美术 PNG。** 上传到仓库的是 4 个布局 JSON 与生成器 `tools/gen-iso-maps.mjs`；画面里新增的石桥、山石、枯木、碑阵、引魂灯等，全部由 `render/world-renderer.ts` 的**程序化占位**绘制。仓库原有 PNG 未被本轮修改。
 - 下拉后远端**已有另一条工作流新增的真实素材**：`public/assets/art/iso/` 下的 `palace_*.png`、`pagoda.png`、`ground_marble.png`、`city_gate_wide*`、宫墙系列，以及 `assets_src/tools/modv2/palace.py`、`widegate.py`。它们属于 `v0.13.0`，不是本轮模块 11/12 的产物。
 - **结论**：截至 `v0.13.0`，五图的主体表现仍是「布局 JSON + 程序化占位」，真实美术只覆盖了宫城素材族。这正是 G-NOW 的起点。
-- ⚠️ **出图脚本有跨环境硬编码绝对路径**（换机器必踩）：`assets_src/tools/modv2/palace.py:23` 与 `widegate.py:19` 写死 `D:\workspace\game\xiyou01\shanhai\public\assets\art\iso`；另有 `calib.py:10`、`cityfill.py:25`、`ground.py:10`、`_shots.py:9` 指向其他本机目录。依赖为 Python + Pillow + numpy，仓库**暂无 `requirements.txt` / 运行说明**。
+- **`v0.14.0` 起已有变化**：新增 `tree_leaf.png` / `tree_dead.png` 两张真实贴图（`tree_pine.png` 原有），三种树形全部不再走占位；树木按格坐标做确定性色差与镜像，避免整片林子像复制粘贴。生成器 `tools/gen-tree-art.mjs` **零外部依赖**（纯 Node + zlib、路径相对脚本位置），`npm run trees` 幂等 —— 与下面那些 Python 脚本不同，它在任何环境都能直接跑。
+- ⚠️ **出图脚本有跨环境硬编码绝对路径**（换机器必踩，仍未修）：`assets_src/tools/modv2/palace.py:23` 与 `widegate.py:19` 写死 `D:\workspace\game\xiyou01\shanhai\public\assets\art\iso`；另有 `calib.py:10`、`cityfill.py:25`、`ground.py:10`、`_shots.py:9` 指向其他本机目录。依赖为 Python + Pillow + numpy，仓库**暂无 `requirements.txt` / 运行说明**。
 
 ### 2.4 已修正的文档口径漂移
 
@@ -128,11 +132,12 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 
 | 项 | 值 |
 | --- | --- |
-| 远端 `main` | `ec859fec8ae4667f80f7ebf69391e120d2f1e108`（`v0.13.1`，即 `v0.13.2` 的父提交）；`6cf599a` 为再上一版 |
-| tags | `v0.12.0` → `55851ba`；`v0.13.0` → `6cf599a`；`v0.13.1` → `ec859fe`；`v0.13.2` → 本次提交 |
+| 远端 `main` | `edb7045cee9dbf7a1d5a9c178a47f903767b4ad1`（`v0.13.2`，即 `v0.14.0` 的父提交）；`ec859fe` 为再上一版 |
+| tags | `v0.12.0` → `55851ba`；`v0.13.0` → `6cf599a`；`v0.13.1` → `ec859fe`；`v0.13.2` → `edb7045`；`v0.14.0` → 本次提交 |
 | 本地 git | 当前环境为 codeload 快照重建的独立根提交（与远端历史不连通）；`core.autocrlf=false` / `core.eol=lf`；网络放行后建议重新 clone |
-| 测试 / 构建 | `npm test` 67/67；`npm run build`（`tsc --noEmit` + `vite build`）通过 |
-| 文件规模 | 968 个，其中 778 张 PNG（`v0.13.0` 时为 966 个，交接文档与同步工具各 +1） |
+| 测试 / 构建 | `npm test` 69/69；`npm run build`（`tsc --noEmit` + `vite build`）通过 |
+| 文件规模 | 971 个，其中 780 张 PNG（`v0.13.0` 时 966 → 交接文档/同步工具 +2 → 树木贴图与生成器 +3） |
+| 美术生成 | `npm run maps` 生成布局、`npm run trees` 生成树木贴图、`npm run assets` 生成像素素材，三者均幂等 |
 | 应用目录 | `shanhai/`，入口 `src/ui/main.ts`；开发态 `?play=1` 直接开局、`?map=<id>` 直达场景；`#sim` 数值仿真 |
 | 地图格网 | `core/world.ts` 的 `ISO_GRIDS`（五图各一规格），`core/iso.ts` 提供与尺寸无关的碰撞/BFS，`core/iso-path.ts` 保留 A*，`ui/map-panel.ts` 为舆图 |
 | 布局生成 | `npm run maps` → `tools/gen-iso-maps.mjs` → `public/assets/art/iso/*.json`（幂等，自带 BFS 自检） |
@@ -164,7 +169,7 @@ cd xiyou01/shanhai
 node tools/gh-sync.mjs status                              # 只读：远端 sha/tag + 本地差异
 node tools/gh-sync.mjs pull --apply                        # codeload 快照下拉（默认不删本地独有文件）
 node tools/gh-sync.mjs push                               # dry-run，先看清单
-node tools/gh-sync.mjs push --apply --tag v0.13.3 -m "..." # 写入 main 并打附注 tag（换成新版本号）
+node tools/gh-sync.mjs push --apply --tag v0.14.1 -m "..." # 写入 main 并打附注 tag（换成新版本号）
 ```
 
 - 凭据优先级：`GITHUB_TOKEN` / `GH_TOKEN` 环境变量 → `git credential fill`（本机为 Windows 凭据管理器）。令牌只进内存，不打印、不落盘。
@@ -209,7 +214,7 @@ node tools/gh-sync.mjs push --apply --tag v0.13.3 -m "..." # 写入 main 并打�
 | # | 任务 | 验收 |
 | --- | --- | --- |
 | 1 | 修掉 `modv2/*.py` 的硬编码输出路径，改为相对仓库根 / 环境变量；补 Python 依赖与出图命令说明 | 在全新目录 clone 后可直接跑通出图脚本，产物落到 `public/assets/art/iso/` |
-| 2 | 盘点五图「哪些构件仍是占位」，列一张真实素材缺口清单并按 1.5 节确认优先级 | 清单入仓，每图一行，标注目标 PNG 名与对应候选函数 |
+| 2 | 盘点五图「哪些构件仍是占位」，列一张真实素材缺口清单并按 1.5 节确认优先级（树木已在 v0.14.0 完成，可从清单划掉） | 清单入仓，每图一行，标注目标 PNG 名与对应候选函数 |
 | 3 | 按确认的优先级逐图补真实 PNG，登记 `iso.ts` 类型/候选与布局 JSON | 满足 A1 / A2 / A3；`?map=<id>` 截图逐图验收 |
 | 4 | 每完成一图跑一次完整回归 + 构建，达标后推送并打 tag | 满足 A4 / A5；`PROGRESS.md` 追加交付记录，本文件 front matter 更新 |
 | 5 | （待 1.5 节拍板后）M4 联机预研 | 先出服务端技术栈 / 协议范围决策，再动代码 |
@@ -229,3 +234,4 @@ node tools/gh-sync.mjs push --apply --tag v0.13.3 -m "..." # 写入 main 并打�
 | --- | --- | --- |
 | v1 / `v0.13.1` | 2026-11-10 | 创建：目标与验收、阶段进展时间线、素材状态专章、环境切换手册、`tools/gh-sync.mjs` 入库；修正 PROGRESS / README 过期口径 |
 | v2 / `v0.13.2` | 2026-11-10 | 校正状态快照：写入推送后的真实基线 sha / tag / 文件数，避免自引用计数偏差 |
+| v3 / `v0.14.0` | 2026-11-10 | 模块 13：云京道路净空与树木美术；状态快照推进到 69/69、971 文件 |

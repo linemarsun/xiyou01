@@ -6,7 +6,8 @@
  *   音频事件映射与 BGM 常量 / 寻路规划 / 挂机决策 / 等距地图与素材清单 /
  *   国风美术映射与素材文件完整性 / 世界观文案统一 / 国风地图与悬赏榜数据 /
  *   一景一制（独立格网、边界出入口、专属路网、全锚点 BFS 连通、主题区分）/
- *   等距 A* 寻路 / 跨图落点「落地即弹回」保护。
+ *   等距 A* 寻路 / 跨图落点「落地即弹回」保护 /
+ *   云京道路净空（建筑不压窄路、道路不被截断）/ 树木真实贴图覆盖。
  * 运行：npm test   （新增玩法模块时请在本文件补对应断言）
  */
 import { build } from 'esbuild';
@@ -1454,6 +1455,69 @@ test('等距 A* 从入山落点可走到青崖山道全部三个出口', () => {
       prev = w;
     }
   }
+});
+
+console.log('\n[17] 云京道路净空与树木美术');
+test('云京建筑不压窄带道路，道路也没有被整截面堵死', () => {
+  const f = path.join(ROOT, 'public/assets/art', 'iso/taoyuan.json');
+  const layout = iso.expandLayout(JSON.parse(readFileSync(f, 'utf8')));
+  const col = iso.buildCollision(layout);
+  const groundRects = layout.items.filter((i) => i.type.startsWith('ground_'));
+  // 窄带（任一边 ≤ 6 格）= 需要保持畅通的街巷；宽块是广场/坊院，允许摆摊设碑
+  const roads = groundRects.filter((r) => r.type !== 'ground_grass' && r.type !== 'ground_water'
+    && Math.min(r.w ?? 1, r.h ?? 1) <= 6);
+  const roadCells = new Set();
+  for (const r of roads) {
+    for (let y = r.gy; y < r.gy + (r.h ?? 1); y++) {
+      for (let x = r.gx; x < r.gx + (r.w ?? 1); x++) roadCells.add(iso.keyOf(x, y));
+    }
+  }
+  const buildings = /^(house|house_large|shop_small|hall|palace_hall|palace_hall_s)$/;
+  let conflicts = 0;
+  for (const it of layout.items) {
+    if (!buildings.test(it.type)) continue;
+    for (const c of iso.itemCells(it)) if (roadCells.has(iso.keyOf(c.gx, c.gy))) conflicts++;
+  }
+  eq(conflicts, 0, '没有建筑足迹压在窄带道路上');
+
+  // 每条窄路沿长轴的每个横截面，至少留一格可走
+  let blockedSections = 0;
+  for (const r of roads) {
+    const horiz = (r.w ?? 1) >= (r.h ?? 1);
+    const len = horiz ? (r.w ?? 1) : (r.h ?? 1);
+    const wide = horiz ? (r.h ?? 1) : (r.w ?? 1);
+    for (let a = 0; a < len; a++) {
+      let free = false;
+      for (let b = 0; b < wide; b++) {
+        const x = horiz ? r.gx + a : r.gx + b;
+        const y = horiz ? r.gy + b : r.gy + a;
+        const k = iso.keyOf(x, y);
+        if (col.ground.has(k) && !col.blocked.has(k)) { free = true; break; }
+      }
+      if (!free) blockedSections++;
+    }
+  }
+  eq(blockedSections, 0, '所有窄带道路保持连续可走');
+});
+
+test('五张地图的树木变体都有真实 PNG，且贴图为带透明通道的合法文件', () => {
+  const dir = path.join(ROOT, 'public/assets/art', 'iso');
+  const ids = ['taoyuan', 'wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu'];
+  const variants = new Set();
+  for (const id of ids) {
+    const layout = JSON.parse(readFileSync(path.join(dir, `${id}.json`), 'utf8'));
+    for (const it of layout.items) if (it.type === 'tree') variants.add(it.variant || '');
+  }
+  for (const v of variants) {
+    const file = path.join(dir, v ? `tree_${v}.png` : 'tree.png');
+    ok(existsSync(file), `存在树木贴图 ${path.basename(file)}`);
+    const b = readFileSync(file);
+    ok(b.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), `${path.basename(file)} 是 PNG`);
+    eq(b[25], 6, `${path.basename(file)} 带 alpha 通道`);
+    const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
+    ok(w >= 48 && w <= 180 && h >= 120 && h <= 280, `${path.basename(file)} 尺寸合理（${w}×${h}）`);
+  }
+  ok(variants.has('leaf') && variants.has('pine') && variants.has('dead'), '三种树形都被布局使用');
 });
 
 console.log(`\n=== 结果：${passed} 通过 / ${failures.length} 失败 ===\n`);

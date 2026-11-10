@@ -3306,7 +3306,7 @@
     {
       "type": "hall",
       "gx": 22,
-      "gy": 104,
+      "gy": 99,
       "w": 6,
       "h": 6,
       "variant": "stone",
@@ -3315,7 +3315,7 @@
     {
       "type": "hall",
       "gx": 12,
-      "gy": 86,
+      "gy": 89,
       "w": 6,
       "h": 6,
       "variant": "stone",
@@ -3423,23 +3423,9 @@
       "h": 8
     },
     {
-      "type": "fence",
-      "gx": 8,
-      "gy": 84,
-      "w": 1,
-      "h": 4
-    },
-    {
-      "type": "fence",
-      "gx": 8,
-      "gy": 106,
-      "w": 1,
-      "h": 3
-    },
-    {
       "type": "house",
       "gx": 12,
-      "gy": 106,
+      "gy": 110,
       "w": 4,
       "h": 4,
       "facing": "sw",
@@ -3576,7 +3562,7 @@
     {
       "type": "house",
       "gx": 74,
-      "gy": 72,
+      "gy": 79,
       "w": 4,
       "h": 4,
       "facing": "nw",
@@ -3606,7 +3592,7 @@
     {
       "type": "house",
       "gx": 116,
-      "gy": 90,
+      "gy": 83,
       "w": 4,
       "h": 4,
       "facing": "nw",
@@ -3918,12 +3904,6 @@
     },
     {
       "type": "tree",
-      "gx": 76,
-      "gy": 79,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 79,
       "gy": 79,
       "variant": "leaf"
@@ -4011,12 +3991,6 @@
       "gx": 73,
       "gy": 82,
       "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 76,
-      "gy": 82,
-      "variant": "leaf"
     },
     {
       "type": "tree",
@@ -4185,12 +4159,6 @@
       "gx": 115,
       "gy": 85,
       "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 118,
-      "gy": 85,
-      "variant": "pine"
     },
     {
       "type": "tree",
@@ -5695,17 +5663,6 @@
     },
     {
       "type": "tree",
-      "gx": 12,
-      "gy": 94,
-      "variant": "leaf"
-    },
-    {
-      "type": "rock",
-      "gx": 15,
-      "gy": 94
-    },
-    {
-      "type": "tree",
       "gx": 18,
       "gy": 94,
       "variant": "leaf"
@@ -5795,18 +5752,6 @@
     },
     {
       "type": "tree",
-      "gx": 24,
-      "gy": 99,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 27,
-      "gy": 99,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 33,
       "gy": 99,
       "variant": "pine"
@@ -5870,17 +5815,6 @@
       "gx": 21,
       "gy": 102,
       "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 24,
-      "gy": 102,
-      "variant": "leaf"
-    },
-    {
-      "type": "rock",
-      "gx": 27,
-      "gy": 102
     },
     {
       "type": "tree",
@@ -6037,12 +5971,6 @@
       "gx": 11,
       "gy": 112,
       "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 14,
-      "gy": 112,
-      "variant": "leaf"
     },
     {
       "type": "tree",

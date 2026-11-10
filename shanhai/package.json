@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "node tools/regression.mjs",
     "assets": "node tools/gen-assets.mjs",
-    "maps": "node tools/gen-iso-maps.mjs"
+    "maps": "node tools/gen-iso-maps.mjs",
+    "trees": "node tools/gen-tree-art.mjs"
   },
   "devDependencies": {
     "pngjs": "^7.0.0",

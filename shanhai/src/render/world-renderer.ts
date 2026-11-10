@@ -556,6 +556,14 @@ export class WorldRenderer {
       if (off) { sp.x = -off.ax; sp.y = -off.ay; }
       // 分坊瓦色/墙色：对整张精灵做乘法着色（不改原图）
       if (unit.item.tint !== undefined) sp.tint = unit.item.tint;
+      // 树木：按格坐标做确定性色差与镜像，避免成片林子像复制粘贴（不改布局数据）
+      if (unit.type === 'tree') {
+        const h = (Math.imul(unit.item.gx, 73856093) ^ Math.imul(unit.item.gy, 19349663)) >>> 0;
+        if (unit.item.tint === undefined) {
+          sp.tint = [0xffffff, 0xedf3e4, 0xf4f0dc, 0xe4ecdf, 0xf1ead9][h % 5];
+        }
+        if (h % 7 === 0) sp.scale.x = -1;
+      }
       // 城门楼与左右直墙衔接：图端头仍带一条深色描边，这里把精灵横向补 2px（左右各 1px）
       // 压住接缝。城墙直段本身不加裁边/外扩补丁。
       if ((unit.item.type === 'city_gate_tower' || unit.item.type === 'city_gate_wide') && tex.width > 0) {
@@ -920,24 +928,52 @@ export class WorldRenderer {
     c.addChild(gfx);
   }
 
-  /** 树占位：树干 + 分层树冠（pine 尖冠 / leaf 圆冠 / dead 枯枝） */
+  /**
+   * 树占位（仅在 tree_<variant>.png 缺图时兜底）。
+   * 与真实贴图同构：深色描边 + 分层叶团 + 顶光棱，不再是「一根棍顶三个扁圆」。
+   */
   private drawTree(c: Container, H: number, variant?: string): void {
     const gfx = new Graphics();
-    gfx.roundRect(-4, -H * 0.34, 8, H * 0.34, 3).fill(0x4a3324);
+    const ink = 0x201d19, bark = 0x5c4936, barkL = 0x82694e;
+    // 树干：下宽上窄 + 两条分枝 + 受光棱
+    gfx.poly([-9, 0, 9, 0, 4.5, -H * 0.5, -4.5, -H * 0.5]).fill(bark)
+      .stroke({ width: 1.5, color: ink, alpha: 0.9 });
+    gfx.poly([-9, 0, -3, 0, -2, -H * 0.5, -4.5, -H * 0.5]).fill(0x3a2e24);
+    gfx.moveTo(-3, -H * 0.36).lineTo(-25, -H * 0.53).stroke({ width: 5, color: bark });
+    gfx.moveTo(3, -H * 0.4).lineTo(24, -H * 0.55).stroke({ width: 5, color: bark });
+    gfx.moveTo(-5, -2).lineTo(-4, -H * 0.3).stroke({ width: 2, color: barkL });
+
     if (variant === 'dead') {
-      // 忘川 / 地府的枯木：无冠，只留一主干与几道斜枝
-      gfx.roundRect(-5, -H * 0.78, 10, H * 0.5, 3).fill(0x54473b)
-        .stroke({ width: 1, color: 0x241d17, alpha: 0.85 });
-      for (const [x, y] of [[-20, -H * 0.86], [19, -H * 0.9], [-13, -H * 1.02], [12, -H * 1.05]]) {
-        gfx.moveTo(0, -H * 0.6).lineTo(x, y).stroke({ width: 3.5, color: 0x54473b });
+      // 枯木：主干继续上伸，几组渐细分叉
+      gfx.moveTo(-2, -H * 0.5).lineTo(-6, -H * 0.88).stroke({ width: 7, color: bark });
+      for (const [x, y, w] of [[-27, -H * 0.76, 4], [20, -H * 0.82, 4], [-16, -H * 0.98, 2.5], [14, -H, 2.5]]) {
+        gfx.moveTo(-3, -H * 0.6).lineTo(x, y).stroke({ width: w, color: bark });
       }
-    } else if (variant === 'leaf') {
-      gfx.ellipse(-12, -H * 0.52, 20, 18).fill(0x4a6a3c).stroke({ width: 1, color: 0x2b4227, alpha: 0.8 });
-      gfx.ellipse(12, -H * 0.56, 20, 18).fill(0x3f5f35).stroke({ width: 1, color: 0x2b4227, alpha: 0.8 });
-      gfx.ellipse(0, -H * 0.76, 22, 20).fill(0x50733f).stroke({ width: 1, color: 0x2b4227, alpha: 0.8 });
+    } else if (variant === 'pine') {
+      // 针叶：三层收拢的锯齿塔冠，逐层压深色下沿
+      for (const [cy, r, col] of [
+        [-H * 0.38, 27, 0x24402f], [-H * 0.58, 23, 0x30553d], [-H * 0.78, 18, 0x3c6448],
+      ] as Array<[number, number, number]>) {
+        gfx.poly([-r, cy, r, cy, 0, cy - r * 1.3]).fill(col)
+          .stroke({ width: 1.4, color: ink, alpha: 0.85 });
+        gfx.poly([-r * 0.55, cy - r * 0.45, 0, cy - r * 1.18, r * 0.22, cy - r * 0.72])
+          .fill({ color: 0x6f8c6c, alpha: 0.35 });
+      }
     } else {
-      for (const [cy, r] of [[-H * 0.36, 26], [-H * 0.58, 22], [-H * 0.8, 16]] as Array<[number, number]>) {
-        gfx.poly([-r, cy, r, cy, 0, cy - r * 1.25]).fill(0x35573c).stroke({ width: 1, color: 0x233a28, alpha: 0.85 });
+      // 阔叶：暗底冠 + 一簇按高度变亮的叶团 + 顶光小亮团
+      gfx.ellipse(0, -H * 0.63, 39, 44).fill(0x1e362a)
+        .stroke({ width: 2, color: ink, alpha: 0.9 });
+      const blobs: Array<[number, number, number, number]> = [
+        [-24, -H * 0.46, 15, 0x284b36], [-8, -H * 0.48, 16, 0x2f563c],
+        [10, -H * 0.46, 16, 0x2c5038], [26, -H * 0.48, 14, 0x264734],
+        [-18, -H * 0.65, 17, 0x3c6647], [0, -H * 0.67, 18, 0x426c4b],
+        [18, -H * 0.64, 16, 0x3a6245], [-9, -H * 0.82, 14, 0x4f7a55],
+        [9, -H * 0.82, 14, 0x547f59], [0, -H * 0.94, 11, 0x628b62],
+      ];
+      for (const [x, y, r, col] of blobs) {
+        gfx.ellipse(x, y, r, r * 0.88).fill(col);
+        gfx.ellipse(x - r * 0.25, y - r * 0.3, r * 0.46, r * 0.3)
+          .fill({ color: 0x8fae7a, alpha: 0.42 });
       }
     }
     c.addChild(gfx);
