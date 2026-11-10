@@ -1,16 +1,17 @@
 # 山海奇谭 · 任务目标与进展记录（PROGRESS）
 
-> 本文件用于跨会话续接开发：记录任务目标、已完成内容、当前进展与后续路线。
-> 最后更新：2026-11-09（模块 0~12 全部完成；同日合并远端「一景一制」四提交与本地「跨图修复 + 舆图」分支，回归 67/67）
+> 本文件记录**详细流水账与逐模块交付记录**。目标、状态快照、阶段进展与环境交接的唯一可信源是 **[HANDOFF.md](./HANDOFF.md)**，本文件不再单独维护「当前状态」。
+> 最后更新：2026-11-10（目标固化 + 环境交接文档化，随 `v0.13.1` 入仓；远端基线 `main@6cf599a` / tag `v0.13.0`，回归 67/67）
 
 | 项目 | 内容 |
 | --- | --- |
 | 游戏定位 | 大话西游式 2D 回合制 RPG（玩法机制借鉴，美术/命名/文案全部原创） |
 | 技术栈 | TypeScript + Vite + PixiJS 8（渲染），纯逻辑层 core/ 与渲染层分离，为联机预留 |
-| 当前基线 | `main` 分支（远端「一景一制」`55851ba` ⇄ 本地「跨图修复 + 舆图」已合并；回归 67/67） |
-| 运行 | `npm run dev` → http://localhost:5199；`npm run build`；`npm run assets` 重新生成像素素材 |
+| 当前基线 | 远端 `main@6cf599a` / tag `v0.13.0`（`v0.12.0` → `55851ba` 为一景一制交付）；本地为快照重建的独立根提交 `4b21699`；回归 67/67。详见 [HANDOFF.md 第 3 节](./HANDOFF.md) |
+| 运行 | `npm run dev` → http://localhost:5199；`npm run build`；`npm run assets` 重新生成像素素材；`npm run maps` 重生成等距布局 |
 | 数值仿真 | 地址栏加 `#sim`：AI 执挥双方批量跑 144 场，输出各门派胜率 |
-| 文档 | `README.md` 总览；`docs/功能说明.md`、`docs/接口说明.md`、`docs/使用方式.md`；本文件记进度与待办 |
+| 当前阶段目标 | **真实美术素材替换程序化占位**（2026-11-10 用户确认），验收标准见 [HANDOFF.md 第 1.2 节](./HANDOFF.md) |
+| 文档 | [HANDOFF.md](./HANDOFF.md) 目标/进展/交接（唯一可信源）；`README.md` 总览；`docs/功能说明.md`、`docs/接口说明.md`、`docs/使用方式.md`；本文件记流水账 |
 
 ## 1. 里程碑状态
 
@@ -150,14 +151,17 @@
 5. ~~**音乐音效**~~ → 模块 5 完成。
 6. ~~**等距野外全场景**（补其余 4 张地图并完善场景）~~ → 模块 11 完成。
 7. ~~**一景一制**（场景差异化 / 规模与形状 / 边界出入口）~~ → 模块 12 完成。
-8. **M4 联机**：core/ 已是可序列化指令+事件流，服务器跑 `resolveRound` 即可。**需先确认服务端技术栈、部署方式与协议范围**（见下方「待确认」）。
+8. **G-NOW 真实美术素材替换程序化占位**（2026-11-10 用户确认的当前阶段目标）：远端 `v0.13.0` 已完成「宫城素材族」第一步。**先修出图脚本硬编码路径、补 Python 依赖说明，再逐图补真实 PNG**。验收标准、素材状态与已知坑见 [HANDOFF.md 第 1.2 / 2.3 / 4.4 / 6 节](./HANDOFF.md)。
+9. **M4 联机**：core/ 已是可序列化指令+事件流，服务器跑 `resolveRound` 即可。**需先确认服务端技术栈、部署方式与协议范围**（见下方「待确认」）。
 
 > 待确认（M4 联机）：① 服务端用 Node 内置 http 还是引入 ws/express；② 目标形态是本地可跑的验证原型还是可部署服务；③ 房间/会话、断线与状态序列化的范围；④ 客户端是否保留纯本地模式作为回退。确认后才动手，不自行推测。
 
 ### 代码层面已知缺口（非玩法待办）
 - `battle-screen.ts` 的「独立战斗模式 / 再战一场 / 更换阵容」分支在 `main.ts` 无入口，属不可达代码。
 - 存档无版本号、无导入导出，迁移靠字段兜底；`WorldRenderer.syncState()` 定义后未调用。
-- 无单元测试框架与 CI（已有 Node 侧全链回归 `npm test`，61 项断言）。
+- 无单元测试框架与 CI（已有 Node 侧全链回归 `npm test`，67 项断言）。
+- Python 出图脚本 `assets_src/tools/modv2/*.py` 存在硬编码本机绝对路径（`palace.py:23` / `widegate.py:19` 等 6 处），且无 `requirements.txt` 与运行说明 —— 换环境出图前必须处理，详见 [HANDOFF.md 第 2.3 节](./HANDOFF.md)。
+- 本仓库的本地 `.git` 是 codeload 快照后重建的独立根提交，与远端历史不连通；受限网络下用 `tools/gh-sync.mjs` 同步，见 [HANDOFF.md 第 4 节](./HANDOFF.md)。
 
 ## 4. 关键技术与约定
 
@@ -165,7 +169,7 @@
 - **随机**：战斗内一切随机走 `core/rng.ts`（mulberry32，种子化），同种子+同指令结果可复现；世界掉落用 `Math.random`（无需回放）。
 - **素材**：`tools/gen-assets.mjs` 程序化生成（调色板+像素模板），输出到 `public/assets/`，`manifest.json` 清单定义每角色帧序列/帧率/循环——想换手绘素材按清单文件名替换 PNG 即可。
 - **调平衡**：数值全在 `src/core/content.ts`；跑 `#sim` 看胜率。
-- **文档同步**：功能变化改 `docs/功能说明.md`，接口变化改 `docs/接口说明.md`，操作/使用变化改 `docs/使用方式.md`，进度与待办改本文件；每模块交付前跑 `npm run build`。
+- **文档同步**：目标/状态快照/阶段进展/环境切换改 `HANDOFF.md`（并在推送前更新其 front matter），流水账与逐模块交付记录改本文件，功能变化改 `docs/功能说明.md`，接口变化改 `docs/接口说明.md`，操作/使用变化改 `docs/使用方式.md`；每模块交付前跑 `npm run build`。**状态数值只在 HANDOFF.md 写一份**，避免口径漂移。
 - **已知怪癖**：vite 热更新偶尔吃掉同批多次编辑的后半截（伺服模块新旧混合），症状是"改了没生效/报奇怪的错"——硬刷新或重启 dev server 解决。
 - **调试句柄**：DEV 构建下 `window.__shanhai`（state/playerPos/info/moveTo），供自动化测试与调位置用。
 
@@ -176,7 +180,10 @@ cd shanhai
 npm install
 npm run dev      # http://localhost:5199
 npm run build    # tsc --noEmit + vite build
+npm test         # 全链回归，期望 67/67
 npm run assets   # 重新生成像素素材
+npm run maps     # 重新生成等距布局（幂等）
+node tools/gh-sync.mjs status   # 受限网络下核对本地与远端 tree
 ```
 
 ### 合并交付记录（2026-11-09）：远端「一景一制」⇄ 本地「跨图修复 + 舆图」
@@ -184,3 +191,15 @@ npm run assets   # 重新生成像素素材
 - **取舍**：地图定义/布局 JSON/文档以远端「一景一制」为准（格坐标 `isoExit/isoSpawn/isoNpc` + 各图独立格网）；本地保留的通用能力全部存活——`exitsSuppressedOnArrival` 落地屏蔽、`ui/map-panel.ts` 舆图、`core/iso-path.ts` A*（渲染层主路径现用远端 `iso.findIsoPath`，iso-path 保留供调试与回归）。
 - **断言口径更新**：布局合法性改为「尺寸由 ISO_GRIDS 推导 + 布局 grid 逐项一致」；黑风岭主题断言对齐远端布局（1214 构件：山径 106 / 水带 233 / 桥 4 / 树 295 / 山石 135 / 牌坊 3）；「落地即弹回」断言改为「压圈时只能是成对回程路牌本体，渲染层落地屏蔽保护」。
 - 验证：`npm test` **67/67**、`npm run build`（tsc + vite）通过。
+
+### 下拉同步记录（2026-11-10）
+- 远端 `main = 6cf599a`、tag `v0.13.0`（`v0.12.0` 仍在）。经 codeload 快照同步：48 增/覆盖、918 跳过、0 删除；966 个文件（含 778 PNG）按 git blob sha 与上游 tree 完全一致。
+- 验证：`npm test` **67/67**、`npm run build` 通过；本地 `git init -b main` 快照提交 `4b21699`，工作区干净。**注意**：本地历史与远端不连通，网络放行后建议重新 `git clone` 才能常规 push。
+
+### 目标固化与交接记录（2026-11-10，tag `v0.13.1`）
+- 用户要求：先明确目标并写入文档、同步上传；阶段性进展也写入文档，便于切换环境开发。用户确认三项选择：① 当前阶段目标为**真实美术素材替换程序化占位**；② 文档同步到 **GitHub 仓库 main 并打 tag**；③ 受限网络下的同步脚本**一并入库**。
+- 新增 [HANDOFF.md](./HANDOFF.md)：机器可读 front matter（远端 sha / tag / 测试数 / 更新时间）、目标与可验收标准、长期约束与非目标、阶段进展时间线、本轮地图诉求对照、素材状态专章、环境切换手册、自检清单、下一步任务队列。
+- 新增 `tools/gh-sync.mjs`：`status`（按 blob sha 比对本地与远端 tree）/ `pull`（codeload 快照）/ `push`（Git Data API + 可选附注 tag），凭据支持 `GITHUB_TOKEN` 或 `git credential fill`，写操作默认 dry-run。替代原先放在工作区根目录、未入仓且写死基线 sha 的 `push-github.mjs`。
+- 口径修正：本文件原记「61 项 / 基线 55851ba / 最后更新 2026-11-09」，已对齐到 67 项与 `v0.13.0`；README 文档导航与路线图同步。
+- 关键结论留档：**模块 11/12 没有生成或上传任何新美术 PNG**，上传的是 4 个布局 JSON 与生成器；画面新增部分为 `render/world-renderer.ts` 程序化占位。`v0.13.0` 的宫城真实 PNG 来自另一条工作流。
+- 验证：`npm test` **67/67**、`npm run build` 通过；`tools/gh-sync.mjs status` 输出与远端 tree 一致（详见 HANDOFF.md 第 0 / 3 节）。
