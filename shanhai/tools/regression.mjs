@@ -909,6 +909,27 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
     [59, 6], [68, 7], [5, 59], [7, 59], [120, 59], [122, 68]]) {
     ok(!walk(gx, gy), `城墙/墩柱 (${gx},${gy}) 应阻挡`);
   }
+
+  // —— 宫城（中心广场南侧）：构件齐全 / 制高点 / 碰撞 ——
+  ok(pick('palace_hall').length === 1, '宫城主殿 1 座（6×6 金顶三重檐）');
+  ok(iso.ISO_TYPES.palace_hall.w === 6 && iso.ISO_TYPES.palace_hall.h === 6, '主殿足迹 6×6');
+  ok(iso.ISO_TYPES.palace_hall.height > iso.ISO_TYPES.bell_tower.height, '主殿高于鼓楼');
+  ok(pick('palace_hall_s').length >= 1, '宫城配殿存在');
+  ok(pick('pagoda').length === 1, '白塔 1 座');
+  ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔高于主殿（新城制高点）');
+  ok(pick('palace_gate').length === 1, '宫门 1 座（朝南）');
+  eq(count('palace_corner'), 4, '宫城四角角楼 4 座');
+  ok(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2') >= 8,
+    `宫墙段 ${count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2')} 件`);
+  ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
+  const phall = pick('palace_hall')[0];
+  ok(!walk(phall.gx, phall.gy), '宫城主殿足迹不可走');
+  const pgate2 = pick('palace_gate')[0];
+  ok(walk(pgate2.gx + 1, pgate2.gy) && walk(pgate2.gx + 2, pgate2.gy), '宫门券门中间两列可走');
+  ok(!walk(pgate2.gx, pgate2.gy), '宫门门柱格不可走');
+  const pcorner = pick('palace_corner')[0];
+  ok(!walk(pcorner.gx, pcorner.gy), '宫城角楼足迹不可走');
+
   const house = pick('house')[0];
   ok(!walk(house.gx, house.gy), `房屋足迹 (${house.gx},${house.gy}) 不可走`);
   const gate = pick('paifang')[0];   // 牌坊复用 3×3 拱门贴图，拱洞机制与旧 gate_arch 一致
