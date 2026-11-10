@@ -2,15 +2,15 @@
 doc: HANDOFF
 schema: 1
 updated: 2026-11-10
-updated_at: "2026-11-10 19:40 +08:00"
+updated_at: "2026-11-10 19:55 +08:00"
 repo: https://github.com/linemarsun/xiyou01
 branch: main
-baseline_main: 6cf599a75fb10a8307af6946b50ff8a7f4390ac7
-baseline_tag: v0.13.0
-this_release: v0.13.1
+baseline_main: ec859fec8ae4667f80f7ebf69391e120d2f1e108
+baseline_tag: v0.13.1
+this_release: v0.13.2
 tests: 67/67
 build: pass
-repo_files: 966
+repo_files: 968
 repo_png: 778
 node: v22.22.2
 local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，与远端历史不连通，勿直接 git push
@@ -31,8 +31,8 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 | 项目是什么 | 大话西游式 2D 回合制 RPG，原创美术/文案；`core/` 纯逻辑层为联机预留，单机流程已完整跑通 |
 | 代码在哪 | `https://github.com/linemarsun/xiyou01`，主分支 `main`，应用根目录是仓库内的 `shanhai/` |
 | 现在到哪一步 | 五张等距地图「一景一制」已完成（v0.12.0）；远端 v0.13.0 起转向**真实宫城美术素材**，本阶段目标是把程序化占位逐步替换成真实 PNG |
-| 基线 | 远端 `main = 6cf599a` / tag `v0.13.0`；本文件随 `v0.13.1` 入库 |
-| 健康度 | `npm test` 67/67、`npm run build` 通过；966 个文件（含 778 张 PNG） |
+| 基线 | 远端 `main = ec859fe` / 最新 tag `v0.13.2`（`v0.13.1` 引入本文件，`v0.13.0` 为宫城素材族） |
+| 健康度 | `npm test` 67/67、`npm run build` 通过；968 个文件（含 778 张 PNG） |
 | 本环境最大坑 | git 智能协议被代理拦截（`clone/fetch/push` 502），只能走 codeload + GitHub API；本地 `.git` 是快照重建的独立根提交，**不能常规 push** |
 
 ---
@@ -98,7 +98,8 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 | 2026-11-09 | 交付推送 | 16 文件（+1035/−122）推送 `main`、`4cf6fc0 → 55851ba` | tag **`v0.12.0`**（附注对象 `0248e06`） |
 | 2026-11-09 晚 | 远端后续（另一工作流） | `e8f8021` 城门嵌入与格级寻路、`968e269` 鼓楼贴图、`4cf6fc0` 券门拓宽、`6cf599a` 宫城素材族（modv2 `palace.py` + 真实 PNG + `iso.ts` 登记 + A* / 舆图） | `npm test` **67/67**；tag **`v0.13.0`** |
 | 2026-11-10 | 下拉同步 | codeload 快照：48 增/覆盖、918 跳过、0 删除；966 文件按 git blob sha 与远端 tree 完全一致 | `npm test` 67/67、`npm run build` 通过；本地快照提交 `4b21699`，工作区干净 |
-| 2026-11-10 | 目标固化与交接（本文件） | `HANDOFF.md` + `tools/gh-sync.mjs` + README / PROGRESS 口径修正 | tag **`v0.13.1`** |
+| 2026-11-10 | 目标固化与交接（本文件） | `HANDOFF.md` + `tools/gh-sync.mjs` + README / PROGRESS 口径修正；+2 文件（966 → 968） | tag **`v0.13.1`** → `ec859fe` |
+| 2026-11-10 | 状态快照校正 | front matter 的基线 sha / tag / 文件数改为推送后的真实值 | tag **`v0.13.2`** |
 
 ### 2.2 本轮地图任务：用户诉求 → 落地对照
 
@@ -127,11 +128,11 @@ local_git_note: 本机 .git 可能是 codeload 快照重建的独立根提交，
 
 | 项 | 值 |
 | --- | --- |
-| 远端 `main` | `6cf599a75fb10a8307af6946b50ff8a7f4390ac7`（本文件编写时，即 `v0.13.1` 的父提交） |
-| tags | `v0.12.0` → `55851ba`；`v0.13.0` → `6cf599a`；`v0.13.1` → 本次提交 |
+| 远端 `main` | `ec859fec8ae4667f80f7ebf69391e120d2f1e108`（`v0.13.1`，即 `v0.13.2` 的父提交）；`6cf599a` 为再上一版 |
+| tags | `v0.12.0` → `55851ba`；`v0.13.0` → `6cf599a`；`v0.13.1` → `ec859fe`；`v0.13.2` → 本次提交 |
 | 本地 git | 当前环境为 codeload 快照重建的独立根提交（与远端历史不连通）；`core.autocrlf=false` / `core.eol=lf`；网络放行后建议重新 clone |
 | 测试 / 构建 | `npm test` 67/67；`npm run build`（`tsc --noEmit` + `vite build`）通过 |
-| 文件规模 | 966 个，其中 778 张 PNG |
+| 文件规模 | 968 个，其中 778 张 PNG（`v0.13.0` 时为 966 个，交接文档与同步工具各 +1） |
 | 应用目录 | `shanhai/`，入口 `src/ui/main.ts`；开发态 `?play=1` 直接开局、`?map=<id>` 直达场景；`#sim` 数值仿真 |
 | 地图格网 | `core/world.ts` 的 `ISO_GRIDS`（五图各一规格），`core/iso.ts` 提供与尺寸无关的碰撞/BFS，`core/iso-path.ts` 保留 A*，`ui/map-panel.ts` 为舆图 |
 | 布局生成 | `npm run maps` → `tools/gen-iso-maps.mjs` → `public/assets/art/iso/*.json`（幂等，自带 BFS 自检） |
@@ -163,7 +164,7 @@ cd xiyou01/shanhai
 node tools/gh-sync.mjs status                              # 只读：远端 sha/tag + 本地差异
 node tools/gh-sync.mjs pull --apply                        # codeload 快照下拉（默认不删本地独有文件）
 node tools/gh-sync.mjs push                               # dry-run，先看清单
-node tools/gh-sync.mjs push --apply --tag v0.13.2 -m "..." # 写入 main 并打附注 tag
+node tools/gh-sync.mjs push --apply --tag v0.13.3 -m "..." # 写入 main 并打附注 tag（换成新版本号）
 ```
 
 - 凭据优先级：`GITHUB_TOKEN` / `GH_TOKEN` 环境变量 → `git credential fill`（本机为 Windows 凭据管理器）。令牌只进内存，不打印、不落盘。
@@ -227,3 +228,4 @@ node tools/gh-sync.mjs push --apply --tag v0.13.2 -m "..." # 写入 main 并打�
 | 版本 | 日期 | 内容 |
 | --- | --- | --- |
 | v1 / `v0.13.1` | 2026-11-10 | 创建：目标与验收、阶段进展时间线、素材状态专章、环境切换手册、`tools/gh-sync.mjs` 入库；修正 PROGRESS / README 过期口径 |
+| v2 / `v0.13.2` | 2026-11-10 | 校正状态快照：写入推送后的真实基线 sha / tag / 文件数，避免自引用计数偏差 |
