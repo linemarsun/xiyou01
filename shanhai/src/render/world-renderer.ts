@@ -1505,6 +1505,30 @@ export class WorldRenderer {
     if (this.isoLayout) this.syncIso(true); else this.syncTiles();
   }
 
+  /** 调试：列出世界坐标附近的构件单元及其实际渲染位置（衔接对齐排查用） */
+  debugUnitsNear(x: number, y: number, r = 400): Array<{
+    type: string; gx: number; gy: number; x: number; y: number; z: number;
+    visible: boolean; nodeX: number | null; nodeY: number | null; alpha: number | null; scale: number[] | null;
+  }> {
+    const out: Array<{
+      type: string; gx: number; gy: number; x: number; y: number; z: number;
+      visible: boolean; nodeX: number | null; nodeY: number | null; alpha: number | null; scale: number[] | null;
+    }> = [];
+    for (const unit of this.isoUnits.values()) {
+      if (unit.ground) continue;
+      if (Math.hypot(unit.x - x, unit.y - y) > r) continue;
+      const node = this.isoVisible.get(unit.key) ?? null;
+      out.push({
+        type: unit.type, gx: unit.item.gx, gy: unit.item.gy, x: unit.x, y: unit.y, z: unit.z,
+        visible: !!node,
+        nodeX: node ? node.x : null, nodeY: node ? node.y : null,
+        alpha: node ? node.alpha : null,
+        scale: node ? [node.scale.x, node.scale.y] : null,
+      });
+    }
+    return out;
+  }
+
   /**
    * 调试：连续走动 durationMs 毫秒并采样 Pixi ticker 帧率（默认沿主街 gx=16 直走）。
    * 返回平均值/最低/最高帧率，以及视口内平均精灵数。用于交付「走动 10 秒帧率」。

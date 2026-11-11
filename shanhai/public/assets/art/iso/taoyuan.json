@@ -7239,6 +7239,25 @@
       "gx": 127,
       "gy": 123,
       "variant": "leaf"
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 60,
+      "gy": 119
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 123,
+      "gy": 58,
+      "w": 1,
+      "h": 12
+    },
+    {
+      "type": "ground_dirt",
+      "gx": 62,
+      "gy": 123,
+      "w": 6,
+      "h": 1
     }
   ]
 }
