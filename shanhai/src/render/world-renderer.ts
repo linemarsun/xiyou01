@@ -516,7 +516,7 @@ export class WorldRenderer {
       ground_grass: 0x3c5a3c,
       ground_stone: 0x585461,
       ground_dirt: 0x695440,
-      ground_water: 0x30586a,
+      ground_water: 0x2e6a8c,
       ground_marble: 0xbcb4a4,
     };
     const groups = new Map<string, number[][]>();
@@ -597,7 +597,7 @@ export class WorldRenderer {
       ground_grass: 0x3c5a3c,
       ground_stone: 0x585461,
       ground_dirt: 0x695440,
-      ground_water: 0x30586a,
+      ground_water: 0x2e6a8c,
       ground_marble: 0xbcb4a4,
     };
     const fill = palette[unit.item.type] ?? 0x4a4450;

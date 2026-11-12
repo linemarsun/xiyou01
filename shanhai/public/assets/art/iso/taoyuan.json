@@ -6634,42 +6634,6 @@
     },
     {
       "type": "tree",
-      "gx": 63,
-      "gy": 1,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 63,
-      "gy": 3,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 63,
-      "gy": 125,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 63,
-      "gy": 127,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 1,
-      "gy": 63,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 127,
-      "gy": 63,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
       "gx": 69,
       "gy": 1,
       "variant": "leaf"
@@ -7242,6 +7206,62 @@
       "type": "ground_stone",
       "gx": 69,
       "gy": 121
+    },
+    {
+      "type": "ground_water",
+      "gx": 0,
+      "gy": 0,
+      "w": 128,
+      "h": 2
+    },
+    {
+      "type": "ground_water",
+      "gx": 0,
+      "gy": 126,
+      "w": 128,
+      "h": 2
+    },
+    {
+      "type": "ground_water",
+      "gx": 0,
+      "gy": 2,
+      "w": 2,
+      "h": 124
+    },
+    {
+      "type": "ground_water",
+      "gx": 126,
+      "gy": 2,
+      "w": 2,
+      "h": 124
+    },
+    {
+      "type": "ground_stone",
+      "gx": 59,
+      "gy": 0,
+      "w": 10,
+      "h": 5
+    },
+    {
+      "type": "ground_stone",
+      "gx": 59,
+      "gy": 123,
+      "w": 10,
+      "h": 5
+    },
+    {
+      "type": "ground_stone",
+      "gx": 0,
+      "gy": 59,
+      "w": 5,
+      "h": 10
+    },
+    {
+      "type": "ground_stone",
+      "gx": 123,
+      "gy": 59,
+      "w": 5,
+      "h": 10
     }
   ]
 }
