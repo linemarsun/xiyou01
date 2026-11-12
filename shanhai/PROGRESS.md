@@ -1,16 +1,16 @@
 # 山海奇谭 · 任务目标与进展记录（PROGRESS）
 
 > 本文件记录**详细流水账与逐模块交付记录**。目标、状态快照、阶段进展与环境交接的唯一可信源是 **[HANDOFF.md](./HANDOFF.md)**，本文件不再单独维护「当前状态」。
-> 最后更新：2026-11-10（模块 13 云京道路净空 + 树木美术，随 `v0.14.0` 入仓；远端基线 `main@edb7045`，回归 69/69）
+> 最后更新：2026-11-12（模块 14 四图构件素材补齐，随 `v0.15.0` 入仓；远端基线 `main@5413786`，回归 72/72）
 
 | 项目 | 内容 |
 | --- | --- |
 | 游戏定位 | 大话西游式 2D 回合制 RPG（玩法机制借鉴，美术/命名/文案全部原创） |
 | 技术栈 | TypeScript + Vite + PixiJS 8（渲染），纯逻辑层 core/ 与渲染层分离，为联机预留 |
-| 当前基线 | 远端 `main@edb7045` / tag `v0.14.0`（`v0.13.0` → `6cf599a` 宫城素材族）；本地为快照重建的独立根提交 `4b21699`；回归 69/69。详见 [HANDOFF.md 第 3 节](./HANDOFF.md) |
-| 运行 | `npm run dev` → http://localhost:5199；`npm run build`；`npm run assets` 重新生成像素素材；`npm run maps` 重生成等距布局 |
+| 当前基线 | 远端 `main@5413786` / tag `v0.15.0`（`v0.14.0` → `5413786` 道路净空 + 树木；`v0.13.0` → `6cf599a` 宫城素材族）；本地为快照重建的独立根提交；回归 72/72。详见 [HANDOFF.md 第 3 节](./HANDOFF.md) |
+| 运行 | `npm run dev` → http://localhost:5199；`npm run build`；`npm run assets` / `npm run maps` / `npm run trees` / `npm run props` 四个幂等生成器 |
 | 数值仿真 | 地址栏加 `#sim`：AI 执挥双方批量跑 144 场，输出各门派胜率 |
-| 当前阶段目标 | **真实美术素材替换程序化占位**（2026-11-10 用户确认），验收标准见 [HANDOFF.md 第 1.2 节](./HANDOFF.md) |
+| 当前阶段目标 | **真实美术素材替换程序化占位已于 `v0.15.0` 达成**（A1/A2/A3 全绿）；下一阶段目标待用户拍板，见 [HANDOFF.md 第 1.5 节](./HANDOFF.md) |
 | 文档 | [HANDOFF.md](./HANDOFF.md) 目标/进展/交接（唯一可信源）；`README.md` 总览；`docs/功能说明.md`、`docs/接口说明.md`、`docs/使用方式.md`；本文件记流水账 |
 
 ## 1. 里程碑状态
@@ -180,10 +180,11 @@ cd shanhai
 npm install
 npm run dev      # http://localhost:5199
 npm run build    # tsc --noEmit + vite build
-npm test         # 全链回归，期望 69/69
+npm test         # 全链回归，期望 72/72
 npm run assets   # 重新生成像素素材
 npm run maps     # 重新生成等距布局（幂等）
 npm run trees    # 重新生成阔叶树/枯木贴图（幂等，零依赖）
+npm run props    # 重新生成山石/石桥/碑井炉箱/大殿 12 张贴图（幂等，零依赖）
 node tools/gh-sync.mjs status   # 受限网络下核对本地与远端 tree
 ```
 
@@ -215,3 +216,14 @@ node tools/gh-sync.mjs status   # 受限网络下核对本地与远端 tree
 - **回归**：新增 `[17]` 两组断言 —— 云京建筑不压窄带道路且每条窄路逐截面可走；五图树木变体都有真实 PNG、为带 alpha 的合法文件且尺寸合理。`npm test` **69/69**、`npm run build` 通过。
 - **画面验收**：无头浏览器多机位实拍（`city_southroad` / `city_south` / `city_west` / `city_eastzoom` + 野外 `wild_heifeng` / `wild_luanzang`），确认土路恢复连续、建筑落在草地上留出街沿、阔叶树变为分层叶团、枯木有分叉、林木有色调变化。
 - 已知边界：`hall` 仍是程序化蓝顶方盒（无真实贴图），本次未替换；`assets_src/tools/modv2/*.py` 的硬编码绝对路径仍未修（见 HANDOFF 第 2.3 / 6 节）。
+
+### 模块 14 交付记录（2026-11-12，tag `v0.15.0`）
+- 用户要求：「继续帮我完善除了云京之外的其他几个地图，补充缺少的素材」。
+- **缺口盘点**：按 `core/art.ts` 的 `isoModuleCandidates(type, variant, facing)` 展开五图全部非地面构件，列出候选链全部落空的类型 —— `rock`（云京 72）/ `rock_moss`（青崖 135）/ `rock_dark`（忘川 128 + 地府 93）/ `rock_crystal`（洞天 805）/ `bridge`（7）/ `bridge_dark`（7）/ `stele`（52）/ `well`（15）/ `incense`（10）/ `crate`（41）/ `hall`（4）/ `hall_stone`（云京 3）。这些此前都由 `render/world-renderer.ts` 的 `drawRock` / `drawBridge` / `drawStele` 等程序化几何占位绘制。
+- **新增 `tools/gen-iso-props.mjs`**：沿用 `gen-tree-art.mjs` 的零依赖超采样画布（纯 Node + zlib，自写多边形/椭圆/线段/描边/PNG 编码），按 `gate_arch.png` / `house_4x4_sw.png` 的深墨描边 + 等距四向明暗分面 + 低饱和石/木/瓦色，一次产出 **12 张真实 PNG**：山石 4 变体（素石 / 青苔 / 幽冥裂纹带幽光 / 洞天晶簇）、石桥 2 变体（青石 / 冷灰）、石碑、水井（木架辘轳吊桶）、青铜鼎香炉（三足双耳 + 半透明烟）、木箱、大殿 2 变体（朱红庑殿 / 云京石殿，两级台基 + 柱列 + 格扇门 + 瓦垄正脊）。固定种子、`npm run props` 两次运行字节一致、路径相对脚本位置。
+- **不改布局数据**：文件名严格贴合候选链，渲染层 `loadIsoModules()` 自动命中；`npm run maps` 两次运行字节一致（布局 JSON 未动）。`core/iso.ts` 只更新 `hall` 的注释并把可见高度从 260 校正到 340（用于角色遮挡判定）。
+- **消除复制感**：`world-renderer.ts` 新增模块级 `PROP_TINT`，把原先只给树的确定性色差扩展到 rock / stele / crate / lantern_post；山石另加 1/7 镜像与 5 档纵向起伏。洞天 805 块晶石因此有明暗、冷暖、高矮变化，实拍确认不再像同一张图复制粘贴。
+- **石桥造型迭代**：初版四边等高栏板在实拍里读成「围栏石台 / 下沉凹槽」，改为只沿两条长边设栏（后左 8px 压边、前右全高）、两端敞开，桥板厚度只画可见前缘、望柱只立前右栏板两端。俯瞰与放大近景均已复核。
+- **回归 69 → 72**：新增 `[18]` 三组断言 —— ① 五图每条非地面构件的候选链至少命中一张真实 PNG（零缺图）；② 12 张新贴图为合法带 alpha 的 PNG、尺寸合理、山石/石桥/大殿变体内容互异；③ 四张野外/地府图的山石变体各自独立（moss / dark / crystal / dark），主题差异不被抹平。
+- **验证**：`npm test` **72/72**、`npm run build` 通过、`npm run props` 与 `npm run maps` 均幂等；无头浏览器实拍四图俯瞰 + 石桥/大殿/晶石密集区近景，确认构件全部换成真实贴图、锚点与 6×6 足迹匹配、无错位或悬空。
+- **已知边界**：石桥在等距俯视下仍略像斜置石台、大殿瓦垄偏淡（见 HANDOFF 第 6 节任务 4）；洞天可见精灵最多，软件渲染下俯瞰截图偶发超时，真机 GPU 未见异常；`modv2/*.py` 硬编码绝对路径仍未修。

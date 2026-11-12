@@ -11,7 +11,8 @@
     "test": "node tools/regression.mjs",
     "assets": "node tools/gen-assets.mjs",
     "maps": "node tools/gen-iso-maps.mjs",
-    "trees": "node tools/gen-tree-art.mjs"
+    "trees": "node tools/gen-tree-art.mjs",
+    "props": "node tools/gen-iso-props.mjs"
   },
   "devDependencies": {
     "pngjs": "^7.0.0",

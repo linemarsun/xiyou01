@@ -7,7 +7,8 @@
  *   国风美术映射与素材文件完整性 / 世界观文案统一 / 国风地图与悬赏榜数据 /
  *   一景一制（独立格网、边界出入口、专属路网、全锚点 BFS 连通、主题区分）/
  *   等距 A* 寻路 / 跨图落点「落地即弹回」保护 /
- *   云京道路净空（建筑不压窄路、道路不被截断）/ 树木真实贴图覆盖。
+ *   云京道路净空（建筑不压窄路、道路不被截断）/ 树木真实贴图覆盖 /
+ *   五图构件真实素材全覆盖（候选链零缺图、山石/石桥变体主题独立）。
  * 运行：npm test   （新增玩法模块时请在本文件补对应断言）
  */
 import { build } from 'esbuild';
@@ -1518,6 +1519,69 @@ test('五张地图的树木变体都有真实 PNG，且贴图为带透明通道�
     ok(w >= 48 && w <= 180 && h >= 120 && h <= 280, `${path.basename(file)} 尺寸合理（${w}×${h}）`);
   }
   ok(variants.has('leaf') && variants.has('pine') && variants.has('dead'), '三种树形都被布局使用');
+});
+
+console.log('\n[18] 五图构件真实素材覆盖（零程序化占位）');
+const ISO_DIR = path.join(ROOT, 'public/assets/art', 'iso');
+const MAP_IDS = ['taoyuan', 'wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu'];
+const readLayout = (id) => iso.expandLayout(JSON.parse(readFileSync(path.join(ISO_DIR, `${id}.json`), 'utf8')));
+const urlToFile = (url) => path.join(ROOT, 'public', url.replace(/^\//, ''));
+
+test('五图所有非地面构件都能命中至少一张真实 PNG（候选链零缺图）', () => {
+  const missing = [];
+  const hitOf = new Map();
+  for (const id of MAP_IDS) {
+    for (const it of readLayout(id).items) {
+      if (it.type.startsWith('ground_')) continue;
+      const cands = it.type === 'house'
+        ? art.isoHouseCandidates(it.facing, it.variant)
+        : art.isoModuleCandidates(it.type, it.variant, it.facing);
+      const hit = cands.find((u) => existsSync(urlToFile(u)));
+      const key = `${it.type}|${it.variant ?? ''}|${it.facing ?? ''}`;
+      if (!hit) missing.push(`${id}: ${key}`);
+      else if (!hitOf.has(key)) hitOf.set(key, path.basename(hit));
+    }
+  }
+  eq(missing.length, 0, `仍走程序化占位的构件：${[...new Set(missing)].slice(0, 12).join('、')}`);
+  ok(hitOf.size >= 20, `覆盖的构件种类 ${hitOf.size} 种`);
+});
+
+test('新增构件贴图均为合法带 alpha 的 PNG，且变体贴图内容互不相同', () => {
+  const names = ['rock', 'rock_moss', 'rock_dark', 'rock_crystal', 'bridge', 'bridge_dark',
+    'stele', 'well', 'incense', 'crate', 'hall', 'hall_stone'];
+  const buf = (n) => readFileSync(path.join(ISO_DIR, `${n}.png`));
+  for (const n of names) {
+    const b = buf(n);
+    ok(b.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), `${n}.png 是 PNG`);
+    eq(b[25], 6, `${n}.png 带 alpha 通道`);
+    const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
+    ok(w >= 96 && w <= 520 && h >= 96 && h <= 760, `${n}.png 尺寸合理（${w}×${h}）`);
+  }
+  const uniq = (list) => new Set(list.map((n) => buf(n).toString('base64'))).size;
+  eq(uniq(['rock', 'rock_moss', 'rock_dark', 'rock_crystal']), 4, '四种山石贴图内容互异');
+  eq(uniq(['bridge', 'bridge_dark']), 2, '两种石桥贴图内容互异');
+  eq(uniq(['hall', 'hall_stone']), 2, '两种大殿贴图内容互异');
+});
+
+test('四张野外/地府地图的山石变体各自独立，主题差异不被抹平', () => {
+  const expect = {
+    wild_heifeng: { rock: 'moss', bridge: undefined },
+    wild_luanzang: { rock: 'dark', bridge: 'dark' },
+    wild_shanxiao: { rock: 'crystal', bridge: undefined },
+    difu: { rock: 'dark', bridge: 'dark' },
+  };
+  for (const [id, want] of Object.entries(expect)) {
+    const items = readLayout(id).items;
+    const rocks = items.filter((i) => i.type === 'rock');
+    ok(rocks.length > 20, `${id} 有成片山石（${rocks.length}）`);
+    ok(rocks.every((r) => r.variant === want.rock), `${id} 山石统一使用 ${want.rock}`);
+    const bridges = items.filter((i) => i.type === 'bridge');
+    if (want.bridge !== undefined) {
+      ok(bridges.length > 0 && bridges.every((b) => b.variant === want.bridge), `${id} 石桥统一使用 ${want.bridge}`);
+    } else if (bridges.length) {
+      ok(bridges.every((b) => b.variant === undefined), `${id} 石桥使用默认青石变体`);
+    }
+  }
 });
 
 console.log(`\n=== 结果：${passed} 通过 / ${failures.length} 失败 ===\n`);

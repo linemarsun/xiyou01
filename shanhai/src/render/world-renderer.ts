@@ -22,6 +22,18 @@ const WALK_SPEED = 200; // px/s（大地图提速，减少跨区段跑动时间�
 const MONSTER_SPEED = 34;
 
 /**
+ * 成片重复构件的确定性色差（按格坐标取模，只改精灵 tint / scale，不改布局数据）。
+ * 玲珑洞天一张图就有 805 块晶石，不这么做会明显读成复制粘贴。
+ */
+const PROP_TINT: Record<string, number[]> = {
+  tree: [0xffffff, 0xedf3e4, 0xf4f0dc, 0xe4ecdf, 0xf1ead9],
+  rock: [0xffffff, 0xeef2f6, 0xf3eee6, 0xe6eef0, 0xf0f0e8, 0xe9e6f2],
+  stele: [0xffffff, 0xf0ece4, 0xe8e8e4],
+  crate: [0xffffff, 0xf2e9dc, 0xe9e2d6],
+  lantern_post: [0xffffff, 0xf3eee2],
+};
+
+/**
  * 精灵缩放档位统一由 CHAR_SCALE_TIER（见 ./scale）派生：
  * 当前 1.00 档 = 实体约 112px，占 900 屏高约 12.4%。锚点仍是脚底 0.94。
  * 交互半径按同一比例同步（旧值按 0.75 档书写）。
@@ -556,13 +568,16 @@ export class WorldRenderer {
       if (off) { sp.x = -off.ax; sp.y = -off.ay; }
       // 分坊瓦色/墙色：对整张精灵做乘法着色（不改原图）
       if (unit.item.tint !== undefined) sp.tint = unit.item.tint;
-      // 树木：按格坐标做确定性色差与镜像，避免成片林子像复制粘贴（不改布局数据）
-      if (unit.type === 'tree') {
+      // 树 / 山石 / 小件：按格坐标做确定性色差、镜像与轻微高度差
+      const palette = PROP_TINT[unit.type];
+      if (palette || unit.type === 'rock') {
         const h = (Math.imul(unit.item.gx, 73856093) ^ Math.imul(unit.item.gy, 19349663)) >>> 0;
-        if (unit.item.tint === undefined) {
-          sp.tint = [0xffffff, 0xedf3e4, 0xf4f0dc, 0xe4ecdf, 0xf1ead9][h % 5];
+        if (unit.item.tint === undefined && palette) sp.tint = palette[h % palette.length];
+        if ((unit.type === 'tree' || unit.type === 'rock') && h % 7 === 0) sp.scale.x = -1;
+        // 山石阵（尤其洞天 805 块晶石）再叠一档纵向起伏，打散整齐感
+        if (unit.type === 'rock' && unit.item.tint === undefined) {
+          sp.scale.y = [1, 0.94, 1.06, 0.98, 1.03][h % 5];
         }
-        if (h % 7 === 0) sp.scale.x = -1;
       }
       // 城门楼与左右直墙衔接：图端头仍带一条深色描边，这里把精灵横向补 2px（左右各 1px）
       // 压住接缝。城墙直段本身不加裁边/外扩补丁。

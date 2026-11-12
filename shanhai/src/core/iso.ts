@@ -126,8 +126,9 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   house_large: { w: 4, h: 4, height: 280 },
   /** 小档建筑：单间铺面/偏房（跨 2 格） */
   shop_small: { w: 2, h: 2, height: 150 },
-  /** 庙署正殿等大体量建筑（暂无美术，走程序化占位盒） */
-  hall: { w: 6, h: 6, height: 260 },
+  /** 庙署正殿 6×6：真实贴图 hall.png / hall_stone.png（两级台基 + 朱红柱列 + 庑殿瓦顶），
+   * 画布 440×590，可见体量约 340px；程序化方盒只作缺图回退。 */
+  hall: { w: 6, h: 6, height: 340 },
   /** 城墙直段（可复用，沿 gx 或 gy 拉长；垛口由渲染层按长度重复） */
   city_wall: { w: 1, h: 1, height: 120 },
   /** 城墙转角（单独构件） */
@@ -161,7 +162,7 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   lantern_post: { w: 1, h: 1, height: 150 },
   /** 石桥：跨水面，桥面格全部可走 */
   bridge: { w: 3, h: 5, height: 26 },
-  /** 水井 / 香炉 / 山石：点状地标 */
+  /** 水井 / 香炉 / 山石：点状地标；均有真实 PNG，山石按 variant 分 moss/dark/crystal 三套 */
   well: { w: 1, h: 1, height: 74 },
   incense: { w: 1, h: 1, height: 96 },
   rock: { w: 1, h: 1, height: 44 },
