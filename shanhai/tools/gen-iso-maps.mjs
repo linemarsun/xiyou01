@@ -177,6 +177,13 @@ const THEMES = [
     tagline: '青苔环廊 · 青石圆厅 · 四条放射石阶 · 晶壁围合',
     treeVariant: 'pine', rockVariant: 'crystal',
     decoDensity: 0.105, lampStep: 0,
+    // 晶石按「洞厅留白 / 环廊通透 / 洞壁成丛」分层：旧版均匀撒点把环廊和石阶全淹了
+    decoDensityAt: (gx, gy) => {
+      const d = Math.hypot(gx - 52, gy - 52);
+      if (d < 19) return 0.012;
+      if (d < 31) return 0.032;
+      return 0.095;
+    },
     deco: [['rock', 0.90], ['tree', 0.06], ['lantern_post', 0.03], ['crate', 0.01]],
     anchors: {
       spawns: [
@@ -392,7 +399,8 @@ function buildLayout(theme) {
       const k = key(gx, gy);
       if (occupied.has(k) || reserved.has(k) || road[idx(gx, gy)]) continue;
       if (terrain[idx(gx, gy)] !== theme.base) continue;
-      if (rnd() > theme.decoDensity) continue;
+      const density = theme.decoDensityAt ? theme.decoDensityAt(gx, gy) : theme.decoDensity;
+      if (rnd() > density) continue;
       let type = roll();
       const cap = type === 'fence' ? 40 : 12;
       if (SOFT.has(type) && (propCount[type] ?? 0) >= cap) type = theme.deco[0][0];

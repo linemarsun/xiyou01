@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """打样对比图：左=旧版程序化，右=新版生成+后处理，同一条基线，84px 角色参照。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-OLD = os.path.join(ROOT, 'assets_v2', 'preview', '_v1')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
-OUT = os.path.join(ROOT, 'assets_v2', 'preview', 'modules_compare.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+OLD = os.path.join(ROOT, 'assets_src', 'preview', '_v1')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
+OUT = os.path.join(ROOT, 'assets_src', 'preview', 'modules_compare.png')
 
 ROWS = [('wall_wood', 'wall_wood 2x1'), ('gate_arch', 'gate_arch 3x3'),
         ('tree_pine', 'tree_pine 1x1'), ('roof_slope', 'roof_slope 4x2')]
@@ -20,7 +20,7 @@ DIM = (150, 166, 176)
 CHAR_H = 84
 
 def font(size):
-    for p in (r'C:\Windows\Fonts\msyh.ttc', r'C:\Windows\Fonts\simhei.ttf'):
+    for p in (FONT_DIR + '/msyh.ttc', FONT_DIR + '/simhei.ttf'):
         if os.path.exists(p):
             return ImageFont.truetype(p, size)
     return ImageFont.load_default()

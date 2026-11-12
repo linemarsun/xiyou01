@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """地面构件：平面纹理 -> 镜像无缝 -> 2:1 等距反采样成菱形地块（四向可平铺）。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import numpy as np
 from PIL import Image
 
-GEN = r'D:\workspace\dahuayou_web\assets_v2\preview\gen'
-OUT = r'D:\workspace\dahuayou_web\assets_v2\modules'
+# GEN 由 paths 提供（相对仓库根推导）
+OUT = MODULES
 PPU = 96          # 每格 96 像素（平面纹理分辨率）
 
 
@@ -93,5 +94,5 @@ if __name__ == '__main__':
                 ay = (a + b) * 32
                 sheet.paste(im, (ox + ax - 64 + 225, oy + ay - 64 + 60), im)
     ImageDraw.Draw(sheet).text((30, 24), '地面 2×2 平铺接缝自检（左：石板 / 右：土）', fill=(230, 236, 242))
-    sheet.save(r'D:\workspace\dahuayou_web\assets_v2\preview\ground_tiles.png')
+    sheet.save(os.path.join(PREVIEW, 'ground_tiles.png'))
     print('saved ground_tiles.png')

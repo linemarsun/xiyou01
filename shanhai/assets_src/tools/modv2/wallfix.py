@@ -9,6 +9,7 @@
       再补统一外描边、按锚点裁切。
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import numpy as np
@@ -16,9 +17,8 @@ from PIL import Image
 
 import post as P
 
-ROOT = r'D:\workspace\dahuayou_web'
-GEN = os.path.join(ROOT, 'assets_v2', 'preview', 'gen')
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
+GEN = os.path.join(ROOT, 'assets_src', 'preview', 'gen')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
 FACE_LEN = 128          # 4 格
 WALL_H = 170            # 面高
 PAD = 4

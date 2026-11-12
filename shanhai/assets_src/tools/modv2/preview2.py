@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """预览：四向构件格 + 城门新旧对比（带 25px 刻度尺）。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-PRE = os.path.join(ROOT, 'assets_v2', 'preview')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+PRE = os.path.join(ROOT, 'assets_src', 'preview')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 OUT_GRID = os.path.join(PRE, 'modules_four_facing.png')
 OUT_GATE = os.path.join(PRE, 'gate_arch_compare.png')
 BG = (38, 45, 53)
@@ -16,7 +16,7 @@ CHAR_H = 84
 
 
 def font(sz):
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh.ttc', sz)
 
 
 F = font(14)

@@ -6,14 +6,14 @@
     anchor = 足迹前底顶点 p(5,5)
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-PRE = os.path.join(ROOT, 'assets_v2', 'preview')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+PRE = os.path.join(ROOT, 'assets_src', 'preview')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 CHAR_H = 84
 
 WALL_H = 170
@@ -26,7 +26,7 @@ APX = (137, 325)       # 统一锚点像素（= 4×4 足迹前底顶点）
 
 
 def font(sz, bold=False):
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh%s.ttc' % ('bd' if bold else ''), sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh%s.ttc' % ('bd' if bold else ''), sz)
 
 
 def p(u, v):
@@ -352,9 +352,9 @@ def pair_seam(layer, pa, pb):
 
 def sheet_corner():
     from PIL import ImageFont
-    f_h = ImageFont.truetype(r'C:\Windows\Fonts\msyhbd.ttc', 22)
-    f_t = ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', 13)
-    f_s = ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', 11)
+    f_h = ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 22)
+    f_t = ImageFont.truetype(FONT_DIR + '/msyh.ttc', 13)
+    f_s = ImageFont.truetype(FONT_DIR + '/msyh.ttc', 11)
     ch = Image.open(CHAR).convert('RGBA')
     bb = ch.getbbox()
     k = CHAR_H / float(bb[3] - bb[1])
@@ -405,7 +405,7 @@ def sheet_corner():
         d.text((cx + 20, cy - 40), '84px', font=f_s, fill=MUT)
         for (uu, vv, ff) in placed:
             tx, ty = OIS(OXS, OYS, uu + 4, vv + 4)
-            d.text((tx - 10, ty + 6), ff, font=ImageFont.truetype(r'C:\Windows\Fonts\msyhbd.ttc', 12),
+            d.text((tx - 10, ty + 6), ff, font=ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 12),
                    fill=INK)
         d.text((14, 10), '机位 %d｜世界转 %d°｜孔洞 %d｜转角最低不透明度 %d'
                % (shot + 1, shot * 90, hc, min(s[2] for s in seams) if seams else 255),

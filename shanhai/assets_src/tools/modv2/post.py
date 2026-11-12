@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """绿幕抠底 → 去光晕 → 缩放到足迹尺寸 → 补外描边 → 锚点裁切 → PNG/JSON。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 import sys
 
 import numpy as np
 from PIL import Image, ImageFilter, ImageEnhance
 
-ROOT = r'D:\workspace\dahuayou_web'
-GEN = os.path.join(ROOT, 'assets_v2', 'preview', 'gen')
-OUT_DIR = os.path.join(ROOT, 'assets_v2', 'modules')
+GEN = os.path.join(ROOT, 'assets_src', 'preview', 'gen')
+OUT_DIR = os.path.join(ROOT, 'assets_src', 'modules')
 OUT_COL = (34, 29, 26)
 PAD = 2
 

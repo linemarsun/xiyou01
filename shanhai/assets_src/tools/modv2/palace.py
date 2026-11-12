@@ -15,12 +15,13 @@
 shopbuild 的 ROOF_C 是靛青瓦，瓦垄色是硬编码的青灰，不能直接换调色板）。
 """
 import math
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import citybuild as cb
 from citybuild import Image, ImageDraw, poly, mix
 
-OUT = r'D:\workspace\game\xiyou01\shanhai\public\assets\art\iso'
+OUT = ISO_OUT
 cb.MOD = OUT
 
 # ---- 调色 ----

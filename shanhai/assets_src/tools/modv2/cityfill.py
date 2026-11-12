@@ -10,6 +10,7 @@
     衙署 6×6   台基 28 / 月台 16 / 檐 176 / 腰檐 206 / 上檐 232 / 正脊 272
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import math
 import os
 
@@ -19,10 +20,9 @@ import citybuild as CB
 import post as POST
 import shopbuild as SB
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-PRE = os.path.join(ROOT, 'assets_v2', 'preview')
-OUT = r'D:\onenote\OneDrive\Documents\Trae-CN\temp_20261108_02'
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+PRE = os.path.join(ROOT, 'assets_src', 'preview')
+OUT = ensure(os.path.join(PREVIEW, 'shots'))
 
 S = CB.S
 eu, ev, ez = CB.eu, CB.ev, CB.ez

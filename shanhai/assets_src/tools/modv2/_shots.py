@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """出交付图：单栋近景（当铺 / 酒楼）、城墙近景（含转角）。混合街区实景由 citybuild.sheet_street 出。"""
 import os
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 
 from PIL import Image, ImageDraw, ImageFont
 
 import citybuild as CB
 
-OUT = r'D:\onenote\OneDrive\Documents\Trae-CN\temp_20261108_02'
+OUT = ensure(os.path.join(PREVIEW, 'shots'))
 BG = (226, 219, 199, 255)
-F_T = ImageFont.truetype('C:/Windows/Fonts/msyhbd.ttc', 34)
-F_S = ImageFont.truetype('C:/Windows/Fonts/msyh.ttc', 19)
+F_T = ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 34)
+F_S = ImageFont.truetype(FONT_DIR + '/msyh.ttc', 19)
 
 
 def shot(items, sc, title, sub, ground=(220, 213, 195, 255), char=None,

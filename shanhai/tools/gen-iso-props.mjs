@@ -95,7 +95,7 @@ class Canvas {
       }
     }
   }
-  polygon(pts, col) {
+  polygon(pts, col, a = 1) {
     const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
     for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
       for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
@@ -104,7 +104,7 @@ class Canvas {
           const [xi, yi] = pts[i], [xj, yj] = pts[j];
           if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi + 1e-9) + xi) inside = !inside;
         }
-        if (inside) this.blend(x, y, col);
+        if (inside) this.blend(x, y, col, a);
       }
     }
   }
@@ -138,7 +138,7 @@ class Draw {
     this.ax = w / 2; this.ay = h - 8; // 底部留 8px 余量，让构件「坐」进地面
   }
   pt(x, y) { return [(this.ax + x) * S, (this.ay + y) * S]; }
-  poly(pts, col) { this.c.polygon(pts.map(([x, y]) => this.pt(x, y)), col); }
+  poly(pts, col, a = 1) { this.c.polygon(pts.map(([x, y]) => this.pt(x, y)), col, a); }
   line(x0, y0, x1, y1, w, col, a = 1) {
     const [a0, b0] = this.pt(x0, y0), [a1, b1] = this.pt(x1, y1);
     this.c.line(a0, b0, a1, b1, w * S, col, a);
@@ -226,6 +226,9 @@ const scaleFp = (fp, s) => {
   return Object.fromEntries(Object.entries(fp).map(([k, p]) => [k, [c[0] + (p[0] - c[0]) * s, c[1] + (p[1] - c[1]) * s]]));
 };
 const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+const mixCol = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+const upPt = (p, h) => [p[0], p[1] - h];
+const downPt = (p, h) => [p[0], p[1] + h];
 
 /** 等距立方体：左前立面（亮）/ 右前立面（暗）/ 顶面（最亮） */
 function isoBox(d, fp, height, pal, lift = 0) {
@@ -264,8 +267,11 @@ function drawRock(variant, seed) {
   d.poly([D, E, Fp, G, M2], p.r);                    // 右背光面
   d.poly([B, Cp, D, M2, M1], p.t);                   // 顶面
   d.poly([M1, M2, G, Hp], p.r);                      // 正面下段压暗，拉出体积
-  d.stroke([Cp, M1, G], 1.5, C.inkSoft);
-  d.stroke([D, M2, G], 1.4, C.inkSoft);
+  // 晶簇改由晶体自身分面，跳过基座的两条斜分面线（旧版会像黑裂缝穿过晶体）
+  if (variant !== 'crystal') {
+    d.stroke([Cp, M1, G], 1.5, C.inkSoft);
+    d.stroke([D, M2, G], 1.4, C.inkSoft);
+  }
   d.stroke([B, Cp, D, E, Fp], 1.6, C.ink);
   d.stroke([A, Hp, G, Fp], 1.4, C.ink);
   // 底部碎石，避免「一块石头直接插进地面」
@@ -296,24 +302,34 @@ function drawRock(variant, seed) {
     d.ellipse(-13, -h * 0.42, 2.2, 1.7, C.soul, 0.6);
     d.ellipse(17, -h * 0.3, 1.8, 1.4, C.soul, 0.5);
   } else if (variant === 'crystal') {
-    // 石基座上长出三根棱柱晶体：暗面 / 亮面 / 高光棱 / 白尖
+    // 五根高低错落的棱柱晶体 + 基座碎晶：矮的先画、主晶后画，避免三根等高柱的复制感
     const shards = [
-      { x: -15, base: -h * 0.72, w: 9, h: 44, lean: -5 },
-      { x: 1, base: -h * 0.88, w: 12, h: 72, lean: 3 },
-      { x: 17, base: -h * 0.6, w: 8, h: 38, lean: 6 },
+      { x: -22, base: -h * 0.56, w: 6, h: 28, lean: -4, tone: 0.1 },
+      { x: -11, base: -h * 0.76, w: 10, h: 52, lean: -3, tone: 0.5 },
+      { x: 2, base: -h * 0.92, w: 13, h: 78, lean: 2, tone: 1 },
+      { x: 15, base: -h * 0.70, w: 9, h: 44, lean: 4, tone: 0.7 },
+      { x: 25, base: -h * 0.50, w: 6, h: 25, lean: 5, tone: 0.25 },
     ];
-    for (const s of shards) {
+    for (const s of [...shards].sort((a, b) => a.h - b.h)) {
       const bx = s.x, by = s.base, tip = [bx + s.lean, by - s.h];
-      d.poly([[bx - s.w, by], [bx, by + 4], tip], C.crysR);
-      d.poly([[bx, by + 4], [bx + s.w, by], tip], C.crysL);
-      d.poly([[bx - s.w * 0.35, by - 3], tip, [bx + s.w * 0.2, by - 5]], C.crysT);
-      d.stroke([[bx, by + 4], tip], 1.8, C.crysHi);
+      d.poly([[bx - s.w, by], [bx, by + 4], tip], mixCol(C.crysR, C.crysT, 0.12 * s.tone));
+      d.poly([[bx, by + 4], [bx + s.w, by], tip], mixCol(C.crysL, C.crysHi, 0.18 * s.tone));
+      d.poly([[bx - s.w * 0.35, by - 3], tip, [bx + s.w * 0.2, by - 5]], mixCol(C.crysT, C.crysHi, 0.35 * s.tone));
+      d.stroke([[bx, by + 4], tip], 1.8, C.crysHi, 0.9);
       d.stroke([[bx - s.w, by], tip, [bx + s.w, by]], 1.4, C.crysCore);
+      // 内棱线：把一根晶体再切成两个折射面
+      d.line(bx + s.w * 0.5, by - 2, bx + s.lean * 0.45, by - s.h * 0.82, 1, C.crysHi, 0.55);
       d.ellipse(tip[0], tip[1] + 2, 2.4, 1.8, C.crysHi, 0.9);
     }
-    for (let i = 0; i < 8; i++) {
-      const x = -24 + R() * 48, y = -h * 0.3 - R() * 18;
-      d.ellipse(x, y, 1.8, 1.2, C.crysHi, 0.65);
+    // 基座前缘碎晶片 + 散落幽光，让晶簇「长在石头里」而不是插在地上
+    d.ellipse(0, -3, 23, 5, C.crysL, 0.22);
+    for (const [x, w] of [[-25, 5], [-16, 4], [12, 5], [24, 4]]) {
+      d.poly([[x - w, -4], [x, -10], [x + w, -3]], mixCol(C.crysL, C.crysT, 0.35));
+      d.stroke([[x - w, -4], [x, -10], [x + w, -3]], 1, C.crysCore);
+    }
+    for (let i = 0; i < 10; i++) {
+      const x = -26 + R() * 52, y = -h * 0.24 - R() * 16;
+      d.ellipse(x, y, 1.8, 1.2, C.crysHi, 0.6);
     }
   } else {
     // 云京素石：几道层理线
@@ -325,53 +341,126 @@ function drawRock(variant, seed) {
 
 // ============================ 石桥 ============================
 const BRIDGE_PAL = {
-  base: { deck: [164, 156, 138], railL: [126, 118, 103], railR: [98, 92, 82], base: [56, 52, 48], seam: [92, 84, 72], cap: [196, 188, 168] },
-  dark: { deck: [110, 104, 118], railL: [80, 75, 90], railR: [62, 58, 72], base: [40, 37, 46], seam: [56, 52, 64], cap: [148, 142, 156] },
+  base: {
+    deckLo: [132, 124, 110], deckHi: [198, 190, 172], seam: [92, 84, 72],
+    railL: [126, 118, 103], railR: [98, 92, 82], base: [56, 52, 48], cap: [196, 188, 168],
+    shadow: [76, 70, 62], water: [32, 30, 38], arch: [206, 198, 178],
+  },
+  dark: {
+    deckLo: [86, 82, 96], deckHi: [148, 142, 158], seam: [56, 52, 64],
+    railL: [80, 75, 90], railR: [62, 58, 72], base: [40, 37, 46], cap: [148, 142, 156],
+    shadow: [50, 46, 56], water: [24, 22, 32], arch: [158, 152, 168],
+  },
 };
 
+/**
+ * 拱形石桥：沿长轴分 12 段按 sin 曲线抬高桥面，两条长边随拱起伏；
+ * 近侧桥身开两孔券洞，栏板改「半透镂空 + 上下横枋 + 五根望柱」，两端短边敞开并带引桥踏步。
+ * 旧版是一整块平板 + 一堵实心栏墙，等距俯视下会被读成「斜置的围栏石台」。
+ */
 function drawBridge(variant) {
-  const W = 344, H = 214;
+  const W = 344, H = 226;
   const d = new Draw(W, H), p = BRIDGE_PAL[variant], fp = isoFp(3, 5);
-  // 桥板厚度只画在两条可见前缘，四边暗框会把桥面读成「下沉凹槽」
-  const deck = liftFp(fp, -16);
-  d.poly([deck.F, deck.R, [deck.R[0], deck.R[1] + 8], [deck.F[0], deck.F[1] + 8]], p.base);
-  d.poly([deck.F, deck.L, [deck.L[0], deck.L[1] + 8], [deck.F[0], deck.F[1] + 8]], p.base);
-  const rh = 25;
-  const up = (pt) => [pt[0], pt[1] - rh];
-  // 桥栏只沿两条长边：后左 L→T 仅 8px 压边，前右 F→R 全高，两端完全敞开
-  const upBack = (pt) => [pt[0], pt[1] - rh * 0.32];
-  d.poly([deck.L, deck.T, upBack(deck.T), upBack(deck.L)], p.railL);
-  d.stroke([upBack(deck.L), upBack(deck.T)], 1.2, C.inkSoft);
-  // 桥墩分缝（桥板前右长边下方）
-  for (let i = 1; i < 4; i++) {
-    const q = lerp(deck.F, deck.R, i / 4);
-    d.line(q[0], q[1] + 8, q[0], q[1] + 14, 1.4, C.inkSoft);
+  const LIFT = -20, AMP = 18, BASE = 30, N = 12;
+  // 长轴：L→T / F→R；两端短边 L→F 与 T→R 是上下桥的敞口
+  const A = (t) => lerp(fp.L, fp.T, t);
+  const B = (t) => lerp(fp.F, fp.R, t);
+  const P = (pt, t) => [pt[0], pt[1] + LIFT - AMP * Math.sin(Math.PI * t)];
+  const edgeA = [], edgeB = [];
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    edgeA.push(P(A(t), t)); edgeB.push(P(B(t), t));
   }
-  d.poly([deck.T, deck.R, deck.F, deck.L], p.deck);
-  // 双向石板缝，把整块斜板读成一排石板
+
+  // 桥下阴影（贴地菱形，拱洞里透出来的就是它）
+  d.poly([fp.T, fp.R, fp.F, fp.L].map((q) => [q[0], q[1] + 4]), mixCol(p.shadow, C.ink, 0.2));
+
+  // 近侧桥身：随拱起伏的整条厚石带
+  for (let i = 0; i < N; i++) {
+    const t0 = i / N, t1 = (i + 1) / N;
+    const q0 = edgeB[i], q1 = edgeB[i + 1];
+    const lit = Math.sin(Math.PI * (t0 + t1) / 2);
+    d.poly([q0, q1, downPt(q1, BASE), downPt(q0, BASE)], mixCol(p.base, p.seam, 0.16 * lit));
+  }
+  d.stroke(edgeB.map((q) => downPt(q, BASE)), 1.4, C.ink);
+
+  // 两孔券洞：洞顶按半正弦抬起，桥板留 8px 厚度不凿穿
+  const archHole = (t0, t1) => {
+    const arc = [], foot = [];
+    for (let k = 0; k <= 18; k++) {
+      const u = k / 18, t = t0 + (t1 - t0) * u;
+      const q = P(B(t), t);
+      arc.push([q[0], q[1] + BASE - 2 - 22 * Math.sin(Math.PI * u)]);
+      foot.push([q[0], q[1] + BASE]);
+    }
+    d.poly([...arc, ...foot.reverse()], p.water);
+    d.stroke(arc, 3.2, C.ink);            // 深墨券口
+    d.stroke(arc, 1.8, p.arch);           // 券石亮边把「洞」从桥身上凿出来
+    const m = P(B((t0 + t1) / 2), (t0 + t1) / 2);
+    d.line(m[0] - 11, m[1] + BASE - 7, m[0] + 11, m[1] + BASE - 7, 1, p.arch, 0.22);
+  };
+  archHole(0.16, 0.40);
+  archHole(0.60, 0.84);
+  // 桥墩分缝落在两洞之间与两端
+  for (const t of [0.08, 0.5, 0.92]) {
+    const q = P(B(t), t);
+    d.line(q[0], q[1] + 4, q[0], q[1] + BASE, 1.3, C.inkSoft);
+  }
+
+  // 桥面：由远及近逐段铺石板，中段受光更亮，拱起的体积靠明暗读出
+  for (let i = N - 1; i >= 0; i--) {
+    const t0 = i / N, t1 = (i + 1) / N;
+    const a0 = edgeA[i], b0 = edgeB[i], b1 = edgeB[i + 1], a1 = edgeA[i + 1];
+    const lit = 0.18 + 0.72 * Math.sin(Math.PI * (t0 + t1) / 2);
+    d.poly([a0, b0, b1, a1], mixCol(p.deckLo, p.deckHi, lit));
+    d.line(...a1, ...b1, 1.2, p.seam);
+  }
+  const mid = [];
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    mid.push(P(lerp(A(t), B(t), 0.5), t));
+  }
+  d.stroke(mid, 1, p.seam, 0.45);
+  d.stroke(edgeA, 1.8, C.ink);
+  d.stroke(edgeB, 1.8, C.ink);
+  d.line(...edgeA[0], ...edgeB[0], 1.7, C.ink);
+  d.line(...edgeA[N], ...edgeB[N], 1.7, C.ink);
+
+  // 两端只补 9px 桥板断面 + 一条浅色桥头石：盖住透明白缝，又不把敞口封成挡墙
+  for (const k of [0, N]) {
+    const a = edgeA[k], b = edgeB[k], th = 9;
+    d.poly([a, b, downPt(b, th), downPt(a, th)], mixCol(p.base, p.cap, 0.22));
+    d.stroke([a, downPt(a, th), downPt(b, th), b], 1.2, C.ink);
+    d.line(...a, ...b, 3, p.cap, 0.9);
+    d.line(...a, ...b, 1.1, C.ink, 0.6);
+  }
+
+  // 远侧栏板只留 7px 压边；近侧栏板半透镂空 + 上下横枋，不再是一堵实心墙
+  for (let i = 0; i < N; i++) {
+    const a0 = edgeA[i], a1 = edgeA[i + 1], b0 = edgeB[i], b1 = edgeB[i + 1];
+    d.poly([a0, a1, upPt(a1, 7), upPt(a0, 7)], p.railL, 0.85);
+    d.poly([b0, b1, upPt(b1, 20), upPt(b0, 20)], p.railR, 0.34);
+  }
+  const railA = edgeA.map((q) => upPt(q, 7));
+  const railB = edgeB.map((q) => upPt(q, 20));
+  d.stroke(railA, 1.5, C.inkSoft);
+  d.stroke(edgeB, 3.4, C.ink);
+  d.stroke(edgeB, 2, p.base);
+  d.stroke(railB, 4.2, C.ink);
+  d.stroke(railB, 2.6, p.cap);
   for (let i = 1; i < 6; i++) {
-    const t = i / 6;
-    d.line(...lerp(deck.T, deck.R, t), ...lerp(deck.L, deck.F, t), 1.1, p.seam);
-    d.line(...lerp(deck.T, deck.L, t), ...lerp(deck.R, deck.F, t), 1.1, p.seam);
+    const t = i / 6, a = P(A(t), t), b = P(B(t), t);
+    d.line(a[0], a[1], a[0], a[1] - 7, 1, p.seam);
+    d.line(b[0], b[1], b[0], b[1] - 20, 1, p.seam, 0.7);
   }
-  d.stroke([deck.T, deck.R, deck.F, deck.L, deck.T], 1.8, C.ink);
-  d.poly([deck.F, deck.R, up(deck.R), up(deck.F)], p.railR);
-  d.stroke([deck.F, deck.R], 1.6, C.ink);
-  d.stroke([up(deck.F), up(deck.R)], 1.5, C.ink);
-  // 两条长边的栏板分缝与浅浮雕线
-  for (let i = 1; i < 6; i++) {
-    const t = i / 6;
-    d.line(...lerp(deck.L, deck.T, t), ...lerp(upBack(deck.L), upBack(deck.T), t), 1, p.seam);
-    d.line(...lerp(deck.F, deck.R, t), ...lerp(up(deck.F), up(deck.R), t), 1, p.seam);
-  }
-  d.line(...lerp(up(deck.F), deck.F, 0.42), ...lerp(up(deck.R), deck.R, 0.42), 1.1, p.seam);
-  // 望柱只立在前右栏板两端；后侧与桥头不立柱，避免读成围栏石台
-  for (const [k, pt] of [['F', deck.F], ['R', deck.R]]) {
-    const x = pt[0], y = up(pt)[1];
-    d.poly([[x - 4, y], [x + 4, y], [x + 4, y - 13], [x - 4, y - 13]], p.cap);
-    d.stroke([[x - 4, y], [x - 4, y - 13], [x + 4, y - 13], [x + 4, y]], 1.3, C.ink);
-    d.poly([[x - 6, y - 13], [x + 6, y - 13], [x + 4, y - 18], [x - 4, y - 18]], p.cap);
-    if (k === 'F' || k === 'R') d.ellipse(x, y - 21, 3, 2.4, C.gold, 0.95);
+  // 望柱沿近侧栏板等距排布，柱头带小宝顶；两端柱不封桥口
+  for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+    const q = P(B(t), t), x = q[0], y = q[1];
+    d.poly([[x - 3.5, y + 2], [x + 3.5, y + 2], [x + 3.5, y - 24], [x - 3.5, y - 24]], p.cap);
+    d.stroke([[x - 3.5, y + 2], [x - 3.5, y - 24], [x + 3.5, y - 24], [x + 3.5, y + 2]], 1.3, C.ink);
+    d.poly([[x - 5.5, y - 24], [x + 5.5, y - 24], [x + 4, y - 29], [x - 4, y - 29]], p.cap);
+    d.stroke([[x - 5.5, y - 24], [x + 5.5, y - 24]], 1.2, C.ink);
+    d.ellipse(x, y - 31, 2.3, 2, C.gold, 0.9);
   }
   return { w: W, h: H, rgba: addOutline(d.rgba(), W, H, 2, C.ink) };
 }
@@ -512,7 +601,7 @@ const HALL_PAL = {
   },
 };
 
-/** 庑殿顶：四坡瓦面 + 瓦垄 + 正脊 + 檐口瓦当 */
+/** 庑殿顶：四坡明暗分面 + 双线瓦垄/瓦缝 + 四条垂脊 + 檐板瓦当 + 正脊吻兽 */
 function hipRoof(d, fp, lift, height, p) {
   const E = liftFp(scaleFp(fp, 1.16), -lift);
   const c = centerOf(E);
@@ -521,31 +610,50 @@ function hipRoof(d, fp, lift, height, p) {
   const half = len * 0.2;
   const J1 = [c[0] - u[0] * half, c[1] - u[1] * half - height];
   const J2 = [c[0] + u[0] * half, c[1] + u[1] * half - height];
-  // 背面两坡先画，前面两坡后画盖住
+  // 四坡拉开明暗：后左最暗、右上背光、左下受光、右下最亮侧的反面
+  const lit = mixCol(p.roofL, p.roofT, 0.3);
+  const dark = mixCol(p.roofR, C.ink, 0.12);
   d.poly([E.T, E.L, J1], p.roofBack);
-  d.poly([E.R, E.T, J2, J1], p.roofL);
-  d.poly([E.L, E.F, J2, J1], p.roofL);
-  d.poly([E.F, E.R, J2], p.roofR);
-  // 瓦垄：前左坡与前右坡各 6 条，沿坡向收拢到正脊（淡一点，避免读成放射线）
-  for (let i = 1; i < 7; i++) {
-    const t = i / 7;
-    d.line(...lerp(J1, J2, t), ...lerp(E.L, E.F, t), 1.1, C.tileLine, 0.78);
-    d.line(...lerp(J1, J2, t), ...lerp(E.F, E.R, t), 1.1, C.tileLine, 0.78);
+  d.poly([E.R, E.T, J2, J1], p.roofR);
+  d.poly([E.L, E.F, J2, J1], lit);
+  d.poly([E.F, E.R, J2], dark);
+  // 瓦垄：一阴一阳双线，沿坡向收拢到正脊；再补三道横向瓦片接缝
+  // 旧版只有 1.1px 半透明单线，缩到游戏视口后几乎看不见，屋顶读成一块纯色板
+  const TILES = 9;
+  for (const [a, b] of [[E.T, E.R], [E.L, E.F], [E.F, E.R]]) {
+    for (let i = 1; i < TILES; i++) {
+      const t = i / TILES;
+      const top = lerp(J1, J2, t), bot = lerp(a, b, t);
+      d.line(...top, ...bot, 1.9, C.tileLine, 0.92);
+      d.line(top[0] + 1.7, top[1], bot[0] + 1.7, bot[1], 1.1, p.rim, 0.55);
+    }
+    for (const k of [0.32, 0.6, 0.84]) {
+      d.line(...lerp(J1, a, k), ...lerp(J2, b, k), 1, C.tileLine, 0.34);
+    }
   }
-  // 檐口：深色压边 + 一圈瓦当
-  d.stroke([E.L, E.F, E.R], 3.2, C.ink);
+  // 三条外缘垂脊把屋顶转折钉死；用淡瓦色而非金色高光，避免中央出现抢眼的 Y 形金线。
+  // J2→E.F 落在屋面前坡正中，旧版画出来像一道裂缝，这里不画
+  for (const [j, e] of [[J1, E.T], [J1, E.L], [J2, E.R]]) {
+    d.line(...j, ...e, 3.2, C.ink);
+    d.line(...j, ...e, 1.3, p.rim, 0.75);
+  }
+  // 檐板 + 瓦当：先压一条深色带，再点一圈亮瓦头
+  d.poly([E.L, E.F, E.R, [E.R[0], E.R[1] + 5], [E.F[0], E.F[1] + 5], [E.L[0], E.L[1] + 5]], C.inkSoft);
+  d.stroke([E.L, E.F, E.R], 2.6, C.ink);
   for (let i = 0; i <= 8; i++) {
     const t = i / 8;
     for (const [a, b] of [[E.L, E.F], [E.F, E.R]]) {
       const q = lerp(a, b, t);
-      d.ellipse(q[0], q[1] + 1, 2.6, 2, p.rim, 0.9);
+      d.ellipse(q[0], q[1] + 2.5, 3.2, 2.3, p.rim, 0.95);
     }
   }
-  // 正脊与脊饰
-  d.line(J1[0], J1[1], J2[0], J2[1], 4.2, C.ink);
-  d.line(J1[0], J1[1] - 1, J2[0], J2[1] - 1, 2.4, p.ridge);
-  for (const j of [J1, J2]) {
-    d.poly([[j[0] - 4, j[1]], [j[0] + 4, j[1]], [j[0] + 2, j[1] - 9], [j[0] - 2, j[1] - 9]], p.ridge);
+  // 正脊：深墨压底 + 金色脊线 + 两端翘角吻兽
+  d.line(J1[0], J1[1], J2[0], J2[1], 5.4, C.ink);
+  d.line(J1[0], J1[1] - 1, J2[0], J2[1] - 1, 2.8, p.ridge);
+  for (const [j, s] of [[J1, -1], [J2, 1]]) {
+    d.poly([[j[0] - 4, j[1] + 1], [j[0] + 4, j[1] + 1], [j[0] + 2, j[1] - 10], [j[0] - 2, j[1] - 10]], p.ridge);
+    d.line(j[0], j[1] - 9, j[0] + s * 7, j[1] - 15, 2.2, p.ridge);
+    d.stroke([[j[0] - 4, j[1] + 1], [j[0] - 2, j[1] - 10], [j[0] + 2, j[1] - 10], [j[0] + 4, j[1] + 1]], 1.2, C.ink);
   }
   d.stroke([E.T, E.R, E.F, E.L, E.T], 1.6, C.inkSoft);
 }
@@ -557,14 +665,18 @@ function drawHall(variant) {
   isoBox(d, fp, 16, p.base);
   isoBox(d, scaleFp(fp, 0.9), 12, p.base, 16);
   const platform = 28;
-  // 殿前踏跺：贴着台基前缘的一条三级斜坡，而不是悬空的小方块
-  d.poly([[-24, 0], [0, 0], [0, -28], [-24, -28]], C.stoneHi);
-  d.poly([[0, 0], [24, 0], [24, -28], [0, -28]], C.stoneL);
-  d.line(-24, -10, 0, -10, 1.2, C.stoneEdge);
-  d.line(0, -10, 24, -10, 1.2, C.stoneEdge);
-  d.line(-24, -19, 0, -19, 1.2, C.stoneEdge);
-  d.line(0, -19, 24, -19, 1.2, C.stoneEdge);
-  d.stroke([[-24, 0], [0, 0], [24, 0]], 1.6, C.ink);
+  // 殿前踏跺：贴着台基前缘的三级斜坡 + 两侧垂带石，不再是悬空的小白块
+  d.poly([[-30, 0], [0, 0], [0, -28], [-30, -28]], C.stoneHi);
+  d.poly([[0, 0], [30, 0], [30, -28], [0, -28]], C.stoneL);
+  d.poly([[-34, 0], [-30, 0], [-30, -32], [-34, -32]], C.stoneT);
+  d.poly([[30, 0], [34, 0], [34, -32], [30, -32]], C.stoneR);
+  for (const dy of [-10, -19]) {
+    d.line(-30, dy, 0, dy, 1.2, C.stoneEdge);
+    d.line(0, dy, 30, dy, 1.2, C.stoneEdge);
+  }
+  d.stroke([[-34, 0], [-30, 0], [0, 0], [30, 0], [34, 0]], 1.6, C.ink);
+  d.stroke([[-34, -32], [-30, -32]], 1.2, C.inkSoft);
+  d.stroke([[30, -32], [34, -32]], 1.2, C.inkSoft);
   // 殿身
   const inner = scaleFp(fp, 0.74);
   isoBox(d, inner, 118, { t: p.wallL, l: p.wallL, r: p.wallR }, platform);

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """诊断：墙身 + 山墙（无坡面），确认山墙是否贴在端墙墙顶。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
 OX, OY = 440, 290
 
 
@@ -38,7 +38,7 @@ def main():
         x, y = p(u, v)
         d.ellipse([OX + x - 1.5, OY + y - 170 - 1.5, OX + x + 1.5, OY + y - 170 + 1.5], fill=(86, 214, 194, 255))
     put(cv, d, 'roof_gable_se', 4, 1, 170)
-    cv.convert('RGB').save(os.path.join(ROOT, 'assets_v2', 'preview', '_diag_gable.png'))
+    cv.convert('RGB').save(os.path.join(ROOT, 'assets_src', 'preview', '_diag_gable.png'))
     print('ok')
 
 

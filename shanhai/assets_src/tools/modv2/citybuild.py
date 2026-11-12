@@ -10,6 +10,7 @@
 锚点：一律 = 足迹前底顶点 p(umax, vmax)，与 4×4 屋身同一约定
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import math
 import os
 
@@ -18,10 +19,9 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import post as POST
 import shopbuild as SB
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-PRE = os.path.join(ROOT, 'assets_v2', 'preview')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+PRE = os.path.join(ROOT, 'assets_src', 'preview')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 
 CW, CH = 560, 580
 OX, OY = 280, 350
@@ -47,7 +47,7 @@ G1_TOP = G1_EAVE + G1_RISE
 G2_EAVE, G2_RISE = 366, 40       # 城楼上檐
 G2_RIDGE = G2_EAVE + G2_RISE     # 406
 
-FONT = r'C:\Windows\Fonts\msyh%s.ttc'
+FONT = FONT_DIR + '/msyh%s.ttc'
 
 # ---------------------------------------------------------------- 色板（全部由既有色板混出）
 CREAM = (240, 233, 214)
@@ -614,7 +614,7 @@ def droop_R(n, rise):
 
 
 # ---------------------------------------------------------------- 预览板
-CHAR_PATH = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+CHAR_PATH = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 _CACHE = {}
 
 

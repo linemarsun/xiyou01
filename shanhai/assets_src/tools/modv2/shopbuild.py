@@ -12,6 +12,7 @@
     当铺   3×4  墙高 138（最窄、最低、最暗）
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import math
 import os
 
@@ -570,7 +571,7 @@ def run():
 
 
 def char_img(hgt, path=None):
-    im = Image.open(path or os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png'))
+    im = Image.open(path or os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png'))
     im = im.convert('RGBA')
     k = float(hgt) / im.height
     return im.resize((max(1, int(round(im.width * k))), hgt), Image.LANCZOS)
@@ -595,9 +596,9 @@ def sheet_near():
     CW, CH, TOP, FOOT = 480, 500, 96, 64
     im = Image.new('RGBA', (CW * 4, TOP + CH + FOOT), (244, 242, 234, 255))
     d = ImageDraw.Draw(im)
-    f1 = ImageFont.truetype(r'C:\Windows\Fonts\msyhbd.ttc', 25)
-    f2 = ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', 13)
-    f3 = ImageFont.truetype(r'C:\Windows\Fonts\msyhbd.ttc', 18)
+    f1 = ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 25)
+    f2 = ImageFont.truetype(FONT_DIR + '/msyh.ttc', 13)
+    f3 = ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 18)
     d.text((28, 18), '店铺四类 · 体量 / 面宽 / 墙色 三项分家（同一机位，84px 角色）', font=f1,
            fill=(30, 27, 24))
     d.text((30, 54), '檐口一律压墙顶，脊 = 檐口 + 40；道具只是加分项，不承担辨识。',
@@ -652,9 +653,9 @@ def sheet_far():
     base = 292
     im = Image.new('RGBA', (total, base + 70), (244, 242, 234, 255))
     d = ImageDraw.Draw(im)
-    f1 = ImageFont.truetype(r'C:\Windows\Fonts\msyhbd.ttc', 18)
-    f2 = ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', 13)
-    f3 = ImageFont.truetype(r'C:\Windows\Fonts\msyhbd.ttc', 16)
+    f1 = ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 18)
+    f2 = ImageFont.truetype(FONT_DIR + '/msyh.ttc', 13)
+    f3 = ImageFont.truetype(FONT_DIR + '/msyhbd.ttc', 16)
     d.text((26, 10), '远景辨识度验证（50% 缩放 · 角色 40px）— 远看能否分出四家', font=f1,
            fill=(30, 27, 24))
     d.rectangle([0, base + 2, total, base + 70], fill=(232, 228, 217))

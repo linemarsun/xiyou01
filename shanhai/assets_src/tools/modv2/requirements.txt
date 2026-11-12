@@ -1,0 +1,5 @@
+# modv2 历史出图脚本（Python + Pillow + numpy）依赖。
+# 主出图管线已改用零依赖 Node 生成器（tools/gen-assets.mjs / gen-iso-maps.mjs /
+# gen-tree-art.mjs / gen-iso-props.mjs），日常改素材不需要安装本文件。
+Pillow>=10.0
+numpy>=1.26

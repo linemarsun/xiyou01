@@ -9,6 +9,7 @@
 说明：SW/SE 互为镜像即可，NE/NW 是"半格深"的背向近似；如需背面完全独立的画法须重新生成。
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 import sys
 
@@ -17,9 +18,8 @@ from PIL import Image, ImageEnhance
 
 import post as P
 
-ROOT = r'D:\workspace\dahuayou_web'
-GEN = os.path.join(ROOT, 'assets_v2', 'preview', 'gen')
-OUT_DIR = os.path.join(ROOT, 'assets_v2', 'modules')
+GEN = os.path.join(ROOT, 'assets_src', 'preview', 'gen')
+OUT_DIR = os.path.join(ROOT, 'assets_src', 'modules')
 PAD = 2
 
 # 每件：(生成图, 足迹[w,h], 世界高, 目标内容尺寸, 是否四向, 背向处理, 描边内缩, warp)

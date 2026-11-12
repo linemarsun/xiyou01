@@ -2,14 +2,14 @@
 """街角拼装验证：4×4 房子（受光坡 + 背坡 + 单条正脊 + 端面山墙）+ 城门 + 松树 + 84px 角色。
 图上标注：正脊线、山墙面、两坡足迹菱形。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-OUT = os.path.join(ROOT, 'assets_v2', 'preview', 'modules_corner_test.png')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+OUT = os.path.join(ROOT, 'assets_src', 'preview', 'modules_corner_test.png')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 CHAR_H = 84
 CW, CH = 940, 700
 OX, OY = 440, 300
@@ -18,7 +18,7 @@ RIDGE_Z = 210
 
 
 def font(sz, bold=False):
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh%s.ttc' % ('bd' if bold else ''), sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh%s.ttc' % ('bd' if bold else ''), sz)
 
 
 def p(u, v):

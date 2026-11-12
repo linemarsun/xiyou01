@@ -8,11 +8,13 @@
  *   一景一制（独立格网、边界出入口、专属路网、全锚点 BFS 连通、主题区分）/
  *   等距 A* 寻路 / 跨图落点「落地即弹回」保护 /
  *   云京道路净空（建筑不压窄路、道路不被截断）/ 树木真实贴图覆盖 /
- *   五图构件真实素材全覆盖（候选链零缺图、山石/石桥变体主题独立）。
+ *   五图构件真实素材全覆盖（候选链零缺图、山石/石桥变体主题独立）/
+ *   精修贴图细节不回退 / 洞天晶石分层 / modv2 出图脚本跨环境路径。
  * 运行：npm test   （新增玩法模块时请在本文件补对应断言）
  */
 import { build } from 'esbuild';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { inflateSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -1581,6 +1583,77 @@ test('四张野外/地府地图的山石变体各自独立，主题差异不被�
     } else if (bridges.length) {
       ok(bridges.every((b) => b.variant === undefined), `${id} 石桥使用默认青石变体`);
     }
+  }
+});
+
+console.log('\n[19] 精修不回退与跨环境出图（模块 15）');
+
+/** 解码本仓库生成器产出的 PNG（逐行 filter 0），统计非透明像素与颜色种类 */
+const pngDetail = (name) => {
+  const b = readFileSync(path.join(ISO_DIR, `${name}.png`));
+  const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
+  let off = 8;
+  const idat = [];
+  while (off < b.length) {
+    const len = b.readUInt32BE(off), type = b.toString('ascii', off + 4, off + 8);
+    if (type === 'IDAT') idat.push(b.subarray(off + 8, off + 8 + len));
+    off += 12 + len;
+    if (type === 'IEND') break;
+  }
+  const raw = inflateSync(Buffer.concat(idat));
+  let opaque = 0;
+  const colors = new Set();
+  for (let y = 0; y < h; y++) {
+    const row = y * (w * 4 + 1);
+    if (raw[row] !== 0) return { opaque: 0, colors: 0 }; // 换了别的 PNG 编码即视为不合格
+    for (let x = 0; x < w; x++) {
+      const i = row + 1 + x * 4;
+      if (raw[i + 3] > 8) {
+        opaque++;
+        colors.add(`${raw[i]},${raw[i + 1]},${raw[i + 2]}`);
+      }
+    }
+  }
+  return { opaque, colors: colors.size };
+};
+
+test('拱桥券洞、殿顶瓦垄与晶簇分面的贴图细节没有退回旧版平板', () => {
+  // 阈值取自 v0.15.0 旧版实测（bridge 104 色 / hall 420 色 / crystal 223 色）与精修后的实测值之间
+  const want = {
+    bridge: { opaque: 23000, colors: 350 },
+    bridge_dark: { opaque: 23000, colors: 350 },
+    hall: { opaque: 78000, colors: 700 },
+    hall_stone: { opaque: 78000, colors: 700 },
+    rock_crystal: { opaque: 4800, colors: 400 },
+  };
+  for (const [n, min] of Object.entries(want)) {
+    const d = pngDetail(n);
+    ok(d.opaque > min.opaque, `${n}.png 有实质内容（${d.opaque} 个非透明像素）`);
+    ok(d.colors > min.colors, `${n}.png 明暗/线条细节未退化（${d.colors} 种颜色）`);
+  }
+});
+
+test('玲珑洞天晶石按洞厅留白 / 环廊通透 / 洞壁成丛分层，不再满屏铺满', () => {
+  const rocks = readLayout('wild_shanxiao').items.filter((i) => i.type === 'rock');
+  const dist = (i) => Math.hypot(i.gx - 52, i.gy - 52);
+  const core = rocks.filter((i) => dist(i) < 19).length;
+  const ring = rocks.filter((i) => dist(i) >= 19 && dist(i) < 31).length;
+  const outer = rocks.filter((i) => dist(i) >= 31).length;
+  ok(rocks.length > 600 && rocks.length < 800, `总量降到可阅读密度（${rocks.length} 块）`);
+  ok(core < 30, `青石圆厅留白（${core} 块）`);
+  ok(ring < 60, `青苔环廊通透（${ring} 块）`);
+  ok(outer > 500, `洞壁晶丛仍成围合之势（${outer} 块）`);
+});
+
+test('modv2 历史出图脚本不再绑定本机绝对路径，依赖与入口齐备', () => {
+  const dir = path.join(ROOT, 'assets_src/tools/modv2');
+  const files = readdirSync(dir).filter((f) => f.endsWith('.py') && f !== 'paths.py');
+  ok(files.length > 20, `覆盖 ${files.length} 个历史脚本`);
+  const bad = files.filter((f) => /(?:r|R)?['"][A-Za-z]:[\\/]/.test(readFileSync(path.join(dir, f), 'utf8')));
+  eq(bad.length, 0, `仍写死盘符路径：${bad.join('、')}`);
+  for (const f of ['paths.py', 'requirements.txt']) ok(existsSync(path.join(dir, f)), `${f} 已入库`);
+  for (const f of ['palace.py', 'widegate.py']) {
+    ok(/OUT = ISO_OUT/.test(readFileSync(path.join(dir, f), 'utf8')), `${f} 输出指向仓库内的 iso 目录`);
   }
 });
 

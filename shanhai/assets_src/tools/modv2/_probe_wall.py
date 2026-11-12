@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys
-sys.path.insert(0, r'D:\workspace\dahuayou_web\tools\modv2')
+import os
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
+sys.path.insert(0, HERE)
 import numpy as np
 import post as P
 from PIL import Image
 
-im = Image.open(r'D:\workspace\dahuayou_web\assets_v2\preview\gen\wall_wood.jpg').convert('RGB')
+im = Image.open(os.path.join(GEN, 'wall_wood.jpg')).convert('RGB')
 im = P.key_green(im)
 im.putalpha(P.largest_component(im.split()[3]))
 bb = im.getbbox()

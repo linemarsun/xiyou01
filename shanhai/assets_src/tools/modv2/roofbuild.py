@@ -11,6 +11,7 @@
 锚点 anchor_cell 一律取足迹前底顶点；anchor_px 由 S() 直接算出，制图与摆位同一套数。
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import numpy as np
@@ -18,8 +19,7 @@ from PIL import Image, ImageDraw
 
 import post as P
 
-ROOT = r'D:\workspace\dahuayou_web'
-OUT_DIR = os.path.join(ROOT, 'assets_v2', 'modules')
+OUT_DIR = os.path.join(ROOT, 'assets_src', 'modules')
 
 EAVE_Z = 170
 RISE = 40                    # 脊比檐高：背坡可见带宽 ≈ 28.6*2.15-0.894*RISE ≈ 26px

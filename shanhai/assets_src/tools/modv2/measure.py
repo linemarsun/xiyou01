@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """数值核对：把三件屋顶按足迹放到画布，输出各自的像素包围盒与交界线位置。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import numpy as np
 from PIL import Image
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
 
 
 def p(u, v):

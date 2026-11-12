@@ -5,6 +5,7 @@
 纹理 96×96 严格周期（噪声用带 wrap 的双线性上采样，草簇按 3×3 偏移重绘 9 次）。
 """
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 import random
 
@@ -14,9 +15,8 @@ from PIL import Image, ImageDraw, ImageFilter
 import post as P
 from ground import iso_patch
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-PRE = os.path.join(ROOT, 'assets_v2', 'preview')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+PRE = os.path.join(ROOT, 'assets_src', 'preview')
 PPU = 96
 
 # 既定色板（不引入新艳色）：草=灰绿，树=灰绿两级
@@ -43,7 +43,7 @@ D_ROOT = (104, 124, 78)
 
 def font(sz, bold=False):
     from PIL import ImageFont
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh%s.ttc' % ('bd' if bold else ''), sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh%s.ttc' % ('bd' if bold else ''), sz)
 
 
 # ---------------------------------------------------------------- 周期噪声
@@ -259,7 +259,7 @@ def tile_sheet(grass, tree, name='flora_tiles.png', cols=9, rows=6):
            font=font(20, True), fill=(30, 27, 24))
     d.text((28, 52), '草地：多倍频斑块 + 草簇 + 干草过渡；土路：踩实土面 + 碎石亮棱 + 草根；两张均 96×96 严格周期，四向可平铺',
            font=font(13), fill=(122, 114, 103))
-    char = Image.open(os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')).convert('RGBA')
+    char = Image.open(os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')).convert('RGBA')
     k = 84.0 / char.height
     char = char.resize((int(char.width * k), 84), Image.LANCZOS)
     im.alpha_composite(char, (TW - 156, TH - 118))

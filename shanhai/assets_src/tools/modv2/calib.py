@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """背坡 z 偏移标定：固定受光坡，扫背坡/脊条的垂直偏移，挑接缝最齐的一档。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
-MOD = r'D:\workspace\dahuayou_web\assets_v2\modules'
-OUT = r'D:\workspace\dahuayou_web\assets_v2\preview\_roof_calib.png'
+MOD = MODULES
+OUT = os.path.join(PREVIEW, '_roof_calib.png')
 
 
 def p(u, v):
@@ -15,7 +16,7 @@ def p(u, v):
 
 
 def font(sz):
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh.ttc', sz)
 
 
 def load(name):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成 assets_v2/modules 下的 12 件构件 + 拼装示意图。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 import sys
 
@@ -12,10 +13,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from kit import Sprite, C, co  # noqa: E402
 import parts  # noqa: E402
 
-ROOT = r'D:\workspace\dahuayou_web'
-OUT_DIR = os.path.join(ROOT, 'assets_v2', 'modules')
-MOCK = os.path.join(ROOT, 'assets_v2', 'preview', 'modules_street_corner.png')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+OUT_DIR = os.path.join(ROOT, 'assets_src', 'modules')
+MOCK = os.path.join(ROOT, 'assets_src', 'preview', 'modules_street_corner.png')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 CHAR_H = 84
 
 # 每件的世界高度（离地像素，用于 JSON 与比例汇报）

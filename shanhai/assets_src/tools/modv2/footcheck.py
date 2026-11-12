@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """足迹对齐诊断：画菱形 + 构件，检查坡/脊是否压在交界线上。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-OUT = os.path.join(ROOT, 'assets_v2', 'preview', '_footprint_check.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+OUT = os.path.join(ROOT, 'assets_src', 'preview', '_footprint_check.png')
 
 
 def p(u, v):
@@ -40,7 +40,7 @@ def main():
         if label:
             cx = sum(q[0] for q in xy) / 4
             cy = sum(q[1] for q in xy) / 4
-            d.text((cx - 24, cy - 6), label, font=ImageFont.truetype(r'C:\Windows\Fonts\msyh.ttc', 12), fill=color)
+            d.text((cx - 24, cy - 6), label, font=ImageFont.truetype(FONT_DIR + '/msyh.ttc', 12), fill=color)
 
     def put(name, u0, v0):
         path = os.path.join(MOD, name + '.png')

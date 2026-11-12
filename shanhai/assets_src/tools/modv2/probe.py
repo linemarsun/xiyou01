@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import numpy as np
 from PIL import Image
 
-MOD = r'D:\workspace\dahuayou_web\assets_v2\modules'
+MOD = MODULES
 
 
 def p(u, v):

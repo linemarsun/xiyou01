@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """交付图：① 4×4 房屋四向对照（84px 角色） ② 墙身+双坡+正脊+山墙 叠合与分解（标檐口 z=170）。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-PRE = os.path.join(ROOT, 'assets_v2', 'preview')
-CHAR = os.path.join(ROOT, 'assets_v2', 'sprites', 'xiake', 'idle_0.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+PRE = os.path.join(ROOT, 'assets_src', 'preview')
+CHAR = os.path.join(ROOT, 'assets_src', 'sprites', 'xiake', 'idle_0.png')
 
 WALL_H = 170
 EAVE_Z = 170
@@ -30,7 +30,7 @@ REL = {'house_4x4_sw': (0, 0), 'house_4x4_se': (0, 0), 'house_4x4_ne': (0, 0),
 
 
 def font(sz, bold=False):
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh%s.ttc' % ('bd' if bold else ''), sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh%s.ttc' % ('bd' if bold else ''), sz)
 
 
 def p(u, v):

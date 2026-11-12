@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """把每件 PNG 放到棋盘格上，叠加按锚点推算的足迹菱形，检查锚点是否落在足迹前底顶点。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-OUT = os.path.join(ROOT, 'assets_v2', 'preview', '_anchor_check.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+OUT = os.path.join(ROOT, 'assets_src', 'preview', '_anchor_check.png')
 PAD = 14
-FONT = r'C:\Windows\Fonts\msyh.ttc'
+FONT = FONT_DIR + '/msyh.ttc'
 
 
 def diamond(w, h):

@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 """屋顶分解图：受光坡 / 背坡 / 脊条三格 + 叠合，每格叠足迹菱形与脊线。"""
 import json
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = r'D:\workspace\dahuayou_web'
-MOD = os.path.join(ROOT, 'assets_v2', 'modules')
-OUT = os.path.join(ROOT, 'assets_v2', 'preview', 'roof_exploded.png')
+MOD = os.path.join(ROOT, 'assets_src', 'modules')
+OUT = os.path.join(ROOT, 'assets_src', 'preview', 'roof_exploded.png')
 
 EAVE_Z, RIDGE_Z = 150, 170
 CELL = (470, 300)
 
 
 def font(sz, bold=False):
-    return ImageFont.truetype(r'C:\Windows\Fonts\msyh%s.ttc' % ('bd' if bold else ''), sz)
+    return ImageFont.truetype(FONT_DIR + '/msyh%s.ttc' % ('bd' if bold else ''), sz)
 
 
 def p(u, v):

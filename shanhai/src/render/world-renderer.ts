@@ -23,7 +23,7 @@ const MONSTER_SPEED = 34;
 
 /**
  * 成片重复构件的确定性色差（按格坐标取模，只改精灵 tint / scale，不改布局数据）。
- * 玲珑洞天一张图就有 805 块晶石，不这么做会明显读成复制粘贴。
+ * 玲珑洞天一张图有 661 块晶石（v0.15.1 分层后），不这么做会明显读成复制粘贴。
  */
 const PROP_TINT: Record<string, number[]> = {
   tree: [0xffffff, 0xedf3e4, 0xf4f0dc, 0xe4ecdf, 0xf1ead9],
@@ -574,7 +574,8 @@ export class WorldRenderer {
         const h = (Math.imul(unit.item.gx, 73856093) ^ Math.imul(unit.item.gy, 19349663)) >>> 0;
         if (unit.item.tint === undefined && palette) sp.tint = palette[h % palette.length];
         if ((unit.type === 'tree' || unit.type === 'rock') && h % 7 === 0) sp.scale.x = -1;
-        // 山石阵（尤其洞天 805 块晶石）再叠一档纵向起伏，打散整齐感
+        // 山石阵（洞天按圆厅留白 / 环廊通透 / 洞壁成丛分层后仍有 661 块晶石）
+        // 再叠一档纵向起伏，打散整齐感
         if (unit.type === 'rock' && unit.item.tint === undefined) {
           sp.scale.y = [1, 0.94, 1.06, 0.98, 1.03][h % 5];
         }

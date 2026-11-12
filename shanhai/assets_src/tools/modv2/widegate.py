@@ -10,13 +10,14 @@ roof_slope / ridge / add_outline / bake），拱洞内壁用新版 arch_open（�
 透光 + 地面光池，不再是黑洞）。城台顶 238 / 楼正脊 406，高于城墙垛口 224。
 """
 import math
+from paths import ROOT, MODULES, PREVIEW, GEN, CHAR, ISO_OUT, HERE, FONT_DIR, ensure
 import os
 
 import citybuild as cb
 from citybuild import Image, ImageDraw, poly, mix
 
 # 输出直接落到本仓库（覆盖 citybuild.ROOT 指向的旧工作区）
-OUT = r'D:\workspace\game\xiyou01\shanhai\public\assets\art\iso'
+OUT = ISO_OUT
 cb.MOD = OUT
 # 大画幅 + 原点平移：10 格宽足迹 + 406 正脊，原 560×580 画布放不下
 # 注意：gable/roof_slope/ridge 用 shopbuild 自己的 OX/OY，必须同步修改，否则屋脊端头会飞出
