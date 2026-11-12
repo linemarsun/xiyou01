@@ -129,42 +129,95 @@ def iso_box(d, u0, u1, v0, v1, z0, z1, cf, cs, ct, edge=True):
         d.line([S(u1, v0, z1), S(u1, v1, z1)], fill=mix(ct, DARK, 0.42), width=1)
 
 
-def brick_v(d, u0, u1, v, z0, z1, col, ch=9.0, cw=0.62, seed=0):
-    """v=常数 立面的砖缝：水平砖行 + 错缝竖缝。
-    竖缝落在绝对格栅上（锚在 U0），因此任意长度切段后拼接，砖缝相位不变。"""
+def _brick_tone(col, row, ua, ao, ao_h):
+    """单砖确定性色调：明度抖动 + 可选贴地环境光遮蔽。锚定绝对格栅，跨段同相位。"""
+    h = ((row * 73856093) ^ (int(round(ua * 31)) * 19349663)) & 0xFFFFFFFF
+    t = (h % 997) / 997.0
+    bc = mix(mix(col, DARK, 0.085 * t), CREAM, 0.085 * (1.0 - t))
+    if ao_h > 0:
+        bc = mix(bc, DARK, 0.20 * max(0.0, 1.0 - min(ao, ao_h) / ao_h))
+    return bc
+
+
+def brick_v(d, u0, u1, v, z0, z1, col, ch=9.0, cw=0.62, seed=0, ao_h=0.0):
+    """v=常数 立面砖：逐砖填色（确定性抖动）+ 错缝 + 砖缝阴影/高光。
+    竖缝落在绝对格栅上（锚在 U0），任意长度切段后拼接，砖缝与抖动相位不变。
+    ao_h>0 时向 z0 方向叠加环境光遮蔽（越贴地越暗）。"""
     dark = mix(col, DARK, 0.42)
     light = mix(col, CREAM, 0.26)
-    k = 0
+    row = int(math.floor(z0 / ch))
     z = z0 + ch
     while z < z1:
+        za = max(z - ch, z0)
+        zb = min(z, z1)
+        off = (cw / 2.0) if (row + seed) % 2 else 0.0
+        m0 = int(math.floor((u0 - off - U0) / cw)) + 1
+        ua = u0
+        u = U0 + m0 * cw + off
+        while ua < u1 - 1e-6:
+            ub = min(u, u1)
+            bc = _brick_tone(col, row, ua, za, ao_h)
+            if ub - ua > 0.02 and zb - za > 0.5:
+                quad(d, S(ua, v, za), eu(ub - ua), ez(zb - za), bc)
+                d.line([S(ua, v, zb - 0.9), S(ub, v, zb - 0.9)],
+                       fill=mix(bc, CREAM, 0.22), width=1)
+            ua = ub
+            u += cw
         d.line([S(u0, v, z), S(u1, v, z)], fill=dark, width=1)
-        d.line([S(u0, v, z + 1.2), S(u1, v, z + 1.2)], fill=light, width=1)
-        off = (cw / 2.0) if (k + seed) % 2 else 0.0
-        m = int(math.floor((u0 - off - U0) / cw)) + 1
-        u = U0 + m * cw + off
+        u = U0 + m0 * cw + off
         while u < u1:
             d.line([S(u, v, z), S(u, v, z + ch)], fill=dark, width=1)
             u += cw
-        k += 1
+        d.line([S(u0, v, z + 1.2), S(u1, v, z + 1.2)], fill=light, width=1)
+        row += 1
         z += ch
 
 
-def brick_u(d, u, v0, v1, z0, z1, col, ch=9.0, cw=0.62, seed=0):
+def brick_u(d, u, v0, v1, z0, z1, col, ch=9.0, cw=0.62, seed=0, ao_h=0.0):
+    """u=常数 侧脸砖：与 brick_v 同一套逐砖填色/抖动/AO。"""
     dark = mix(col, DARK, 0.46)
     light = mix(col, CREAM, 0.14)
-    k = 0
+    row = int(math.floor(z0 / ch))
     z = z0 + ch
     while z < z1:
+        za = max(z - ch, z0)
+        zb = min(z, z1)
+        off = (cw / 2.0) if (row + seed) % 2 else 0.0
+        m0 = int(math.floor((v0 - off - V0) / cw)) + 1
+        va = v0
+        v = V0 + m0 * cw + off
+        while va < v1 - 1e-6:
+            vb = min(v, v1)
+            bc = _brick_tone(col, row, va, za, ao_h)
+            if vb - va > 0.02 and zb - za > 0.5:
+                quad(d, S(u, va, za), ev(vb - va), ez(zb - za), bc)
+                d.line([S(u, va, zb - 0.9), S(u, vb, zb - 0.9)],
+                       fill=mix(bc, CREAM, 0.16), width=1)
+            va = vb
+            v += cw
         d.line([S(u, v0, z), S(u, v1, z)], fill=dark, width=1)
-        d.line([S(u, v0, z + 1.2), S(u, v1, z + 1.2)], fill=light, width=1)
-        off = (cw / 2.0) if (k + seed) % 2 else 0.0
-        m = int(math.floor((v0 - off - V0) / cw)) + 1
-        v = V0 + m * cw + off
+        v = V0 + m0 * cw + off
         while v < v1:
             d.line([S(u, v, z), S(u, v, z + ch)], fill=dark, width=1)
             v += cw
-        k += 1
+        d.line([S(u, v0, z + 1.2), S(u, v1, z + 1.2)], fill=light, width=1)
+        row += 1
         z += ch
+
+
+def weather_streaks(d, u0, u1, v, z_top, z_bot, col, seed=0, n=5):
+    """确定性竖向风雨渍：细窄暗带自上而下、长短错落。锚定绝对 u，跨段同相位。"""
+    for k in range(n):
+        h = ((seed * 2654435761) ^ (k * 40503 + 97)) & 0xFFFFFFFF
+        t0 = (h % 997) / 997.0
+        t1 = ((h >> 10) % 997) / 997.0
+        ua = u0 + (u1 - u0) * ((k + 0.15 + 0.7 * t0) / n)
+        wu = min(0.14 + 0.12 * t1, max(0.06, (u1 - u0) / n * 0.8), u1 - ua)
+        zt = z_top - (z_top - z_bot) * (0.08 + 0.10 * t0)
+        zb2 = max(zt - (z_top - z_bot) * (0.30 + 0.42 * t1), z_bot)
+        if zb2 - zt < 4 or u1 - ua < 0.04:
+            continue
+        quad(d, S(ua, v, zb2), eu(wu), ez(zt - zb2), mix(col, DARK, 0.075))
 
 
 def vgrad(d, u0, u1, v, z0, z1, c_bot, c_top, steps=14):
@@ -202,8 +255,12 @@ def merlons(d, axis, a0, a1, c0, c1, z0, hgt, wh=None, inner=False):
         b = a + w
         if axis == 'u':
             iso_box(d, a, b, c0, c1, z0, z0 + hgt, cf, cs, mix(cf, CREAM, 0.30))
+            d.line([S(a, c1, z0 + hgt), S(b, c1, z0 + hgt)],
+                   fill=mix(cf, CREAM, 0.42), width=1)
         else:
             iso_box(d, c0, c1, a, b, z0, z0 + hgt, cf, cs, mix(cf, CREAM, 0.30))
+            d.line([S(c0, b, z0 + hgt), S(c1, b, z0 + hgt)],
+                   fill=mix(cf, CREAM, 0.42), width=1)
 
 
 # ---------------------------------------------------------------- 直段
@@ -224,11 +281,11 @@ def build_wall(n, axis, th=2):
     # 基座
     iso_box(d, b[0], b[1], b[2], b[3], 0, BASE, STONE, STONE_S, STONE_T)
     if axis == 'u':
-        brick_v(d, b[0], b[1], b[3], 0, BASE, STONE, ch=11.0, cw=0.92)
-        brick_u(d, b[1], b[2], b[3], 0, BASE, STONE_S, ch=11.0, cw=0.92)
+        brick_v(d, b[0], b[1], b[3], 0, BASE, STONE, ch=11.0, cw=0.92, ao_h=BASE)
+        brick_u(d, b[1], b[2], b[3], 0, BASE, STONE_S, ch=11.0, cw=0.92, ao_h=BASE)
     else:
-        brick_v(d, b[0], b[1], b[3], 0, BASE, STONE, ch=11.0, cw=0.92, seed=1)
-        brick_u(d, b[1], b[2], b[3], 0, BASE, STONE_S, ch=11.0, cw=0.92, seed=1)
+        brick_v(d, b[0], b[1], b[3], 0, BASE, STONE, ch=11.0, cw=0.92, seed=1, ao_h=BASE)
+        brick_u(d, b[1], b[2], b[3], 0, BASE, STONE_S, ch=11.0, cw=0.92, seed=1, ao_h=BASE)
     d.line([S(b[0], b[3], BASE), S(b[1], b[3], BASE)], fill=mix(STONE, DARK, 0.5), width=2)
     # 墙身
     iso_box(d, eu0, eu1, ev0, ev1, BASE, WALL_TOP, WALL_C, WALL_S, WALK_C)
@@ -243,6 +300,8 @@ def build_wall(n, axis, th=2):
     else:
         brick_v(d, eu0, eu1, ev1, BASE + 3, WALL_TOP - 8, WALL_C, seed=2)
         brick_u(d, eu1, ev0, ev1, BASE + 3, WALL_TOP - 8, WALL_S, seed=3)
+    # 风雨渍：确定性竖向污痕，让墙面有岁月感
+    weather_streaks(d, eu0, eu1, ev1, WALL_TOP - 10, BASE + 10, WALL_C, seed=7 if axis == 'u' else 11)
     # 注：直段的 u=u1 面在拼接后是「接缝」，不是外棱 —— 这里不画转角亮棱/暗倒角，
     # 否则每段端头都会在接缝处留一道亮（或暗）竖线。转角厚度由 city_wall_corner 承担。
     d.line([S(eu0, ev1, BASE), S(eu1, ev1, BASE)], fill=(30, 27, 24), width=3)
@@ -290,8 +349,8 @@ def build_corner(th=2):
     u0, u1, v0, v1 = U0, U0 + th, V0, V0 + th
     L = 0.06
     iso_box(d, u0 - L, u1 + L, v0 - L, v1 + L, 0, BASE, STONE, STONE_S, STONE_T)
-    brick_v(d, u0 - L, u1 + L, v1 + L, 0, BASE, STONE, ch=11.0, cw=0.92, seed=2)
-    brick_u(d, u1 + L, v0 - L, v1 + L, 0, BASE, STONE_S, ch=11.0, cw=0.92, seed=2)
+    brick_v(d, u0 - L, u1 + L, v1 + L, 0, BASE, STONE, ch=11.0, cw=0.92, seed=2, ao_h=BASE)
+    brick_u(d, u1 + L, v0 - L, v1 + L, 0, BASE, STONE_S, ch=11.0, cw=0.92, seed=2, ao_h=BASE)
     CC = mix(WALL_C, CREAM, 0.12)
     CS = mix(WALL_S, CREAM, 0.05)
     # u 两端出血 BL 再裁回名义范围：否则 iso_box 在 u=u1 画的竖棱线、以及轮廓描边，
@@ -514,8 +573,8 @@ def build_gate():
     bu0, bu1 = u0 - B, u1 + B
     # 1 条石基座（与城台齐平，便于券门贯通到地面）
     iso_box(d, bu0, bu1, v0, v1, 0, 30, STONE, STONE_S, STONE_T)
-    brick_v(d, bu0, bu1, v1, 0, 30, STONE, ch=11.0, cw=0.92, seed=5)
-    brick_u(d, bu1, v0, v1, 0, 30, STONE_S, ch=11.0, cw=0.92, seed=5)
+    brick_v(d, bu0, bu1, v1, 0, 30, STONE, ch=11.0, cw=0.92, seed=5, ao_h=30)
+    brick_u(d, bu1, v0, v1, 0, 30, STONE_S, ch=11.0, cw=0.92, seed=5, ao_h=30)
     # 2 城台（墩台）
     iso_box(d, bu0, bu1, v0, v1, 30, GP_TOP, GATE_C, GATE_S, GATE_T)
     brick_v(d, bu0, bu1, v1, 36, GP_TOP - 12, GATE_C, ch=10.0, cw=0.54)
