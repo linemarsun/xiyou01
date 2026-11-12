@@ -455,90 +455,6 @@
       "h": 2
     },
     {
-      "type": "city_wall_u6",
-      "gx": 55,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u2",
-      "gx": 60,
-      "gy": 121,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 66,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 72,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 78,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 84,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 90,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 96,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 102,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 108,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u6",
-      "gx": 114,
-      "gy": 121,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "city_wall_u2",
-      "gx": 119,
-      "gy": 121,
-      "w": 2,
-      "h": 2
-    },
-    {
       "type": "city_wall_v6",
       "gx": 5,
       "gy": 7,
@@ -869,14 +785,6 @@
       "w": 3,
       "h": 10,
       "facing": "se"
-    },
-    {
-      "type": "city_gate_tower",
-      "gx": 62,
-      "gy": 120,
-      "w": 4,
-      "h": 3,
-      "facing": "sw"
     },
     {
       "type": "bell_tower",
@@ -7241,11 +7149,6 @@
       "variant": "leaf"
     },
     {
-      "type": "city_wall_u2",
-      "gx": 60,
-      "gy": 119
-    },
-    {
       "type": "ground_dirt",
       "gx": 123,
       "gy": 58,
@@ -7253,11 +7156,92 @@
       "h": 12
     },
     {
-      "type": "ground_dirt",
-      "gx": 62,
-      "gy": 123,
-      "w": 6,
-      "h": 1
+      "type": "city_wall_u2",
+      "gx": 55,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 57,
+      "gy": 121
+    },
+    {
+      "type": "city_gate_wide",
+      "gx": 59,
+      "gy": 120,
+      "w": 10,
+      "h": 3,
+      "facing": "sw"
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 69,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 75,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 81,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 87,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 93,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 99,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 105,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u6",
+      "gx": 111,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 117,
+      "gy": 121
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 119,
+      "gy": 121
+    },
+    {
+      "type": "ground_stone",
+      "gx": 58,
+      "gy": 120
+    },
+    {
+      "type": "ground_stone",
+      "gx": 58,
+      "gy": 121
+    },
+    {
+      "type": "ground_stone",
+      "gx": 69,
+      "gy": 120
+    },
+    {
+      "type": "ground_stone",
+      "gx": 69,
+      "gy": 121
     }
   ]
 }

@@ -188,8 +188,8 @@ const grassBase = layout.items.find((it) => it.type === 'ground_grass' && (it.w 
 {
   const comp = buildWindow([grassBase, ...wallGate.filter((it) => it.gy >= 118 && it.gy <= 125 && it.gx >= 44 && it.gx <= 90)]);
   writeFileSync(fileURLToPath(new URL('_diag_south.png', import.meta.url)), PNG.sync.write(comp.png));
-  scanJunction(comp, 'x', 62, [120, 123], '南门·西侧 (X=62)');
-  scanJunction(comp, 'x', 66, [120, 123], '南门·东侧 (X=66)');
+  scanJunction(comp, 'x', 59, [120, 123], '南门·西侧 (X=59)');
+  scanJunction(comp, 'x', 69, [120, 123], '南门·东侧 (X=69)');
 }
 
 // ===== 额外：dump 西门北侧缺口区域覆盖图 =====
