@@ -340,6 +340,46 @@ for (let y = 72; y <= 118; y += 7) {
   }
 }
 
+// ---------- 宫城（中心广场南侧）----------
+// 宫城区域 x50..65, y72..85（16×14）：四角角楼 + 四面宫墙 + 主殿 + 配殿 + 白塔 + 汉白玉内院
+// 不放在中心广场上（鼓楼保留为制高点），不阻断主街，不侵入四坊建筑密度
+const PG = { x: 50, y: 72, w: 16, h: 14 };
+const pGround = (x, y, w, h) => {
+  groundRect(x, y, w, h, 'ground_marble');
+  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) placed.add(key(x + dx, y + dy));
+};
+const pWall = (type, x, y, w, h) => {
+  items.push({ type, gx: x, gy: y, w, h });
+  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) placed.add(key(x + dx, y + dy));
+};
+// 内院汉白玉地面（宫墙内侧 x52..63, y74..83）
+pGround(PG.x + 2, PG.y + 2, PG.w - 4, PG.h - 4);
+// 四角角楼
+for (const [x, y] of [[50, 72], [64, 72], [50, 84], [64, 84]]) pWall('palace_corner', x, y, 2, 2);
+// 北墙（角楼之间 x52..63, y72..73）
+pWall('palace_wall_u6', 52, 72, 6, 2);
+pWall('palace_wall_u6', 58, 72, 6, 2);
+// 南墙（角楼之间 x52..63, y84..85）：palace_wall_u2 + palace_wall_u6 + 宫门
+pWall('palace_wall_u2', 52, 84, 2, 2);
+pWall('palace_wall_u6', 54, 84, 6, 2);
+// 宫门朝南（palace_gate 券门通道走中间两列）
+items.push({ type: 'palace_gate', gx: 60, gy: 84, w: 4, h: 2, facing: 'sw' });
+for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(60 + dx, 84 + dy));
+// 西墙（角楼之间 y74..83, x50..51）
+pWall('palace_wall_v6', 50, 74, 2, 6);
+pWall('palace_wall_v2', 50, 80, 2, 2);
+pWall('palace_wall_v2', 50, 82, 2, 2);
+// 东墙（角楼之间 y74..83, x64..65）
+pWall('palace_wall_v6', 64, 74, 2, 6);
+pWall('palace_wall_v2', 64, 80, 2, 2);
+pWall('palace_wall_v2', 64, 82, 2, 2);
+// 主殿（内院北部 6×6，金顶三重檐）
+pWall('palace_hall', 52, 74, 6, 6);
+// 配殿（主殿东侧 4×4）
+pWall('palace_hall_s', 58, 74, 4, 4);
+// 白塔（内院西南 3×3，新城制高点）
+pWall('pagoda', 52, 80, 3, 3);
+
 // ---------- 收尾：消灭 >4×4 纯草地（城内每 4×4 窗口至少一处内容） ----------
 const isBare = (k) =>
   !placed.has(k) && !stoneCells.has(k) && !waterCells.has(k) && !dirtCells.has(k);

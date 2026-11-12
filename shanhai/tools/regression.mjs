@@ -744,15 +744,15 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(count('city_wall_u6') > 0 && count('city_wall_v6') > 0, '直段 u/v 两向都用到美术模块');
   eq(count('city_wall_corner'), 4, '四角转角构件（美术 city_wall_corner）');
   eq(count('gate_arch') + count('city_gate_tower') + count('city_gate_wide') + count('city_gate_wide_v'), 4,
-    '四向城门各一座（南城门楼 + 北/西/东宽城门楼，城台制式统一）');
+    '四向城门各一座（四门统一宽城门楼城台制式）');
   const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower'), ...pick('city_gate_wide'),
     ...pick('city_gate_wide_v')].map((g) => `${g.gx},${g.gy}`));
   ok(gateSet.has('59,5'), '北门 = 宽城门楼，开口与南北主街同宽 (x59..68)、外侧与城墙齐平 (gy5..7)');
   // 宽城门楼高于城墙：正脊 406 > 城墙垛口 224（城门比城墙矮不合理）
   ok(iso.ISO_TYPES.city_gate_wide.height > iso.ISO_TYPES.city_wall_u6.height,
     '北城门楼标高高于城墙');
-  ok(gateSet.has('62,120') && gateSet.has('5,59') && gateSet.has('120,59'),
-    '南（城门楼，外侧齐平 gy120..122）/ 西 / 东门（v 向宽城门楼，开口与东西主街同宽 y59..68）');
+  ok(gateSet.has('59,120') && gateSet.has('5,59') && gateSet.has('120,59'),
+    '南（宽城门楼，开口与南北主街同宽 x59..68、外侧与城墙齐平 gy120..122）/ 西 / 东门（v 向宽城门楼，开口与东西主街同宽 y59..68）');
   // 四门城台外侧都与城墙外面齐平：北/南门凸向城内 1 排，西/东门凸向城内 1 列
   ok(iso.ISO_TYPES.city_gate_wide_v.height === iso.ISO_TYPES.city_gate_wide.height,
     '东西门与北门同一标高体系');
@@ -901,18 +901,40 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   for (const [fx, fy, tx, ty, name] of [[63, 57, 63, 66, '南北'], [57, 63, 66, 63, '东西']]) {
     ok(iso.findIsoPath(col, layout.grid, { gx: fx, gy: fy }, { gx: tx, gy: ty }) !== null, `鼓楼 ${name} 方向 BFS 可穿行`);
   }
-  // 四门券洞通道：北门（x60..67 × gy5..7）/ 南门（中 2 列）/ 西东门（y60..67 × gx5..7 / gx120..122）
+  // 四门券洞通道：北门（x60..67 × gy5..7）/ 南门（x60..67 × gy120..122）/ 西东门（y60..67 × gx5..7 / gx120..122）
   for (const [gx, gy, name] of [[63, 6, '北门'], [63, 121, '南门'], [6, 63, '西门'], [121, 63, '东门']]) {
     ok(walk(gx, gy), `${name}券洞通道可走`);
   }
-  // 宽城门楼：券洞与主街同宽（北门 x60..67 全部可穿，东西门 y60..67 全部可穿），两侧墩柱阻挡
-  for (const [gx, gy] of [[60, 6], [67, 5], [60, 7], [67, 7], [5, 60], [7, 67], [120, 60], [122, 67]]) {
+  // 宽城门楼：券洞与主街同宽（北/南门 x60..67 全部可穿，东西门 y60..67 全部可穿），两侧墩柱阻挡
+  for (const [gx, gy] of [[60, 6], [67, 5], [60, 7], [67, 7], [60, 120], [67, 120], [60, 122], [67, 122],
+    [5, 60], [7, 67], [120, 60], [122, 67]]) {
     ok(walk(gx, gy), `宽券洞 (${gx},${gy}) 可走`);
   }
   for (const [gx, gy] of [[8, 5], [59, 5], [68, 5], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5],
-    [59, 6], [68, 7], [5, 59], [7, 59], [120, 59], [122, 68]]) {
+    [59, 6], [68, 7], [5, 59], [7, 59], [120, 59], [122, 68], [59, 121], [68, 121]]) {
     ok(!walk(gx, gy), `城墙/墩柱 (${gx},${gy}) 应阻挡`);
   }
+
+  // —— 宫城（中心广场南侧）：构件齐全 / 制高点 / 碰撞 ——
+  ok(pick('palace_hall').length === 1, '宫城主殿 1 座（6×6 金顶三重檐）');
+  ok(iso.ISO_TYPES.palace_hall.w === 6 && iso.ISO_TYPES.palace_hall.h === 6, '主殿足迹 6×6');
+  ok(iso.ISO_TYPES.palace_hall.height > iso.ISO_TYPES.bell_tower.height, '主殿高于鼓楼');
+  ok(pick('palace_hall_s').length >= 1, '宫城配殿存在');
+  ok(pick('pagoda').length === 1, '白塔 1 座');
+  ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔高于主殿（新城制高点）');
+  ok(pick('palace_gate').length === 1, '宫门 1 座（朝南）');
+  eq(count('palace_corner'), 4, '宫城四角角楼 4 座');
+  ok(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2') >= 8,
+    `宫墙段 ${count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2')} 件`);
+  ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
+  const phall = pick('palace_hall')[0];
+  ok(!walk(phall.gx, phall.gy), '宫城主殿足迹不可走');
+  const pgate2 = pick('palace_gate')[0];
+  ok(walk(pgate2.gx + 1, pgate2.gy) && walk(pgate2.gx + 2, pgate2.gy), '宫门券门中间两列可走');
+  ok(!walk(pgate2.gx, pgate2.gy), '宫门门柱格不可走');
+  const pcorner = pick('palace_corner')[0];
+  ok(!walk(pcorner.gx, pcorner.gy), '宫城角楼足迹不可走');
+
   const house = pick('house')[0];
   ok(!walk(house.gx, house.gy), `房屋足迹 (${house.gx},${house.gy}) 不可走`);
   const gate = pick('paifang')[0];   // 牌坊复用 3×3 拱门贴图，拱洞机制与旧 gate_arch 一致
@@ -1466,9 +1488,12 @@ test('云京建筑不压窄带道路，道路也没有被整截面堵死', () =>
   const layout = iso.expandLayout(JSON.parse(readFileSync(f, 'utf8')));
   const col = iso.buildCollision(layout);
   const groundRects = layout.items.filter((i) => i.type.startsWith('ground_'));
-  // 窄带（任一边 ≤ 6 格）= 需要保持畅通的街巷；宽块是广场/坊院，允许摆摊设碑
+  // 窄带（任一边 ≤ 6 格）= 需要保持畅通的街巷；宽块是广场/坊院，允许摆摊设碑。
+  // 1×1 的单格石板是南门楼两侧填补楔形缝的装饰路肩（dev 分叉线新增），
+  // 压在城墙基线下本就不可走，不算「道路」，不参与净空判定。
   const roads = groundRects.filter((r) => r.type !== 'ground_grass' && r.type !== 'ground_water'
-    && Math.min(r.w ?? 1, r.h ?? 1) <= 6);
+    && Math.min(r.w ?? 1, r.h ?? 1) <= 6
+    && !((r.w ?? 1) === 1 && (r.h ?? 1) === 1));
   const roadCells = new Set();
   for (const r of roads) {
     for (let y = r.gy; y < r.gy + (r.h ?? 1); y++) {

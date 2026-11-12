@@ -42,12 +42,13 @@ def _podium(d, bu0, bu1, v0, v1, front_axis):
     B = cb.BL
     # 1 条石基座（与城台齐平，券门贯通到地面）
     cb.iso_box(d, bu0, bu1, v0, v1, 0, 30, cb.STONE, cb.STONE_S, cb.STONE_T)
-    cb.brick_v(d, bu0, bu1, v1, 0, 30, cb.STONE, ch=11.0, cw=0.92, seed=5)
-    cb.brick_u(d, bu1, v0, v1, 0, 30, cb.STONE_S, ch=11.0, cw=0.92, seed=5)
+    cb.brick_v(d, bu0, bu1, v1, 0, 30, cb.STONE, ch=11.0, cw=0.92, seed=5, ao_h=30)
+    cb.brick_u(d, bu1, v0, v1, 0, 30, cb.STONE_S, ch=11.0, cw=0.92, seed=5, ao_h=30)
     # 2 城台（墩台）
     cb.iso_box(d, bu0, bu1, v0, v1, 30, cb.GP_TOP, cb.GATE_C, cb.GATE_S, cb.GATE_T)
     cb.brick_v(d, bu0, bu1, v1, 36, cb.GP_TOP - 12, cb.GATE_C, ch=10.0, cw=0.54)
     cb.brick_u(d, bu1, v0, v1, 36, cb.GP_TOP - 12, cb.GATE_S, ch=10.0, cw=0.54, seed=1)
+    cb.weather_streaks(d, bu0, bu1, v1, cb.GP_TOP - 16, 42, cb.GATE_C, seed=13)
     # 3 压顶石带 + 台面
     cb.quad(d, cb.S(bu0, v1, cb.GP_TOP - 9), cb.eu(bu1 - bu0), cb.ez(9), cb.STONE_T)
     cb.quad(d, cb.S(bu1, v0, cb.GP_TOP - 9), cb.ev(v1 - v0), cb.ez(9), cb.mix(cb.STONE_T, cb.DARK, 0.18))

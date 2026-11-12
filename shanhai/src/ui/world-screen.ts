@@ -153,6 +153,8 @@ export class WorldScreen {
       teleport: (x: number, y: number) => this.debugTeleport(x, y),
       view: (scale: number, x?: number, y?: number) => this.renderer?.debugView(scale, x, y),
       fpsWalk: (ms: number) => this.renderer?.debugWalkFps(ms),
+      /** 调试：列出某世界坐标附近构件单元的实际渲染位置（对齐排查用） */
+      unitsNear: (x: number, y: number, r = 400) => this.renderer?.debugUnitsNear(x, y, r),
     };
   }
 

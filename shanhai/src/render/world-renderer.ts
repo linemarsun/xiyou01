@@ -528,7 +528,7 @@ export class WorldRenderer {
       ground_grass: 0x3c5a3c,
       ground_stone: 0x585461,
       ground_dirt: 0x695440,
-      ground_water: 0x30586a,
+      ground_water: 0x2e6a8c,
       ground_marble: 0xbcb4a4,
     };
     const groups = new Map<string, number[][]>();
@@ -621,7 +621,7 @@ export class WorldRenderer {
       ground_grass: 0x3c5a3c,
       ground_stone: 0x585461,
       ground_dirt: 0x695440,
-      ground_water: 0x30586a,
+      ground_water: 0x2e6a8c,
       ground_marble: 0xbcb4a4,
     };
     const fill = palette[unit.item.type] ?? 0x4a4450;
@@ -1555,6 +1555,30 @@ export class WorldRenderer {
     this.world.scale.set(scale);
     this.centerCamera();
     if (this.isoLayout) this.syncIso(true); else this.syncTiles();
+  }
+
+  /** 调试：列出世界坐标附近的构件单元及其实际渲染位置（衔接对齐排查用） */
+  debugUnitsNear(x: number, y: number, r = 400): Array<{
+    type: string; gx: number; gy: number; x: number; y: number; z: number;
+    visible: boolean; nodeX: number | null; nodeY: number | null; alpha: number | null; scale: number[] | null;
+  }> {
+    const out: Array<{
+      type: string; gx: number; gy: number; x: number; y: number; z: number;
+      visible: boolean; nodeX: number | null; nodeY: number | null; alpha: number | null; scale: number[] | null;
+    }> = [];
+    for (const unit of this.isoUnits.values()) {
+      if (unit.ground) continue;
+      if (Math.hypot(unit.x - x, unit.y - y) > r) continue;
+      const node = this.isoVisible.get(unit.key) ?? null;
+      out.push({
+        type: unit.type, gx: unit.item.gx, gy: unit.item.gy, x: unit.x, y: unit.y, z: unit.z,
+        visible: !!node,
+        nodeX: node ? node.x : null, nodeY: node ? node.y : null,
+        alpha: node ? node.alpha : null,
+        scale: node ? [node.scale.x, node.scale.y] : null,
+      });
+    }
+    return out;
   }
 
   /**
