@@ -204,7 +204,7 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   // 7×7 鼓楼：anchor_px [229,602] - (spriteW/2, spriteH) = (0, -4)，画布底比足迹前底顶点低 4px
   bell_tower: { ax: 0, ay: -4 },
   // —— 宫城族（palace.py 烘焙，ax = anchor_px.x - spriteW/2, ay = anchor_px.y - spriteH）——
-  palace_hall: { ax: 0, ay: -2 },         // 800×644, anchor [400,642]（AI 宏伟版 10×10）
+  palace_hall: { ax: 0, ay: -2 },         // 880×551, anchor [440,549]（故宫太和殿版 10×10）
   palace_hall_s: { ax: 0, ay: -19 },      // 324×453, anchor [162,434]
   palace_gate: { ax: 32, ay: -5 },        // 206×426, anchor [135,421]
   palace_corner: { ax: 0, ay: -5 },       // 142×422, anchor [71,417]
