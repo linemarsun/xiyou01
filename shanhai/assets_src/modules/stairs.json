@@ -1,0 +1,30 @@
+{
+ "name": "stairs",
+ "footprint": [
+  3,
+  1
+ ],
+ "height_px": 30,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "facing": "SW",
+ "sprite_size": [
+  198,
+  98
+ ],
+ "sprite_h_px": 96,
+ "ratio_to_char": 1.14,
+ "margins_px": [
+  1,
+  2,
+  65,
+  0
+ ]
+}

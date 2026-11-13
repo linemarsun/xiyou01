@@ -1,0 +1,78 @@
+{
+ "name": "city_wall_corner",
+ "facing": "SW",
+ "footprint": [
+  2,
+  2
+ ],
+ "footprint_w": 2,
+ "footprint_h": 2,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  2,
+  2
+ ],
+ "anchor_px": [
+  64,
+  302
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  128,
+  308
+ ],
+ "sprite_h_px": 304,
+ "ratio_to_char": 3.62,
+ "margins_px": [
+  0,
+  2,
+  0,
+  2
+ ],
+ "source": "城墙转角角台 2×2：台体顶 z=200（与直段共线）、四面连续女墙顶 z=232、近棱隅石交替石材；四面同构，四方位通用",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": false,
+ "derive_op": "draw(real_geometry)",
+ "derived_from": null,
+ "tileable": false,
+ "corner_for": [
+  "city_wall_u*",
+  "city_wall_v*"
+ ],
+ "elevation": {
+  "base_z": 34,
+  "wall_top_z": 200,
+  "eave_z": 200,
+  "parapet_z": 232,
+  "ridge_z": 232
+ },
+ "elevation_note": "台体顶与直段同为 200（压顶石带连续，接缝处无台阶）；女墙 232 比直段垛口 224 高 8px：俯视把四角读成墩台",
+ "parts": [
+  "stone_base",
+  "brick_body",
+  "coping",
+  "parapet_ring",
+  "corner_quoins"
+ ],
+ "stack_order": [
+  "base",
+  "body",
+  "coping",
+  "parapet_far",
+  "parapet_left",
+  "parapet_right",
+  "parapet_near",
+  "corner_stones",
+  "quoins"
+ ],
+ "orientation_free": true,
+ "orientation_note": "女墙四面闭合且四角对称，故不产出 ne/nw/se 朝向件；世界旋转后仅光照随引擎既有规则处理"
+}

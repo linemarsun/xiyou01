@@ -1,0 +1,162 @@
+{
+  "image": "atlas.png",
+  "size": [
+    2048,
+    2048
+  ],
+  "sprites": [
+    {
+      "name": "icon_azure_orb",
+      "category": "icons",
+      "file": "icons/icon_azure_orb.png",
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_bamboo_scroll",
+      "category": "icons",
+      "file": "icons/icon_bamboo_scroll.png",
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_beast_pill",
+      "category": "icons",
+      "file": "icons/icon_beast_pill.png",
+      "x": 512,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_bronze_bell",
+      "category": "icons",
+      "file": "icons/icon_bronze_bell.png",
+      "x": 768,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_cloud_charm",
+      "category": "icons",
+      "file": "icons/icon_cloud_charm.png",
+      "x": 1024,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_elixir_gourd",
+      "category": "icons",
+      "file": "icons/icon_elixir_gourd.png",
+      "x": 1280,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_jade_talisman",
+      "category": "icons",
+      "file": "icons/icon_jade_talisman.png",
+      "x": 1536,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_steel_sword",
+      "category": "icons",
+      "file": "icons/icon_steel_sword.png",
+      "x": 1792,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "icon_white_jade",
+      "category": "icons",
+      "file": "icons/icon_white_jade.png",
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "name": "ui_btn_active",
+      "category": "ui",
+      "file": "ui/ui_btn_active.png",
+      "x": 256,
+      "y": 256,
+      "w": 512,
+      "h": 146
+    },
+    {
+      "name": "ui_btn_normal",
+      "category": "ui",
+      "file": "ui/ui_btn_normal.png",
+      "x": 768,
+      "y": 256,
+      "w": 512,
+      "h": 145
+    },
+    {
+      "name": "ui_cloud_divider",
+      "category": "ui",
+      "file": "ui/ui_cloud_divider.png",
+      "x": 1280,
+      "y": 256,
+      "w": 512,
+      "h": 107
+    },
+    {
+      "name": "ui_cloud_frame",
+      "category": "ui",
+      "file": "ui/ui_cloud_frame.png",
+      "x": 0,
+      "y": 512,
+      "w": 512,
+      "h": 478
+    },
+    {
+      "name": "ui_hp_bar_bg",
+      "category": "ui",
+      "file": "ui/ui_hp_bar_bg.png",
+      "x": 512,
+      "y": 512,
+      "w": 512,
+      "h": 126
+    },
+    {
+      "name": "ui_hp_bar_fill",
+      "category": "ui",
+      "file": "ui/ui_hp_bar_fill.png",
+      "x": 1024,
+      "y": 512,
+      "w": 512,
+      "h": 79
+    },
+    {
+      "name": "ui_panel_base",
+      "category": "ui",
+      "file": "ui/ui_panel_base.png",
+      "x": 1536,
+      "y": 512,
+      "w": 512,
+      "h": 449
+    },
+    {
+      "name": "ui_skill_slot",
+      "category": "ui",
+      "file": "ui/ui_skill_slot.png",
+      "x": 0,
+      "y": 990,
+      "w": 501,
+      "h": 512
+    }
+  ]
+}

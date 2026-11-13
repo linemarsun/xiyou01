@@ -1,0 +1,69 @@
+{
+ "name": "shop_tavern_sw",
+ "facing": "SW",
+ "footprint": [
+  5,
+  4
+ ],
+ "footprint_label": "5x4",
+ "footprint_w": 5,
+ "footprint_h": 4,
+ "footprint_note": "本类为该行业专属足迹：宽 5 格 × 深 4 格（与其它三类不同，用于远看分家）",
+ "elevation": {
+  "wall_h": 242,
+  "eave_z": 242,
+  "ridge_z": 282,
+  "rise": 40,
+  "overhang_px": 4.3
+ },
+ "height_px": 282,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  5,
+  4
+ ],
+ "anchor_px": [
+  184,
+  414
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；檐口 z=wall_h，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "sprite_size": [
+  323,
+  420
+ ],
+ "sprite_h_px": 416,
+ "ratio_to_char": 4.95,
+ "parts": [
+  "wall_front(v=vmax)",
+  "wall_side(u=umax)",
+  "roof_far_gable(u=umin)",
+  "roof_back_slope",
+  "roof_near_gable(u=umax)",
+  "roof_lit_slope",
+  "roof_ridge"
+ ],
+ "stack_order": [
+  "side_wall",
+  "front_wall",
+  "facade",
+  "eave_shadow",
+  "far_gable",
+  "back_slope",
+  "near_gable",
+  "lit_slope",
+  "ridge",
+  "props"
+ ],
+ "source": "酒楼：5×4 足迹，墙高/檐口 z=242，脊 z=282，匾额留空",
+ "outline_px": 2.2,
+ "mirror_rule": "se/nw 水平镜像（锚点不动）；ne 换背光墙色",
+ "shop": "tavern"
+}

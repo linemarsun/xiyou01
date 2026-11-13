@@ -1,0 +1,44 @@
+{
+ "name": "roof_gable",
+ "facing": "SW",
+ "footprint": [
+  1,
+  4
+ ],
+ "height_px": 210,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  0,
+  4
+ ],
+ "anchor_px": [
+  133,
+  82
+ ],
+ "anchor_note": "anchor_cell=足迹前底顶点（格）；anchor_px=sprite 内像素坐标",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": true,
+ "sprite_size": [
+  141,
+  93
+ ],
+ "sprite_h_px": 89,
+ "ratio_to_char": 1.06,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "程序化瓦垄(a,b 参数空间) + 2:1 等距反投影",
+ "outline_px": 2.5,
+ "mirror_derived": true,
+ "derive_op": "mirror_h",
+ "derived_from": "roof_gable_se"
+}

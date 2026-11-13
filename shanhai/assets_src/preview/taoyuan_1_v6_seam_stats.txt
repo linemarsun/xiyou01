@@ -1,0 +1,4 @@
+seam_x_mean_abs_diff=15.808
+seam_x_band_base=18.906
+seam_y_mean_abs_diff=26.683
+seam_y_band_base=29.543

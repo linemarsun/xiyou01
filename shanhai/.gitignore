@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vite/
+.cache/
+
+# 临时截图 / 调试产物
+screenshots/
+temp_2026*/
+*.log
+
+# Python 中间产物（assets_src/tools/modv2 出图脚本）
+__pycache__/
+*.pyc

@@ -1,0 +1,44 @@
+{
+ "name": "roof_slope",
+ "facing": "SW",
+ "footprint": [
+  4,
+  2
+ ],
+ "height_px": 210,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  4,
+  2
+ ],
+ "anchor_px": [
+  137,
+  141
+ ],
+ "anchor_note": "anchor_cell=足迹前底顶点（格）；anchor_px=sprite 内像素坐标",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": true,
+ "sprite_size": [
+  206,
+  151
+ ],
+ "sprite_h_px": 147,
+ "ratio_to_char": 1.75,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "程序化瓦垄 + 2:1 反投影 + 瓦当；檐口 z=170，脊 z=228，出檐 0.15 格",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null
+}

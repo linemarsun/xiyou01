@@ -1,0 +1,44 @@
+{
+ "name": "wall_wood",
+ "facing": "NW",
+ "footprint": [
+  1,
+  4
+ ],
+ "height_px": 170,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  1,
+  4
+ ],
+ "anchor_px": [
+  134,
+  240
+ ],
+ "anchor_note": "面状构件：锚点 = 面底边低端 = 足迹前底顶点；面长 4 格/面高 170/底边斜率 2:1",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "sprite_size": [
+  268,
+  240
+ ],
+ "sprite_h_px": 232,
+ "ratio_to_char": 2.76,
+ "margins_px": [
+  131,
+  8,
+  3,
+  0
+ ],
+ "source": "text_to_image 单件墙板，三点仿射归一（面长 4 格 / 面高 170 / 底边 2:1）",
+ "outline_px": 2.5,
+ "mirror_derived": true,
+ "derive_op": "brightness",
+ "derived_from": "wall_wood_sw"
+}

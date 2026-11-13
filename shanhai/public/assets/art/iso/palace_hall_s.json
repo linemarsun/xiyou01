@@ -1,0 +1,50 @@
+{
+ "name": "palace_hall_s",
+ "facing": "SW",
+ "footprint": [
+  4,
+  4
+ ],
+ "footprint_w": 4,
+ "footprint_h": 4,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  4,
+  4
+ ],
+ "anchor_px": [
+  162,
+  434
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  324,
+  453
+ ],
+ "sprite_h_px": 449,
+ "ratio_to_char": 5.35,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "宫城配殿 4×4：程序化宫城件：汉白玉台基/朱红墙体/金色屋面（_gold_slope 瓦垄 + _gold_ridge 鸱吻）；台基 0-44，殿身 44-210，正脊 ~316",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": false,
+ "derive_op": "draw(real_geometry)",
+ "derived_from": null,
+ "tileable": false,
+ "elevation": {
+  "terrace_top_z": 44,
+  "ridge_z": 316
+ }
+}

@@ -1,0 +1,80 @@
+{
+ "name": "city_wall_u2",
+ "facing": "SW",
+ "footprint": [
+  2,
+  2
+ ],
+ "footprint_w": 2,
+ "footprint_h": 2,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  2,
+  2
+ ],
+ "anchor_px": [
+  64,
+  290
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  128,
+  297
+ ],
+ "sprite_h_px": 293,
+ "ratio_to_char": 3.49,
+ "margins_px": [
+  0,
+  2,
+  0,
+  2
+ ],
+ "source": "城墙直段 2×2（u 向，厚 2 格）：条石基座 z0-34 + 砖墙身 34-192 + 压顶石带 192-200（马道面）+ 两侧垛口 200-224；垛口周期 1 格，任意整数长度可拼接",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": false,
+ "derive_op": "draw(real_geometry)",
+ "derived_from": null,
+ "run_axis": "u",
+ "segment_cells": 2,
+ "thickness_cells": 2,
+ "tileable": true,
+ "tile_period_cells": 1,
+ "elevation": {
+  "base_z": 34,
+  "wall_top_z": 200,
+  "eave_z": 200,
+  "parapet_z": 224,
+  "ridge_z": 224
+ },
+ "elevation_note": "马道 z=200（比民居檐口 170 高 30、低于脊 210）；垛口顶 z=224（高出民居脊 14）",
+ "parts": [
+  "stone_base",
+  "brick_body",
+  "coping",
+  "walkway",
+  "merlons_far",
+  "merlons_near"
+ ],
+ "stack_order": [
+  "base",
+  "body",
+  "coping",
+  "walkway",
+  "merlon_far",
+  "merlon_near"
+ ],
+ "seams": {
+  "planes": [
+   "u"
+  ],
+  "note": "长度方向两端按整格对齐、无出挑；垛口两端各留 0.17 格，接缝两侧合计 0.34 = 一个垛口缺口宽"
+ }
+}

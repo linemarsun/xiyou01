@@ -1,0 +1,40 @@
+{
+ "name": "ground_stone",
+ "facing": "ALL",
+ "footprint": [
+  2,
+  2
+ ],
+ "height_px": 0,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": {
+  "u": true,
+  "v": true,
+  "seam": "mirror"
+ },
+ "sprite_size": [
+  128,
+  64
+ ],
+ "sprite_h_px": 64,
+ "ratio_to_char": 0,
+ "margins_px": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "source": "text_to_image plan texture + mirror seamless + 2:1 isometric inverse map",
+ "outline_px": 0,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null,
+ "note": "长青石错缝 + 倒角亮棱 + 裂纹苔痕，四向平铺"
+}

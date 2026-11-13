@@ -1,0 +1,35 @@
+{
+ "name": "gate_arch",
+ "facing": "SW",
+ "footprint": [
+  3,
+  3
+ ],
+ "height_px": 222,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": false,
+ "sprite_size": [
+  194,
+  226
+ ],
+ "sprite_h_px": 222,
+ "ratio_to_char": 2.64,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "text_to_image (green screen #00FF00) + chroma key/despill + scale + outline",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null
+}

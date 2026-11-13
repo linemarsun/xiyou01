@@ -1,0 +1,25 @@
+{
+  "name": "shanhai-qitan",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "山海奇谭 —— 大话西游式 2D 回合制 RPG（战斗核心 / 2.5D 画面 / 大地图 / 装备等级 / 召唤兽 / 师门法术）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "node tools/regression.mjs",
+    "assets": "node tools/gen-assets.mjs",
+    "maps": "node tools/gen-iso-maps.mjs",
+    "trees": "node tools/gen-tree-art.mjs",
+    "props": "node tools/gen-iso-props.mjs"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "pixi.js": "^8.22.0"
+  }
+}

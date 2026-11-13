@@ -1,0 +1,67 @@
+{
+ "region": "taoyuan",
+ "segment": 1,
+ "size": [
+  1440,
+  900
+ ],
+ "anchor": "bottom-center",
+ "objects": [
+  {
+   "file": "taoyuan_1/obj_01.png",
+   "x": -10,
+   "y": 980,
+   "scale": 0.95,
+   "depth": 0.99,
+   "occludes": true
+  },
+  {
+   "file": "taoyuan_1/obj_02.png",
+   "x": 1420,
+   "y": 210,
+   "scale": 0.55,
+   "depth": 0.8,
+   "occludes": true
+  },
+  {
+   "file": "taoyuan_1/obj_03.png",
+   "x": 1140,
+   "y": 900,
+   "scale": 0.52,
+   "depth": 0.9,
+   "occludes": false
+  },
+  {
+   "file": "taoyuan_1/obj_04.png",
+   "x": 920,
+   "y": 880,
+   "scale": 0.6,
+   "depth": 0.94,
+   "occludes": true
+  },
+  {
+   "file": "taoyuan_1/obj_05.png",
+   "x": 1340,
+   "y": 940,
+   "scale": 0.6,
+   "depth": 1.0,
+   "occludes": true
+  },
+  {
+   "file": "taoyuan_1/obj_06.png",
+   "x": 250,
+   "y": 865,
+   "scale": 0.42,
+   "depth": 0.86,
+   "occludes": false
+  },
+  {
+   "file": "taoyuan_1/obj_07.png",
+   "x": 640,
+   "y": 915,
+   "scale": 0.5,
+   "depth": 0.96,
+   "occludes": false
+  }
+ ]
+}

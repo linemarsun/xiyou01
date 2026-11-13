@@ -1,0 +1,44 @@
+{
+ "name": "roof_gable",
+ "facing": "SE",
+ "footprint": [
+  1,
+  4
+ ],
+ "height_px": 210,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  1,
+  4
+ ],
+ "anchor_px": [
+  7,
+  82
+ ],
+ "anchor_note": "anchor_cell=足迹前底顶点（格）；anchor_px=sprite 内像素坐标",
+ "tile": [
+  64,
+  32
+ ],
+ "tileable": true,
+ "sprite_size": [
+  141,
+  93
+ ],
+ "sprite_h_px": 89,
+ "ratio_to_char": 1.06,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "山墙端面：底边贴墙顶 z=170，脊尖 z=228，两坡端头封口",
+ "outline_px": 2.5,
+ "mirror_derived": false,
+ "derive_op": "source",
+ "derived_from": null
+}
