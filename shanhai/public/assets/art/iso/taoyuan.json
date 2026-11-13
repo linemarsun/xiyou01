@@ -1273,10 +1273,10 @@
     },
     {
       "type": "palace_hall",
-      "gx": 61,
-      "gy": 53,
-      "w": 6,
-      "h": 6
+      "gx": 59,
+      "gy": 52,
+      "w": 10,
+      "h": 10
     },
     {
       "type": "palace_hall_s",

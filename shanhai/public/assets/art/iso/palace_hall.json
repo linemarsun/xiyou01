@@ -2,52 +2,52 @@
  "name": "palace_hall",
  "facing": "SW",
  "footprint": [
-  6,
-  6
+  10,
+  10
  ],
- "footprint_w": 6,
- "footprint_h": 6,
+ "footprint_w": 10,
+ "footprint_h": 10,
  "anchor": [
   0.5,
   1.0
  ],
  "anchor_cell": [
-  6,
-  6
+  10,
+  10
  ],
  "anchor_px": [
-  252,
-  654
+  400,
+  642
  ],
- "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；AI 生成图的台基前底角即 bbox 最低点，落地即对齐",
  "tile": [
   64,
   32
  ],
  "sprite_size": [
-  504,
-  686
+  800,
+  644
  ],
- "sprite_h_px": 682,
- "ratio_to_char": 8.12,
+ "sprite_h_px": 640,
+ "ratio_to_char": 5.71,
  "margins_px": [
   2,
   2,
   2,
   2
  ],
- "source": "宫城主殿 6×6：程序化宫城件：汉白玉台基/朱红墙体/金色屋面（_gold_slope 瓦垄 + _gold_ridge 鸱吻）；三层台基 0-74，殿身 74-262/300-386，正脊 ~496",
+ "source": "宫城主殿 10×10：AI 生成宏伟三重檐金瓦大殿（朱红殿身、三座高大门洞、三层汉白玉台基、宽石阶、两侧配殿连廊）；绿幕棋盘格抠底后按建筑 bbox 等比对齐到 800×644 画布，无留白、不变形",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
  "mirror_derived": false,
- "derive_op": "draw(real_geometry)",
- "derived_from": null,
+ "derive_op": "ai_generated + matte + anchor_align",
+ "derived_from": "generated-images/palace_hall_grand_raw.png",
  "tileable": false,
  "elevation": {
-  "terrace_top_z": 74,
-  "lower_eave_z": 268,
-  "upper_eave_z": 386,
-  "ridge_z": 496
+  "terrace_top_z": 96,
+  "lower_eave_z": 320,
+  "upper_eave_z": 460,
+  "ridge_z": 620
  },
- "note": "参考国风都城金顶大殿构图；台基与踏道烘焙进贴图"
+ "note": "参考国风都城金顶大殿构图；足迹由 6×6 放大到 10×10 以匹配人物尺度，旧宽扁素材另存为 palace_hall_wide.png"
 }

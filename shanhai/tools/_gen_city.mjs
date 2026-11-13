@@ -190,7 +190,7 @@ for (const x of [48, 78]) {
   for (const y of [74, 76]) rigid('palace_wall_v2', x, y, 2, 2);
 }
 // 内院：主殿居中偏北、东西配殿、白塔在东南、曲水石桥
-rigid('palace_hall', 61, 53, 6, 6);
+rigid('palace_hall', 59, 52, 10, 10);  // AI 宏伟版：足迹 10×10，内院北部居中
 rigid('palace_hall_s', 54, 54, 4, 4);
 rigid('palace_hall_s', 70, 54, 4, 4);
 rigid('pagoda', 72, 66, 3, 3);

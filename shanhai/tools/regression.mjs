@@ -758,8 +758,9 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(count('shop_small'), 0, '缺图小档铺面不再生成（避免无顶方盒）');
 
   // —— 中心：32×32 完整宫城（参考图宫墙围合院落，取代鼓楼广场）——
-  ok(pick('palace_hall').length === 1, '宫城主殿 1 座（6×6 金顶重檐）');
-  ok(iso.ISO_TYPES.palace_hall.w === 6 && iso.ISO_TYPES.palace_hall.h === 6, '主殿足迹 6×6');
+  ok(pick('palace_hall').length === 1, '宫城主殿 1 座（10×10 宏伟金顶三重檐）');
+  ok(iso.ISO_TYPES.palace_hall.w === 10 && iso.ISO_TYPES.palace_hall.h === 10,
+    '主殿足迹 10×10（相对人物整体放大，门洞/台基随之放大）');
   ok(pick('palace_hall_s').length >= 2, '东西配殿各 1 座');
   ok(pick('pagoda').length === 1, '白塔 1 座（宫城一侧）');
   ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔为全城制高点');
