@@ -743,11 +743,11 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(wallSegs >= 60, `城墙段 ${wallSegs} 件（6 格 ${count('city_wall_u6') + count('city_wall_v6')} + 2 格 ${count('city_wall_u2') + count('city_wall_v2')}）`);
   ok(count('city_wall_u6') > 0 && count('city_wall_v6') > 0, '直段 u/v 两向都用到美术模块');
   eq(count('city_wall_corner'), 4, '四角转角构件（朱红角台）');
-  eq(count('gate_keep'), 4, '四向城门各一座城台门楼（灰白城台 + 朱红券洞 + 黄瓦门楼，6×3）');
+  eq(count('gate_keep'), 4, '四向城门各一座城台门楼（灰白城台 + 朱红券洞 + 黄瓦门楼，12×6 等比放大版）');
   const gateSet = new Set(pick('gate_keep').map((g) => `${g.gx},${g.gy},${iso.isoSize(g).w}x${iso.isoSize(g).h}`));
-  ok(gateSet.has('61,5,6x3'), '北门城台 (61,5,6×3) 与 (62,3) 出口路牌同轴，玩法坐标不变');
-  ok(gateSet.has('61,121,6x3') && gateSet.has('5,61,3x6') && gateSet.has('121,61,3x6'),
-    '南（61,121,6×3）/ 西（5,61,3×6）/ 东（121,61,3×6）门城台各自对准主街');
+  ok(gateSet.has('58,5,12x6'), '北门城台 (58,5,12×6) 与 (62,3) 出口路牌同轴，玩法坐标不变');
+  ok(gateSet.has('58,121,12x6') && gateSet.has('5,58,6x12') && gateSet.has('121,58,6x12'),
+    '南（58,121,12×6）/ 西（5,58,6×12）/ 东（121,58,6×12）门城台各自对准主街');
   ok(iso.ISO_TYPES.gate_keep.height > iso.ISO_TYPES.city_wall_u6.height,
     '城台门楼标高高于城墙（含台上门楼）');
   eq(count('gate_arch'), 0, '旧 3 格窄券洞城门不再作为城门使用（贴图保留给牌坊）');
@@ -873,12 +873,12 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(walk(62, 3), '北门出口路牌 (62,3) 可走 —— 玩法坐标保持不变');
   ok(walk(16, 32), '出生点 (16,32) 可走');
   ok(walk(62, 5) && walk(62, 6) && walk(62, 7), '北门城台券洞贯通（城外→城内）');
-  ok(walk(65, 6) && walk(63, 6) && walk(64, 7), '北门券洞 4 列宽全通（与主街同宽的中间 4 列）');
-  ok(!walk(61, 6) && !walk(66, 6), '北门城台边缘两列阻挡（券洞居中 4 列）');
+  ok(walk(65, 6) && walk(63, 6) && walk(64, 7) && walk(61, 6) && walk(66, 6), '北门券洞 6 列宽全通（与主街同宽的中间 6 列）');
+  ok(!walk(60, 6) && !walk(67, 6), '北门城台边缘两列阻挡（券洞居中 6 列）');
   ok(walk(62, 120) && walk(62, 121) && walk(62, 122), '南门券洞贯通');
-  ok(walk(6, 62) && walk(6, 63) && walk(6, 65), '西门券洞 4 行宽贯通（gy62..65）');
+  ok(walk(6, 62) && walk(6, 63) && walk(6, 65) && walk(6, 61) && walk(6, 66), '西门券洞 6 行宽贯通（gy61..66）');
   ok(walk(121, 62) && walk(121, 63) && walk(121, 65), '东门券洞贯通');
-  ok(!walk(6, 61) && !walk(6, 66), '东西门城台边缘两行阻挡（券洞居中 4 行）');
+  ok(!walk(6, 60) && !walk(6, 67), '东西门城台边缘两行阻挡（券洞居中 6 行）');
   ok(walk(63, 44) && walk(44, 63) && walk(63, 82) && walk(82, 63), '环宫城四段环路可走');
   ok(walk(63, 78) && walk(64, 78), '宫门中间两列券洞可走');
   ok(!walk(62, 78), '宫门门柱格阻挡');
@@ -1046,10 +1046,10 @@ function isoScene(id) {
 /** 格坐标 → 世界坐标必须按「该图自己的格网」换算 */
 const isoAt = (id, gx, gy) => iso.cellToWorld(world.isoGridOf(id), gx, gy);
 const countType = (id, type) => isoScene(id).layout.items.filter((i) => i.type === type).length;
-/** 边界带：距任意一条边 ≤1 格；云京北门嵌在城墙线上（宽城门楼 x59..68，券洞 gy4..6），门洞一带视作边界 */
+/** 边界带：距任意一条边 ≤1 格；云京北门嵌在城墙线上（城台门楼 x58..69，券洞 gy5..10），门洞一带视作边界 */
 const isBorder = (id, gx, gy) => {
   const g = world.isoGridOf(id);
-  if (id === 'taoyuan' && gx >= 59 && gx <= 68 && gy >= 1 && gy <= 5) return true;
+  if (id === 'taoyuan' && gx >= 58 && gx <= 69 && gy >= 1 && gy <= 5) return true;
   return gx <= 1 || gy <= 1 || gx >= g.cols - 2 || gy >= g.rows - 2;
 };
 

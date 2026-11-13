@@ -490,73 +490,87 @@
       "h": 2
     },
     {
-      "type": "city_wall_u6",
+      "type": "city_wall_u2",
       "gx": 55,
       "gy": 5,
-      "w": 6,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 56,
+      "gy": 5,
+      "w": 2,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 67,
+      "gx": 70,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 73,
+      "gx": 76,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 79,
+      "gx": 82,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 85,
+      "gx": 88,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 91,
+      "gx": 94,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 97,
+      "gx": 100,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 103,
+      "gx": 106,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 109,
+      "gx": 112,
       "gy": 5,
       "w": 6,
       "h": 2
     },
     {
-      "type": "city_wall_u6",
-      "gx": 115,
+      "type": "city_wall_u2",
+      "gx": 118,
       "gy": 5,
-      "w": 6,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 119,
+      "gy": 5,
+      "w": 2,
       "h": 2
     },
     {
@@ -616,73 +630,87 @@
       "h": 2
     },
     {
-      "type": "city_wall_u6",
+      "type": "city_wall_u2",
       "gx": 55,
       "gy": 121,
-      "w": 6,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 56,
+      "gy": 121,
+      "w": 2,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 67,
+      "gx": 70,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 73,
+      "gx": 76,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 79,
+      "gx": 82,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 85,
+      "gx": 88,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 91,
+      "gx": 94,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 97,
+      "gx": 100,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 103,
+      "gx": 106,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
       "type": "city_wall_u6",
-      "gx": 109,
+      "gx": 112,
       "gy": 121,
       "w": 6,
       "h": 2
     },
     {
-      "type": "city_wall_u6",
-      "gx": 115,
+      "type": "city_wall_u2",
+      "gx": 118,
       "gy": 121,
-      "w": 6,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "city_wall_u2",
+      "gx": 119,
+      "gy": 121,
+      "w": 2,
       "h": 2
     },
     {
@@ -742,74 +770,88 @@
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 5,
       "gy": 55,
       "w": 2,
-      "h": 6
+      "h": 2
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 5,
+      "gy": 56,
+      "w": 2,
+      "h": 2
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 67,
+      "gy": 70,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 73,
+      "gy": 76,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 79,
+      "gy": 82,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 85,
+      "gy": 88,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 91,
+      "gy": 94,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 97,
+      "gy": 100,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 103,
+      "gy": 106,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 5,
-      "gy": 109,
+      "gy": 112,
       "w": 2,
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 5,
-      "gy": 115,
+      "gy": 118,
       "w": 2,
-      "h": 6
+      "h": 2
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 5,
+      "gy": 119,
+      "w": 2,
+      "h": 2
     },
     {
       "type": "city_wall_v6",
@@ -868,74 +910,88 @@
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 121,
       "gy": 55,
       "w": 2,
-      "h": 6
+      "h": 2
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 121,
+      "gy": 56,
+      "w": 2,
+      "h": 2
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 67,
+      "gy": 70,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 73,
+      "gy": 76,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 79,
+      "gy": 82,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 85,
+      "gy": 88,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 91,
+      "gy": 94,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 97,
+      "gy": 100,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 103,
+      "gy": 106,
       "w": 2,
       "h": 6
     },
     {
       "type": "city_wall_v6",
       "gx": 121,
-      "gy": 109,
+      "gy": 112,
       "w": 2,
       "h": 6
     },
     {
-      "type": "city_wall_v6",
+      "type": "city_wall_v2",
       "gx": 121,
-      "gy": 115,
+      "gy": 118,
       "w": 2,
-      "h": 6
+      "h": 2
+    },
+    {
+      "type": "city_wall_v2",
+      "gx": 121,
+      "gy": 119,
+      "w": 2,
+      "h": 2
     },
     {
       "type": "city_wall_corner",
@@ -995,34 +1051,34 @@
     },
     {
       "type": "gate_keep",
-      "gx": 61,
+      "gx": 58,
       "gy": 5,
-      "w": 6,
-      "h": 3,
-      "facing": "sw"
-    },
-    {
-      "type": "gate_keep",
-      "gx": 61,
-      "gy": 121,
-      "w": 6,
-      "h": 3,
-      "facing": "sw"
-    },
-    {
-      "type": "gate_keep",
-      "gx": 5,
-      "gy": 61,
-      "w": 3,
+      "w": 12,
       "h": 6,
+      "facing": "sw"
+    },
+    {
+      "type": "gate_keep",
+      "gx": 58,
+      "gy": 121,
+      "w": 12,
+      "h": 6,
+      "facing": "sw"
+    },
+    {
+      "type": "gate_keep",
+      "gx": 5,
+      "gy": 58,
+      "w": 6,
+      "h": 12,
       "facing": "se"
     },
     {
       "type": "gate_keep",
       "gx": 121,
-      "gy": 61,
-      "w": 3,
-      "h": 6,
+      "gy": 58,
+      "w": 6,
+      "h": 12,
       "facing": "se"
     },
     {
@@ -2781,14 +2837,6 @@
     },
     {
       "type": "stall",
-      "gx": 59,
-      "gy": 10,
-      "w": 2,
-      "h": 2,
-      "facing": "sw"
-    },
-    {
-      "type": "stall",
       "gx": 52,
       "gy": 17,
       "w": 2,
@@ -2927,14 +2975,6 @@
       "type": "stall",
       "gx": 115,
       "gy": 52,
-      "w": 2,
-      "h": 2,
-      "facing": "sw"
-    },
-    {
-      "type": "stall",
-      "gx": 10,
-      "gy": 59,
       "w": 2,
       "h": 2,
       "facing": "sw"
@@ -3082,6 +3122,14 @@
       "w": 2,
       "h": 2,
       "facing": "sw"
+    },
+    {
+      "type": "stall",
+      "gx": 59,
+      "gy": 115,
+      "w": 2,
+      "h": 2,
+      "facing": "se"
     },
     {
       "type": "crate",
@@ -3609,18 +3657,6 @@
       "gx": 36,
       "gy": 9,
       "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 60,
-      "gy": 9,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 69,
-      "gy": 9,
-      "variant": "pine"
     },
     {
       "type": "tree",
@@ -4782,12 +4818,6 @@
     },
     {
       "type": "tree",
-      "gx": 9,
-      "gy": 60,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 12,
       "gy": 60,
       "variant": "pine"
@@ -4874,12 +4904,6 @@
       "type": "tree",
       "gx": 117,
       "gy": 60,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 9,
-      "gy": 69,
       "variant": "pine"
     },
     {
@@ -6820,19 +6844,7 @@
     },
     {
       "type": "tree",
-      "gx": 59,
-      "gy": 125,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 1,
-      "gy": 59,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 125,
       "gy": 59,
       "variant": "pine"
     },
@@ -6856,19 +6868,7 @@
     },
     {
       "type": "tree",
-      "gx": 63,
-      "gy": 125,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 1,
-      "gy": 63,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 125,
       "gy": 63,
       "variant": "pine"
     },
@@ -6904,19 +6904,7 @@
     },
     {
       "type": "tree",
-      "gx": 67,
-      "gy": 125,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 1,
-      "gy": 67,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 125,
       "gy": 67,
       "variant": "pine"
     },

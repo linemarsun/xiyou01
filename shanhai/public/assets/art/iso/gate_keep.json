@@ -2,22 +2,22 @@
  "name": "gate_keep",
  "facing": "SW",
  "footprint": [
-  6,
-  3
+  12,
+  6
  ],
- "footprint_w": 6,
- "footprint_h": 3,
+ "footprint_w": 12,
+ "footprint_h": 6,
  "anchor": [
   0.5,
   1.0
  ],
  "anchor_cell": [
-  6,
-  3
+  12,
+  6
  ],
  "anchor_px": [
-  193,
-  328
+  386,
+  656
  ],
  "anchor_note": "足迹前底顶点 p(w-1,h-1)；6×3 菱形底点偏 bbox 中心右侧 (w-h)/2*32=48px→缩放后 45px；AI 城台底角即 bbox 最低点，落地即对齐",
  "tile": [
@@ -25,18 +25,18 @@
   32
  ],
  "sprite_size": [
-  296,
-  330
+  592,
+  660
  ],
- "sprite_h_px": 326,
- "ratio_to_char": 2.91,
+ "sprite_h_px": 650,
+ "ratio_to_char": 5.8,
  "margins_px": [
   2,
   2,
   2,
   2
  ],
- "source": "参考图制式城台门楼（map_01）：浅灰白石砌城台两收分层 + 朱红拱形券洞（前脸居中）+ 深炭灰垛口压顶 + 黄琉璃重檐门楼（红柱金斗拱）；标准 2:1 等距、正面朝左下、无透视灭点；按城台菱形宽 (6+3)*32=288px 反推缩放，画布 296×330",
+ "source": "参考图制式城台门楼（map_01）：浅灰白石砌城台两收分层 + 朱红拱形券洞（前脸居中）+ 深炭灰垛口压顶 + 黄琉璃重檐门楼（红柱金斗拱）；标准 2:1 等距、正面朝左下、无透视灭点；等比放大 ×2（12×6 足迹）：城台垫高至与城墙匹配（垛口顶高出 ~26px），画布 592×660",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；与城墙拼接面不描边",
  "mirror_derived": false,
@@ -44,9 +44,11 @@
  "derived_from": "generated-images/gate_keep_raw.png",
  "tileable": false,
  "elevation": {
-  "platform_top_z": 158,
-  "lower_eave_z": 240,
-  "upper_eave_z": 310
+  "platform_top_z": 210,
+  "parapet_top_z": 250,
+  "lower_eave_z": 480,
+  "ridge_top_z": 646
  },
- "note": "四门统一制式（N/S: 6×3，E/W: 3×6）；券洞通道 4 格宽（gate_keepLane）；旧 3×3 窄券洞 gate_arch 保留供牌坊复用"
+ "note": "四门统一制式 12×6/6×12（N/S: 12×6，E/W: 6×12 用 SE 镜像版 gate_keep_se.png）；券洞通道 6 格宽（gateKeepLane，与 6 格主街同宽对齐）；等比放大后城台与城墙等高、门楼整体高出城墙——用户 2026-11-13 拍板 12×6 方案",
+ "elevation_note": "城台走面 ~210（略高于墙身顶 200）、垛口顶 ~250（高出城墙垛口 224 约 26）、正脊 ~646（低于白塔 700）；由 6×3 版等比 ×2 实测推算"
 }

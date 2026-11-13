@@ -153,8 +153,8 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   crate: { w: 1, h: 1, height: 44 },
   stele: { w: 1, h: 2, height: 90 },
   gate_arch: { w: 3, h: 3, height: 222 },
-  /** 参考图制式城台门楼：灰白石城台 + 朱红券洞 + 黄瓦重檐门楼（6×3，券洞 4 格宽） */
-  gate_keep: { w: 6, h: 3, height: 320 },
+  /** 参考图制式城台门楼：灰白石城台 + 朱红券洞 + 黄瓦重檐门楼（12×6，垛口顶高出城墙 ~26px，券洞 6 格宽与主街同宽） */
+  gate_keep: { w: 12, h: 6, height: 650 },
   /** 牌坊：复用城门贴图（art.isoModuleCandidates 里做别名） */
   paifang: { w: 3, h: 3, height: 222 },
   tree: { w: 1, h: 1, height: 186 },
@@ -215,10 +215,10 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   palace_wall_v2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
   palace_wall_v6: { ax: -64, ay: -5 },    // 256×275, anchor [64,270]
   pagoda: { ax: 0.5, ay: -21 },           // 267×756, anchor [134,735]
-  // 城台门楼（AI 素材 296×330）：矩形足迹长边贴墙，正面朝向由墙向决定——
-  // N/S 门（6×3，u 墙）用 SW 原版，E/W 门（3×6，v 墙）用 gate_keep_se 镜像版。
-  gate_keep: { ax: 45, ay: -2 },          // SW 原版 anchor_px [193,328]（底点偏中心右侧 45px）
-  gate_keep_se: { ax: -45, ay: -2 },      // SE 镜像版 anchor_px [103,328]（底点偏中心左侧 45px）
+  // 城台门楼（AI 素材 592×660 = 6×3 版等比 ×2，足迹 12×6）：矩形足迹长边贴墙，
+  // 正面朝向由墙向决定——N/S 门用 SW 原版，E/W 门用 gate_keep_se 镜像版。
+  gate_keep: { ax: 90, ay: -4 },          // SW 原版 anchor_px [386,656]（底点偏中心右侧 90px）
+  gate_keep_se: { ax: -90, ay: -4 },      // SE 镜像版 anchor_px [206,656]（底点偏中心左侧 90px）
 };
 
 export function isoSize(item: IsoItem): { w: number; h: number } {
@@ -316,18 +316,18 @@ export function wideGateLane(item: IsoItem): Array<{ gx: number; gy: number }> {
 }
 
 /**
- * 城台门楼券洞：6×3 城台中央 4 格宽通道（与门内主街同宽的中间 4 列 / 4 行）。
- * N/S 门（w6×h3）走中列 x62..65；E/W 门（w3×h6）走中行 gy62..65。
+ * 城台门楼券洞：12×6 城台中央 6 格宽通道（与 6 格门内主街同宽的中间 6 列 / 6 行）。
+ * N/S 门（w12×h6）走中列 gx+3..gx+8；E/W 门（w6×h12）走中行 gy+3..gy+8。
  */
 export function gateKeepLane(item: IsoItem): Array<{ gx: number; gy: number }> {
   const { w, h } = isoSize(item);
   const out: Array<{ gx: number; gy: number }> = [];
   if (w >= h) {
-    const x0 = item.gx + Math.floor((w - 4) / 2);
-    for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 4; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
+    const x0 = item.gx + Math.floor((w - 6) / 2);
+    for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 6; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
   } else {
-    const y0 = item.gy + Math.floor((h - 4) / 2);
-    for (let dy = 0; dy < 4; dy++) for (let dx = 0; dx < w; dx++) out.push({ gx: item.gx + dx, gy: y0 + dy });
+    const y0 = item.gy + Math.floor((h - 6) / 2);
+    for (let dy = 0; dy < 6; dy++) for (let dx = 0; dx < w; dx++) out.push({ gx: item.gx + dx, gy: y0 + dy });
   }
   return out;
 }
