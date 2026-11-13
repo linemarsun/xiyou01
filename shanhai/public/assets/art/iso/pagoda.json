@@ -1,6 +1,6 @@
 {
  "name": "pagoda",
- "facing": "SW",
+ "facing": "SE",
  "footprint": [
   3,
   3
@@ -16,7 +16,7 @@
   3
  ],
  "anchor_px": [
-  133,
+  134,
   735
  ],
  "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
@@ -39,8 +39,8 @@
  "source": "白塔 3×3：须弥座 0-30 + 五层白石塔身（挑檐青瓦）+ 攒尖金顶 + 宝顶，总高 ~700",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
- "mirror_derived": false,
- "derive_op": "draw(real_geometry)",
+ "mirror_derived": true,
+ "derive_op": "draw(real_geometry) + flip_facing_sw2se",
  "derived_from": null,
  "tileable": false,
  "elevation": {

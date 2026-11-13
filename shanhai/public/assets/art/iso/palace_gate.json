@@ -1,6 +1,6 @@
 {
  "name": "palace_gate",
- "facing": "SW",
+ "facing": "SE",
  "footprint": [
   4,
   2
@@ -16,7 +16,7 @@
   2
  ],
  "anchor_px": [
-  135,
+  71,
   421
  ],
  "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
@@ -39,8 +39,8 @@
  "source": "宫门 4×2：红墙 24-150 + 亮色券洞（半宽 0.92、券脚 62+24）+ 黄瓦帽 + 门楼金顶脊 ~322",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
- "mirror_derived": false,
- "derive_op": "draw(real_geometry)",
+ "mirror_derived": true,
+ "derive_op": "draw(real_geometry) + flip_facing_sw2se",
  "derived_from": null,
  "tileable": false,
  "arch": {

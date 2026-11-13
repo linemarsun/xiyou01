@@ -1,6 +1,6 @@
 {
  "name": "palace_hall",
- "facing": "SW",
+ "facing": "SE",
  "footprint": [
   10,
   10
@@ -39,8 +39,8 @@
  "source": "宫城主殿 10×10：以故宫太和殿为原型的 AI 素材（重檐庑殿顶、单层宽扁十一间、菱花格扇门窗、朱红墙柱金瓦、三层汉白玉须弥座台基与丹陛石阶、十样脊兽）；标准 2:1 等距视角（正面朝左下、屋脊沿左上→右下对角线、垂直线竖直、平行线不收敛），与宫城其余素材同朝向；抠底后按建筑 bbox 等比对齐到 880×744 画布，无留白、不变形",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
- "mirror_derived": false,
- "derive_op": "ai_generated + matte + anchor_align",
+ "mirror_derived": true,
+ "derive_op": "ai_generated + matte + anchor_align + flip_facing_sw2se",
  "derived_from": "generated-images/palace_hall_taihe_iso_raw.png",
  "tileable": false,
  "elevation": {

@@ -1,6 +1,6 @@
 {
  "name": "palace_wall_v6",
- "facing": "SW",
+ "facing": "SE",
  "footprint": [
   2,
   6
@@ -39,8 +39,8 @@
  "source": "宫墙直段 v 向 2×6：条石 0-16 + 朱红墙身 16-138 + 黄瓦帽 138-150",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
- "mirror_derived": false,
- "derive_op": "draw(real_geometry)",
+ "mirror_derived": true,
+ "derive_op": "draw(real_geometry) + flip_facing_sw2se",
  "derived_from": null,
  "tileable": true
 }
