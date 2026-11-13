@@ -153,6 +153,8 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   crate: { w: 1, h: 1, height: 44 },
   stele: { w: 1, h: 2, height: 90 },
   gate_arch: { w: 3, h: 3, height: 222 },
+  /** 参考图制式城台门楼：灰白石城台 + 朱红券洞 + 黄瓦重檐门楼（6×3，券洞 4 格宽） */
+  gate_keep: { w: 6, h: 3, height: 320 },
   /** 牌坊：复用城门贴图（art.isoModuleCandidates 里做别名） */
   paifang: { w: 3, h: 3, height: 222 },
   tree: { w: 1, h: 1, height: 186 },
@@ -213,6 +215,8 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   palace_wall_v2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
   palace_wall_v6: { ax: -64, ay: -5 },    // 256×275, anchor [64,270]
   pagoda: { ax: -0.5, ay: -21 },          // 267×756, anchor [133,735]
+  // 城台门楼（AI 素材 296×330）：城台底点偏 bbox 中心右侧 45px（6×3 菱形底点 (w-h)/2*32=48px 减 3px 余量）
+  gate_keep: { ax: 45, ay: -2 },          // anchor_px [193,328]
 };
 
 export function isoSize(item: IsoItem): { w: number; h: number } {
@@ -291,6 +295,23 @@ export function wideGateLane(item: IsoItem): Array<{ gx: number; gy: number }> {
   } else {
     const y0 = item.gy + Math.floor((h - 8) / 2);
     for (let dy = 0; dy < 8; dy++) for (let dx = 0; dx < w; dx++) out.push({ gx: item.gx + dx, gy: y0 + dy });
+  }
+  return out;
+}
+
+/**
+ * 城台门楼券洞：6×3 城台中央 4 格宽通道（与门内主街同宽的中间 4 列 / 4 行）。
+ * N/S 门（w6×h3）走中列 x62..65；E/W 门（w3×h6）走中行 gy62..65。
+ */
+export function gateKeepLane(item: IsoItem): Array<{ gx: number; gy: number }> {
+  const { w, h } = isoSize(item);
+  const out: Array<{ gx: number; gy: number }> = [];
+  if (w >= h) {
+    const x0 = item.gx + Math.floor((w - 4) / 2);
+    for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < 4; dx++) out.push({ gx: x0 + dx, gy: item.gy + dy });
+  } else {
+    const y0 = item.gy + Math.floor((h - 4) / 2);
+    for (let dy = 0; dy < 4; dy++) for (let dx = 0; dx < w; dx++) out.push({ gx: item.gx + dx, gy: y0 + dy });
   }
   return out;
 }
@@ -436,9 +457,11 @@ export function buildCollision(layout: IsoLayout): IsoCollision {
     const lane = new Set<string>(
       item.type === 'gate_arch' || item.type === 'paifang'
         ? archLane(item).map((c) => keyOf(c.gx, c.gy))
-        : item.type === 'city_gate_tower' || item.type === 'palace_gate'
-          ? gateTowerLane(item).map((c) => keyOf(c.gx, c.gy))
-          : item.type === 'city_gate_wide' || item.type === 'city_gate_wide_v'
+          : item.type === 'city_gate_tower' || item.type === 'palace_gate'
+            ? gateTowerLane(item).map((c) => keyOf(c.gx, c.gy))
+            : item.type === 'gate_keep'
+              ? gateKeepLane(item).map((c) => keyOf(c.gx, c.gy))
+            : item.type === 'city_gate_wide' || item.type === 'city_gate_wide_v'
             ? wideGateLane(item).map((c) => keyOf(c.gx, c.gy))
             : item.type === 'bell_tower'
               ? bellTowerPassage(item).map((c) => keyOf(c.gx, c.gy))

@@ -152,15 +152,16 @@ const wallRun = (x, y, w, h) => {
   for (; len - i >= 2; i += 2) seg(i, 2);
   if (len - i === 1) seg(i - 1, 2);
 };
-// 四门为 3 格窄券洞：门洞 x61..63 / y61..63 处断开城墙，gate_arch 自带十字券洞通道
+// 四门为参考图制式城台门楼（gate_keep 6×3）：城台与门内主街同宽（6 格），
+// 城墙在 x61..66 / y61..66 断开，gate_keep 自带 4 格券洞通道（中列/中行 ±2）
 wallRun(7, 5, 54, 2);       // 北墙西段 x7..60
-wallRun(64, 5, 57, 2);      // 北墙东段 x64..120
+wallRun(67, 5, 54, 2);      // 北墙东段 x67..120（城台开口 x61..66）
 wallRun(7, 121, 54, 2);     // 南墙西段
-wallRun(64, 121, 57, 2);    // 南墙东段
+wallRun(67, 121, 54, 2);    // 南墙东段
 wallRun(5, 7, 2, 54);       // 西墙北段 y7..60
-wallRun(5, 64, 2, 57);      // 西墙南段 y64..120
+wallRun(5, 67, 2, 54);      // 西墙南段 y67..120（城台开口 y61..66）
 wallRun(121, 7, 2, 54);     // 东墙北段
-wallRun(121, 64, 2, 57);    // 东墙南段
+wallRun(121, 67, 2, 54);    // 东墙南段
 // 四角：朱红角台 + 内侧朱墙黄瓦角楼（参考图四角楼）
 for (const [x, y] of [[5, 5], [121, 5], [5, 121], [121, 121]]) {
   rigid('city_wall_corner', x, y, 2, 2);
@@ -168,11 +169,11 @@ for (const [x, y] of [[5, 5], [121, 5], [5, 121], [121, 121]]) {
 for (const [x, y] of [[7, 7], [119, 7], [7, 119], [119, 119]]) {
   rigid('palace_corner', x, y, 2, 2);
 }
-// 四门窄券洞（gate_arch 3×3，archLane 十字 5 格可穿行）
-rigid('gate_arch', 61, 5, 3, 3, { facing: 'sw' });
-rigid('gate_arch', 61, 120, 3, 3, { facing: 'sw' });
-rigid('gate_arch', 5, 61, 3, 3, { facing: 'se' });
-rigid('gate_arch', 120, 61, 3, 3, { facing: 'se' });
+// 四门城台门楼（灰白石城台 + 朱红券洞 + 黄瓦重檐门楼，足迹 6×3 / 3×6）
+rigid('gate_keep', 61, 5, 6, 3, { facing: 'sw' });
+rigid('gate_keep', 61, 121, 6, 3, { facing: 'sw' });
+rigid('gate_keep', 5, 61, 3, 6, { facing: 'se' });
+rigid('gate_keep', 121, 61, 3, 6, { facing: 'se' });
 
 // ---------------------------------------------------------------- 宫城 32×32（居中）
 // 外圈朱红宫墙（黄瓦帽）2 格厚，四角角楼，南面正中宫门
@@ -300,7 +301,7 @@ console.log(JSON.stringify({
   houses: houseCount, stalls: stallCount, crates: crateCount,
   innerTrees, outerTrees, rocks: rockCount,
   bellTower: count('bell_tower'),
-  gates: count('gate_arch'), wideGate: count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'),
+  gates: count('gate_keep'), wideGate: count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'),
   wallCorner: count('city_wall_corner'), cornerTower: count('palace_corner'),
   palaceWalls: count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'),
   bridges: count('bridge'), paifang: count('paifang'),

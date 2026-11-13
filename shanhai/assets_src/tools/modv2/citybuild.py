@@ -70,15 +70,15 @@ def mix(a, b, t):
     return tuple(int(round(a[i] * (1 - t) + b[i] * t)) for i in range(3))
 
 
-# 参考图配色：朱红墙身 + 灰白垛口压顶（不再从暖灰色板混出）
+# 参考图配色（map_01）：朱红墙身 + 深灰垛口压顶 + 深色条石基座
 WALL_C = (178, 62, 48)                      # 朱红砖墙（受光前脸）
 WALL_S = (126, 42, 34)                      # 朱红背光侧脸
-PARA_C = (224, 220, 210)                    # 灰白垛口 / 女墙（受光）
-PARA_S = (166, 162, 154)                    # 灰白垛口背光
+PARA_C = (86, 84, 80)                       # 深灰垛口 / 女墙（受光，参考图压顶色）
+PARA_S = (58, 56, 54)                       # 深灰垛口背光
 WALL_HI = (232, 146, 118)                   # 朱红砖缝高光（替代米白，避免洗白墙身）
-STONE = mix(IRON_L, CREAM, 0.34)            # 条石基座：保持灰白
-STONE_S = mix(STONE, DARK, 0.20)
-STONE_T = mix(STONE, CREAM, 0.22)
+STONE = mix(IRON, DARK, 0.22)               # 条石基座：深灰石
+STONE_S = mix(STONE, DARK, 0.30)
+STONE_T = mix(STONE, IRON, 0.30)
 WALK_C = mix(STONE, BEIGE, 0.30)            # 马道面
 WALK_S = mix(WALK_C, DARK, 0.16)
 GATE_C = (192, 76, 58)                      # 城台 / 券洞内壁：朱红

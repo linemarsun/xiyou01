@@ -738,15 +738,19 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   const count = (t) => layout.items.filter((i) => i.type === t).length;
   const pick = (t) => layout.items.filter((i) => i.type === t);
 
-  // —— 参考图制式：城墙闭合 / 四门 3 格窄券洞 / 四角角台 + 角楼 ——
+  // —— 参考图制式：城墙闭合 / 四门 6 格城台门楼 / 四角角台 + 角楼 ——
   const wallSegs = count('city_wall_u6') + count('city_wall_u2') + count('city_wall_v6') + count('city_wall_v2');
   ok(wallSegs >= 60, `城墙段 ${wallSegs} 件（6 格 ${count('city_wall_u6') + count('city_wall_v6')} + 2 格 ${count('city_wall_u2') + count('city_wall_v2')}）`);
   ok(count('city_wall_u6') > 0 && count('city_wall_v6') > 0, '直段 u/v 两向都用到美术模块');
   eq(count('city_wall_corner'), 4, '四角转角构件（朱红角台）');
-  eq(count('gate_arch'), 4, '四向城门各一座 3 格窄券洞（参考图连续城墙 + 门洞）');
-  const gateSet = new Set(pick('gate_arch').map((g) => `${g.gx},${g.gy}`));
-  ok(gateSet.has('61,5'), '北门券洞 (61,5) 与 (62,3) 出口路牌同轴，玩法坐标不变');
-  ok(gateSet.has('61,120') && gateSet.has('5,61') && gateSet.has('120,61'), '南 / 西 / 东门券洞各自对准主街');
+  eq(count('gate_keep'), 4, '四向城门各一座城台门楼（灰白城台 + 朱红券洞 + 黄瓦门楼，6×3）');
+  const gateSet = new Set(pick('gate_keep').map((g) => `${g.gx},${g.gy},${iso.isoSize(g).w}x${iso.isoSize(g).h}`));
+  ok(gateSet.has('61,5,6x3'), '北门城台 (61,5,6×3) 与 (62,3) 出口路牌同轴，玩法坐标不变');
+  ok(gateSet.has('61,121,6x3') && gateSet.has('5,61,3x6') && gateSet.has('121,61,3x6'),
+    '南（61,121,6×3）/ 西（5,61,3×6）/ 东（121,61,3×6）门城台各自对准主街');
+  ok(iso.ISO_TYPES.gate_keep.height > iso.ISO_TYPES.city_wall_u6.height,
+    '城台门楼标高高于城墙（含台上门楼）');
+  eq(count('gate_arch'), 0, '旧 3 格窄券洞城门不再作为城门使用（贴图保留给牌坊）');
   eq(count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'), 0,
     '旧宽城门楼（10×3）已全部移除');
   eq(count('palace_corner'), 8, '四角角楼 4 座（城墙角）+ 宫城四角楼 4 座');
@@ -868,10 +872,13 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   };
   ok(walk(62, 3), '北门出口路牌 (62,3) 可走 —— 玩法坐标保持不变');
   ok(walk(16, 32), '出生点 (16,32) 可走');
-  ok(walk(62, 5) && walk(62, 6) && walk(62, 7), '北门 3 格窄券洞贯通（城外→城内）');
+  ok(walk(62, 5) && walk(62, 6) && walk(62, 7), '北门城台券洞贯通（城外→城内）');
+  ok(walk(65, 6) && walk(63, 6) && walk(64, 7), '北门券洞 4 列宽全通（与主街同宽的中间 4 列）');
+  ok(!walk(61, 6) && !walk(66, 6), '北门城台边缘两列阻挡（券洞居中 4 列）');
   ok(walk(62, 120) && walk(62, 121) && walk(62, 122), '南门券洞贯通');
-  ok(walk(6, 61) && walk(6, 62) && walk(6, 63), '西门券洞贯通');
-  ok(walk(121, 61) && walk(121, 62) && walk(121, 63), '东门券洞贯通');
+  ok(walk(6, 62) && walk(6, 63) && walk(6, 65), '西门券洞 4 行宽贯通（gy62..65）');
+  ok(walk(121, 62) && walk(121, 63) && walk(121, 65), '东门券洞贯通');
+  ok(!walk(6, 61) && !walk(6, 66), '东西门城台边缘两行阻挡（券洞居中 4 行）');
   ok(walk(63, 44) && walk(44, 63) && walk(63, 82) && walk(82, 63), '环宫城四段环路可走');
   ok(walk(63, 78) && walk(64, 78), '宫门中间两列券洞可走');
   ok(!walk(62, 78), '宫门门柱格阻挡');

@@ -36,7 +36,7 @@ const gs = world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '诊�
 const checks = [
   ['路牌 (62,3)', 62, 3], ['出生点 (16,32)', 16, 32],
   ['NPC (32,32)', 32, 32], ['酒肆 (32,20)', 32, 20],
-  ['北门券洞 (62,5)', 62, 5], ['北门券洞 (62,6)', 62, 6], ['北门内侧 (62,8)', 62, 8],
+  ['北门券洞 (62,5)', 62, 5], ['北门券洞 (65,6)', 65, 6], ['北门内侧 (62,8)', 62, 8],
   ['南门券洞 (62,121)', 62, 121], ['南门内侧 (62,118)', 62, 118],
   ['西门券洞 (6,62)', 6, 62], ['东门券洞 (121,62)', 121, 62],
   ['北环 (63,44)', 63, 44], ['南环 (63,82)', 63, 82],
@@ -70,7 +70,7 @@ for (const [fx, fy, tx, ty, label] of [
 console.log('\n=== 统计 ===');
 console.log(JSON.stringify({
   items: layout.items.length,
-  house: count('house'), gate_arch: count('gate_arch'),
+  house: count('house'), gate_keep: count('gate_keep'),
   city_wall_corner: count('city_wall_corner'), palace_corner: count('palace_corner'),
   palace_hall: count('palace_hall'), palace_hall_s: count('palace_hall_s'),
   palace_gate: count('palace_gate'), pagoda: count('pagoda'),
