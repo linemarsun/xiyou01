@@ -1,0 +1,52 @@
+{
+ "name": "gate_keep_se",
+ "facing": "SE",
+ "footprint": [
+  6,
+  3
+ ],
+ "footprint_w": 6,
+ "footprint_h": 3,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  6,
+  3
+ ],
+ "anchor_px": [
+  103,
+  328
+ ],
+ "anchor_note": "SE 镜像版（E/W 门 3×6 专用）：镜像后城台底点偏 bbox 中心左侧 45px；N/S 门用 gate_keep.png（SW 原版）",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  296,
+  330
+ ],
+ "sprite_h_px": 326,
+ "ratio_to_char": 2.91,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "参考图制式城台门楼（map_01）：浅灰白石砌城台两收分层 + 朱红拱形券洞（前脸居中）+ 深炭灰垛口压顶 + 黄琉璃重檐门楼（红柱金斗拱）；标准 2:1 等距、正面朝左下、无透视灭点；按城台菱形宽 (6+3)*32=288px 反推缩放，画布 296×330",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；与城墙拼接面不描边",
+ "mirror_derived": true,
+ "derive_op": "ai_generated + matte + anchor_align + flip_facing_sw2se",
+ "derived_from": "generated-images/gate_keep_raw.png",
+ "tileable": false,
+ "elevation": {
+  "platform_top_z": 158,
+  "lower_eave_z": 240,
+  "upper_eave_z": 310
+ },
+ "note": "四门两套贴图：N/S 门（6×3，u 墙）用 SW 原版 gate_keep.png；E/W 门（3×6，v 墙）用本 SE 镜像版。矩形足迹长边必须贴墙，正面朝向由墙向决定，无法四门统一 SE。"
+}

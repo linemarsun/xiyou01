@@ -208,20 +208,36 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   // —— 宫城族（palace.py 烘焙，ax = anchor_px.x - spriteW/2, ay = anchor_px.y - spriteH）——
   palace_hall: { ax: 0, ay: -2 },         // 880×744, anchor [440,742]（故宫太和殿版 10×10）
   palace_hall_s: { ax: 0, ay: -19 },      // 324×453, anchor [162,434]
-  palace_gate: { ax: -32, ay: -5 },       // 206×426, anchor [71,421]
+  palace_gate: { ax: 32, ay: -5 },        // 206×426, anchor [135,421]
   palace_corner: { ax: 0, ay: -5 },       // 142×422, anchor [71,417]
   palace_wall_u6: { ax: 64, ay: -5 },     // 256×275, anchor [192,270]
   palace_wall_u2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
   palace_wall_v2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
   palace_wall_v6: { ax: -64, ay: -5 },    // 256×275, anchor [64,270]
   pagoda: { ax: 0.5, ay: -21 },           // 267×756, anchor [134,735]
-  // 城台门楼（AI 素材 296×330，正面朝右下/SE）：城台底点偏 bbox 中心左侧 45px
-  gate_keep: { ax: -45, ay: -2 },         // anchor_px [103,328]
+  // 城台门楼（AI 素材 296×330）：矩形足迹长边贴墙，正面朝向由墙向决定——
+  // N/S 门（6×3，u 墙）用 SW 原版，E/W 门（3×6，v 墙）用 gate_keep_se 镜像版。
+  gate_keep: { ax: 45, ay: -2 },          // SW 原版 anchor_px [193,328]（底点偏中心右侧 45px）
+  gate_keep_se: { ax: -45, ay: -2 },      // SE 镜像版 anchor_px [103,328]（底点偏中心左侧 45px）
 };
 
 export function isoSize(item: IsoItem): { w: number; h: number } {
   const d = ISO_TYPES[item.type];
   return { w: item.w ?? d?.w ?? 1, h: item.h ?? d?.h ?? 1 };
+}
+
+/**
+ * 按朝向查找落点偏差：先试 `<type>_<facing>`（同型不同朝向的贴图各有锚点），
+ * 再退回 `<type>`。供渲染层取 sprite 偏移用。
+ */
+export function isoAnchorOffset(
+  type: string, facing?: string,
+): { ax: number; ay: number } | undefined {
+  if (facing) {
+    const perFacing = ISO_ANCHOR_OFFSET[`${type}_${facing}`];
+    if (perFacing) return perFacing;
+  }
+  return ISO_ANCHOR_OFFSET[type];
 }
 
 export function isGroundType(type: string): boolean {

@@ -1,6 +1,6 @@
 {
  "name": "gate_keep",
- "facing": "SE",
+ "facing": "SW",
  "footprint": [
   6,
   3
@@ -16,7 +16,7 @@
   3
  ],
  "anchor_px": [
-  103,
+  193,
   328
  ],
  "anchor_note": "足迹前底顶点 p(w-1,h-1)；6×3 菱形底点偏 bbox 中心右侧 (w-h)/2*32=48px→缩放后 45px；AI 城台底角即 bbox 最低点，落地即对齐",
@@ -39,8 +39,8 @@
  "source": "参考图制式城台门楼（map_01）：浅灰白石砌城台两收分层 + 朱红拱形券洞（前脸居中）+ 深炭灰垛口压顶 + 黄琉璃重檐门楼（红柱金斗拱）；标准 2:1 等距、正面朝左下、无透视灭点；按城台菱形宽 (6+3)*32=288px 反推缩放，画布 296×330",
  "outline_px": 2.4,
  "outline_rule": "可见外沿描边；与城墙拼接面不描边",
- "mirror_derived": true,
- "derive_op": "ai_generated + matte + anchor_align + flip_facing_sw2se",
+ "mirror_derived": false,
+ "derive_op": "ai_generated + matte + anchor_align",
  "derived_from": "generated-images/gate_keep_raw.png",
  "tileable": false,
  "elevation": {

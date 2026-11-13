@@ -9,8 +9,8 @@ import {
   artUrl, foregroundImageUrl, foregroundJsonUrl, isoHouseCandidates, isoModuleCandidates, mapArtLegacyUrl, mapArtUrl, WORLD_TILE_ART,
 } from '../core/art';
 import {
-  ISO_ANCHOR_OFFSET, ISO_TYPES, buildCollision, cellAt, cellRange, cellToWorld, expandLayout, findIsoPath, footprintPolygon,
-  frontVertex, housePieces, isGroundType, isoLineWalkable, isoSize, isoWalkable, keyOf, nearestWalkableCell, simplifyIsoPath,
+  ISO_TYPES, buildCollision, cellAt, cellRange, cellToWorld, expandLayout, findIsoPath, footprintPolygon,
+  frontVertex, housePieces, isGroundType, isoAnchorOffset, isoLineWalkable, isoSize, isoWalkable, keyOf, nearestWalkableCell, simplifyIsoPath,
   type IsoCollision, type IsoItem, type IsoLayout,
 } from '../core/iso';
 import { planPath, type Point } from '../core/path';
@@ -564,7 +564,7 @@ export class WorldRenderer {
       const sp = new Sprite(tex);
       sp.anchor.set(0.5, 1);
       // 非正方足迹（城墙 6×2 / 2×6、城门楼 4×3）的锚点在精灵内不在底边中点，按模块元数据回正
-      const off = ISO_ANCHOR_OFFSET[unit.item.type];
+      const off = isoAnchorOffset(unit.item.type, unit.item.facing);
       if (off) { sp.x = -off.ax; sp.y = -off.ay; }
       // 分坊瓦色/墙色：对整张精灵做乘法着色（不改原图）
       if (unit.item.tint !== undefined) sp.tint = unit.item.tint;
