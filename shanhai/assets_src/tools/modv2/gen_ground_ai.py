@@ -31,10 +31,10 @@ FILES = {
 }
 RIMS = {
     'grass': (78, 128, 52, 90),
-    'stone': (96, 89, 76, 110),
+    'stone': (86, 92, 98, 110),      # 青灰描边（石板去黄后统一冷调）
     'dirt': (122, 95, 60, 100),
     'water': (40, 105, 155, 120),
-    'marble': (166, 158, 138, 110),
+    'marble': (170, 168, 160, 110),
 }
 
 # 变体 → (类型, 窗口 x, y, 水平镜像, 180° 旋转)
@@ -76,6 +76,17 @@ def diamond_mask() -> Image.Image:
     return m
 
 
+def recolor(px: np.ndarray, mode: str) -> np.ndarray:
+    """地面统一色调：石板去黄 → 青灰（与汉白玉/青瓦建筑同调），水微降饱和。"""
+    lum = (px @ np.array([0.299, 0.587, 0.114], dtype=np.float32))[..., None]
+    if mode == 'stone_cool':     # 保 30% 原纹理色 + 70% 灰度，再轻微向青偏移
+        px = px * 0.30 + lum * 0.70
+        px = px * np.array([0.95, 1.0, 1.04], dtype=np.float32) * 1.06
+    elif mode == 'water_soft':   # 降饱和 15%，避免小水面过艳
+        px = px * 0.85 + lum * 0.15
+    return px
+
+
 def bake(seam: dict[str, np.ndarray], kind: str, x: int, y: int, flip: bool, rot180: bool,
          marble: bool = False) -> Image.Image:
     win = seam[kind][y:y + WIN_H, x:x + WIN_W]
@@ -86,8 +97,12 @@ def bake(seam: dict[str, np.ndarray], kind: str, x: int, y: int, flip: bool, rot
     if flip:
         im = im.transpose(Image.FLIP_LEFT_RIGHT)
     px = np.asarray(im.resize((W, H), Image.LANCZOS)).astype(np.float32)
-    if marble:  # 汉白玉：石板向暖白调色（保留淡缝）
-        base = np.array([218.0, 212.0, 196.0])
+    if kind == 'stone':
+        px = recolor(px, 'stone_cool')
+    elif kind == 'water':
+        px = recolor(px, 'water_soft')
+    if marble:  # 汉白玉：石板向素白调色（保留淡缝），与青灰石板同冷调
+        base = np.array([224.0, 222.0, 214.0])
         px = px * 0.45 + base * 0.55
     out = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     rgb = Image.fromarray(np.clip(px, 0, 255).astype(np.uint8), 'RGB').convert('RGBA')
