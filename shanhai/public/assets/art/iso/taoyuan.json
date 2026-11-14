@@ -183,31 +183,31 @@
     },
     {
       "type": "ground_stone",
-      "gx": 42,
-      "gy": 42,
-      "w": 44,
+      "gx": 38,
+      "gy": 38,
+      "w": 52,
       "h": 6
     },
     {
       "type": "ground_stone",
-      "gx": 42,
-      "gy": 80,
-      "w": 44,
+      "gx": 38,
+      "gy": 84,
+      "w": 52,
       "h": 6
     },
     {
       "type": "ground_stone",
-      "gx": 42,
-      "gy": 42,
+      "gx": 38,
+      "gy": 38,
       "w": 6,
-      "h": 44
+      "h": 52
     },
     {
       "type": "ground_stone",
-      "gx": 80,
-      "gy": 42,
+      "gx": 84,
+      "gy": 38,
       "w": 6,
-      "h": 44
+      "h": 52
     },
     {
       "type": "ground_stone",
@@ -407,29 +407,29 @@
     },
     {
       "type": "ground_marble",
-      "gx": 50,
-      "gy": 50,
-      "w": 28,
-      "h": 28
+      "gx": 46,
+      "gy": 46,
+      "w": 36,
+      "h": 36
     },
     {
       "type": "ground_water",
-      "gx": 52,
-      "gy": 66,
-      "w": 9,
+      "gx": 50,
+      "gy": 64,
+      "w": 10,
       "h": 4
     },
     {
       "type": "ground_water",
-      "gx": 70,
-      "gy": 70,
-      "w": 6,
+      "gx": 68,
+      "gy": 66,
+      "w": 8,
       "h": 5
     },
     {
       "type": "ground_stone",
       "gx": 60,
-      "gy": 80,
+      "gy": 83,
       "w": 8,
       "h": 3
     },
@@ -1083,36 +1083,36 @@
     },
     {
       "type": "palace_corner",
-      "gx": 48,
-      "gy": 48,
+      "gx": 44,
+      "gy": 44,
       "w": 2,
       "h": 2
     },
     {
       "type": "palace_corner",
-      "gx": 78,
-      "gy": 48,
+      "gx": 82,
+      "gy": 44,
       "w": 2,
       "h": 2
     },
     {
       "type": "palace_corner",
-      "gx": 48,
-      "gy": 78,
+      "gx": 44,
+      "gy": 82,
       "w": 2,
       "h": 2
     },
     {
       "type": "palace_corner",
-      "gx": 78,
-      "gy": 78,
+      "gx": 82,
+      "gy": 82,
       "w": 2,
       "h": 2
     },
     {
       "type": "palace_gate",
       "gx": 62,
-      "gy": 78,
+      "gy": 82,
       "w": 4,
       "h": 2,
       "facing": "sw"
@@ -1120,73 +1120,79 @@
     {
       "type": "palace_hall",
       "gx": 59,
-      "gy": 52,
+      "gy": 48,
       "w": 10,
       "h": 10
     },
     {
       "type": "palace_hall_s",
-      "gx": 72,
-      "gy": 54,
+      "gx": 50,
+      "gy": 50,
       "w": 4,
       "h": 4
     },
     {
       "type": "palace_hall_s",
-      "gx": 50,
-      "gy": 64,
+      "gx": 74,
+      "gy": 50,
       "w": 4,
       "h": 4
     },
     {
       "type": "pagoda",
-      "gx": 72,
-      "gy": 66,
+      "gx": 46,
+      "gy": 68,
       "w": 3,
       "h": 3
     },
     {
       "type": "bridge",
-      "gx": 55,
-      "gy": 65,
+      "gx": 54,
+      "gy": 63,
       "w": 3,
       "h": 5
     },
     {
       "type": "bridge",
       "gx": 70,
-      "gy": 70,
+      "gy": 66,
       "w": 3,
       "h": 5
     },
     {
       "type": "tree",
-      "gx": 52,
+      "gx": 48,
       "gy": 58,
       "variant": "pine"
     },
     {
       "type": "tree",
-      "gx": 52,
-      "gy": 62,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 57,
-      "gy": 62,
+      "gx": 56,
+      "gy": 58,
       "variant": "pine"
     },
     {
       "type": "tree",
       "gx": 74,
-      "gy": 52,
+      "gy": 56,
       "variant": "pine"
     },
     {
       "type": "tree",
-      "gx": 76,
-      "gy": 58,
+      "gx": 77,
+      "gy": 60,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 50,
+      "gy": 72,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 58,
+      "gy": 74,
       "variant": "pine"
     },
     {
@@ -1197,25 +1203,19 @@
     },
     {
       "type": "tree",
-      "gx": 60,
+      "gx": 76,
       "gy": 74,
       "variant": "pine"
     },
     {
-      "type": "tree",
-      "gx": 50,
-      "gy": 76,
-      "variant": "pine"
-    },
-    {
       "type": "lantern_post",
       "gx": 60,
-      "gy": 62
+      "gy": 60
     },
     {
       "type": "lantern_post",
       "gx": 66,
-      "gy": 62
+      "gy": 60
     },
     {
       "type": "lantern_post",
@@ -1370,15 +1370,6 @@
     {
       "type": "house",
       "gx": 44,
-      "gy": 86,
-      "w": 9,
-      "h": 9,
-      "facing": "sw",
-      "tint": 16777215
-    },
-    {
-      "type": "house",
-      "gx": 44,
       "gy": 26,
       "w": 9,
       "h": 9,
@@ -1410,7 +1401,7 @@
       "w": 9,
       "h": 9,
       "facing": "se",
-      "tint": 16771798
+      "tint": 16777215
     },
     {
       "type": "house",
@@ -1419,7 +1410,7 @@
       "w": 9,
       "h": 9,
       "facing": "se",
-      "tint": 16777215
+      "tint": 16771798
     },
     {
       "type": "house",
@@ -1473,7 +1464,7 @@
       "w": 9,
       "h": 9,
       "facing": "sw",
-      "tint": 16771798
+      "tint": 16777215
     },
     {
       "type": "house",
@@ -1482,12 +1473,12 @@
       "w": 9,
       "h": 9,
       "facing": "sw",
-      "tint": 16777215
+      "tint": 16771798
     },
     {
       "type": "house",
-      "gx": 86,
-      "gy": 42,
+      "gx": 42,
+      "gy": 90,
       "w": 9,
       "h": 9,
       "facing": "se",
@@ -1536,7 +1527,7 @@
       "w": 9,
       "h": 9,
       "facing": "sw",
-      "tint": 16771798
+      "tint": 16777215
     },
     {
       "type": "house",
@@ -1545,7 +1536,7 @@
       "w": 9,
       "h": 9,
       "facing": "se",
-      "tint": 16777215
+      "tint": 16771798
     },
     {
       "type": "house",
@@ -1648,11 +1639,6 @@
     },
     {
       "type": "lantern_post",
-      "gx": 86,
-      "gy": 53
-    },
-    {
-      "type": "lantern_post",
       "gx": 97,
       "gy": 53
     },
@@ -1664,11 +1650,6 @@
     {
       "type": "lantern_post",
       "gx": 9,
-      "gy": 75
-    },
-    {
-      "type": "lantern_post",
-      "gx": 86,
       "gy": 75
     },
     {
@@ -1685,31 +1666,6 @@
       "type": "lantern_post",
       "gx": 9,
       "gy": 86
-    },
-    {
-      "type": "lantern_post",
-      "gx": 42,
-      "gy": 86
-    },
-    {
-      "type": "lantern_post",
-      "gx": 53,
-      "gy": 86
-    },
-    {
-      "type": "lantern_post",
-      "gx": 75,
-      "gy": 86
-    },
-    {
-      "type": "lantern_post",
-      "gx": 86,
-      "gy": 86
-    },
-    {
-      "type": "lantern_post",
-      "gx": 42,
-      "gy": 97
     },
     {
       "type": "lantern_post",
@@ -2040,397 +1996,283 @@
     },
     {
       "type": "tree",
-      "gx": 39,
+      "gx": 93,
       "gy": 39,
       "variant": "pine"
     },
     {
       "type": "tree",
-      "gx": 45,
+      "gx": 99,
       "gy": 39,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 39,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 39,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 45,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 45,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 45,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 45,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 45,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 51,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 51,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 51,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 69,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 33,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 111,
+      "gy": 69,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 117,
+      "gy": 69,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 75,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 75,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 75,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 75,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 81,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 81,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 81,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 81,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 87,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 87,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 93,
+      "gy": 87,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 99,
+      "gy": 87,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 105,
+      "gy": 87,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 9,
+      "gy": 93,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 15,
+      "gy": 93,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 21,
+      "gy": 93,
+      "variant": "pine"
+    },
+    {
+      "type": "tree",
+      "gx": 27,
+      "gy": 93,
+      "variant": "leaf"
+    },
+    {
+      "type": "tree",
+      "gx": 39,
+      "gy": 93,
       "variant": "pine"
     },
     {
       "type": "tree",
       "gx": 51,
-      "gy": 39,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 69,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 75,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 81,
-      "gy": 39,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 87,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 93,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 99,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 105,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 117,
-      "gy": 39,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 9,
-      "gy": 45,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 21,
-      "gy": 45,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 33,
-      "gy": 45,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
-      "gy": 45,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 111,
-      "gy": 45,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 9,
-      "gy": 51,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 15,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 21,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 27,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 33,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
-      "gy": 51,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 87,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 93,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 99,
-      "gy": 51,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 105,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 111,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 117,
-      "gy": 51,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 15,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 21,
-      "gy": 69,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 27,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 33,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 87,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 93,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 99,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 105,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 111,
-      "gy": 69,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 117,
-      "gy": 69,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 15,
-      "gy": 75,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 27,
-      "gy": 75,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
-      "gy": 75,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 87,
-      "gy": 75,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 93,
-      "gy": 75,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 99,
-      "gy": 75,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 9,
-      "gy": 81,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 21,
-      "gy": 81,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 27,
-      "gy": 81,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
-      "gy": 81,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 87,
-      "gy": 81,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 105,
-      "gy": 81,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 9,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 15,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 69,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 75,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 81,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 87,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 93,
-      "gy": 87,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 99,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 105,
-      "gy": 87,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 9,
-      "gy": 93,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 15,
-      "gy": 93,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 21,
-      "gy": 93,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 27,
-      "gy": 93,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 39,
       "gy": 93,
       "variant": "pine"
     },
@@ -2733,21 +2575,6 @@
     },
     {
       "type": "rock",
-      "gx": 38,
-      "gy": 38
-    },
-    {
-      "type": "rock",
-      "gx": 51,
-      "gy": 38
-    },
-    {
-      "type": "rock",
-      "gx": 77,
-      "gy": 38
-    },
-    {
-      "type": "rock",
       "gx": 90,
       "gy": 38
     },
@@ -2773,11 +2600,6 @@
     },
     {
       "type": "rock",
-      "gx": 38,
-      "gy": 51
-    },
-    {
-      "type": "rock",
       "gx": 90,
       "gy": 51
     },
@@ -2794,11 +2616,6 @@
     {
       "type": "rock",
       "gx": 25,
-      "gy": 77
-    },
-    {
-      "type": "rock",
-      "gx": 38,
       "gy": 77
     },
     {
@@ -2819,6 +2636,11 @@
     {
       "type": "rock",
       "gx": 38,
+      "gy": 90
+    },
+    {
+      "type": "rock",
+      "gx": 51,
       "gy": 90
     },
     {
