@@ -6,7 +6,7 @@
 变体取自同图不同窗口（部分水平镜像/180° 旋转），渲染层按格坐标哈希分发。
 
 源图（generated-images/）：
-- grass Seamless_tileable_top_down_gro_2026-11-14T03-28-46.png
+- grass Seamless_tileable_top_down_tex_2026-11-14T03-38-36.png（工笔风，城门风格锚）
 - stone Seamless_tileable_top_down_gro_2026-11-14T03-29-02.png
 - water Seamless_tileable_top_down_gro_2026-11-14T03-29-15.png
 - dirt  Seamless_tileable_top_down_gro_2026-11-14T03-29-31.png
@@ -24,7 +24,7 @@ OUT = Path(__file__).resolve().parents[3] / 'public' / 'assets' / 'art' / 'iso'
 W, H = 128, 64
 WIN_W, WIN_H = 512, 256          # 4× 下采样窗口，无纵横比失真
 FILES = {
-    'grass': 'Seamless_tileable_top_down_gro_2026-11-14T03-28-46.png',
+    'grass': 'Seamless_tileable_top_down_tex_2026-11-14T03-38-36.png',
     'stone': 'Seamless_tileable_top_down_gro_2026-11-14T03-29-02.png',
     'water': 'Seamless_tileable_top_down_gro_2026-11-14T03-29-15.png',
     'dirt': 'Seamless_tileable_top_down_gro_2026-11-14T03-29-31.png',
