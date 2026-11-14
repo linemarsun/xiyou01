@@ -769,12 +769,26 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(pick('pagoda').length === 1, '白塔 1 座（宫城一侧）');
   ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔为全城制高点');
   ok(pick('palace_gate').length === 1, '南面宫门 1 座');
-  // 宫墙回归（AI 工笔朱红宫墙金琉璃帽，2026-11-14 恢复围墙）：北 6+南 8+东西各 6 = 26 段
-  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 26,
-    '工笔宫墙 26 段四边闭合（北6 u6 / 南4 u6+4 u2 / 东西各6 v6）');
-  eq(count('palace_wall_u6'), 10, '北墙 6 段 + 南墙 4 段 u6');
-  eq(count('palace_wall_u2'), 4, '南墙 4 段 u2（宫门两侧补齐）');
+  // 宫墙回归（AI 工笔朱红宫墙金琉璃帽）：北 6+南 5+东西各 6 = 23 段；
+  // 南墙接宫门贴图两端（palace_gate.png 基座自带墙帽跨 u59.75..71.2）：
+  // 西段 46..59 = 2×u6+u2，东段 72..81 = u6+2×u2
+  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 24,
+    '工笔宫墙 24 段四边闭合（北6 u6 / 南3 u6+3 u2 / 东西各6 v6）');
+  eq(count('palace_wall_u6'), 9, '北墙 6 段 + 南墙 3 段 u6');
+  eq(count('palace_wall_u2'), 3, '南墙 3 段 u2（接宫门贴图两端）');
   eq(count('palace_wall_v6'), 12, '东西墙各 6 段 v6');
+  // 宫门贴图墙帽覆盖区（u60..71 墙线）不得再放墙段，避免双重墙
+  const southWallCells = [...pick('palace_wall_u6'), ...pick('palace_wall_u2')]
+    .filter((w) => w.gy === 82)
+    .flatMap((w) => Array.from({ length: iso.isoSize(w).w }, (_, i) => w.gx + i));
+  ok(southWallCells.every((x) => x < 60 || x > 71),
+    `南墙墙段不进入宫门贴图覆盖区 u60..71（实际 ${southWallCells.join(',')}）`);
+  // 配殿南移到庭院两侧（用户反馈摆放不合理：旧 (50,50)/(74,50) 被角楼/主殿檐角压住）
+  const sideHalls = pick('palace_hall_s');
+  ok(sideHalls.every((h) => h.gy >= 70), `配殿位于庭院南部（${sideHalls.map((h) => `${h.gx},${h.gy}`).join(' / ')}）`);
+  // 白塔脱离西墙（旧 (46,68) 足迹贴墙被墙段穿插）：距西墙 ≥2 格
+  const pag = pick('pagoda')[0];
+  ok(pag && pag.gx >= 48 && pag.gy <= 66, `白塔位于西北水园、不贴墙（${pag.gx},${pag.gy}）`);
   ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
   ok(count('bridge') >= 1 && count('ground_water') >= 2, '宫内曲水与石桥（参考图水系）');
   ok(count('paifang') >= 4, '宫前坊 4 座（街坊空地，不压主街轴线）');

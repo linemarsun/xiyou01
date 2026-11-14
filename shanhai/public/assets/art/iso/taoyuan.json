@@ -1166,20 +1166,6 @@
       "h": 2
     },
     {
-      "type": "palace_wall_u6",
-      "gx": 66,
-      "gy": 82,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_u6",
-      "gx": 72,
-      "gy": 82,
-      "w": 6,
-      "h": 2
-    },
-    {
       "type": "palace_wall_u2",
       "gx": 58,
       "gy": 82,
@@ -1187,10 +1173,10 @@
       "h": 2
     },
     {
-      "type": "palace_wall_u2",
-      "gx": 60,
+      "type": "palace_wall_u6",
+      "gx": 72,
       "gy": 82,
-      "w": 2,
+      "w": 6,
       "h": 2
     },
     {
@@ -1309,21 +1295,21 @@
     {
       "type": "palace_hall_s",
       "gx": 50,
-      "gy": 50,
+      "gy": 72,
       "w": 4,
       "h": 4
     },
     {
       "type": "palace_hall_s",
-      "gx": 74,
-      "gy": 50,
+      "gx": 73,
+      "gy": 72,
       "w": 4,
       "h": 4
     },
     {
       "type": "pagoda",
-      "gx": 46,
-      "gy": 68,
+      "gx": 49,
+      "gy": 60,
       "w": 3,
       "h": 3
     },
@@ -1343,14 +1329,14 @@
     },
     {
       "type": "tree",
-      "gx": 48,
+      "gx": 54,
       "gy": 58,
       "variant": "pine"
     },
     {
       "type": "tree",
       "gx": 56,
-      "gy": 58,
+      "gy": 62,
       "variant": "pine"
     },
     {
@@ -1362,42 +1348,20 @@
     {
       "type": "tree",
       "gx": 77,
-      "gy": 60,
+      "gy": 62,
       "variant": "pine"
     },
     {
       "type": "tree",
-      "gx": 50,
+      "gx": 57,
       "gy": 72,
       "variant": "pine"
     },
     {
       "type": "tree",
-      "gx": 58,
-      "gy": 74,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 68,
-      "gy": 74,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 76,
-      "gy": 74,
-      "variant": "pine"
-    },
-    {
-      "type": "lantern_post",
-      "gx": 60,
-      "gy": 60
-    },
-    {
-      "type": "lantern_post",
       "gx": 66,
-      "gy": 60
+      "gy": 74,
+      "variant": "pine"
     },
     {
       "type": "lantern_post",
@@ -1406,8 +1370,13 @@
     },
     {
       "type": "lantern_post",
-      "gx": 66,
+      "gx": 64,
       "gy": 70
+    },
+    {
+      "type": "lantern_post",
+      "gx": 60,
+      "gy": 74
     },
     {
       "type": "incense",
