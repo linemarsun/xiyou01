@@ -769,8 +769,12 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(pick('pagoda').length === 1, '白塔 1 座（宫城一侧）');
   ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔为全城制高点');
   ok(pick('palace_gate').length === 1, '南面宫门 1 座');
-  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 0,
-    '旧平涂宫墙已清理（用户反馈风格不统一，宫城为开放式台地）');
+  // 宫墙回归（AI 工笔朱红宫墙金琉璃帽，2026-11-14 恢复围墙）：北 6+南 8+东西各 6 = 26 段
+  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 26,
+    '工笔宫墙 26 段四边闭合（北6 u6 / 南4 u6+4 u2 / 东西各6 v6）');
+  eq(count('palace_wall_u6'), 10, '北墙 6 段 + 南墙 4 段 u6');
+  eq(count('palace_wall_u2'), 4, '南墙 4 段 u2（宫门两侧补齐）');
+  eq(count('palace_wall_v6'), 12, '东西墙各 6 段 v6');
   ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
   ok(count('bridge') >= 1 && count('ground_water') >= 2, '宫内曲水与石桥（参考图水系）');
   ok(count('paifang') >= 4, '宫前坊 4 座（街坊空地，不压主街轴线）');
