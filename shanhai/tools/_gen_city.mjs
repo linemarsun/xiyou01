@@ -264,12 +264,12 @@ for (let y = 11; y <= 116; y += 9) {
 for (let y = 9; y <= 118; y += 11) {
   for (let x = 9; x <= 118; x += 11) put({ type: 'lantern_post', gx: x, gy: y });
 }
-// 行道树 / 街坊绿化：针叶为主（参考图城内外成片针叶林）
+// 行道树 / 街坊绿化：针叶为主（参考图城内外成片针叶林）。
+// 用户反馈太密：步长 3+1/3 过滤 → 步长 6 全枚举，密度约减半；宽冠树冠交叠留足空隙。
 let innerTrees = 0;
-for (let y = 9; y <= 119; y += 3) {
-  for (let x = 9; x <= 119; x += 3) {
+for (let y = 9; y <= 119; y += 6) {
+  for (let x = 9; x <= 119; x += 6) {
     if (x >= 42 && x <= 84 && y >= 42 && y <= 84) continue;
-    if ((x + y) % 3 !== 0) continue;
     if (put({ type: 'tree', gx: x, gy: y, variant: (x + y) % 5 === 0 ? 'leaf' : 'pine' })) innerTrees++;
   }
 }

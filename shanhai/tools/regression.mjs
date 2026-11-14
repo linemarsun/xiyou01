@@ -794,7 +794,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(count('fence'), 0, '旧版院墙制式随重排移除，改为棋盘街坊');
   ok(count('ground_water') >= 8, `城外两片蜿蜒河湾 ${count('ground_water')} 段（取代环城护城河）`);
   ok(count('well') >= 1 && count('incense') >= 1 && count('stele') >= 1, '水井/香炉/石碑');
-  ok(count('tree') >= 400, `针叶林与行道树 ${count('tree')} 棵`);
+  ok(count('tree') >= 180 && count('tree') <= 400, `针叶林与行道树 ${count('tree')} 棵（用户反馈减密后约为旧一半）`);
   ok(count('stall') >= 20 && count('crate') >= 30, '市井摊棚与货箱');
   ok(count('ground_stone') >= 20 && count('ground_dirt') >= 8, '棋盘街巷与城外土路');
 
