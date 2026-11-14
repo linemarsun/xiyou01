@@ -95,8 +95,8 @@ const THEMES = [
       for (const [gx, gy] of [[22, 58], [60, 32], [98, 78], [26, 84]]) {
         prop('bridge', gx, gy, 3, 5);
       }
-      // 三座指路牌坊分立三个山口，牌坊中列可穿行
-      for (const [gx, gy] of [[36, 6], [7, 68], [118, 68]]) placeNear('paifang', gx, gy, 3, 3);
+      // 指路牌坊：西/东口各一 + 山腰歇脚坪一座（北口改由山门牌楼担当，避免双牌楼同框）
+      for (const [gx, gy] of [[63, 44], [7, 68], [118, 68]]) placeNear('paifang', gx, gy, 3, 3);
       // 山神庙 + 山间木屋（远离主路，不挡行走）
       placeNear('hall', 78, 74, 6, 6);
       placeNear('house', 44, 32, 4, 4, { variant: 'lattice', facing: 'sw' });
@@ -105,6 +105,8 @@ const THEMES = [
       for (const [type, gx, gy] of [['well', 52, 52], ['incense', 46, 76], ['stele', 88, 80]]) {
         placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
       }
+      // 山门牌楼：北入口主街东侧，玩家出云京入山第一眼的地标
+      placeNear('mountain_gate', 38, 12, 3, 3);
     },
   },
 
@@ -167,6 +169,8 @@ const THEMES = [
         tryProp('fence', cx - 9, gy, 2, 1);
         tryProp('fence', cx + 7, gy, 2, 1);
       }
+      // 渡口码头：南渡口广场东缘石堤旁，紧邻「幽都 · 忘川渡口」出口
+      placeNear('ferry_dock', 82, 121, 3, 5);
     },
   },
 
@@ -243,6 +247,8 @@ const THEMES = [
       }
       // 洞顶暗河（一小段，视觉上区别于方整岩地）
       for (let gy = 6; gy < 20; gy++) for (let gx = 70; gx < 76; gx++) setT(gx, gy, 'ground_water');
+      // 仙府门庭：西入口放射道北侧，进洞第一眼的地标
+      placeNear('cave_gate', 8, 47, 3, 3);
     },
   },
 
@@ -286,6 +292,10 @@ const THEMES = [
       for (const [type, gx, gy] of [['incense', 36, 72], ['well', 44, 72], ['crate', 30, 90]]) {
         placeNear(type, gx, gy);
       }
+      // 阎罗殿：黄泉道东侧桥北段，入府第一眼的幽冥主殿
+      placeNear('hell_palace', 52, 18, 6, 6);
+      // 引魂灯：碑阵间隙再立四盏，幽绿魂火呼应碑阵纵深（避开碑/灯的固定步进位）
+      for (const [gx, gy] of [[34, 22], [46, 34], [34, 94], [46, 100]]) tryProp('soul_lantern', gx, gy);
     },
   },
 ];

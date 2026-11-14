@@ -1157,11 +1157,23 @@ export class WorldRenderer {
   private buildActor(x: number, y: number, defId: string, scale: number, manifest: Manifest): Actor {
     const cm = manifest[defId];
     const frames: Record<string, Texture[]> = {};
-    if (cm) {
-      for (const [name, def] of Object.entries(cm.anims)) {
-        frames[name] = def.frames
+    let anims = cm?.anims;
+    if (cm && anims) {
+      for (const [name, def] of Object.entries(anims)) {
+        let list = def.frames
           .map((f) => Assets.get(new URL(`/assets/${f}`, location.origin).href) as Texture | undefined)
           .filter((t): t is Texture => !!t);
+        if (name === 'walk' && list.length === 4) {
+          // —— walk 步态净化 ——
+          // 素材 4 帧为 [迈左腿, 并腿+全身上浮1px, 迈右腿, 并腿+上浮]：两个"并腿浮起"帧
+          // 互为重复、高频出现（每 2 帧蹦跳一次），且腿是水平迈步而身体垂直上浮，动作错位，
+          // 走起来一跳一跳显得扭曲。只保留 f0/f2 两个迈步帧做左右交替（经典 8-bit 步态，
+          // 身体稳定不弹跳）；fps 取 7 使每步恰约一格（200px/s ÷ ≈53.7px/格 ≈ 3.7 步/s），
+          // 脚步与移动同步不滑步。此调整仅在运行时生效，不改素材契约与战斗渲染。
+          list = [list[0], list[2]];
+          anims = { ...anims, walk: { ...anims.walk, fps: 7 } };
+        }
+        frames[name] = list;
       }
     }
     const idle = frames.idle ?? [];
@@ -1181,7 +1193,7 @@ export class WorldRenderer {
     shadow.ellipse(0, -2, 30 * sh, 9 * sh).fill({ color: 0x0a0a10, alpha: 0.28 });
     root.addChild(shadow, sprite);
     const actor: Actor = {
-      root, sprite, baseScale: scale, anims: cm?.anims, frames,
+      root, sprite, baseScale: scale, anims, frames,
       animName: idle.length > 0 ? 'idle' : undefined,
     };
     return actor;
@@ -1334,10 +1346,20 @@ export class WorldRenderer {
         if (Math.abs(dx) > 2) this.player.sprite.scale.x = Math.abs(this.player.baseScale) * (dx < 0 ? -1 : 1);
       }
     } else {
-      this.playAnim(this.player, 'idle');
-      this.player.sprite.scale.x = Math.abs(this.player.sprite.scale.x);
       const next = this.path.shift();
-      if (next) { this.targetX = next.x; this.targetY = next.y; }
+      if (next) {
+        // 中途 waypoint：吸附到格点消除逐段死区偏差，并保持 walk 动画连续推进。
+        // 旧实现在此先切 idle 再切回 walk，gotoAndPlay(0) 会把步态反复重置到第 0 帧，
+        // 路径拐点越多走起来越"一顿一顿"；改为只有路径终点才回到待机姿态。
+        this.player.root.x = this.targetX;
+        this.player.root.y = this.targetY;
+        this.targetX = next.x;
+        this.targetY = next.y;
+        this.playAnim(this.player, 'walk');
+      } else {
+        this.playAnim(this.player, 'idle');
+        this.player.sprite.scale.x = Math.abs(this.player.sprite.scale.x);
+      }
     }
     this.player.root.zIndex = this.player.root.y;
 

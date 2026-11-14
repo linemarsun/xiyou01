@@ -183,6 +183,16 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   pagoda: { w: 3, h: 3, height: 700 },
   /** 汉白玉广场地面（宫城内铺地） */
   ground_marble: { w: 1, h: 1, ground: true },
+  /** 山门牌楼（青崖山道地标）：三门石木坊，与 gate_arch 同规格（3×3） */
+  mountain_gate: { w: 3, h: 3, height: 222 },
+  /** 渡口码头（渡忘川地标）：石造栈桥平台伸入水面（3×5，与 bridge 同足迹） */
+  ferry_dock: { w: 3, h: 5, height: 60 },
+  /** 仙府门庭（玲珑洞天地标）：青苔石拱门洞配晶柱（3×3） */
+  cave_gate: { w: 3, h: 3, height: 260 },
+  /** 阎罗殿（地府地标 6×6）：幽冥大殿，与 hall 同足迹 */
+  hell_palace: { w: 6, h: 6, height: 380 },
+  /** 引魂灯（地府路灯 1×1）：石造灯楼燃幽绿魂火 */
+  soul_lantern: { w: 1, h: 1, height: 170 },
 };
 
 /**
