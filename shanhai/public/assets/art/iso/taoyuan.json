@@ -1166,24 +1166,17 @@
       "h": 2
     },
     {
-      "type": "palace_wall_u2",
-      "gx": 58,
-      "gy": 82,
-      "w": 2,
-      "h": 2
-    },
-    {
       "type": "palace_wall_u6",
-      "gx": 72,
+      "gx": 69,
       "gy": 82,
       "w": 6,
       "h": 2
     },
     {
-      "type": "palace_wall_u2",
-      "gx": 78,
+      "type": "palace_wall_u6",
+      "gx": 75,
       "gy": 82,
-      "w": 2,
+      "w": 6,
       "h": 2
     },
     {

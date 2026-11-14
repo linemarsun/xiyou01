@@ -213,7 +213,7 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   // —— 宫城族（palace.py 烘焙，ax = anchor_px.x - spriteW/2, ay = anchor_px.y - spriteH）——
   palace_hall: { ax: 0, ay: -2 },         // 880×744, anchor [440,742]（故宫太和殿版 10×10）
   palace_hall_s: { ax: 0, ay: -19 },      // 324×453, anchor [162,434]
-  palace_gate: { ax: 0.5, ay: -2 },       // 459×444, anchor [230,442]（AI 工笔重绘 SE）
+  palace_gate: { ax: -0.5, ay: -2 },      // 459×444, anchor [229,442]（原版为 v 向墙城门，2026-11-14 水平镜像改为 u 向：拱门转朝 SW、塔楼归中）
   palace_corner: { ax: 0.5, ay: -2 },     // 327×434, anchor [164,432]（AI 工笔重绘 SE）
   palace_wall_u6: { ax: 64, ay: -5 },     // 256×275, anchor [192,270]
   palace_wall_u2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]

@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..'))
 MOD = os.path.join(ROOT, 'assets_src', 'modules')
+MOD2 = os.path.join(ROOT, 'public', 'assets', 'art', 'iso')  # 运行时资产（gate_keep/house 等）
 OUT_DIR = os.path.join(ROOT, '_restyle_samples')
 LAYOUT = os.path.join(ROOT, 'public', 'assets', 'art', 'iso', 'taoyuan.json')
 
@@ -33,9 +34,16 @@ _cache = {}
 
 def mod(name):
     if name not in _cache:
-        p = os.path.join(MOD, name)
-        _cache[name] = (Image.open(p + '.png').convert('RGBA'),
-                        json.load(open(p + '.json', encoding='utf-8')))
+        p = None
+        if os.path.exists(os.path.join(MOD, name + '.png')):
+            p = os.path.join(MOD, name)
+        elif os.path.exists(os.path.join(MOD2, name + '.png')):
+            p = os.path.join(MOD2, name)
+        if p is None:
+            raise FileNotFoundError(name)
+        jp = p + '.json'
+        meta = json.load(open(jp, encoding='utf-8')) if os.path.exists(jp) else {}
+        _cache[name] = (Image.open(p + '.png').convert('RGBA'), meta)
     return _cache[name]
 
 
@@ -118,7 +126,7 @@ def render(region=None, out_name='iso_render'):
         cand = [f"{name}_{f}", name] if f else [name]
         found = None
         for c in cand:
-            if os.path.exists(os.path.join(MOD, c + '.png')):
+            if os.path.exists(os.path.join(MOD, c + '.png')) or os.path.exists(os.path.join(MOD2, c + '.png')):
                 found = c
                 break
         if not found:
@@ -131,6 +139,15 @@ def render(region=None, out_name='iso_render'):
         print('缺图跳过:', sorted(set(skipped)))
 
     im = b.im
+    # 调试：叠加红色足迹线框，验证贴图与足迹的对齐
+    if os.environ.get('ISO_DEBUG_FP'):
+        d = ImageDraw.Draw(im)
+        for it in sorted(props, key=sort_key):
+            w = it.get('w') or 1
+            h = it.get('h') or 1
+            pts = [b.P(it['gx'] + w, it['gy'] + h), b.P(it['gx'], it['gy'] + h),
+                   b.P(it['gx'], it['gy']), b.P(it['gx'] + w, it['gy'])]
+            d.polygon(pts, outline=(255, 0, 0, 255))
     if region:
         # 裁回内容区
         im = im.crop(im.getbbox())

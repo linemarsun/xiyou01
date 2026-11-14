@@ -180,13 +180,14 @@ rigid('gate_keep', 121, 58, 6, 12, { facing: 'se' });
 for (const [x, y] of [[44, 44], [82, 44], [44, 82], [82, 82]]) rigid('palace_corner', x, y, 2, 2);
 // 北墙 y44 / x46..81（36 格 = 6×u6）
 for (const x of [46, 52, 58, 64, 70, 76]) rigid('palace_wall_u6', x, 44, 6, 2);
-// 南墙 y82：宫门贴图（palace_gate.png）基座自带东西墙帽，不透明基座横跨墙线
-// u≈59.75..71.2 → 墙段只需接到贴图两端：西段 46..59 = 2×u6+u2，东段 72..81 = u6+2×u2，
-// 门楼足迹 62..65 居中，贴图墙帽补齐 59..62 / 65..72 的空档（视觉无缝）
+// 南墙 y82：宫门贴图（palace_gate.png，2026-11-14 已水平镜像为 u 向版：拱门朝 SW、
+// 塔楼居中）。实测镜像后基座剪影横跨墙线 u≈57.9..69.25（画布 1..365），
+// 墙段只需接到剪影两端：西段 46..57 = 2×u6，东段 69..81 = 2×u6+u2 收边，
+// 城台侧面与墙端面重叠 0.1~0.25 格，视觉无缝
 for (const x of [46, 52]) rigid('palace_wall_u6', x, 82, 6, 2);
-rigid('palace_wall_u2', 58, 82, 2, 2);
-rigid('palace_wall_u6', 72, 82, 6, 2);
-for (const x of [78, 80]) rigid('palace_wall_u2', x, 82, 2, 2);
+rigid('palace_wall_u6', 69, 82, 6, 2);
+rigid('palace_wall_u6', 75, 82, 6, 2);
+rigid('palace_wall_u2', 80, 82, 2, 2);
 rigid('palace_gate', 62, 82, 4, 2, { facing: 'sw' });
 // 东西墙 x44 / x82，y46..81（各 36 格 = 6×v6）
 for (const y of [46, 52, 58, 64, 70, 76]) {
