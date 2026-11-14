@@ -1538,7 +1538,7 @@ test('五图所有非地面构件都能命中至少一张真实 PNG（候选链�
       if (it.type.startsWith('ground_')) continue;
       const cands = it.type === 'house'
         ? art.isoHouseCandidates(it.facing, it.variant)
-        : art.isoModuleCandidates(it.type, it.variant, it.facing);
+        : art.isoModuleCandidates(it.type, it.variant, it.facing, id);
       const hit = cands.find((u) => existsSync(urlToFile(u)));
       const key = `${it.type}|${it.variant ?? ''}|${it.facing ?? ''}`;
       if (!hit) missing.push(`${id}: ${key}`);
@@ -1547,6 +1547,33 @@ test('五图所有非地面构件都能命中至少一张真实 PNG（候选链�
   }
   eq(missing.length, 0, `仍走程序化占位的构件：${[...new Set(missing)].slice(0, 12).join('、')}`);
   ok(hitOf.size >= 20, `覆盖的构件种类 ${hitOf.size} 种`);
+});
+
+test('双素材线分流契约：云京工笔版在根目录、四图手绘版在 iso/hw/，互不覆盖', () => {
+  const HW_FILES = ['tree_pine', 'tree_leaf', 'ground_grass', 'ground_stone', 'ground_dirt',
+    'ground_water', 'gate_arch', 'city_wall_u6', 'city_wall_v6'];
+  for (const n of HW_FILES) {
+    ok(existsSync(path.join(ISO_DIR, 'hw', `${n}.png`)), `iso/hw/${n}.png 存在（main 手绘版）`);
+    ok(existsSync(path.join(ISO_DIR, `${n}.png`)), `iso/${n}.png 存在（云京工笔版）`);
+    const a = readFileSync(path.join(ISO_DIR, `${n}.png`));
+    const b = readFileSync(path.join(ISO_DIR, 'hw', `${n}.png`));
+    ok(!a.equals(b), `iso/${n}.png 与 hw 版内容互异（真分流而非复制）`);
+  }
+  // 云京候选链永不进入 hw/；四图冲突构件候选链首个命中必须是 hw/
+  const yun = art.isoModuleCandidates('tree', 'pine', undefined, 'taoyuan');
+  ok(yun.every((u) => !u.includes('/hw/')), '云京候选链不含 hw/');
+  for (const [id, v] of [['wild_heifeng', 'leaf'], ['wild_luanzang', 'dead'], ['wild_shanxiao', 'pine'], ['difu', 'dead']]) {
+    const c = art.isoModuleCandidates('tree', v, undefined, id);
+    ok(c[0].includes('/hw/'), `${id} 候选链 hw/ 优先`);
+    const hit = c.find((u) => existsSync(urlToFile(u)));
+    ok(!!hit, `${id} tree_${v} 候选链命中真实 PNG`);
+    if (v === 'dead') {
+      // 枯树两线素材本就相同（未分流），根目录即 main 手绘版
+      ok(hit && !hit.includes('/hw/') && hit.endsWith('/tree_dead.png'), `${id} tree_dead 命中根目录 main 版`);
+    } else {
+      ok(hit && hit.includes('/hw/'), `${id} tree_${v} 实际命中 hw/ 手绘版`);
+    }
+  }
 });
 
 test('新增构件贴图均为合法带 alpha 的 PNG，且变体贴图内容互不相同', () => {

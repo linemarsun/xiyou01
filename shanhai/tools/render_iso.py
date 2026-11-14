@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..'))
+HW_MODE = False
 MOD = os.path.join(ROOT, 'assets_src', 'modules')
 MOD2 = os.path.join(ROOT, 'public', 'assets', 'art', 'iso')  # 运行时资产（gate_keep/house 等）
 OUT_DIR = os.path.join(ROOT, '_restyle_samples')
@@ -38,6 +39,8 @@ def mod(name):
         if os.path.exists(os.path.join(MOD, name + '.png')):
             p = os.path.join(MOD, name)
         elif os.path.exists(os.path.join(MOD2, name + '.png')):
+            p = os.path.join(MOD2, name)
+        elif name.startswith('hw/') and os.path.exists(os.path.join(MOD2, name + '.png')):
             p = os.path.join(MOD2, name)
         if p is None:
             raise FileNotFoundError(name)
@@ -83,6 +86,9 @@ class Board(object):
 
 def render(region=None, out_name='iso_render'):
     layout = json.load(open(LAYOUT, encoding='utf-8'))
+    # 双素材线分流：非 taoyuan 布局优先取 iso/hw/（main 手绘版），回落根目录
+    global HW_MODE
+    HW_MODE = 'taoyuan' not in LAYOUT
     g = layout['grid']
     items = layout['items']
 
@@ -124,11 +130,15 @@ def render(region=None, out_name='iso_render'):
             name = f"{t}_{it['variant']}"
         f = it.get('facing')
         cand = [f"{name}_{f}", name] if f else [name]
+        cand.append({'paifang': 'gate_arch'}.get(t, t))  # 别名 + 纯基名兜底（对齐游戏候选链）
         if t == 'house':
             hf = f or 'sw'
-            cand = ([f"house_4x4_{hf}_{it.get('variant')}"] if it.get('variant') else []) + [f"house_4x4_{hf}"]
+            cand = ([f"house_4x4_{hf}_{it.get('variant')}"] if it.get('variant') else []) + [f"house_4x4_{hf}", t]
         found = None
         for c in cand:
+            if HW_MODE and os.path.exists(os.path.join(MOD2, 'hw', c + '.png')):
+                found = 'hw/' + c
+                break
             if os.path.exists(os.path.join(MOD, c + '.png')) or os.path.exists(os.path.join(MOD2, c + '.png')):
                 found = c
                 break

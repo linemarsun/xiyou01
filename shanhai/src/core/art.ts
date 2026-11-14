@@ -132,7 +132,14 @@ export function isoModuleUrl(type: string, variant?: string, facing?: string): s
 /** 无独立贴图的构件借用既有模块图（牌坊与城门同为三门石坊） */
 export const ISO_MODULE_ALIAS: Record<string, string> = { paifang: 'gate_arch' };
 
-export function isoModuleCandidates(type: string, variant?: string, facing?: string): string[] {
+/**
+ * 双素材线命名分流：云京沿用本地工笔线贴图（iso/ 根目录），其余四图走 main
+ * 手绘线版本（iso/hw/ 同名文件优先）。同名冲突文件在 hw/ 保留 main 版原素材，
+ * 云京与其余地图互不覆盖；hw/ 缺图的构件自然回落 iso/ 根目录（两线一致的文件）。
+ */
+export const ISO_HW_MAPS = new Set(['wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu']);
+
+export function isoModuleCandidates(type: string, variant?: string, facing?: string, mapId?: string): string[] {
   const base0 = ISO_MODULE_ALIAS[type] ?? type;
   const bases = variant ? [`${base0}_${variant}`, base0] : [base0];
   const out: string[] = [];
@@ -142,6 +149,10 @@ export function isoModuleCandidates(type: string, variant?: string, facing?: str
       if (facing !== 'sw') out.push(artUrl(`iso/${base}_sw.png`));
     }
     out.push(artUrl(`iso/${base}.png`));
+  }
+  if (mapId && ISO_HW_MAPS.has(mapId)) {
+    const hw = out.map((u) => u.replace('/assets/art/iso/', '/assets/art/iso/hw/'));
+    return [...hw, ...out];
   }
   return out;
 }

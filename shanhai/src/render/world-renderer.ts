@@ -343,7 +343,7 @@ export class WorldRenderer {
       // 房屋走成套屋身图（含门脸变体）；其余构件：朝向 → sw → 无朝向旧图
       return this.loadIsoTexture(k, type === 'house'
         ? isoHouseCandidates(facing || undefined, variant || undefined)
-        : isoModuleCandidates(type, variant || undefined, facing || undefined));
+        : isoModuleCandidates(type, variant || undefined, facing || undefined, this.map.id));
     }));
 
     // 房屋缺成套屋身时补取旧构件图（rules.roofLift 兜底路径才会用到）
@@ -357,7 +357,7 @@ export class WorldRenderer {
     }
     await Promise.all([...pieceKeys].map((k) => {
       const [type, , facing] = k.split('|');
-      return this.loadIsoTexture(k, isoModuleCandidates(type, undefined, facing || undefined));
+      return this.loadIsoTexture(k, isoModuleCandidates(type, undefined, facing || undefined, this.map.id));
     }));
   }
 
@@ -438,6 +438,9 @@ export class WorldRenderer {
       }
       // 地面块变体与微色差：确定性哈希（AI 工笔贴图：草 4 变体 / 石板·土路·水各 2 +
       // 亮度 ±7%），避免整图同一张贴图平铺的重复感；缺变体图时回退基础图或纯色批。
+      // 变体与亮度抖动仅云京启用（本地工笔贴图的防平铺机制）；其余四图走
+      // main 手绘线（hw/ 候选），保持 main 原行为（无变体、无 tint）
+      const yunjing = this.map.id === 'taoyuan';
       const gh = (Math.imul(bx, 2654435761) ^ Math.imul(by, 668265263)) >>> 0;
       const GROUND_VARIANTS: Record<string, string[]> = {
         ground_grass: ['a', 'b', 'c', 'd'],
@@ -445,12 +448,13 @@ export class WorldRenderer {
         ground_dirt: ['a', 'b'],
         ground_water: ['a', 'b'],
       };
-      const vopts = GROUND_VARIANTS[best];
+      const vopts = yunjing ? GROUND_VARIANTS[best] : undefined;
       const variant = vopts ? vopts[gh % vopts.length] : undefined;
       // 汉白玉是单张贴图的纯色大平层，随机明暗会显成色斑 → 只留极轻微变化；
       // 其余地面（草/石/土/水）保留下确定性亮度抖动避免平铺重复感
-      const lum = best === 'ground_marble' ? 252 + (gh % 4) : 236 + (gh % 20);
-      const tint = (lum << 16) | (lum << 8) | lum;
+      const lum = !yunjing ? 255
+        : best === 'ground_marble' ? 252 + (gh % 4) : 236 + (gh % 20);
+      const tint = yunjing ? (lum << 16) | (lum << 8) | lum : undefined;
       blocks.set(keyOf(bx, by), { type: best, gx: bx, gy: by, w: 2, h: 2, variant, tint });
     }
     // 草地先画、街道最后画：区块边缘多为奇数列/行，压过去更像真实街沿
