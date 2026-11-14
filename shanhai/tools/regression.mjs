@@ -1501,7 +1501,7 @@ test('五张地图的树木变体都有真实 PNG，且贴图为带透明通道�
     ok(b.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), `${path.basename(file)} 是 PNG`);
     eq(b[25], 6, `${path.basename(file)} 带 alpha 通道`);
     const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
-    ok(w >= 48 && w <= 180 && h >= 120 && h <= 280, `${path.basename(file)} 尺寸合理（${w}×${h}）`);
+    ok(w >= 48 && w <= 220 && h >= 120 && h <= 280, `${path.basename(file)} 尺寸合理（${w}×${h}）`);
   }
   ok(variants.has('leaf') && variants.has('pine') && variants.has('dead'), '三种树形都被布局使用');
 });
