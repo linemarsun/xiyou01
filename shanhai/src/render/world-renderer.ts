@@ -447,7 +447,9 @@ export class WorldRenderer {
       };
       const vopts = GROUND_VARIANTS[best];
       const variant = vopts ? vopts[gh % vopts.length] : undefined;
-      const lum = 236 + (gh % 20);
+      // 汉白玉是单张贴图的纯色大平层，随机明暗会显成色斑 → 只留极轻微变化；
+      // 其余地面（草/石/土/水）保留下确定性亮度抖动避免平铺重复感
+      const lum = best === 'ground_marble' ? 252 + (gh % 4) : 236 + (gh % 20);
       const tint = (lum << 16) | (lum << 8) | lum;
       blocks.set(keyOf(bx, by), { type: best, gx: bx, gy: by, w: 2, h: 2, variant, tint });
     }
