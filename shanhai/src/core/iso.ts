@@ -121,7 +121,10 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   ground_dirt: { w: 1, h: 1, ground: true },
   /** 水面：地面的一种，但不可行走（石桥的桥面格例外，见 buildCollision） */
   ground_water: { w: 1, h: 1, ground: true },
-  house: { w: 4, h: 4, height: 190 },
+  /** 一进四合院民居（AI 合院贴图 480×430）：正房在后、院门倒座在前、中间青砖院子；
+   *  贴图底座菱形 ≈476px → 足迹 8×8（菱形 512px，碰撞略大于视觉墙体更安全）；
+   *  正脊标高 ~390（院门楼 + 后正房双重屋顶）。 */
+  house: { w: 8, h: 8, height: 390 },
   /** 大档建筑：跨 3~4 格的两层楼阁/大宅（层高抬到 280，暂无美术，走程序化占位盒） */
   house_large: { w: 4, h: 4, height: 280 },
   /** 小档建筑：单间铺面/偏房（跨 2 格） */
@@ -193,6 +196,8 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
  * ax = anchor_px.x - spriteW/2，ay = anchor_px.y - spriteH。
  */
 export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
+  // 合院民居（480×430）：底顶点在画布底部正中 (240,427)，ax=0；ay = 427-430
+  house: { ax: 0, ay: -3 },
   city_wall_u6: { ax: 64, ay: -5 },
   city_wall_u2: { ax: 0, ay: -5 },
   city_wall_v6: { ax: -64, ay: -5 },

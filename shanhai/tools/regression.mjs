@@ -788,8 +788,8 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   const byRegion = { market: 0, residence: 0, temple: 0, garden: 0 };
   for (const it of layout.items) if (BUILDING.has(it.type)) byRegion[regionOf(it)]++;
   const totalBuildings = byRegion.market + byRegion.residence + byRegion.temple + byRegion.garden;
-  ok(totalBuildings >= 120 && totalBuildings <= 170, `民居总数 ${totalBuildings} 栋（目标约 150，旧版 60~80）`);
-  ok(Object.values(byRegion).every((n) => n >= 25),
+  ok(totalBuildings >= 30 && totalBuildings <= 90, `民居总数 ${totalBuildings} 栋（8×8 合院体量 4 倍于旧 4×4，密度相应下降）`);
+  ok(Object.values(byRegion).every((n) => n >= 5),
     `四象限都成坊 市集 ${byRegion.market} / 宅院 ${byRegion.residence} / 庙署 ${byRegion.temple} / 园林 ${byRegion.garden}`);
   eq(count('fence'), 0, '旧版院墙制式随重排移除，改为棋盘街坊');
   ok(count('ground_water') >= 8, `城外两片蜿蜒河湾 ${count('ground_water')} 段（取代环城护城河）`);
@@ -798,21 +798,24 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(count('stall') >= 20 && count('crate') >= 30, '市井摊棚与货箱');
   ok(count('ground_stone') >= 20 && count('ground_dirt') >= 8, '棋盘街巷与城外土路');
 
-  // —— 尺度：4×4 民居为主 + 宫城大殿（参考图民居尺度统一）——
+  // —— 尺度：8×8 一进四合院民居（AI 合院贴图，正房+倒座+院子）——
   const medium = count('house');
-  ok(medium >= 120, `中档 4×4 屋身 ${medium} 座`);
+  ok(medium >= 20 && medium <= 80, `一进四合院民居 ${medium} 座（8×8 合院体量为旧 4×4 的 4 倍，密度相应下降）`);
   eq(count('shop_small'), 0, '小档缺成套屋身，先不生成');
   eq(count('house_large'), 0, '大宅缺成套屋身，先不生成（避免空白墙面占位）');
   eq(iso.ISO_TYPES.house_large.w, 4, '大档跨 4 格（两三层楼阁）');
-  ok(iso.ISO_TYPES.house_large.height > iso.ISO_TYPES.house.height, '大档层高高于中档');
+  ok(iso.ISO_TYPES.house.height > iso.ISO_TYPES.house_large.height, '合院含前后两进双重屋顶，标高高于旧楼阁屋身');
   eq(iso.ISO_TYPES.shop_small.w, 2, '小档跨 2 格');
-  eq(iso.ISO_TYPES.house.w, 4, '中档沿用 4×4 屋身');
+  eq(iso.ISO_TYPES.house.w, 8, '合院 8×8 足迹（菱形 512px 与贴图底座吻合）');
+  ok(pick('house').every((b) => b.facing === 'se' || b.facing === 'sw'),
+    '合院只做 se/sw 两向（院门朝镜头侧，sw 为 se 水平镜像）');
+  ok(pick('house').every((b) => b.variant === undefined), '合院不带 variant（直取 house_4x4_se/_sw.png 成对贴图）');
 
   // —— 配色：贴图已是深灰瓦 / 红木构，tint 只做极轻的暖冷差（不再靛青乘法染色）——
   const COOL = 0xffffff;
   const WARM = 0xffead6;
   const tinted = layout.items.filter((i) => BUILDING.has(i.type) && i.tint !== undefined);
-  ok(tinted.length >= 100, `着色建筑 ${tinted.length} 座`);
+  ok(tinted.length >= 20, `着色建筑 ${tinted.length} 座`);
   ok(tinted.every((i) => i.tint === COOL || i.tint === WARM), '瓦色只分中性主色与暖色点缀两档');
   const warm = tinted.filter((i) => i.tint === WARM).length;
   const warmRatio = warm / tinted.length;
@@ -913,8 +916,8 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
 
   // 城门拱洞 222px（与 gate_arch 真实美术一致），角色通行高度不受影响
   eq(iso.ISO_TYPES.gate_arch.height, 222, '城门拱洞 222px');
-  eq(iso.ISO_TYPES.house.w, 4, '屋身 4 格宽（与 4 格墙板一致）');
-  eq(iso.ISO_TYPES.house.h, 4, '屋身 4 格深（两面墙各 4 格）');
+  eq(iso.ISO_TYPES.house.w, 8, '合院 8 格宽（菱形 512px 与 AI 合院贴图底座吻合）');
+  eq(iso.ISO_TYPES.house.h, 8, '合院 8 格深');
 
   // 组合式房屋：墙 sw+se、前后坡、屋脊、山墙端面共 7 件，且脊线方向随朝向变化
   const houseItem = layout.items.find((i) => i.type === 'house');
@@ -937,9 +940,9 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(liftedRidge.dy - plainRidge.dy, -170, 'rules.roofLift 仅对旧屋面构件兜底抬升');
   eq(raw.rules?.roofLift ?? 0, 0, '屋面兜底抬升默认 0（成套屋身落地即贴墙顶）');
 
-  // 门脸变体：四坊手摆也混用三套门脸，房屋带 variant 字段
+  // 合院民居不带门脸变体（整座合院一张贴图，直取 house_4x4_se/_sw.png）
   const houseVariants = new Set(layout.items.filter((i) => i.type === 'house').map((i) => i.variant).filter(Boolean));
-  ok(houseVariants.size >= 3, `四坊实际混用 ${houseVariants.size} 套门脸`);
+  eq(houseVariants.size, 0, '合院民居不带 variant（旧门脸变体仅存于 difu/wild 布局）');
 
   // 模块 / 布局命名契约 + 四向贴图回退
   eq(art.isoLayoutUrl('taoyuan'), '/assets/art/iso/taoyuan.json', '布局路径');

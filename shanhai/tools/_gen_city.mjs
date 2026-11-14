@@ -212,27 +212,35 @@ for (const [x, y] of [[58, 76], [68, 76]]) {
 for (const [x, y] of [[50, 20], [74, 20], [20, 74], [104, 74]]) {
   put({ type: 'paifang', gx: x, gy: y, w: 3, h: 3, facing: 'sw' });
 }
+// 井 / 碑：固定坐标地标，先于民居撒点落位（8×8 合院体量大，后放会被占位）
+for (const [x, y] of [[20, 20], [104, 20], [20, 104], [104, 104], [46, 20], [80, 104]]) {
+  put({ type: 'well', gx: x, gy: y });
+}
+for (const [x, y] of [[36, 20], [92, 20], [36, 108], [92, 108], [20, 62], [108, 62]]) {
+  put({ type: 'stele', gx: x, gy: y, w: 1, h: 2 });
+}
 
-// ---------------------------------------------------------------- 民居（高密棋盘街坊）
-// 全城按 5 格步长撒 4×4 屋身，自动避开所有道路/水面/宫城/城墙/玩法点位；
-// 用哈希排序打散填充顺序，避免只填满上半城。
+// ---------------------------------------------------------------- 民居（一进四合院，AI 合院贴图）
+// 合院体量 8×8（菱形 512px，画布 480×430）：旧 4×4/5 步长不再适用。
+// 细步长全枚举候选点 + 哈希序抢占（put 自动避让道路/水面/宫城/玩法点位与已占格），
+// 每个街坊块落 1~2 座合院，数量约为旧版 1/3（体量 4 倍）。
+// 只做 se/sw 两向（院门朝镜头一侧），sw 为 se 的水平镜像；无 variant（直取 house_4x4_se/_sw.png）。
 const candidates = [];
-for (let y = 8; y + 4 <= 120; y += 5) {
-  for (let x = 8; x + 4 <= 120; x += 5) {
+for (let y = 8; y + 8 <= 121; y += 2) {
+  for (let x = 8; x + 8 <= 121; x += 2) {
     candidates.push({ x, y, h: ((x * 73 + y * 151) % 1009) });
   }
 }
 candidates.sort((a, b) => a.h - b.h);
-const FACINGS = ['sw', 'se', 'nw', 'ne'];
-const M_VAR = ['shop', 'lattice', 'carved', 'lattice'];
 let houseCount = 0;
 for (const { x, y } of candidates) {
-  if (houseCount >= 150) break;
+  if (houseCount >= 80) break;
   // 宫城与环路范围不撒民居
   if (x >= 42 && x <= 84 && y >= 42 && y <= 84) continue;
   const ok = put({
-    type: 'house', gx: x, gy: y, w: 4, h: 4,
-    facing: FACINGS[(x + y) % 4], variant: M_VAR[(x * 3 + y) % 4], tint: tintPick(),
+    type: 'house', gx: x, gy: y, w: 8, h: 8,
+    facing: ((x + y) >> 1) % 2 ? 'sw' : 'se',   // 枚举步长为 2，x+y 恒偶 → 取半再取奇偶才两向都有
+    tint: houseCount % 7 === 3 ? WARM : COOL,   // 按成功落位计数取暖色，约 14%（枚举有失败尝试，不能用递增序号）
   });
   if (ok) houseCount++;
 }
@@ -252,13 +260,7 @@ for (let y = 11; y <= 116; y += 9) {
     if (put({ type: 'crate', gx: x, gy: y })) crateCount++;
   }
 }
-// 井 / 碑 / 灯笼 / 牌坊（宫城外围四向主轴，参考图宫前坊）
-for (const [x, y] of [[20, 20], [104, 20], [20, 104], [104, 104], [46, 20], [80, 104]]) {
-  put({ type: 'well', gx: x, gy: y });
-}
-for (const [x, y] of [[36, 20], [92, 20], [36, 108], [92, 108], [20, 62], [108, 62]]) {
-  put({ type: 'stele', gx: x, gy: y, w: 1, h: 2 });
-}
+// 灯笼（宫城外围四向主轴；井/碑已前移至民居撒点前）
 for (let y = 9; y <= 118; y += 11) {
   for (let x = 9; x <= 118; x += 11) put({ type: 'lantern_post', gx: x, gy: y });
 }
