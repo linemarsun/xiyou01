@@ -124,6 +124,9 @@ def render(region=None, out_name='iso_render'):
             name = f"{t}_{it['variant']}"
         f = it.get('facing')
         cand = [f"{name}_{f}", name] if f else [name]
+        if t == 'house':
+            hf = f or 'sw'
+            cand = ([f"house_4x4_{hf}_{it.get('variant')}"] if it.get('variant') else []) + [f"house_4x4_{hf}"]
         found = None
         for c in cand:
             if os.path.exists(os.path.join(MOD, c + '.png')) or os.path.exists(os.path.join(MOD2, c + '.png')):

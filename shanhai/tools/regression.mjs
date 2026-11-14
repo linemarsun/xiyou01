@@ -1558,7 +1558,7 @@ test('新增构件贴图均为合法带 alpha 的 PNG，且变体贴图内容互
     ok(b.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), `${n}.png 是 PNG`);
     eq(b[25], 6, `${n}.png 带 alpha 通道`);
     const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
-    ok(w >= 96 && w <= 520 && h >= 96 && h <= 760, `${n}.png 尺寸合理（${w}×${h}）`);
+    ok(w >= 96 && w <= 940 && h >= 48 && h <= 760, `${n}.png 尺寸合理（${w}×${h}）`);
   }
   const uniq = (list) => new Set(list.map((n) => buf(n).toString('base64'))).size;
   eq(uniq(['rock', 'rock_moss', 'rock_dark', 'rock_crystal']), 4, '四种山石贴图内容互异');

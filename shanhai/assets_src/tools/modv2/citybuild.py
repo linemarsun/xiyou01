@@ -70,20 +70,18 @@ def mix(a, b, t):
     return tuple(int(round(a[i] * (1 - t) + b[i] * t)) for i in range(3))
 
 
-# 参考图配色（map_01）：朱红墙身 + 深灰垛口压顶 + 深色条石基座
-WALL_C = (178, 62, 48)                      # 朱红砖墙（受光前脸）
-WALL_S = (126, 42, 34)                      # 朱红背光侧脸
-PARA_C = (86, 84, 80)                       # 深灰垛口 / 女墙（受光，参考图压顶色）
-PARA_S = (58, 56, 54)                       # 深灰垛口背光
-WALL_HI = (232, 146, 118)                   # 朱红砖缝高光（替代米白，避免洗白墙身）
-STONE = mix(IRON, DARK, 0.22)               # 条石基座：深灰石
-STONE_S = mix(STONE, DARK, 0.30)
-STONE_T = mix(STONE, IRON, 0.30)
+WALL_C = mix(BEIGE, IRON, 0.26)             # 夯土/砖墙：暖灰
+WALL_S = mix(WALL_C, DARK, 0.24)            # 背光侧脸
+PARA_C = mix(WALL_C, IRON, 0.14)
+PARA_S = mix(WALL_S, IRON, 0.12)
+STONE = mix(IRON_L, CREAM, 0.34)            # 条石
+STONE_S = mix(STONE, DARK, 0.20)
+STONE_T = mix(STONE, CREAM, 0.22)
 WALK_C = mix(STONE, BEIGE, 0.30)            # 马道面
 WALK_S = mix(WALK_C, DARK, 0.16)
-GATE_C = (192, 76, 58)                      # 城台 / 券洞内壁：朱红
-GATE_S = (138, 50, 38)
-GATE_T = (210, 100, 78)
+GATE_C = mix(WALL_C, BEIGE, 0.22)           # 城台砖：比城墙略亮一档
+GATE_S = mix(GATE_C, DARK, 0.22)
+GATE_T = mix(GATE_C, CREAM, 0.14)
 
 
 def font(sz, bold=False):
@@ -135,7 +133,7 @@ def _brick_tone(col, row, ua, ao, ao_h):
     """单砖确定性色调：明度抖动 + 可选贴地环境光遮蔽。锚定绝对格栅，跨段同相位。"""
     h = ((row * 73856093) ^ (int(round(ua * 31)) * 19349663)) & 0xFFFFFFFF
     t = (h % 997) / 997.0
-    bc = mix(mix(col, DARK, 0.085 * t), WALL_HI, 0.085 * (1.0 - t))
+    bc = mix(mix(col, DARK, 0.085 * t), CREAM, 0.085 * (1.0 - t))
     if ao_h > 0:
         bc = mix(bc, DARK, 0.20 * max(0.0, 1.0 - min(ao, ao_h) / ao_h))
     return bc
@@ -146,7 +144,7 @@ def brick_v(d, u0, u1, v, z0, z1, col, ch=9.0, cw=0.62, seed=0, ao_h=0.0):
     竖缝落在绝对格栅上（锚在 U0），任意长度切段后拼接，砖缝与抖动相位不变。
     ao_h>0 时向 z0 方向叠加环境光遮蔽（越贴地越暗）。"""
     dark = mix(col, DARK, 0.42)
-    light = mix(col, WALL_HI, 0.26)
+    light = mix(col, CREAM, 0.26)
     row = int(math.floor(z0 / ch))
     z = z0 + ch
     while z < z1:
@@ -162,7 +160,7 @@ def brick_v(d, u0, u1, v, z0, z1, col, ch=9.0, cw=0.62, seed=0, ao_h=0.0):
             if ub - ua > 0.02 and zb - za > 0.5:
                 quad(d, S(ua, v, za), eu(ub - ua), ez(zb - za), bc)
                 d.line([S(ua, v, zb - 0.9), S(ub, v, zb - 0.9)],
-                       fill=mix(bc, WALL_HI, 0.22), width=1)
+                       fill=mix(bc, CREAM, 0.22), width=1)
             ua = ub
             u += cw
         d.line([S(u0, v, z), S(u1, v, z)], fill=dark, width=1)
@@ -178,7 +176,7 @@ def brick_v(d, u0, u1, v, z0, z1, col, ch=9.0, cw=0.62, seed=0, ao_h=0.0):
 def brick_u(d, u, v0, v1, z0, z1, col, ch=9.0, cw=0.62, seed=0, ao_h=0.0):
     """u=常数 侧脸砖：与 brick_v 同一套逐砖填色/抖动/AO。"""
     dark = mix(col, DARK, 0.46)
-    light = mix(col, WALL_HI, 0.14)
+    light = mix(col, CREAM, 0.14)
     row = int(math.floor(z0 / ch))
     z = z0 + ch
     while z < z1:

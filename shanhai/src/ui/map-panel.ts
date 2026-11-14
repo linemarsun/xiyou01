@@ -31,11 +31,10 @@ const CANVAS_H = 360;
 interface Terrain { grid: IsoGrid; types: Uint8Array; blocked: Set<string> }
 
 const GROUND_COLOR: Record<string, string> = {
-  ground_grass: '#6fa84c',   // 参考图：鲜绿草地
-  ground_dirt: '#9c7c50',
-  ground_stone: '#8d8574',
-  ground_water: '#3a8cc0',
-  ground_marble: '#d8d2c2',  // 宫城内院（此前缺映射会被当成草地色）
+  ground_grass: '#4b6b48',
+  ground_dirt: '#8a6a45',
+  ground_stone: '#8d8878',
+  ground_water: '#2f4a5c',
   ground_snow: '#c9d5d4',
 };
 
@@ -202,7 +201,6 @@ export class MapPanel {
     if (this.terrain && this.terrainKey === key) return;
     const codes: Record<string, number> = {
       ground_grass: 1, ground_dirt: 2, ground_stone: 3, ground_water: 4, ground_snow: 5,
-      ground_marble: 6,
     };
     const types = new Uint8Array(g.cols * g.rows);
     for (const item of layout.items) {
@@ -237,8 +235,7 @@ export class MapPanel {
   private drawIso(ctx: CanvasRenderingContext2D, t: Terrain): void {
     const { grid: g, types, blocked } = t;
     const colors = ['', GROUND_COLOR.ground_grass, GROUND_COLOR.ground_dirt,
-      GROUND_COLOR.ground_stone, GROUND_COLOR.ground_water, GROUND_COLOR.ground_snow,
-      GROUND_COLOR.ground_marble];
+      GROUND_COLOR.ground_stone, GROUND_COLOR.ground_water, GROUND_COLOR.ground_snow];
     // 一次遍历按地形分桶，避免每种颜色都重扫整张网格
     const buckets: Point[][] = colors.map(() => []);
     const hx = (g.tileW / 2) * this.scale, hy = (g.tileH / 2) * this.scale;
