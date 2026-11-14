@@ -769,8 +769,8 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(pick('pagoda').length === 1, '白塔 1 座（宫城一侧）');
   ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔为全城制高点');
   ok(pick('palace_gate').length === 1, '南面宫门 1 座');
-  ok(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2') >= 16,
-    '朱红宫墙黄瓦帽四边闭合');
+  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 0,
+    '旧平涂宫墙已清理（用户反馈风格不统一，宫城为开放式台地）');
   ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
   ok(count('bridge') >= 1 && count('ground_water') >= 2, '宫内曲水与石桥（参考图水系）');
   ok(count('paifang') >= 4, '宫前坊 4 座（街坊空地，不压主街轴线）');
@@ -795,7 +795,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(count('ground_water') >= 8, `城外两片蜿蜒河湾 ${count('ground_water')} 段（取代环城护城河）`);
   ok(count('well') >= 1 && count('incense') >= 1 && count('stele') >= 1, '水井/香炉/石碑');
   ok(count('tree') >= 180 && count('tree') <= 400, `针叶林与行道树 ${count('tree')} 棵（用户反馈减密后约为旧一半）`);
-  ok(count('stall') >= 20 && count('crate') >= 30, '市井摊棚与货箱');
+  eq(count('stall') + count('crate'), 0, '旧平涂摊棚与货箱已清理（用户反馈风格不统一）');
   ok(count('ground_stone') >= 20 && count('ground_dirt') >= 8, '棋盘街巷与城外土路');
 
   // —— 尺度：8×8 一进四合院民居（AI 合院贴图，正房+倒座+院子）——

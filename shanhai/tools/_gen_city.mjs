@@ -176,30 +176,22 @@ rigid('gate_keep', 5, 58, 6, 12, { facing: 'se' });
 rigid('gate_keep', 121, 58, 6, 12, { facing: 'se' });
 
 // ---------------------------------------------------------------- 宫城 32×32（居中）
-// 外圈朱红宫墙（黄瓦帽）2 格厚，四角角楼，南面正中宫门
+// 旧平涂宫墙已清理（用户反馈风格不统一）：宫城为开放式台地——四角工笔角楼、
+// 南面工笔宫门、主殿/配殿/白塔/曲水石桥，地面为汉白玉内院
 for (const [x, y] of [[48, 48], [78, 48], [48, 78], [78, 78]]) rigid('palace_corner', x, y, 2, 2);
-// 北墙 x50..77 / y48..49：4×u6 + 2×u2 = 28 格
-for (const x of [50, 56, 62, 68]) rigid('palace_wall_u6', x, 48, 6, 2);
-for (const x of [74, 76]) rigid('palace_wall_u2', x, 48, 2, 2);
-// 南墙 x50..77 / y78..79：中间 x62..65 留给宫门
-for (const x of [50, 56]) rigid('palace_wall_u6', x, 78, 6, 2);
 rigid('palace_gate', 62, 78, 4, 2, { facing: 'sw' });
-for (const x of [66, 72]) rigid('palace_wall_u6', x, 78, 6, 2);
-// 西墙 x48..49 / 东墙 x78..79，y50..77
-for (const x of [48, 78]) {
-  for (const y of [50, 56, 62, 68]) rigid('palace_wall_v6', x, y, 2, 6);
-  for (const y of [74, 76]) rigid('palace_wall_v2', x, y, 2, 2);
-}
 // 内院：主殿居中偏北、东西配殿、白塔在东南、曲水石桥
 rigid('palace_hall', 59, 52, 10, 10);  // AI 宏伟版：足迹 10×10，内院北部居中
-rigid('palace_hall_s', 54, 54, 4, 4);
-rigid('palace_hall_s', 70, 54, 4, 4);
+// 配殿布置：主殿屋檐出挑 ~1.8 格且绘制顺序在前，西北位会被主殿檐体盖住、
+// 西南位会与宫门叠压 → 东配殿 (72,54)、西配殿 (50,64)，均在主殿之后绘制且精灵互不相交
+rigid('palace_hall_s', 72, 54, 4, 4);
+rigid('palace_hall_s', 50, 64, 4, 4);
 rigid('pagoda', 72, 66, 3, 3);
 rigid('bridge', 55, 65, 3, 5);
 rigid('bridge', 70, 70, 3, 5);
 // 宫内行列树 / 灯（避开主殿与水面）
 for (const [x, y] of [
-  [52, 54], [52, 58], [52, 62], [57, 62], [74, 54], [76, 58], [68, 74], [60, 74], [54, 74],
+  [52, 58], [52, 62], [57, 62], [74, 52], [76, 58], [68, 74], [60, 74], [50, 76],
 ]) put({ type: 'tree', gx: x, gy: y, variant: 'pine' }, { interior: false, allowWater: true });
 for (const [x, y] of [[60, 62], [66, 62], [60, 70], [66, 70]]) {
   put({ type: 'lantern_post', gx: x, gy: y }, { interior: false, allowWater: true });
@@ -246,23 +238,11 @@ for (const { x, y } of candidates) {
 }
 
 // ---------------------------------------------------------------- 绿化与市井点缀
-// 市集摊棚 / 货箱：沿环路与主街的空档
-let stallCount = 0, crateCount = 0;
-for (let y = 10; y <= 116; y += 7) {
-  for (let x = 10; x <= 116; x += 7) {
-    if (stallCount >= 40) break;
-    if (put({ type: 'stall', gx: x, gy: y, w: 2, h: 2, facing: (x + y) % 2 ? 'sw' : 'se' })) stallCount++;
-  }
-}
-for (let y = 11; y <= 116; y += 9) {
-  for (let x = 11; x <= 116; x += 9) {
-    if (crateCount >= 60) break;
-    if (put({ type: 'crate', gx: x, gy: y })) crateCount++;
-  }
-}
+// 旧平涂摊棚/货箱已清理（用户反馈风格不统一）：街巷点缀保留工笔灯笼/山石/井/碑
 // 灯笼（宫城外围四向主轴；井/碑已前移至民居撒点前）
+let lanternCount = 0;
 for (let y = 9; y <= 118; y += 11) {
-  for (let x = 9; x <= 118; x += 11) put({ type: 'lantern_post', gx: x, gy: y });
+  for (let x = 9; x <= 118; x += 11) { if (put({ type: 'lantern_post', gx: x, gy: y })) lanternCount++; }
 }
 // 行道树 / 街坊绿化：针叶为主（参考图城内外成片针叶林）。
 // 用户反馈太密：步长 3+1/3 过滤 → 步长 6 全枚举，密度约减半；宽冠树冠交叠留足空隙。
@@ -300,7 +280,7 @@ const count = (t) => items.filter((i) => i.type === t).length;
 const all = layout.items.filter((i) => !['ground_grass', 'ground_stone', 'ground_dirt', 'ground_water', 'ground_marble'].includes(i.type));
 console.log(JSON.stringify({
   total: layout.items.length, ground: ground.length, props: items.length,
-  houses: houseCount, stalls: stallCount, crates: crateCount,
+  houses: houseCount, lanterns: lanternCount,
   innerTrees, outerTrees, rocks: rockCount,
   bellTower: count('bell_tower'),
   gates: count('gate_keep'), wideGate: count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'),
