@@ -1,0 +1,46 @@
+{
+ "name": "palace_wall_u6",
+ "facing": "SE",
+ "footprint": [
+  6,
+  2
+ ],
+ "footprint_w": 6,
+ "footprint_h": 2,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  6,
+  2
+ ],
+ "anchor_px": [
+  192,
+  270
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  256,
+  275
+ ],
+ "sprite_h_px": 271,
+ "ratio_to_char": 3.23,
+ "margins_px": [
+  0,
+  2,
+  0,
+  2
+ ],
+ "source": "宫墙直段 u 向 6×2：条石 0-16 + 朱红墙身 16-138 + 黄瓦帽 138-150",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": true,
+ "derive_op": "draw(real_geometry) + flip_facing_sw2se",
+ "derived_from": null,
+ "tileable": true
+}

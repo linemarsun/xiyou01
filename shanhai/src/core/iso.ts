@@ -175,17 +175,17 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   palace_hall: { w: 10, h: 10, height: 680 },
   /** 宫城配殿 4×4：一层台基 + 红身金顶，正脊 ~316 */
   palace_hall_s: { w: 4, h: 4, height: 320 },
-  /** 宫门 4×2：红墙券门隧洞（亮色，贯通）+ 门楼金顶 ~322 */
-  palace_gate: { w: 4, h: 2, height: 322 },
+  /** 宫门 4×2：AI 工笔重绘（城台券洞右下 + 重檐金瓦门楼） */
+  palace_gate: { w: 4, h: 2, height: 440 },
   /** 宫城角楼 2×2：红墙墩台 + 攒尖金顶 + 宝顶 */
-  palace_corner: { w: 2, h: 2, height: 340 },
+  palace_corner: { w: 2, h: 2, height: 430 },
   /** 宫墙直段：朱红墙身 + 黄瓦帽（高 150，低于城墙 224） */
   palace_wall_u6: { w: 6, h: 2, height: 150 },
   palace_wall_u2: { w: 2, h: 2, height: 150 },
   palace_wall_v2: { w: 2, h: 2, height: 150 },
   palace_wall_v6: { w: 2, h: 6, height: 150 },
   /** 白塔 3×3：汉白玉塔身五层挑檐 + 攒尖金顶，总高 ~700（新城制高点） */
-  pagoda: { w: 3, h: 3, height: 700 },
+  pagoda: { w: 3, h: 3, height: 760 },
   /** 汉白玉广场地面（宫城内铺地） */
   ground_marble: { w: 1, h: 1, ground: true },
 };
@@ -213,13 +213,13 @@ export const ISO_ANCHOR_OFFSET: Record<string, { ax: number; ay: number }> = {
   // —— 宫城族（palace.py 烘焙，ax = anchor_px.x - spriteW/2, ay = anchor_px.y - spriteH）——
   palace_hall: { ax: 0, ay: -2 },         // 880×744, anchor [440,742]（故宫太和殿版 10×10）
   palace_hall_s: { ax: 0, ay: -19 },      // 324×453, anchor [162,434]
-  palace_gate: { ax: 32, ay: -5 },        // 206×426, anchor [135,421]
-  palace_corner: { ax: 0, ay: -5 },       // 142×422, anchor [71,417]
+  palace_gate: { ax: 0.5, ay: -2 },       // 459×444, anchor [230,442]（AI 工笔重绘 SE）
+  palace_corner: { ax: 0.5, ay: -2 },     // 327×434, anchor [164,432]（AI 工笔重绘 SE）
   palace_wall_u6: { ax: 64, ay: -5 },     // 256×275, anchor [192,270]
   palace_wall_u2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
   palace_wall_v2: { ax: 0, ay: -5 },      // 128×211, anchor [64,206]
   palace_wall_v6: { ax: -64, ay: -5 },    // 256×275, anchor [64,270]
-  pagoda: { ax: 0.5, ay: -21 },           // 267×756, anchor [134,735]
+  pagoda: { ax: -0.5, ay: -2 },           // 305×764, anchor [152,762]（AI 工笔重绘 SE）
   // 城台门楼（AI 素材 592×660 = 6×3 版等比 ×2，足迹 12×6）：矩形足迹长边贴墙，
   // 正面朝向由墙向决定——N/S 门用 SW 原版，E/W 门用 gate_keep_se 镜像版。
   gate_keep: { ax: 90, ay: -4 },          // SW 原版 anchor_px [386,656]（底点偏中心右侧 90px）
