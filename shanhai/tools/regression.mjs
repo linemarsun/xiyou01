@@ -788,8 +788,8 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   const byRegion = { market: 0, residence: 0, temple: 0, garden: 0 };
   for (const it of layout.items) if (BUILDING.has(it.type)) byRegion[regionOf(it)]++;
   const totalBuildings = byRegion.market + byRegion.residence + byRegion.temple + byRegion.garden;
-  ok(totalBuildings >= 30 && totalBuildings <= 90, `民居总数 ${totalBuildings} 栋（8×8 合院体量 4 倍于旧 4×4，密度相应下降）`);
-  ok(Object.values(byRegion).every((n) => n >= 5),
+  ok(totalBuildings >= 20 && totalBuildings <= 90, `民居总数 ${totalBuildings} 栋（9×9 合院体量 5 倍于旧 4×4，密度相应下降）`);
+  ok(Object.values(byRegion).every((n) => n >= 4),
     `四象限都成坊 市集 ${byRegion.market} / 宅院 ${byRegion.residence} / 庙署 ${byRegion.temple} / 园林 ${byRegion.garden}`);
   eq(count('fence'), 0, '旧版院墙制式随重排移除，改为棋盘街坊');
   ok(count('ground_water') >= 8, `城外两片蜿蜒河湾 ${count('ground_water')} 段（取代环城护城河）`);
@@ -800,13 +800,13 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
 
   // —— 尺度：8×8 一进四合院民居（AI 合院贴图，正房+倒座+院子）——
   const medium = count('house');
-  ok(medium >= 20 && medium <= 80, `一进四合院民居 ${medium} 座（8×8 合院体量为旧 4×4 的 4 倍，密度相应下降）`);
+  ok(medium >= 15 && medium <= 80, `一进四合院民居 ${medium} 座（9×9 合院体量为旧 4×4 的 5 倍，密度相应下降）`);
   eq(count('shop_small'), 0, '小档缺成套屋身，先不生成');
   eq(count('house_large'), 0, '大宅缺成套屋身，先不生成（避免空白墙面占位）');
   eq(iso.ISO_TYPES.house_large.w, 4, '大档跨 4 格（两三层楼阁）');
   ok(iso.ISO_TYPES.house.height > iso.ISO_TYPES.house_large.height, '合院含前后两进双重屋顶，标高高于旧楼阁屋身');
   eq(iso.ISO_TYPES.shop_small.w, 2, '小档跨 2 格');
-  eq(iso.ISO_TYPES.house.w, 8, '合院 8×8 足迹（菱形 512px 与贴图底座吻合）');
+  eq(iso.ISO_TYPES.house.w, 9, '合院 9×9 足迹（菱形 576px 与贴图底座吻合，×1.21 加大版）');
   ok(pick('house').every((b) => b.facing === 'se' || b.facing === 'sw'),
     '合院只做 se/sw 两向（院门朝镜头侧，sw 为 se 水平镜像）');
   ok(pick('house').every((b) => b.variant === undefined), '合院不带 variant（直取 house_4x4_se/_sw.png 成对贴图）');
@@ -916,8 +916,8 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
 
   // 城门拱洞 222px（与 gate_arch 真实美术一致），角色通行高度不受影响
   eq(iso.ISO_TYPES.gate_arch.height, 222, '城门拱洞 222px');
-  eq(iso.ISO_TYPES.house.w, 8, '合院 8 格宽（菱形 512px 与 AI 合院贴图底座吻合）');
-  eq(iso.ISO_TYPES.house.h, 8, '合院 8 格深');
+  eq(iso.ISO_TYPES.house.w, 9, '合院 9 格宽（菱形 576px 与 AI 合院贴图底座吻合）');
+  eq(iso.ISO_TYPES.house.h, 9, '合院 9 格深');
 
   // 组合式房屋：墙 sw+se、前后坡、屋脊、山墙端面共 7 件，且脊线方向随朝向变化
   const houseItem = layout.items.find((i) => i.type === 'house');
