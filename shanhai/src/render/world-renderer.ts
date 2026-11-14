@@ -436,11 +436,17 @@ export class WorldRenderer {
         const score = n * 10 + (groundPriority[t] ?? 0);
         if (score > bestScore) { bestScore = score; best = t; }
       }
-      // 地面块变体与微色差：确定性哈希（草 3 变体 / 石板 2 变体 + 亮度 ±7%），
-      // 避免整图同一张贴图平铺的重复感；缺变体图时回退基础图或纯色批。
+      // 地面块变体与微色差：确定性哈希（AI 工笔贴图：草 4 变体 / 石板·土路·水各 2 +
+      // 亮度 ±7%），避免整图同一张贴图平铺的重复感；缺变体图时回退基础图或纯色批。
       const gh = (Math.imul(bx, 2654435761) ^ Math.imul(by, 668265263)) >>> 0;
-      const variant = best === 'ground_grass' ? ['a', 'b', 'c'][gh % 3]
-        : best === 'ground_stone' ? ['a', 'b'][gh % 2] : undefined;
+      const GROUND_VARIANTS: Record<string, string[]> = {
+        ground_grass: ['a', 'b', 'c', 'd'],
+        ground_stone: ['a', 'b'],
+        ground_dirt: ['a', 'b'],
+        ground_water: ['a', 'b'],
+      };
+      const vopts = GROUND_VARIANTS[best];
+      const variant = vopts ? vopts[gh % vopts.length] : undefined;
       const lum = 236 + (gh % 20);
       const tint = (lum << 16) | (lum << 8) | lum;
       blocks.set(keyOf(bx, by), { type: best, gx: bx, gy: by, w: 2, h: 2, variant, tint });
