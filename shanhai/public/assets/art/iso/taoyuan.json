@@ -3951,6 +3951,142 @@
    "gx": 127,
    "gy": 125,
    "variant": "pine"
+  },
+  {
+   "type": "crate",
+   "gx": 28,
+   "gy": 107,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 14,
+   "gy": 53,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 18,
+   "gy": 69,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 15,
+   "gy": 58,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 67,
+   "gy": 33,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 67,
+   "gy": 34,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 86,
+   "gy": 107,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "crate",
+   "gx": 67,
+   "gy": 32,
+   "w": 1,
+   "h": 1
+  },
+  {
+   "type": "stall",
+   "gx": 16,
+   "gy": 58,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 67,
+   "gy": 35,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 23,
+   "gy": 98,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 20,
+   "gy": 67,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 20,
+   "gy": 58,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 13,
+   "gy": 34,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 25,
+   "gy": 98,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 17,
+   "gy": 74,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 24,
+   "gy": 58,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
+  },
+  {
+   "type": "stall",
+   "gx": 20,
+   "gy": 102,
+   "w": 2,
+   "h": 2,
+   "facing": "sw"
   }
  ]
 }
