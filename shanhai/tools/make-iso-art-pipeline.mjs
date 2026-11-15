@@ -212,16 +212,10 @@ function mirror(src) {
 
 // —— 入库清单：源图 → 目标名 + 模式 + 规格 [宽, 高, 去背阈值?, 宽度上限?] ——
 // tall 模式：高度铺满（实体高 = 旧版画布高，对齐 2.87:1 人物观感比）；宽超上限时居中裁切
+// ⚠️ 云京工笔线拥有的贴图（tree×2/ground×5/gate_arch/city_wall_u6|v6/palace 全族/house_4x4_se|sw）
+//    一律不在本清单 —— 重跑管线会覆盖工笔版（教训见 2026-11-14 合并事故）；它们归 ai_align 工具链维护
 const jobs = [
-  // 地面（groundCell 裁单格 128×64）
-  ['2-1-2-1-1794580783194-1.png', 'ground_stone.png', 'ground'],
-  ['2-1-2-1-1794580853941-1.png', 'ground_grass.png', 'ground'],
-  ['2-1-2-1-1794582107961-1.png', 'ground_water.png', 'ground'],
-  ['2-1-2-1-1794583025832-1.png', 'ground_dirt.png', 'ground'],
-  ['2-1-2-1-1794583026633-1.png', 'ground_marble.png', 'ground'],
-  // 通用构件（高度以 0.75 档人物 84px 为基准：箱 ≤ 人胸、碑 ≈ 1.6 倍人高、树 ≈ 2 倍人高）
-  ['2-1-1794580863606-1.png', 'tree_leaf.png', 'tall', 96, 170, 150],
-  ['2-1-1794583071962-1.png', 'tree_pine.png', 'tall', 70, 190, 130],
+  // 通用构件
   ['2-1-1794583073309-1.png', 'tree_dead.png', 'tall', 84, 160, 130],
   ['2-1-1794580903655-1.png', 'rock.png', 'tall', 112, 110, 140],
   ['2-1-1794583111444-1.png', 'rock_moss.png', 'tall', 112, 110, 140],
@@ -268,8 +262,11 @@ const jobs = [
   ['2-1-1794622719531-1.png', 'ferry_dock.png', 'wide', 320, 205],
   ['2-1-1794622730482-1.png', 'cave_gate.png', 'tall', 170, 170, 220],
   ['2-1-1794622783671-1.png', 'soul_lantern.png', 'tall', 48, 150, 100],
+  // 云京合院工笔变体（渲染层按格哈希分发，消除 27 座同款镜像感；布局零改动）
+  ['2-1-1794666862651-1.png', 'house_4x4_se_v2.png', 'wide', 581, 520],
+  ['2-1-1794666932673-1.png', 'house_4x4_se_v3.png', 'wide', 581, 520],
   // 阎罗殿（地府主题大件，独立完整建筑）
-  ['2-1-2-1-1794582156024-1.png', 'hell_palace.png', 'tall', 440, 590, 238, 620],
+  ['2-1-2-1-1794582156024-1.png', 'hell_palace.png', 'tall', 440, 590, 238, 520],
 ];
 
 let ok = 0, fail = 0;
@@ -299,6 +296,8 @@ for (const [src, dst, mode, ...rest] of jobs) {
 // —— 镜像派生（等距 2:1 水平镜像 = 对向朝向） ——
 const mirrorJobs = [
   ['house_4x4_nw.png', 'house_4x4_ne.png'],
+  ['house_4x4_se_v2.png', 'house_4x4_sw_v2.png'],
+  ['house_4x4_se_v3.png', 'house_4x4_sw_v3.png'],
   ['city_wall_u6.png', 'city_wall_v6.png'],
   ['city_wall_u2.png', 'city_wall_v2.png'],
   ['city_gate_wide.png', 'city_gate_wide_v.png'],

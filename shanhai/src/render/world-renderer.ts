@@ -359,6 +359,16 @@ export class WorldRenderer {
       const [type, , facing] = k.split('|');
       return this.loadIsoTexture(k, isoModuleCandidates(type, undefined, facing || undefined, this.map.id));
     }));
+
+    // 云京合院工笔变体池：house_4x4_{se|sw}_v2/v3.png（按格哈希分发消除同款镜像感）。
+    // 缺图静默跳过，池自动退化为基础图；布局不带 variant（回归锁定），分发纯在渲染层。
+    if (this.map.id === 'taoyuan') {
+      await Promise.all(
+        ['se', 'sw'].flatMap((f) => ['v2', 'v3'].map((v) =>
+          this.loadIsoTexture(this.moduleKey('house', v, f), [artUrl(`iso/house_4x4_${f}_${v}.png`)]),
+        )),
+      );
+    }
   }
 
   /** 按候选顺序取第一张真图；Vite 的 SPA 回退会让缺图返回 200 的 index.html，必须校验 Content-Type */
@@ -576,7 +586,19 @@ export class WorldRenderer {
    */
   private buildIsoVisual(unit: IsoUnit): Container {
     const key = this.moduleKey(unit.type, unit.variant, unit.facing);
-    const tex = this.isoTextures.get(key);
+    let tex = this.isoTextures.get(key);
+    // 云京合院变体池：按格坐标哈希在基础图与工笔变体 v2/v3 间分发（27 座同款镜像 → 三种面孔）；
+    // tint（分坊瓦色）是布局数据，与本选择正交，继续生效
+    if (unit.item.type === 'house' && tex) {
+      const hSeed = (Math.imul(unit.item.gx, 73856093) ^ Math.imul(unit.item.gy, 19349663)) >>> 0;
+      const f = unit.facing ?? 'se';
+      const pool = [
+        tex,
+        this.isoTextures.get(this.moduleKey('house', 'v2', f)),
+        this.isoTextures.get(this.moduleKey('house', 'v3', f)),
+      ].filter((t): t is Texture => !!t);
+      tex = pool[hSeed % pool.length];
+    }
     if (tex) {
       // 城墙直段/角台已改为拼接版：长度方向两端不再描边（出血后裁回名义范围），
       // 相邻段直接贴合即可，无需再裁边或外扩压边。

@@ -134,6 +134,12 @@ def render(region=None, out_name='iso_render'):
         if t == 'house':
             hf = f or 'sw'
             cand = ([f"house_4x4_{hf}_{it.get('variant')}"] if it.get('variant') else []) + [f"house_4x4_{hf}", t]
+            # 云京合院工笔变体池：与浏览器 buildIsoVisual 同一哈希（32 位 imul 语义），
+            # 在基础图与 v2/v3 间分发；变体文件缺失时由候选链回退基础图
+            if not it.get('variant'):
+                hseed = ((it['gx'] * 73856093) & 0xFFFFFFFF) ^ ((it['gy'] * 19349663) & 0xFFFFFFFF)
+                pool = [f"house_4x4_{hf}", f"house_4x4_{hf}_v2", f"house_4x4_{hf}_v3"]
+                cand = [pool[hseed % len(pool)]] + cand
         found = None
         for c in cand:
             if HW_MODE and os.path.exists(os.path.join(MOD2, 'hw', c + '.png')):
