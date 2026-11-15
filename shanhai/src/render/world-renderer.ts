@@ -318,8 +318,9 @@ export class WorldRenderer {
       // 沿街自动填房（rules.streetFill）在这里展开；手写条目优先级更高
       this.isoLayout = expandLayout(layout);
       this.isoCollision = buildCollision(this.isoLayout);
-      this.buildIsoUnits();
-      await this.loadIsoModules();
+    this.buildIsoUnits();
+    await this.loadIsoModules();
+    this.assignHouseVariants();
       if (this.destroyed) return;
       this.world.sortableChildren = true;
       // 旧存档可能停在构图范围外：就近吸附到可走格，避免开局卡死
@@ -389,6 +390,25 @@ export class WorldRenderer {
 
   private moduleKey(type: string, variant?: string, facing?: string): string {
     return `${type}|${variant ?? ''}|${facing ?? ''}`;
+  }
+
+  private houseVariantAssign = new Map<string, number>();
+
+  /** 云京合院变体贪心分配：按 (u+v) 画家序遍历，14 格内邻居已用的变体不再重复（消除同款连排） */
+  private assignHouseVariants(): void {
+    if (this.map.id !== 'taoyuan') return;
+    const houses = [...this.isoUnits.values()].filter((u) => u.item.type === 'house');
+    houses.sort((a, b) => (a.item.gx + a.item.gy) - (b.item.gx + b.item.gy));
+    for (const u of houses) {
+      const used = new Set<number>();
+      for (const [k, idx] of this.houseVariantAssign) {
+        const o = this.isoUnits.get(k);
+        if (!o) continue;
+        if (Math.max(Math.abs(o.item.gx - u.item.gx), Math.abs(o.item.gy - u.item.gy)) < 14) used.add(idx);
+      }
+      const pick = [0, 1, 2].find((i) => !used.has(i)) ?? 0;
+      this.houseVariantAssign.set(u.key, pick);
+    }
   }
 
   /** 布局展开成可渲染单元：地面按 2×2 块铺，构件整条登记到足迹覆盖格 */
@@ -587,17 +607,14 @@ export class WorldRenderer {
   private buildIsoVisual(unit: IsoUnit): Container {
     const key = this.moduleKey(unit.type, unit.variant, unit.facing);
     let tex = this.isoTextures.get(key);
-    // 云京合院变体池：按格坐标哈希在基础图与工笔变体 v2/v3 间分发（27 座同款镜像 → 三种面孔）；
+    // 云京合院变体池：贪心分配表驱动（相邻 14 格内不同变体，消除同款连排）；
     // tint（分坊瓦色）是布局数据，与本选择正交，继续生效
     if (unit.item.type === 'house' && tex) {
-      const hSeed = (Math.imul(unit.item.gx, 73856093) ^ Math.imul(unit.item.gy, 19349663)) >>> 0;
       const f = unit.facing ?? 'se';
-      const pool = [
-        tex,
-        this.isoTextures.get(this.moduleKey('house', 'v2', f)),
-        this.isoTextures.get(this.moduleKey('house', 'v3', f)),
-      ].filter((t): t is Texture => !!t);
-      tex = pool[hSeed % pool.length];
+      const idx = this.houseVariantAssign.get(unit.key) ?? 0;
+      const vname = idx === 1 ? 'v2' : idx === 2 ? 'v3' : '';
+      const alt = vname ? this.isoTextures.get(this.moduleKey('house', vname, f)) : undefined;
+      if (alt) tex = alt;
     }
     if (tex) {
       // 城墙直段/角台已改为拼接版：长度方向两端不再描边（出血后裁回名义范围），
