@@ -4087,6 +4087,30 @@
    "w": 2,
    "h": 2,
    "facing": "sw"
+  },
+  {
+   "type": "tree",
+   "gx": 39,
+   "gy": 127,
+   "w": 1,
+   "h": 1,
+   "variant": "pine"
+  },
+  {
+   "type": "tree",
+   "gx": 126,
+   "gy": 43,
+   "w": 1,
+   "h": 1,
+   "variant": "leaf"
+  },
+  {
+   "type": "tree",
+   "gx": 126,
+   "gy": 83,
+   "w": 1,
+   "h": 1,
+   "variant": "pine"
   }
  ]
 }
