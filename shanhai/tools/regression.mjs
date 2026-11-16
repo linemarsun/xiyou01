@@ -793,7 +793,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
     const buf = readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.png`));
     eq(buf.readUInt32BE(16), 256, `${name} 画布宽 256`);
     const meta = JSON.parse(readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.json`), 'utf8'));
-    ok(!!meta.seam_note && meta.seam_note.includes('v2'), `${name} 元数据含 v2 全长无缝标注`);
+    ok(!!meta.seam_note && meta.seam_note.includes('v4'), `${name} 元数据含 v4 全长无缝标注`);
     const img = readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.png`));
     ok(img.length > 20000, `${name} 贴图体积完整（非裁切空版）`);
   }
