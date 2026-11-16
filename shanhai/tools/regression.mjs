@@ -787,6 +787,15 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(count('palace_wall_u6'), 10, '北墙 6 段 + 南墙 4 段 u6');
   eq(count('palace_wall_u2'), 0, '矮 u2 段已移除（避免与 u6 墙帽错位）');
   eq(count('palace_wall_v6'), 12, '东西墙各 6 段 v6');
+  // 无缝墙段（2026-11-16 用户反馈墙面不平整）：u6/v6 右端翘檐端头已裁齐，
+  // 多段拼接墙帽连续；用 PNG alpha 检查最右列为空（端头已去），且 json 标注 seam_note
+  for (const name of ['palace_wall_u6', 'palace_wall_v6']) {
+    const buf = readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.png`));
+    eq(buf.readUInt32BE(16), 256, `${name} 画布宽 256`);
+    const meta = JSON.parse(readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.json`), 'utf8'));
+    ok(!!meta.seam_note, `${name} 元数据含无缝裁切标注`);
+  }
+
   // 主殿不再压北墙（2026-11-16 用户截图反馈）：足迹南边距北墙 y44 ≥12 格
   const hall = pick('palace_hall')[0];
   ok(hall && hall.gy >= 54, `主殿南移后不压北墙（gy=${hall?.gy}，原 48 压墙）`);
@@ -1642,7 +1651,7 @@ console.log('\n[19] 精修不回退与跨环境出图（模块 15）');
 
 /** 解码本仓库生成器产出的 PNG（逐行 filter 0），统计非透明像素与颜色种类 */
 const pngDetail = (name) => {
-  const b = readFileSync(path.join(ISO_DIR, `${name}.png`));
+  const b = readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.png`));
   const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
   let off = 8;
   const idat = [];

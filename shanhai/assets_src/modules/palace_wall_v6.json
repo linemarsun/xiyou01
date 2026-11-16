@@ -42,5 +42,6 @@
  "mirror_derived": true,
  "derive_op": "draw(real_geometry) + flip_facing_sw2se",
  "derived_from": null,
- "tileable": true
+ "tileable": true,
+ "seam_note": "2026-11-16: 右端翘檐端头(x>=216)裁齐为平切，多段拼接时墙帽连续；端头由四角角楼提供"
 }
