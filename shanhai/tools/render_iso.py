@@ -36,12 +36,12 @@ _cache = {}
 def mod(name):
     if name not in _cache:
         p = None
-        if os.path.exists(os.path.join(MOD, name + '.png')):
+        # 运行时资产(public)优先：assets_src/modules 里还留着旧版像素贴图，
+        # 先查 modules 会让离线目检与浏览器真实画面不一致（曾出现红墙蓝顶旧铺面）
+        if os.path.exists(os.path.join(MOD2, name + '.png')):
+            p = os.path.join(MOD2, name)
+        elif os.path.exists(os.path.join(MOD, name + '.png')):
             p = os.path.join(MOD, name)
-        elif os.path.exists(os.path.join(MOD2, name + '.png')):
-            p = os.path.join(MOD2, name)
-        elif name.startswith('hw/') and os.path.exists(os.path.join(MOD2, name + '.png')):
-            p = os.path.join(MOD2, name)
         if p is None:
             raise FileNotFoundError(name)
         jp = p + '.json'

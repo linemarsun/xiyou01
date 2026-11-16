@@ -754,7 +754,16 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'), 0,
     '旧宽城门楼（10×3）已全部移除');
   eq(count('palace_corner'), 8, '四角角楼 4 座（城墙角）+ 宫城四角楼 4 座');
-  eq(count('bell_tower'), 0, '中心鼓楼已删除，让位 40×40 完整宫城');
+  // 2026-11-16 差异化建筑：钟楼移驻西北市集坊作地标（不再占宫城中心），
+  // 原「中心鼓楼已删除」语义演进为「宫城中心无钟楼、坊间有 1 座」
+  eq(count('bell_tower'), 1, '钟楼 1 座（西北市集坊地标，非宫城中心）');
+  ok(pick('bell_tower').every((b) => b.gx < 38 && b.gy < 38), '钟楼位于西北市集坊（不占宫城中心）');
+  eq(count('hall'), 2, '庙署正殿 2 座（东北灰瓦 hall + 西南青石殿 hall/stone）');
+  ok(count('house') <= 26, `差异化建筑替换后合院减量（${count('house')} 座）`);
+  // 功能建筑不得压窄带道路（与 [17] 一致）
+  for (const b of [...pick('bell_tower'), ...pick('hall')]) {
+    ok(iso.isoSize(b).w <= 7, `地标足迹不过大 ${b.type}`);
+  }
   for (const b of [...pick('house'), ...pick('house_large'), ...pick('hall')]) {
     ok(b.gx >= 7 && b.gy >= 7 && b.gx + iso.isoSize(b).w <= 121 && b.gy + iso.isoSize(b).h <= 121,
       `房屋不得贴边/入墙: ${b.type} (${b.gx},${b.gy})`);
@@ -769,14 +778,28 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(pick('pagoda').length === 1, '白塔 1 座（宫城一侧）');
   ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔为全城制高点');
   ok(pick('palace_gate').length === 1, '南面宫门 1 座');
-  // 宫墙回归（AI 工笔朱红宫墙金琉璃帽）：北 6+南 5+东西各 6 = 23 段；
+  // 宫墙回归（AI 工笔朱红宫墙金琉璃帽）：北 6+南 4+东西各 6 = 22 段；
   // 南墙接宫门镜像贴图两端（基座剪影跨 u57.9..69.25）：
-  // 西段 46..57 = 2×u6，东段 69..81 = 2×u6+u2 收边
-  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 23,
-    '工笔宫墙 23 段四边闭合（北6 u6 / 南4 u6+1 u2 / 东西各6 v6）');
+  // 西段 46..57 = 2×u6，东段 70..81 = 2×u6（2026-11-16 去 u2：墙身 127px 与 u6 的 211px
+  // 差 84px 导致墙帽错位，改纯 u6 等高连续）
+  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 22,
+    '工笔宫墙 22 段四边闭合（北6 u6 / 南4 u6 / 东西各6 v6，墙帽等高）');
   eq(count('palace_wall_u6'), 10, '北墙 6 段 + 南墙 4 段 u6');
-  eq(count('palace_wall_u2'), 1, '南墙 1 段 u2（东段收边接角楼）');
+  eq(count('palace_wall_u2'), 0, '矮 u2 段已移除（避免与 u6 墙帽错位）');
   eq(count('palace_wall_v6'), 12, '东西墙各 6 段 v6');
+  // 主殿不再压北墙（2026-11-16 用户截图反馈）：足迹南边距北墙 y44 ≥12 格
+  const hall = pick('palace_hall')[0];
+  ok(hall && hall.gy >= 54, `主殿南移后不压北墙（gy=${hall?.gy}，原 48 压墙）`);
+  // 合院投影遮挡约束：任意两座 Δ(u+v)≥15 或 Δ(u-v)≥10（后排不被前排盖住）
+  const housePairs = pick('house');
+  let occludedPairs = 0;
+  for (let a = 0; a < housePairs.length; a++) for (let b = a + 1; b < housePairs.length; b++) {
+    const p = housePairs[a], q = housePairs[b];
+    const du = Math.abs((p.gx + p.gy) - (q.gx + q.gy));
+    const dv = Math.abs((p.gx - p.gy) - (q.gx - q.gy));
+    if (du < 15 && dv < 10) occludedPairs++;
+  }
+  eq(occludedPairs, 0, '合院无投影遮挡对（Δu+v<15 且 Δu-v<10 为零）');
   // 宫门贴图剪影覆盖区（u58..69 墙线）不得再放墙段，避免双重墙
   const southWallCells = [...pick('palace_wall_u6'), ...pick('palace_wall_u2')]
     .filter((w) => w.gy === 82)
@@ -904,7 +927,7 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(walk(63, 40) && walk(40, 63) && walk(63, 87) && walk(87, 63), '环宫城四段环路可走（40×40 宫城，环路 x/y38..89）');
   ok(walk(63, 82) && walk(64, 82), '宫门中间两列券洞可走');
   ok(!walk(62, 82), '宫门门柱格阻挡');
-  ok(!walk(61, 53), '宫城主殿足迹阻挡');
+  ok(!walk(61, 61), '宫城主殿足迹阻挡（2026-11-16 南移至 y56，避开北墙）');
   ok(!walk(44, 44), '宫城角楼足迹阻挡');
   ok(!walk(5, 5), '城墙角台阻挡');
   ok(!walk(8, 5) && !walk(30, 5) && !walk(8, 121), '朱红城墙连续阻挡（旧十字直穿已改为绕行）');

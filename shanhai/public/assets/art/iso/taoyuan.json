@@ -1167,23 +1167,16 @@
   },
   {
    "type": "palace_wall_u6",
-   "gx": 69,
+   "gx": 70,
    "gy": 82,
    "w": 6,
    "h": 2
   },
   {
    "type": "palace_wall_u6",
-   "gx": 75,
+   "gx": 76,
    "gy": 82,
    "w": 6,
-   "h": 2
-  },
-  {
-   "type": "palace_wall_u2",
-   "gx": 80,
-   "gy": 82,
-   "w": 2,
    "h": 2
   },
   {
@@ -1281,7 +1274,7 @@
   {
    "type": "palace_hall",
    "gx": 59,
-   "gy": 48,
+   "gy": 56,
    "w": 10,
    "h": 10
   },
@@ -1458,13 +1451,26 @@
    "h": 2
   },
   {
-   "type": "house",
-   "gx": 42,
-   "gy": 100,
-   "w": 9,
-   "h": 9,
-   "facing": "sw",
-   "tint": 16777215
+   "type": "bell_tower",
+   "gx": 22,
+   "gy": 22,
+   "w": 7,
+   "h": 7
+  },
+  {
+   "type": "hall",
+   "gx": 98,
+   "gy": 22,
+   "w": 5,
+   "h": 5
+  },
+  {
+   "type": "hall",
+   "gx": 34,
+   "gy": 98,
+   "w": 5,
+   "h": 5,
+   "variant": "stone"
   },
   {
    "type": "house",
@@ -1491,7 +1497,7 @@
    "w": 9,
    "h": 9,
    "facing": "sw",
-   "tint": 16771798
+   "tint": 16777215
   },
   {
    "type": "house",
@@ -1500,7 +1506,7 @@
    "w": 9,
    "h": 9,
    "facing": "se",
-   "tint": 16777215
+   "tint": 16771798
   },
   {
    "type": "house",
@@ -1544,7 +1550,7 @@
    "gy": 24,
    "w": 9,
    "h": 9,
-   "facing": "sw",
+   "facing": "se",
    "tint": 16777215
   },
   {
@@ -1554,7 +1560,7 @@
    "w": 9,
    "h": 9,
    "facing": "se",
-   "tint": 16771798
+   "tint": 16777215
   },
   {
    "type": "house",
@@ -1562,8 +1568,8 @@
    "gy": 76,
    "w": 9,
    "h": 9,
-   "facing": "se",
-   "tint": 16777215
+   "facing": "sw",
+   "tint": 16771798
   },
   {
    "type": "house",
@@ -1572,6 +1578,15 @@
    "w": 9,
    "h": 9,
    "facing": "sw",
+   "tint": 16777215
+  },
+  {
+   "type": "house",
+   "gx": 42,
+   "gy": 94,
+   "w": 9,
+   "h": 9,
+   "facing": "se",
    "tint": 16777215
   },
   {
@@ -1621,8 +1636,8 @@
   },
   {
    "type": "house",
-   "gx": 42,
-   "gy": 90,
+   "gx": 44,
+   "gy": 108,
    "w": 9,
    "h": 9,
    "facing": "se",
@@ -1635,24 +1650,6 @@
    "w": 9,
    "h": 9,
    "facing": "sw",
-   "tint": 16777215
-  },
-  {
-   "type": "house",
-   "gx": 44,
-   "gy": 110,
-   "w": 9,
-   "h": 9,
-   "facing": "sw",
-   "tint": 16777215
-  },
-  {
-   "type": "house",
-   "gx": 112,
-   "gy": 84,
-   "w": 9,
-   "h": 9,
-   "facing": "se",
    "tint": 16777215
   },
   {
@@ -1680,7 +1677,7 @@
    "w": 9,
    "h": 9,
    "facing": "se",
-   "tint": 16771798
+   "tint": 16777215
   },
   {
    "type": "house",
@@ -1818,6 +1815,11 @@
   },
   {
    "type": "lantern_post",
+   "gx": 42,
+   "gy": 108
+  },
+  {
+   "type": "lantern_post",
    "gx": 53,
    "gy": 108
   },
@@ -2050,12 +2052,6 @@
   },
   {
    "type": "tree",
-   "gx": 27,
-   "gy": 27,
-   "variant": "pine"
-  },
-  {
-   "type": "tree",
    "gx": 39,
    "gy": 27,
    "variant": "pine"
@@ -2386,6 +2382,12 @@
   },
   {
    "type": "tree",
+   "gx": 117,
+   "gy": 87,
+   "variant": "pine"
+  },
+  {
+   "type": "tree",
    "gx": 9,
    "gy": 93,
    "variant": "pine"
@@ -2411,6 +2413,12 @@
   {
    "type": "tree",
    "gx": 39,
+   "gy": 93,
+   "variant": "pine"
+  },
+  {
+   "type": "tree",
+   "gx": 45,
    "gy": 93,
    "variant": "pine"
   },
@@ -2488,12 +2496,6 @@
   },
   {
    "type": "tree",
-   "gx": 45,
-   "gy": 99,
-   "variant": "pine"
-  },
-  {
-   "type": "tree",
    "gx": 51,
    "gy": 99,
    "variant": "leaf"
@@ -2551,6 +2553,12 @@
    "gx": 39,
    "gy": 105,
    "variant": "pine"
+  },
+  {
+   "type": "tree",
+   "gx": 45,
+   "gy": 105,
+   "variant": "leaf"
   },
   {
    "type": "tree",
@@ -2621,6 +2629,18 @@
   {
    "type": "tree",
    "gx": 15,
+   "gy": 117,
+   "variant": "pine"
+  },
+  {
+   "type": "tree",
+   "gx": 45,
+   "gy": 117,
+   "variant": "pine"
+  },
+  {
+   "type": "tree",
+   "gx": 51,
    "gy": 117,
    "variant": "pine"
   },
@@ -2680,11 +2700,6 @@
   {
    "type": "rock",
    "gx": 12,
-   "gy": 25
-  },
-  {
-   "type": "rock",
-   "gx": 25,
    "gy": 25
   },
   {
@@ -2800,6 +2815,11 @@
   {
    "type": "rock",
    "gx": 103,
+   "gy": 90
+  },
+  {
+   "type": "rock",
+   "gx": 116,
    "gy": 90
   },
   {
