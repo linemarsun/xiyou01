@@ -3160,26 +3160,8 @@
     },
     {
       "type": "tree",
-      "gx": 104,
-      "gy": 30,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 110,
-      "gy": 26,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
       "gx": 116,
       "gy": 32,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 104,
-      "gy": 38,
       "variant": "leaf"
     },
     {
@@ -5084,45 +5066,9 @@
       "gy": 28
     },
     {
-      "type": "tree",
-      "gx": 113,
-      "gy": 28,
-      "variant": "pine"
-    },
-    {
       "type": "rock",
       "gx": 116,
       "gy": 28
-    },
-    {
-      "type": "tree",
-      "gx": 109,
-      "gy": 29,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 107,
-      "gy": 31,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 112,
-      "gy": 31,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 110,
-      "gy": 32,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 105,
-      "gy": 33,
-      "variant": "pine"
     },
     {
       "type": "tree",
@@ -5166,49 +5112,13 @@
     },
     {
       "type": "tree",
-      "gx": 108,
-      "gy": 34,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 113,
-      "gy": 34,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
-      "gx": 111,
-      "gy": 35,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 116,
       "gy": 35,
       "variant": "leaf"
     },
     {
       "type": "tree",
-      "gx": 105,
-      "gy": 36,
-      "variant": "pine"
-    },
-    {
-      "type": "tree",
       "gx": 26,
-      "gy": 37,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 108,
-      "gy": 37,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 114,
       "gy": 37,
       "variant": "leaf"
     },
@@ -7190,6 +7100,240 @@
       "gy": 59,
       "w": 5,
       "h": 10
+    },
+    {
+      "type": "stall",
+      "gx": 102,
+      "gy": 27,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 105,
+      "gy": 27,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 108,
+      "gy": 27,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 111,
+      "gy": 27,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 114,
+      "gy": 27,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 102,
+      "gy": 30,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 105,
+      "gy": 30,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 108,
+      "gy": 30,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 111,
+      "gy": 30,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 114,
+      "gy": 30,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 102,
+      "gy": 33,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 105,
+      "gy": 33,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 108,
+      "gy": 33,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 111,
+      "gy": 33,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 114,
+      "gy": 33,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 102,
+      "gy": 36,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 105,
+      "gy": 36,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 108,
+      "gy": 36,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 111,
+      "gy": 36,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "stall",
+      "gx": 114,
+      "gy": 36,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "crate",
+      "gx": 101,
+      "gy": 29
+    },
+    {
+      "type": "crate",
+      "gx": 101,
+      "gy": 32
+    },
+    {
+      "type": "crate",
+      "gx": 101,
+      "gy": 35
+    },
+    {
+      "type": "crate",
+      "gx": 101,
+      "gy": 38
+    },
+    {
+      "type": "crate",
+      "gx": 104,
+      "gy": 27
+    },
+    {
+      "type": "crate",
+      "gx": 107,
+      "gy": 27
+    },
+    {
+      "type": "crate",
+      "gx": 110,
+      "gy": 27
+    },
+    {
+      "type": "crate",
+      "gx": 113,
+      "gy": 27
+    },
+    {
+      "type": "crate",
+      "gx": 116,
+      "gy": 29
+    },
+    {
+      "type": "crate",
+      "gx": 116,
+      "gy": 32
+    },
+    {
+      "type": "crate",
+      "gx": 116,
+      "gy": 35
+    },
+    {
+      "type": "crate",
+      "gx": 116,
+      "gy": 38
+    },
+    {
+      "type": "well",
+      "gx": 101,
+      "gy": 27
+    },
+    {
+      "type": "well",
+      "gx": 90,
+      "gy": 110
+    },
+    {
+      "type": "lantern_post",
+      "gx": 86,
+      "gy": 106
+    },
+    {
+      "type": "lantern_post",
+      "gx": 116,
+      "gy": 92
+    },
+    {
+      "type": "house",
+      "gx": 78,
+      "gy": 70,
+      "w": 4,
+      "h": 4
+    },
+    {
+      "type": "ground_stone",
+      "gx": 101,
+      "gy": 26,
+      "w": 14,
+      "h": 14
     }
   ]
 }
