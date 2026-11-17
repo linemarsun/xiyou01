@@ -148,12 +148,14 @@ function groundCell(src, outW = 128, outH = 64) {
  *   宽扁 AI 构图压矮 30%+，导致建筑比人物小太多。
  * - wide：横长构件（桥/台阶/栅栏）。宽度铺满（足迹长度语义），高度按比例。
  */
-function propTall(src, w, h, thr = 238, cropLimit = Infinity) {
+function propTall(src, w, h, thr = 238, cropLimit = Infinity, topGap = 0) {
   const cut = removeWhiteBg(src, thr);
   const bbox = alphaBBox(cut);
   let sw = bbox.x1 - bbox.x0 + 1;
   const sh = bbox.y1 - bbox.y0 + 1;
-  const scale = h / sh;
+  // topGap：画布顶部透明留空（内容高 = h - topGap）——用于保持"墙顶标高"契约（长短段墙顶齐平）
+  const ch = h - topGap;
+  const scale = ch / sh;
   // 裁宽保高：AI 宽构图超出足迹语义宽上限时，居中裁掉两侧延伸（构图对称时锚点语义不变）
   if (sw * scale > cropLimit) {
     const keep = Math.ceil(cropLimit / scale);
@@ -168,11 +170,12 @@ function propTall(src, w, h, thr = 238, cropLimit = Infinity) {
     const di = (y * sw + x) * 4;
     for (let c = 0; c < 4; c++) trimmed.data[di + c] = cut.data[si + c];
   }
-  const scaled = resize(trimmed, rw, h);
+  const scaled = resize(trimmed, rw, ch);
   const out = new PNG({ width: Math.max(w, rw), height: h });
   const ox = Math.floor((out.width - rw) / 2);
-  for (let y = 0; y < h; y++) for (let x = 0; x < rw; x++) {
-    const si = (y * rw + x) * 4, di = (y * out.width + (ox + x)) * 4;
+  const oy = topGap; // 内容贴底，顶部留 topGap 透明
+  for (let y = 0; y < ch; y++) for (let x = 0; x < rw; x++) {
+    const si = (y * rw + x) * 4, di = ((oy + y) * out.width + (ox + x)) * 4;
     for (let c = 0; c < 4; c++) out.data[di + c] = scaled.data[si + c];
   }
   return erodeWhiteEdge(out);
@@ -243,6 +246,9 @@ const jobs = [
   // 云京城防（拼接件必须贴合足迹宽度）
   ['2-1-1794583686638-1.png', 'bell_tower.png', 'tall', 458, 606, 238, 580],
   // 宫城（主殿/宫门/角楼/白塔/宫墙为工笔线成果，归 ai_align 工具链维护，不在本管线）
+  // 宫城墙工笔化修复（图生图保构图修瓦帽连续 + 墙顶标高统一；v 系 = u 系镜像）
+  ['2-1-1794841895459-1.png', 'palace_wall_u6.png', 'tall', 256, 275, 238, 330, 64],
+  ['2-1-1794841986529-1.png', 'palace_wall_u2.png', 'tall', 128, 211, 238, 170, 0],
   // 野外专属大件
   ['2-1-1794583878982-1.png', 'mountain_gate.png', 'tall', 170, 170, 220],
   ['2-1-1794622719531-1.png', 'ferry_dock.png', 'wide', 320, 205],
@@ -268,11 +274,12 @@ for (const [src, dst, mode, ...rest] of jobs) {
     if (mode === 'ground') out = groundCell(raw);
     else if (mode === 'wide') out = propWide(raw, rest[0], rest[1]);
     else {
-      // rest: [宽, 高, 宽度上限] 或 [宽, 高, 去背阈值, 宽度上限]
-      const [w, h, a, b] = rest;
+      // rest: [宽, 高, 宽度上限] 或 [宽, 高, 去背阈值, 宽度上限, 顶部留空px]
+      const [w, h, a, b, c] = rest;
       const thr = rest.length >= 4 ? a : 238;
       const cropLimit = rest.length >= 4 ? b : a;
-      out = propTall(raw, w, h, thr, cropLimit);
+      const topGap = rest.length >= 5 ? c : 0;
+      out = propTall(raw, w, h, thr, cropLimit, topGap);
     }
     savePng(out, path.join(ISO, dst));
     ok++;
@@ -288,6 +295,8 @@ const mirrorJobs = [
   ['house_4x4_nw.png', 'house_4x4_ne.png'],
   ['house_4x4_se_v2.png', 'house_4x4_sw_v2.png'],
   ['house_4x4_se_v3.png', 'house_4x4_sw_v3.png'],
+  ['palace_wall_u6.png', 'palace_wall_v6.png'],
+  ['palace_wall_u2.png', 'palace_wall_v2.png'],
 ];
 for (const [srcName, dstName] of mirrorJobs) {
   try {
