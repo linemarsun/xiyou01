@@ -42,5 +42,6 @@
  "mirror_derived": true,
  "derive_op": "draw(real_geometry) + flip_facing_sw2se",
  "derived_from": null,
- "tileable": true
+ "tileable": true,
+ "seam_note": "2026-11-16 v4: 端头区用同相位最小周期(沿墙4px/纵2px)回溯纯墙身延拓，金瓦/红墙/石基斜边连续无缝，全长256px保留"
 }

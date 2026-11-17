@@ -363,29 +363,34 @@ def build_corner():
 
 # ---------------------------------------------------------------- 宫墙 6×2 / 2×6
 
-def _wall(u0, u1, v0, v1):
+def _wall(u0, u1, v0, v1, cap_ends=True):
+    """宫墙直段。cap_ends=False 时不画墙帽两端断面（tileable 无缝版）：
+    多段首尾相接时端面会叠出深色竖条+屋檐端头，看起来一段一段不平整；
+    无缝版只保留长向瓦顶，端头由四角角楼提供。"""
     cv = Image.new('RGBA', (cb.CW, cb.CH), (0, 0, 0, 0))
     d = ImageDraw.Draw(cv)
     cb.iso_box(d, u0, u1, v0, v1, 0, 16, cb.STONE, cb.STONE_S, cb.STONE_T)
     cb.iso_box(d, u0, u1, v0, v1, 16, 138, RED_P, RED_P_D, RED_P_L)
     cb.brick_v(d, u0, u1, v1, 22, 130, RED_P, ch=9.0, cw=0.56)
     cb.brick_u(d, u1, v0, v1, 22, 130, RED_P_D, ch=9.0, cw=0.56, seed=1)
-    # 黄瓦墙帽 + 内侧压顶
+    # 黄瓦墙帽：长向顶面始终画；两端断面只在独立段（角楼旁收边）才画
     cb.quad(d, cb.S(u0, v1, 138), cb.eu(u1 - u0), cb.ez(12), CAP_GOLD)
-    cb.quad(d, cb.S(u1, v0, 138), cb.ev(v1 - v0), cb.ez(12), CAP_GOLD_D)
+    if cap_ends:
+        cb.quad(d, cb.S(u1, v0, 138), cb.ev(v1 - v0), cb.ez(12), CAP_GOLD_D)
     d.line([cb.S(u0, v1, 150), cb.S(u1, v1, 150)], fill=(252, 232, 160), width=2)
-    d.line([cb.S(u1, v0, 150), cb.S(u1, v1, 150)], fill=(150, 110, 38), width=2)
+    if cap_ends:
+        d.line([cb.S(u1, v0, 150), cb.S(u1, v1, 150)], fill=(150, 110, 38), width=2)
     return cb.POST.add_outline(cv, px=2.2, erode=1.1)
 
 
 def build_wall_u6():
     _canvas(700, 640, 350, 400)
-    return _wall(cb.U0, cb.U0 + 6, cb.V0, cb.V0 + 2)
+    return _wall(cb.U0, cb.U0 + 6, cb.V0, cb.V0 + 2, cap_ends=False)
 
 
 def build_wall_v6():
     _canvas(700, 640, 350, 400)
-    return _wall(cb.U0, cb.U0 + 2, cb.V0, cb.V0 + 6)
+    return _wall(cb.U0, cb.U0 + 2, cb.V0, cb.V0 + 6, cap_ends=False)
 
 
 def build_wall_u2():

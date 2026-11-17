@@ -28,6 +28,8 @@ const dirtCells = new Set();
 const waterCells = new Set();
 const marbleCells = new Set();
 const reserved = new Set();        // 玩法点位：禁止放任何阻挡构件
+// 窄带石板格：min(w,h)≤6 的 ground_stone 矩形（街巷，建筑不得压占）；宽的广场石板允许
+const stoneNarrowCells = new Set();
 const key = (x, y) => `${x},${y}`;
 
 const groundRect = (x, y, w, h, type) => {
@@ -37,7 +39,10 @@ const groundRect = (x, y, w, h, type) => {
 const fillCells = (set, x, y, w, h) => {
   for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) set.add(key(x + dx, y + dy));
 };
-const STONE = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_stone'); fillCells(stoneCells, x, y, w, h); };
+const STONE = (x, y, w, h) => {
+  groundRect(x, y, w, h, 'ground_stone'); fillCells(stoneCells, x, y, w, h);
+  if (Math.min(w, h) <= 6) fillCells(stoneNarrowCells, x, y, w, h);
+};
 const DIRT = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_dirt'); fillCells(dirtCells, x, y, w, h); };
 const WATER = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_water'); fillCells(waterCells, x, y, w, h); };
 const MARBLE = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_marble'); fillCells(marbleCells, x, y, w, h); };
@@ -108,12 +113,16 @@ const boundsOk = (x, y, w, h, interior = true) => interior
   : x >= 0 && y >= 0 && x + w <= N && y + h <= N;
 
 const cellBlocked = (x, y, w, h, opt) => {
-  const { allowStone = false, allowWater = false, clearance = 0, interior = true } = opt;
+  const { allowStone = false, allowWater = false, clearance = 0, interior = true, allowNarrow = false } = opt;
   for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) {
     const gx = x + dx, gy = y + dy, k = key(gx, gy);
     if (placed.has(k) || reserved.has(k)) return true;
     if (!allowWater && (waterCells.has(k) || marbleCells.has(k))) return true;
-    if (!allowStone && stoneCells.has(k)) return true;
+    if (stoneCells.has(k)) {
+      // 窄带石板（min(矩形边长)≤6）是街巷，必须保持净空；宽块是广场，可放建筑
+      const isNarrow = stoneNarrowCells.has(k);
+      if (!allowStone || (isNarrow && !allowNarrow)) return true;
+    }
     if (clearance > 0 && !interior) continue;
     if (clearance > 0) {
       for (const [nx, ny] of [[gx - 1, gy], [gx + 1, gy], [gx, gy - 1], [gx, gy + 1]]) {
@@ -182,12 +191,10 @@ for (const [x, y] of [[44, 44], [82, 44], [44, 82], [82, 82]]) rigid('palace_cor
 for (const x of [46, 52, 58, 64, 70, 76]) rigid('palace_wall_u6', x, 44, 6, 2);
 // 南墙 y82：宫门贴图（palace_gate.png，2026-11-14 已水平镜像为 u 向版：拱门朝 SW、
 // 塔楼居中）。实测镜像后基座剪影横跨墙线 u≈57.9..69.25（画布 1..365），
-// 墙段只需接到剪影两端：西段 46..57 = 2×u6，东段 69..81 = 2×u6+u2 收边，
-// 城台侧面与墙端面重叠 0.1~0.25 格，视觉无缝
-for (const x of [46, 52]) rigid('palace_wall_u6', x, 82, 6, 2);
-rigid('palace_wall_u6', 69, 82, 6, 2);
-rigid('palace_wall_u6', 75, 82, 6, 2);
-rigid('palace_wall_u2', 80, 82, 2, 2);
+// 墙段只需接到剪影两端：西段 46..57 = 2×u6，东段 70..81 = 2×u6。
+// 2026-11-16：东段原用 u6+u2 收边，但 u2 墙身仅 127px、u6 为 211px，
+// 墙帽差 84px 导致截图里墙顶错位 → 改为纯 u6（70,76），墙帽等高连续。
+for (const x of [46, 52, 70, 76]) rigid('palace_wall_u6', x, 82, 6, 2);
 rigid('palace_gate', 62, 82, 4, 2, { facing: 'sw' });
 // 东西墙 x44 / x82，y46..81（各 36 格 = 6×v6）
 for (const y of [46, 52, 58, 64, 70, 76]) {
@@ -198,7 +205,7 @@ for (const y of [46, 52, 58, 64, 70, 76]) {
 // 配殿贴在主殿侧翼会被檐角盖住或反盖主殿 → 深南位对称 (50,72)/(73,72)，檐角与主殿
 // 精灵 y 带 [1288,2032] 完全错开）；白塔在西北水园 (48,59)——基座出挑 ±56px，
 // 距西墙 2 格、距主殿精灵 144px、角楼精灵 ±164px 全部无碰
-rigid('palace_hall', 59, 48, 10, 10);  // AI 宏伟版：足迹 10×10，内院北部居中
+rigid('palace_hall', 59, 56, 10, 10);  // AI 宏伟版：足迹 10×10，内院北部居中
 rigid('palace_hall_s', 50, 72, 4, 4);  // 西配殿（庭院西南，朝东迎主轴）
 rigid('palace_hall_s', 73, 72, 4, 4);  // 东配殿（庭院东南，与西配殿关于 x63.5 对称）
 rigid('pagoda', 49, 60, 3, 3);   // 塔 764px 高（西北水园地标），西墙/主殿/角楼精灵已核算无碰
@@ -227,6 +234,17 @@ for (const [x, y] of [[36, 20], [92, 20], [36, 108], [92, 108], [20, 62], [108, 
   put({ type: 'stele', gx: x, gy: y, w: 1, h: 2 });
 }
 
+// ---------------------------------------------------------------- 功能建筑（打破民居同款重复）
+// 2026-11-16：用户反馈民居元素重复、需按场景放不同建筑。只用现有工笔资产：
+// 钟楼（市集坊地标）、庙署正殿 hall（庙署坊）、青石殿 hall+stone（园林坊）。
+// 先于合院落位占据格位，合院撒点自动避让；这些大件也纳入下方投影间距约束。
+const landmarks = [
+  { type: 'bell_tower', gx: 22, gy: 22, w: 7, h: 7 },
+  { type: 'hall', gx: 98, gy: 22, w: 5, h: 5 },              // 东北坊：庙署正殿（临街）
+  { type: 'hall', gx: 34, gy: 98, w: 5, h: 5, variant: 'stone' }, // 西南坊：青石殿
+];
+for (const lm of landmarks) put(lm, { allowStone: true });
+
 // ---------------------------------------------------------------- 民居（一进四合院，AI 合院贴图）
 // 合院体量 9×9（菱形 576px，画布 581×520，×1.21 加大版）：旧 4×4/5 步长不再适用。
 // 细步长全枚举候选点 + 哈希序抢占（put 自动避让道路/水面/宫城/玩法点位与已占格），
@@ -240,16 +258,26 @@ for (let y = 8; y + 9 <= 121; y += 2) {
 }
 candidates.sort((a, b) => a.h - b.h);
 let houseCount = 0;
+const housesPlaced = landmarks.filter((l) => placed.has(key(l.gx, l.gy)))
+  .map((l) => ({ gx: l.gx + Math.floor(l.w / 2), gy: l.gy + Math.floor(l.h / 2) }));
 for (const { x, y } of candidates) {
   if (houseCount >= 80) break;
   // 宫城与环路范围不撒民居（x38..89 / y38..89）
   if (x >= 38 && x <= 89 && y >= 38 && y <= 89) continue;
+  // 投影遮挡约束（2026-11-16）：9×9 合院视觉高 476px，排得太近后排会被前排盖住。
+  // Δ(u+v) < 15 且 Δ(u-v) < 10 的两座视为遮挡，抢占时跳过该候选点。
+  const tooClose = housesPlaced.some((h) => {
+    const du = Math.abs((x + y) - (h.gx + h.gy));
+    const dv = Math.abs((x - y) - (h.gx - h.gy));
+    return du < 15 && dv < 10;
+  });
+  if (tooClose) continue;
   const ok = put({
     type: 'house', gx: x, gy: y, w: 9, h: 9,
     facing: ((x + y) >> 1) % 2 ? 'sw' : 'se',   // 枚举步长为 2，x+y 恒偶 → 取半再取奇偶才两向都有
     tint: houseCount % 7 === 3 ? WARM : COOL,   // 按成功落位计数取暖色，约 14%（枚举有失败尝试，不能用递增序号）
   });
-  if (ok) houseCount++;
+  if (ok) { housesPlaced.push({ gx: x, gy: y }); houseCount++; }
 }
 
 // ---------------------------------------------------------------- 绿化与市井点缀
