@@ -293,40 +293,40 @@ GATE_SPRING = 62
 
 
 def build_gate():
-    _canvas(700, 620, 350, 380)
+    _canvas(700, 700, 350, 420)
     cv = Image.new('RGBA', (cb.CW, cb.CH), (0, 0, 0, 0))
     d = ImageDraw.Draw(cv)
     u0, v0 = cb.U0, cb.V0
     u1, v1 = u0 + 4, v0 + 2
     uc = (u0 + u1) / 2.0
-    # 条石基座 + 红墙墩台 0-150
+    # 条石基座 + 红墙墩台 0-212（与宫墙同高体系）
     cb.iso_box(d, u0, u1, v0, v1, 0, 24, cb.STONE, cb.STONE_S, cb.STONE_T)
-    cb.iso_box(d, u0, u1, v0, v1, 24, 150, RED_P, RED_P_D, RED_P_L)
-    cb.brick_v(d, u0, u1, v1, 30, 140, RED_P, ch=9.0, cw=0.56)
-    cb.brick_u(d, u1, v0, v1, 30, 140, RED_P_D, ch=9.0, cw=0.56, seed=1)
+    cb.iso_box(d, u0, u1, v0, v1, 24, 212, RED_P, RED_P_D, RED_P_L)
+    cb.brick_v(d, u0, u1, v1, 30, 204, RED_P, ch=9.0, cw=0.56)
+    cb.brick_u(d, u1, v0, v1, 30, 204, RED_P_D, ch=9.0, cw=0.56, seed=1)
     # 券门隧洞（亮色，贯通 2 格）
     cb.arch_open(d, uc, v1, GATE_HALF, GATE_SPRING, 24, depth=2, axis='v', brick=RED_P)
     # 匾额
     cb.plaque_iso(d, uc, v1, 1.05, 106, 126)
-    # 黄瓦墙帽 150-160（先满铺顶面再压亮带）
-    _roof_cap(d, u0, u1, v0, v1, 150, CAP_GOLD_D)
-    cb.quad(d, cb.S(u0, v1, 150), cb.eu(u1 - u0), cb.ez(10), CAP_GOLD)
-    cb.quad(d, cb.S(u1, v0, 150), cb.ev(v1 - v0), cb.ez(10), CAP_GOLD_D)
-    d.line([cb.S(u0, v1, 160), cb.S(u1, v1, 160)], fill=(252, 232, 160), width=2)
-    # 门楼 160-236：红柱 + 金两坡顶
+    # 黄瓦墙帽 212-224
+    _roof_cap(d, u0, u1, v0, v1, 212, CAP_GOLD_D)
+    cb.quad(d, cb.S(u0, v1, 212), cb.eu(u1 - u0), cb.ez(12), CAP_GOLD)
+    cb.quad(d, cb.S(u1, v0, 212), cb.ev(v1 - v0), cb.ez(12), CAP_GOLD_D)
+    d.line([cb.S(u0, v1, 224), cb.S(u1, v1, 224)], fill=(252, 232, 160), width=2)
+    # 门楼 224-300：红柱 + 金两坡顶
     lu0, lu1, lv0, lv1 = u0 + 0.35, u1 - 0.35, v0 + 0.45, v1 - 0.35
-    _red_body(d, lu0, lu1, lv0, lv1, 160, 236, bays=4)
-    cb.bracket_row(d, lu0 + 0.02, lu1 - 0.02, lv1, 236, 10, n=10)
+    _red_body(d, lu0, lu1, lv0, lv1, 224, 300, bays=4)
+    cb.bracket_row(d, lu0 + 0.02, lu1 - 0.02, lv1, 300, 10, n=10)
     ov = 0.16
     rv = (lv0 + lv1) / 2.0
     nf = (lv1 + ov) - rv
     nb = rv - (lv0 - ov)
-    RIDGE = 322
-    EAVE2 = 246
+    RIDGE = 386
+    EAVE2 = 310
     OVH = 8
     RB = (RIDGE - EAVE2) + OVH
     RF = RB                     # 前坡远边 z = RIDGE - RF（Δz=Δv*16-Δy 推导，与背坡同深）
-    _roof_cap(d, lu0, lu1, lv0, lv1, 236)
+    _roof_cap(d, lu0, lu1, lv0, lv1, 300)
     o = cb.S(lu0 - ov, rv, RIDGE)
     uvec = cb.eu(lu1 - lu0 + 2 * ov)
     cb.SB.gable(d, lu0 - ov, lv0 - ov, lv1 + ov, EAVE2, RIDGE, RED_P, False)
@@ -340,24 +340,24 @@ def build_gate():
 # ---------------------------------------------------------------- 角楼 2×2
 
 def build_corner():
-    _canvas(500, 640, 250, 420)
+    _canvas(500, 760, 250, 470)
     cv = Image.new('RGBA', (cb.CW, cb.CH), (0, 0, 0, 0))
     d = ImageDraw.Draw(cv)
     u0, v0 = cb.U0, cb.V0
     u1, v1 = u0 + 2, v0 + 2
-    # 墩台（红墙）0-150 + 黄帽
+    # 墩台（红墙）0-212 + 黄帽（与宫墙同高体系）
     cb.iso_box(d, u0, u1, v0, v1, 0, 24, cb.STONE, cb.STONE_S, cb.STONE_T)
-    cb.iso_box(d, u0, u1, v0, v1, 24, 150, RED_P, RED_P_D, RED_P_L)
-    cb.brick_v(d, u0, u1, v1, 30, 140, RED_P, ch=9.0, cw=0.56)
-    cb.brick_u(d, u1, v0, v1, 30, 140, RED_P_D, ch=9.0, cw=0.56, seed=1)
-    _roof_cap(d, u0, u1, v0, v1, 150, CAP_GOLD_D)
-    cb.quad(d, cb.S(u0, v1, 150), cb.eu(u1 - u0), cb.ez(10), CAP_GOLD)
-    cb.quad(d, cb.S(u1, v0, 150), cb.ev(v1 - v0), cb.ez(10), CAP_GOLD_D)
-    # 楼身 160-268
+    cb.iso_box(d, u0, u1, v0, v1, 24, 212, RED_P, RED_P_D, RED_P_L)
+    cb.brick_v(d, u0, u1, v1, 30, 204, RED_P, ch=9.0, cw=0.56)
+    cb.brick_u(d, u1, v0, v1, 30, 204, RED_P_D, ch=9.0, cw=0.56, seed=1)
+    _roof_cap(d, u0, u1, v0, v1, 212, CAP_GOLD_D)
+    cb.quad(d, cb.S(u0, v1, 212), cb.eu(u1 - u0), cb.ez(12), CAP_GOLD)
+    cb.quad(d, cb.S(u1, v0, 212), cb.ev(v1 - v0), cb.ez(12), CAP_GOLD_D)
+    # 楼身 224-332
     lu0, lu1, lv0, lv1 = u0 + 0.28, u1 - 0.28, v0 + 0.28, v1 - 0.28
-    _red_body(d, lu0, lu1, lv0, lv1, 160, 268, bays=2)
-    # 攒尖金顶 268-336 + 宝顶
-    _gold_pyramid(d, lu0, lu1, lv0, lv1, 276, 340)
+    _red_body(d, lu0, lu1, lv0, lv1, 224, 332, bays=2)
+    # 攒尖顶 332-400 + 宝顶
+    _gold_pyramid(d, lu0, lu1, lv0, lv1, 340, 404)
     return cb.POST.add_outline(cv, px=2.2, erode=1.1)
 
 
@@ -367,14 +367,14 @@ def _wall(u0, u1, v0, v1):
     cv = Image.new('RGBA', (cb.CW, cb.CH), (0, 0, 0, 0))
     d = ImageDraw.Draw(cv)
     cb.iso_box(d, u0, u1, v0, v1, 0, 16, cb.STONE, cb.STONE_S, cb.STONE_T)
-    cb.iso_box(d, u0, u1, v0, v1, 16, 138, RED_P, RED_P_D, RED_P_L)
-    cb.brick_v(d, u0, u1, v1, 22, 130, RED_P, ch=9.0, cw=0.56)
-    cb.brick_u(d, u1, v0, v1, 22, 130, RED_P_D, ch=9.0, cw=0.56, seed=1)
-    # 黄瓦墙帽 + 内侧压顶
-    cb.quad(d, cb.S(u0, v1, 138), cb.eu(u1 - u0), cb.ez(12), CAP_GOLD)
-    cb.quad(d, cb.S(u1, v0, 138), cb.ev(v1 - v0), cb.ez(12), CAP_GOLD_D)
-    d.line([cb.S(u0, v1, 150), cb.S(u1, v1, 150)], fill=(252, 232, 160), width=2)
-    d.line([cb.S(u1, v0, 150), cb.S(u1, v1, 150)], fill=(150, 110, 38), width=2)
+    cb.iso_box(d, u0, u1, v0, v1, 16, 212, RED_P, RED_P_D, RED_P_L)
+    cb.brick_v(d, u0, u1, v1, 22, 204, RED_P, ch=9.0, cw=0.56)
+    cb.brick_u(d, u1, v0, v1, 22, 204, RED_P_D, ch=9.0, cw=0.56, seed=1)
+    # 朱红墙帽 + 内侧压顶（帽顶 224，与外城城墙垛口同高体系）
+    cb.quad(d, cb.S(u0, v1, 212), cb.eu(u1 - u0), cb.ez(12), CAP_GOLD)
+    cb.quad(d, cb.S(u1, v0, 212), cb.ev(v1 - v0), cb.ez(12), CAP_GOLD_D)
+    d.line([cb.S(u0, v1, 224), cb.S(u1, v1, 224)], fill=(252, 232, 160), width=2)
+    d.line([cb.S(u1, v0, 224), cb.S(u1, v1, 224)], fill=(150, 110, 38), width=2)
     return cb.POST.add_outline(cv, px=2.2, erode=1.1)
 
 

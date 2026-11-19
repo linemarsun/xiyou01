@@ -252,13 +252,6 @@
       "h": 8
     },
     {
-      "type": "ground_marble",
-      "gx": 52,
-      "gy": 74,
-      "w": 12,
-      "h": 10
-    },
-    {
       "type": "city_wall_u6",
       "gx": 7,
       "gy": 5,
@@ -846,11 +839,6 @@
       "type": "lantern_post",
       "gx": 73,
       "gy": 54
-    },
-    {
-      "type": "lantern_post",
-      "gx": 54,
-      "gy": 73
     },
     {
       "type": "lantern_post",
@@ -3242,21 +3230,6 @@
       "gy": 84
     },
     {
-      "type": "incense",
-      "gx": 44,
-      "gy": 76
-    },
-    {
-      "type": "incense",
-      "gx": 44,
-      "gy": 80
-    },
-    {
-      "type": "incense",
-      "gx": 44,
-      "gy": 84
-    },
-    {
       "type": "stele",
       "gx": 37,
       "gy": 72,
@@ -3273,27 +3246,6 @@
     {
       "type": "stele",
       "gx": 37,
-      "gy": 80,
-      "w": 1,
-      "h": 2
-    },
-    {
-      "type": "stele",
-      "gx": 45,
-      "gy": 72,
-      "w": 1,
-      "h": 2
-    },
-    {
-      "type": "stele",
-      "gx": 45,
-      "gy": 76,
-      "w": 1,
-      "h": 2
-    },
-    {
-      "type": "stele",
-      "gx": 45,
       "gy": 80,
       "w": 1,
       "h": 2
@@ -3301,13 +3253,6 @@
     {
       "type": "fence",
       "gx": 33,
-      "gy": 70,
-      "w": 1,
-      "h": 18
-    },
-    {
-      "type": "fence",
-      "gx": 46,
       "gy": 70,
       "w": 1,
       "h": 18
@@ -3418,12 +3363,6 @@
       "type": "tree",
       "gx": 32,
       "gy": 76,
-      "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 50,
-      "gy": 88,
       "variant": "leaf"
     },
     {
@@ -4778,133 +4717,6 @@
       "gy": 114
     },
     {
-      "type": "palace_corner",
-      "gx": 50,
-      "gy": 72,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_corner",
-      "gx": 64,
-      "gy": 72,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_corner",
-      "gx": 50,
-      "gy": 84,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_corner",
-      "gx": 64,
-      "gy": 84,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_u6",
-      "gx": 52,
-      "gy": 72,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_u6",
-      "gx": 58,
-      "gy": 72,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_u2",
-      "gx": 52,
-      "gy": 84,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_u6",
-      "gx": 54,
-      "gy": 84,
-      "w": 6,
-      "h": 2
-    },
-    {
-      "type": "palace_gate",
-      "gx": 60,
-      "gy": 84,
-      "w": 4,
-      "h": 2,
-      "facing": "sw"
-    },
-    {
-      "type": "palace_wall_v6",
-      "gx": 50,
-      "gy": 74,
-      "w": 2,
-      "h": 6
-    },
-    {
-      "type": "palace_wall_v2",
-      "gx": 50,
-      "gy": 80,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_v2",
-      "gx": 50,
-      "gy": 82,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_v6",
-      "gx": 64,
-      "gy": 74,
-      "w": 2,
-      "h": 6
-    },
-    {
-      "type": "palace_wall_v2",
-      "gx": 64,
-      "gy": 80,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_wall_v2",
-      "gx": 64,
-      "gy": 82,
-      "w": 2,
-      "h": 2
-    },
-    {
-      "type": "palace_hall",
-      "gx": 52,
-      "gy": 74,
-      "w": 6,
-      "h": 6
-    },
-    {
-      "type": "palace_hall_s",
-      "gx": 58,
-      "gy": 74,
-      "w": 4,
-      "h": 4
-    },
-    {
-      "type": "pagoda",
-      "gx": 52,
-      "gy": 80,
-      "w": 3,
-      "h": 3
-    },
-    {
       "type": "tree",
       "gx": 26,
       "gy": 9,
@@ -5409,17 +5221,6 @@
       "gx": 36,
       "gy": 84,
       "variant": "leaf"
-    },
-    {
-      "type": "tree",
-      "gx": 53,
-      "gy": 88,
-      "variant": "pine"
-    },
-    {
-      "type": "rock",
-      "gx": 56,
-      "gy": 88
     },
     {
       "type": "rock",
@@ -7334,6 +7135,174 @@
       "gy": 26,
       "w": 14,
       "h": 14
+    },
+    {
+      "type": "palace_corner",
+      "gx": 46,
+      "gy": 70,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_corner",
+      "gx": 56,
+      "gy": 70,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_corner",
+      "gx": 46,
+      "gy": 86,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_corner",
+      "gx": 56,
+      "gy": 86,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_wall_u6",
+      "gx": 48,
+      "gy": 70,
+      "w": 6,
+      "h": 2
+    },
+    {
+      "type": "palace_wall_u2",
+      "gx": 54,
+      "gy": 70,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_wall_u2",
+      "gx": 48,
+      "gy": 86,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_gate",
+      "gx": 50,
+      "gy": 86,
+      "w": 4,
+      "h": 2
+    },
+    {
+      "type": "palace_wall_u2",
+      "gx": 54,
+      "gy": 86,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_wall_v6",
+      "gx": 46,
+      "gy": 72,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "palace_wall_v6",
+      "gx": 46,
+      "gy": 78,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "palace_wall_v2",
+      "gx": 46,
+      "gy": 84,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_wall_v6",
+      "gx": 56,
+      "gy": 72,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "palace_wall_v6",
+      "gx": 56,
+      "gy": 78,
+      "w": 2,
+      "h": 6
+    },
+    {
+      "type": "palace_wall_v2",
+      "gx": 56,
+      "gy": 84,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "type": "palace_hall",
+      "gx": 49,
+      "gy": 76,
+      "w": 6,
+      "h": 6
+    },
+    {
+      "type": "palace_hall_s",
+      "gx": 52,
+      "gy": 73,
+      "w": 4,
+      "h": 4
+    },
+    {
+      "type": "ground_marble",
+      "gx": 48,
+      "gy": 72,
+      "w": 8,
+      "h": 14
+    },
+    {
+      "type": "pagoda",
+      "gx": 117,
+      "gy": 96,
+      "w": 3,
+      "h": 3
+    },
+    {
+      "type": "stele",
+      "gx": 44,
+      "gy": 72
+    },
+    {
+      "type": "stele",
+      "gx": 44,
+      "gy": 76
+    },
+    {
+      "type": "stele",
+      "gx": 44,
+      "gy": 80
+    },
+    {
+      "type": "stele",
+      "gx": 44,
+      "gy": 84
+    },
+    {
+      "type": "incense",
+      "gx": 43,
+      "gy": 76
+    },
+    {
+      "type": "incense",
+      "gx": 43,
+      "gy": 80
+    },
+    {
+      "type": "incense",
+      "gx": 43,
+      "gy": 84
     }
   ]
 }

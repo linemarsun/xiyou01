@@ -171,14 +171,12 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   /** 宫城配殿 4×4：一层台基 + 红身金顶，正脊 ~316 */
   palace_hall_s: { w: 4, h: 4, height: 320 },
   /** 宫门 4×2：红墙券门隧洞（亮色，贯通）+ 门楼金顶 ~322 */
-  palace_gate: { w: 4, h: 2, height: 322 },
-  /** 宫城角楼 2×2：红墙墩台 + 攒尖金顶 + 宝顶 */
-  palace_corner: { w: 2, h: 2, height: 340 },
-  /** 宫墙直段：朱红墙身 + 黄瓦帽（高 150，低于城墙 224） */
-  palace_wall_u6: { w: 6, h: 2, height: 150 },
-  palace_wall_u2: { w: 2, h: 2, height: 150 },
-  palace_wall_v2: { w: 2, h: 2, height: 150 },
-  palace_wall_v6: { w: 2, h: 6, height: 150 },
+  palace_gate: { w: 4, h: 2, height: 388 },
+  palace_corner: { w: 2, h: 2, height: 404 },
+  palace_wall_u6: { w: 6, h: 2, height: 234 },
+  palace_wall_u2: { w: 2, h: 2, height: 234 },
+  palace_wall_v2: { w: 2, h: 2, height: 234 },
+  palace_wall_v6: { w: 2, h: 6, height: 234 },
   /** 白塔 3×3：汉白玉塔身五层挑檐 + 攒尖金顶，总高 ~700（新城制高点） */
   pagoda: { w: 3, h: 3, height: 700 },
   /** 汉白玉广场地面（宫城内铺地） */

@@ -17,7 +17,7 @@
  ],
  "anchor_px": [
   135,
-  421
+  485
  ],
  "anchor_note": "足迹前底顶点 p(umax,vmax)；与 4×4 屋身同一约定，落地即对齐",
  "tile": [
@@ -26,10 +26,10 @@
  ],
  "sprite_size": [
   206,
-  426
+  490
  ],
- "sprite_h_px": 422,
- "ratio_to_char": 5.02,
+ "sprite_h_px": 486,
+ "ratio_to_char": 5.79,
  "margins_px": [
   2,
   2,
