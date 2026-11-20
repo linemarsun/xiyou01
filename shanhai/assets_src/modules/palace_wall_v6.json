@@ -43,5 +43,5 @@
  "derive_op": "draw(real_geometry) + flip_facing_sw2se",
  "derived_from": null,
  "tileable": true,
- "seam_note": "2026-11-16 v4: 端头区用同相位最小周期(沿墙4px/纵2px)回溯纯墙身延拓，金瓦/红墙/石基斜边连续无缝，全长256px保留"
+ "seam_note": "2026-11-18 v5: 整段重排为纯墙身+恒定墙高+0.5坡度（对照 city_wall_u6 地面线校准），左端源列x+96上移、右端x-96下移，列0/列192同源列位移差96=段步进落差，拼接边界逐像素连续；消除 v4 端头收顶在拼接处露出的屋脊翘尖与高度断台"
 }
