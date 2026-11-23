@@ -288,6 +288,48 @@ const THEMES = [
       }
     },
   },
+
+  {
+    id: 'wild_yunmeng', name: '云梦泽', seed: 20261114,
+    cols: 112, rows: 90,
+    base: 'ground_grass', signature: 'misty-lake',
+    tagline: '烟波大泽 · 芦苇荡 · 环湖栈道',
+    treeVariant: 'leaf', rockVariant: 'moss',
+    decoDensity: 0.048, lampStep: 12,
+    deco: [['tree', 0.52], ['rock', 0.24], ['lantern_post', 0.08], ['fence', 0.09], ['stall', 0.04], ['well', 0.03]],
+    anchors: {
+      spawns: [
+        { gx: 30, gy: 24, group: ['kulou'] },
+        { gx: 80, gy: 24, group: ['kulou', 'kulou'] },
+        { gx: 94, gy: 40, group: ['yelang'] },
+        { gx: 26, gy: 36, group: ['kulou'] },
+        { gx: 30, gy: 64, group: ['yelang', 'kulou'] },
+      ],
+      exits: [
+        { gx: 50, gy: 1, to: 'taoyuan', toGx: 62, toGy: 126, label: '云京' },
+      ],
+    },
+    build(c) {
+      const { waterLine, line, rect, markR, prop, placeNear, setT } = c;
+      // 云梦大泽：水带拼出烟波湖形（中部偏南），路后画 → 跨湖段自然成堤
+      waterLine([[20, 50], [40, 56], [64, 50], [88, 56]], 14);
+      rect(30, 42, 50, 12, (x, y) => setT(x, y, 'ground_water'));
+      // 环湖道路：北口 → 岔口 → 东岸渔村；西支路沿芦苇荡南伸
+      line([[50, 1], [50, 16], [78, 20]], 6, 'ground_dirt');
+      line([[78, 20], [94, 32], [94, 56]], 5, 'ground_dirt');
+      line([[50, 16], [26, 24], [26, 44]], 5, 'ground_dirt');
+      // 湖畔歇坪 × 2 + 曲岸栈桥跨水
+      rect(40, 24, 12, 10, (x, y) => markR(x, y, 'ground_stone'));
+      rect(84, 40, 10, 8, (x, y) => markR(x, y, 'ground_stone'));
+      for (const [gx, gy] of [[48, 46], [72, 44]]) prop('bridge', gx, gy, 3, 5);
+      // 泽口牌坊 + 水榭楼阁 + 渔家摊 + 石井
+      for (const [gx, gy] of [[44, 6], [92, 28]]) placeNear('paifang', gx, gy, 3, 3);
+      placeNear('hall', 90, 22, 6, 6);
+      placeNear('house', 26, 32, 4, 4, { variant: 'lattice', facing: 'sw' });
+      placeNear('stall', 56, 14, 2, 2, { variant: 'silk' });
+      placeNear('well', 40, 38, 1, 1);
+    },
+  },
 ];
 
 function buildLayout(theme) {

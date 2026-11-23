@@ -419,18 +419,21 @@ export function itemCells(item: IsoItem): Array<{ gx: number; gy: number }> {
 export function buildCollision(layout: IsoLayout): IsoCollision {
   const ground = new Set<string>();
   const blocked = new Set<string>();
-  /** 拱洞 / 桥面等可穿行格：最后统一从 blocked 里剔除（可覆盖下方水面的不可走标记） */
+  /** 地面 / 桥面等可行走格统一从 blocked 里剔除，由各生成脚本水系的参数表标记 */
   const passable = new Set<string>();
+  /** 地面类型：后写的覆盖先写的（水面阻挡；石板 / 土路覆盖水面 → 成堤成桥可走） */
+  const groundType = new Map<string, string>();
   for (const item of layout.items) {
+    if (!isGroundType(item.type)) continue;
+    for (const c of itemCells(item)) groundType.set(keyOf(c.gx, c.gy), item.type);
+  }
+  for (const [k, type] of groundType) {
+    ground.add(k);
+    if (type === 'ground_water') blocked.add(k); // 水面不可通行
+  }
+  for (const item of layout.items) {
+    if (isGroundType(item.type)) continue;
     const cells = itemCells(item);
-    if (isGroundType(item.type)) {
-      for (const c of cells) {
-        const k = keyOf(c.gx, c.gy);
-        ground.add(k);
-        if (item.type === 'ground_water') blocked.add(k); // 水面不可走
-      }
-      continue;
-    }
     const lane = new Set<string>(
       item.type === 'gate_arch' || item.type === 'paifang'
         ? archLane(item).map((c) => keyOf(c.gx, c.gy))

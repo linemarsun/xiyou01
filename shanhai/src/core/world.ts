@@ -97,6 +97,7 @@ export const ISO_GRIDS: Record<string, IsoGrid> = {
   wild_luanzang: { cols: 96,  rows: 128, tileW: 64, tileH: 32, ox: 4096, oy: 16 },
   wild_shanxiao: { cols: 104, rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
   difu:          { cols: 80,  rows: 112, tileW: 64, tileH: 32, ox: 3584, oy: 16 },
+  wild_yunmeng:  { cols: 112, rows: 90,  tileW: 64, tileH: 32, ox: 2880, oy: 16 },
 };
 /** 云京格网：保留旧名以兼容外部引用与历史存档换算 */
 export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
@@ -153,7 +154,10 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     // 路牌放门洞北沿 cell(62,3)：城内北上穿过券洞即触发，与画面城门严格对齐
     iso: { layout: 'iso/taoyuan.json' },
     spawns: [],
-    exits: [isoExit('taoyuan', 62, 3, 'wild_heifeng', 32, 1, '青崖山道')],
+    exits: [
+      isoExit('taoyuan', 62, 3, 'wild_heifeng', 32, 1, '青崖山道'),
+      isoExit('taoyuan', 62, 126, 'wild_yunmeng', 50, 1, '云梦泽'),
+    ],
     npc: isoNpc('taoyuan', 32, 32, '玄鹤长老'),
     tavern: isoNpc('taoyuan', 32, 20, '云京酒肆掌柜'),
   },
@@ -218,6 +222,19 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 云京'),
     ],
     npc: isoNpc('difu', 40, 72, '孟婆'),
+  },
+  /** 云梦泽 112×90：烟波大泽居中，环湖道路成环，北口通云京南门 */
+  wild_yunmeng: {
+    name: '云梦泽', scene: 'wild_yunmeng',
+    iso: { layout: 'iso/wild_yunmeng.json' },
+    spawns: [
+      isoSpawn('wild_yunmeng', 30, 24, ['kulou']),
+      isoSpawn('wild_yunmeng', 80, 24, ['kulou', 'kulou']),
+      isoSpawn('wild_yunmeng', 94, 40, ['yelang']),
+      isoSpawn('wild_yunmeng', 26, 36, ['kulou']),
+      isoSpawn('wild_yunmeng', 30, 64, ['yelang', 'kulou']),
+    ],
+    exits: [isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '云京')],
   },
 };
 

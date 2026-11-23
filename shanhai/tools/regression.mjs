@@ -1115,7 +1115,7 @@ test('一景一制：五图各有独立格网，尺寸/形状参考云京但互�
     ok(m.h >= 4096 * 0.7 && m.h <= 4096, `${m.name} 高 ${m.h} 与云京同量级`);
     shapes.add(`${g.cols}x${g.rows}`);
   }
-  eq(shapes.size, 5, `五张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
+  eq(shapes.size, 6, `六张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
   for (const id of ISO_REGIONS) {
     const { raw, layout } = isoScene(id);
     ok(Array.isArray(raw.anchors?.spawns) && Array.isArray(raw.anchors?.exits), `${id} 布局带玩法锚点`);
@@ -1311,7 +1311,7 @@ test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
   eq(content.CLASSES.map((c) => c.id).join(','), 'xiake,lingguan,moshi,wuzhu', '职业 id');
   eq(content.PETS.map((p) => p.id).join(','), 'linghu,yanjia,leisun', '宠物 id');
   eq(Object.keys(content.MONSTERS).join(','), 'yelang,heixiong,kulou,zhizhu,shanxiao,shanxiaowang', '怪物 id');
-  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu', '地图 id（新增地府重生点）');
+  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu,wild_yunmeng', '地图 id（新增云梦泽扩展）');
   eq(world.QUESTS.map((q) => q.id).join(','), 'q1,q2,q3', '任务 id');
   eq(world.QUESTS.map((q) => q.targets.need).join(','), '3,4,1', '任务目标数');
   eq(world.QUESTS.map((q) => q.rewardSilver).join(','), '100,160,300', '任务赏银');
@@ -1343,7 +1343,7 @@ test('每张世界地图都有对应的国风满幅背景', () => {
     ok(art.WORLD_TILE_ART[m.scene], `${m.name} 缺背景映射`);
     ok(existsSync(path.join(ROOT, 'public/assets/art', art.WORLD_TILE_ART[m.scene])), `缺背景文件 ${m.scene}`);
   }
-  eq(Object.keys(art.WORLD_TILE_ART).length, 4, '四张地图各一张');
+  eq(Object.keys(art.WORLD_TILE_ART).length, 6, '满幅背景图各一张');
   ok(art.allArtFiles().includes(art.WORLD_TILE_ART.taoyuan), '纳入素材自检清单');
 });
 
