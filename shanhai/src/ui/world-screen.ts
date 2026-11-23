@@ -413,7 +413,7 @@ export class WorldScreen {
     }
 
     this.tavernPanelEl.append(
-      h('div', { class: 'dname' }, `【云京酒肆】雇佣同道（最多 ${COMPANION_CAP} 名）· 同道不食经验，境界始终跟随少侠`),
+      h('div', { class: 'dname' }, `【西岐酒肆】雇佣同道（最多 ${COMPANION_CAP} 名）· 同道不食经验，境界始终跟随少侠`),
       rows,
       h('div', { style: 'text-align:right;margin-top:8px' },
         h('button', { class: 'btn small', onclick: () => { this.tavernPanelEl.style.display = 'none'; } }, '关闭'),
@@ -807,7 +807,7 @@ export class WorldScreen {
     this.allocBtn.classList.toggle('auto-on', this.gs.potential > 0);
     const q = activeQuest(this.gs);
     if (!q) {
-      this.questEl.textContent = this.gs.questStep === 0 ? '📜 任务：往云京寻玄鹤长老' : '📜 任务：全部完成 🎉';
+      this.questEl.textContent = this.gs.questStep === 0 ? '📜 任务：往西岐城寻姜子牙' : '📜 任务：全部完成 🎉';
     } else if (questReady(this.gs)) {
       this.questEl.textContent = `📜 ${q.name}：可交付！`;
     } else {
@@ -856,7 +856,7 @@ export class WorldScreen {
     this.dialogueEl.append(
       h('div', { class: 'quest-body' },
         h('div', { class: 'quest-title' }, '地府 · 忘川渡口'),
-        h('div', { class: 'quest-text' }, '孟婆递来一碗温热的汤：「阳寿未尽，魂且归来。沿黄泉道往南，尽头的还阳牌可回云京；往北过奈何桥，便又到忘川了。」'),
+        h('div', { class: 'quest-text' }, '妲己浅酌一杯酒：「大王在鹿台等着新鲜魂魄呢……你既阳寿未尽，便沿黄泉道往南还阳回西岐城；往北过奈何桥，又是忘川了。」'),
       ),
       h('div', { class: 'cmd-row' },
         h('button', { class: 'btn small', onclick: () => this.closeDialogue() }, '谢过孟婆'),
@@ -864,7 +864,7 @@ export class WorldScreen {
     );
   }
 
-  /** HUD「📜 悬赏」：只读查看榜单，接取/交付仍需在云京找玄鹤长老 */
+  /** HUD「📜 悬赏」：只读查看榜单，接取/交付仍需在西岐城找姜子牙 */
   private openQuestBoard(): void {
     this.closePanels();
     this.renderQuestBoard(true);
@@ -879,7 +879,7 @@ export class WorldScreen {
     detail.append(h('div', { class: 'quest-head' },
       h('img', { class: 'quest-seal', src: artUrl(ICON_ART.bambooScroll), alt: '' }),
       h('div', {},
-        h('div', { class: 'quest-title' }, '云京司礼府 · 悬赏榜'),
+        h('div', { class: 'quest-title' }, '西岐司礼府 · 悬赏榜'),
         h('div', { class: 'quest-npc' }, `司礼：${d.name}`),
       ),
     ));

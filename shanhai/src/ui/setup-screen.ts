@@ -103,8 +103,8 @@ export function renderSetup(root: HTMLElement, handlers: SetupHandlers): void {
 
   root.append(
     h('div', { class: 'setup' },
-      h('h1', { class: 'game-title' }, '山 海 奇 谭'),
-      h('div', { class: 'game-sub' }, '国风回合制 · 云京启程 · 五族道法'),
+      h('h1', { class: 'game-title' }, '封 神 演 义'),
+      h('div', { class: 'game-sub' }, '国风回合制 · 西岐启程 · 代天封神'),
       hasSave && onContinue
         ? h('div', { style: 'margin-bottom:10px' },
             h('button', { class: 'btn primary big', onclick: () => onContinue() }, '继 续 冒 险'),

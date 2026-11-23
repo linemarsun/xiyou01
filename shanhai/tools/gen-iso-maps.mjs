@@ -43,15 +43,15 @@ function mulberry32(seed) {
 /**
  * 每图的完整定义。anchors 一般落在边界带（距边 ≤1 格）：
  *   gx ∈ {1, cols-2} 或 gy ∈ {1, rows-2}。
- * 例外：云京的出城口嵌在北城墙线上（城门券洞 gx=62, gy≈4），路牌/落点取门洞 (62,3)。
+ * 例外：西岐城的出城口嵌在北城墙线上（城门券洞 gx=62, gy≈4），路牌/落点取门洞 (62,3)。
  * 拓扑（成对的路牌互为对方落点，玩家一进图就站在回程路牌上）：
- *   云京城门(62,3) ⇄ 山道(32,1)
- *   山道(1,62) ⇄ 忘川(11,1)      山道(126,62) ⇄ 洞天(1,52)
- *   忘川(73,126) ⇄ 地府(40,1)     地府(40,110) → 云京城门(62,3)（单向还阳）
+ *   西岐城城门(62,3) ⇄ 山道(32,1)
+ *   山道(1,62) ⇄ 黄泉(11,1)      山道(126,62) ⇄ 洞天(1,52)
+ *   黄泉(73,126) ⇄ 地府(40,1)     地府(40,110) → 西岐城城门(62,3)（单向还阳）
  */
 const THEMES = [
   {
-    id: 'wild_heifeng', name: '青崖山道', seed: 20261109,
+    id: 'wild_heifeng', name: '穿云岭古道', seed: 20261109,
     cols: 128, rows: 96,
     base: 'ground_grass', signature: 'switchback-ridge',
     tagline: '盘山之字栈道 · 三溪石桥 · 林海',
@@ -70,9 +70,9 @@ const THEMES = [
         { gx: 116, gy: 62, group: ['heixiong'] },
       ],
       exits: [
-        { gx: 32, gy: 1, to: 'taoyuan', toGx: 62, toGy: 3, label: '云京' },
-        { gx: 1, gy: 62, to: 'wild_luanzang', toGx: 11, toGy: 1, label: '渡忘川' },
-        { gx: 126, gy: 62, to: 'wild_shanxiao', toGx: 1, toGy: 52, label: '玲珑洞天' },
+        { gx: 32, gy: 1, to: 'taoyuan', toGx: 62, toGy: 3, label: '西岐城' },
+        { gx: 1, gy: 62, to: 'wild_luanzang', toGx: 11, toGy: 1, label: '黄泉鬼渡' },
+        { gx: 126, gy: 62, to: 'wild_shanxiao', toGx: 1, toGy: 52, label: '骷髅山白骨洞' },
       ],
     },
     build(c) {
@@ -109,10 +109,10 @@ const THEMES = [
   },
 
   {
-    id: 'wild_luanzang', name: '渡忘川', seed: 20261110,
+    id: 'wild_luanzang', name: '黄泉鬼渡', seed: 20261110,
     cols: 96, rows: 128,
     base: 'ground_dirt', signature: 'diagonal-river',
-    tagline: '忘川斜贯 · 两岸石堤 · 六渡石桥',
+    tagline: '黄泉斜贯 · 两岸石堤 · 六渡石桥',
     treeVariant: 'dead', rockVariant: 'dark', bridgeVariant: 'dark',
     decoDensity: 0.032, lampStep: 14,
     deco: [['tree', 0.44], ['rock', 0.38], ['fence', 0.10], ['lantern_post', 0.05], ['stele', 0.03]],
@@ -126,8 +126,8 @@ const THEMES = [
         { gx: 65, gy: 116, group: ['zhizhu'] },
       ],
       exits: [
-        { gx: 11, gy: 1, to: 'wild_heifeng', toGx: 1, toGy: 62, label: '青崖山道' },
-        { gx: 73, gy: 126, to: 'difu', toGx: 40, toGy: 1, label: '幽都 · 忘川渡口' },
+        { gx: 11, gy: 1, to: 'wild_heifeng', toGx: 1, toGy: 62, label: '穿云岭古道' },
+        { gx: 73, gy: 126, to: 'difu', toGx: 40, toGy: 1, label: '朝歌 · 鹿台' },
       ],
     },
     build(c) {
@@ -171,7 +171,7 @@ const THEMES = [
   },
 
   {
-    id: 'wild_shanxiao', name: '玲珑洞天', seed: 20261111,
+    id: 'wild_shanxiao', name: '骷髅山白骨洞', seed: 20261111,
     cols: 104, rows: 104,
     base: 'ground_dirt', signature: 'ring-cavern',
     tagline: '青苔环廊 · 青石圆厅 · 四条放射石阶 · 晶壁围合',
@@ -195,7 +195,7 @@ const THEMES = [
         { gx: 20, gy: 52, group: ['shanxiao'] },
       ],
       exits: [
-        { gx: 1, gy: 52, to: 'wild_heifeng', toGx: 126, toGy: 62, label: '青崖山道' },
+        { gx: 1, gy: 52, to: 'wild_heifeng', toGx: 126, toGy: 62, label: '穿云岭古道' },
       ],
     },
     build(c) {
@@ -247,24 +247,24 @@ const THEMES = [
   },
 
   {
-    id: 'difu', name: '地府 · 忘川渡口', seed: 20261112,
+    id: 'difu', name: '地府 · 黄泉渡口', seed: 20261112,
     cols: 80, rows: 112,
     base: 'ground_dirt', signature: 'straight-road',
-    tagline: '黄泉直道 · 忘川横河 · 奈何桥 · 碑阵引魂灯',
+    tagline: '黄泉直道 · 黄泉横河 · 奈何桥 · 碑阵引魂灯',
     treeVariant: 'dead', rockVariant: 'dark', bridgeVariant: 'dark',
     decoDensity: 0.018, lampStep: 0,
     deco: [['rock', 0.56], ['fence', 0.22], ['tree', 0.14], ['stele', 0.08]],
     anchors: {
       spawns: [],
       exits: [
-        { gx: 40, gy: 1, to: 'wild_luanzang', toGx: 73, toGy: 126, label: '渡忘川' },
-        { gx: 40, gy: 110, to: 'taoyuan', toGx: 62, toGy: 3, label: '还阳 · 云京' },
+        { gx: 40, gy: 1, to: 'wild_luanzang', toGx: 73, toGy: 126, label: '黄泉鬼渡' },
+        { gx: 40, gy: 110, to: 'taoyuan', toGx: 62, toGy: 3, label: '还阳 · 西岐城' },
       ],
       npc: { gx: 40, gy: 72, name: '孟婆' },
     },
     build(c) {
       const { setT, line, rect, markR, prop, tryProp, placeNear, cols } = c;
-      // 忘川横河：把幽都切成南北两半
+      // 黄泉横河：把朝歌切成南北两半
       rect(0, 54, cols, 7, (x, y) => setT(x, y, 'ground_water'));
       // 一条笔直黄泉道贯穿南北（唯一主路，无十字、无广场）
       line([[40, 1], [40, 110]], 7, 'ground_stone');
@@ -306,7 +306,7 @@ const THEMES = [
         { gx: 30, gy: 64, group: ['yelang', 'kulou'] },
       ],
       exits: [
-        { gx: 50, gy: 1, to: 'taoyuan', toGx: 62, toGy: 126, label: '云京' },
+        { gx: 50, gy: 1, to: 'taoyuan', toGx: 62, toGy: 126, label: '西岐城' },
       ],
     },
     build(c) {

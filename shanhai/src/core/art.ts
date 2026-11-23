@@ -38,7 +38,7 @@ export const CLASS_ART: Record<string, { portrait: string; character: string }> 
   wuzhu: { portrait: 'portraits/char_gui_mingxi.png', character: 'characters/char_gui_mingxi.png' },
 };
 
-/** 初始宠物 → 参考召唤兽（只有 2 张，青冥雷鸢复用白泽幼兽） */
+/** 初始宠物 → 参考召唤兽（只有 2 张，青冥雷鸢复用四不相） */
 export const PET_ART: Record<string, { portrait: string; character: string }> = {
   linghu: { portrait: 'portraits/pet_baize.png', character: 'characters/pet_baize.png' },
   yanjia: { portrait: 'portraits/pet_chiyan_lingsuan.png', character: 'characters/pet_chiyan_lingsuan.png' },

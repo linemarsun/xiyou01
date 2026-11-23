@@ -23,7 +23,7 @@ const MONSTER_SPEED = 34;
 
 /**
  * 成片重复构件的确定性色差（按格坐标取模，只改精灵 tint / scale，不改布局数据）。
- * 玲珑洞天一张图有 661 块晶石（v0.15.1 分层后），不这么做会明显读成复制粘贴。
+ * 骷髅山白骨洞一张图有 661 块晶石（v0.15.1 分层后），不这么做会明显读成复制粘贴。
  */
 const PROP_TINT: Record<string, number[]> = {
   tree: [0xffffff, 0xedf3e4, 0xf4f0dc, 0xe4ecdf, 0xf1ead9],
@@ -722,7 +722,7 @@ export class WorldRenderer {
 
   /**
    * 山石占位：按场景换色（moss 青苔 / dark 幽冥 / crystal 洞天晶石），
-   * 缺省保持云京的灰石画法。
+   * 缺省保持西岐城的灰石画法。
    */
   private drawRock(c: Container, H: number, variant?: string): void {
     const palettes: Record<string, { face: number; light: number; top: number }> = {

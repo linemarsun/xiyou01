@@ -75,7 +75,7 @@ const fresh = () => {
   return world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '回归测试' });
 };
 
-console.log('\n=== 山海奇谭 · 全链回归自检 ===\n');
+console.log('\n=== 封神演义 · 全链回归自检 ===\n');
 
 console.log('[1] 任务链三环');
 test('新开档初始状态', () => {
@@ -263,8 +263,8 @@ test('师门修炼：费用、上限与非本门派拦截', () => {
 
 console.log('\n[4] 召唤兽');
 test('petBase 兼容 PETS 与 MONSTERS；成长与经验曲线', () => {
-  ok(world.petBase('linghu').name.includes('白泽幼兽'), '初始宠物');
-  ok(world.petBase('kulou').name.includes('忘川骨卒'), '收服的怪');
+  ok(world.petBase('linghu').name.includes('四不相'), '初始宠物');
+  ok(world.petBase('kulou').name.includes('黄泉骨卒'), '收服的怪');
   eq(world.petGrowth(1), 1, 'Lv1 无加成');
   ok(Math.abs(world.petGrowth(3) - 1.16) < 1e-9, '每级 +8%');
   eq(world.petExpNeeded(1), 55, 'Lv1 升级需求');
@@ -711,7 +711,7 @@ test('五图等距规格各自按格网推导；卷轴常量只留给旧素材�
     sizes.add(`${m.w}x${m.h}`);
   }
   ok(sizes.size >= 4, `五图世界尺寸不再完全一致（${[...sizes].join(' / ')}）`);
-  ok(world.WORLD_MAPS.difu.npc?.name === '孟婆', '地府孟婆已注册');
+  ok(world.WORLD_MAPS.difu.npc?.name === '妲己', '地府孟婆已注册');
 });
 
 test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四坊密度三档尺度', () => {
@@ -1322,17 +1322,17 @@ test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
 });
 
 test('新世界观命名与 NPC 对话到位', () => {
-  eq(world.WORLD_MAPS.taoyuan.name, '云京', '主城');
-  eq(world.WORLD_MAPS.wild_heifeng.name, '青崖山道', '山野');
-  eq(world.WORLD_MAPS.wild_luanzang.name, '渡忘川', '幽冥');
-  eq(world.WORLD_MAPS.wild_shanxiao.name, '玲珑洞天', '洞府');
-  eq(world.WORLD_MAPS.taoyuan.npc?.name, '玄鹤长老', 'NPC');
-  eq(world.QUESTS[0].name, '青崖清狼', '首环任务');
-  eq(content.CLASSES[0].name, '云岚', '人族角色');
-  ok(world.dialogueFor(fresh()).text.includes('青崖山道'), '接任务对话含新地名');
+  eq(world.WORLD_MAPS.taoyuan.name, '西岐城', '主城');
+  eq(world.WORLD_MAPS.wild_heifeng.name, '穿云岭古道', '山野');
+  eq(world.WORLD_MAPS.wild_luanzang.name, '黄泉鬼渡', '幽冥');
+  eq(world.WORLD_MAPS.wild_shanxiao.name, '骷髅山白骨洞', '洞府');
+  eq(world.WORLD_MAPS.taoyuan.npc?.name, '姜子牙', 'NPC');
+  eq(world.QUESTS[0].name, '穿云荡寇', '首环任务');
+  eq(content.CLASSES[0].name, '哪吒', '人族角色');
+  ok(world.dialogueFor(fresh()).text.includes('穿云岭古道'), '接任务对话含新地名');
   const done = fresh(); done.questStep = world.QUESTS.length + 1;
-  ok(world.dialogueFor(done).text.includes('云京'), '收尾对话含云京');
-  ok(world.WORLD_MAPS.taoyuan.exits[0].label === '青崖山道', '路牌文案统一');
+  ok(world.dialogueFor(done).text.includes('西岐城'), '收尾对话含主城');
+  ok(world.WORLD_MAPS.taoyuan.exits[0].label === '穿云岭古道', '路牌文案统一');
 });
 
 console.log('\n[15] 国风地图与悬赏榜（模块 10）');

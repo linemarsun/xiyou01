@@ -50,7 +50,7 @@ export function nextAutoAction(gs: GameState, playerPos?: Point): AutoAction {
     return { kind: 'stop', reason: '丹药耗尽，请手动补给' };
   }
 
-  // 2. 未接任务 / 任务可交付 → 回云京找玄鹤长老
+  // 2. 未接任务 / 任务可交付 → 回西岐城找姜子牙
   const needQuest = gs.questStep === 0 || questReady(gs);
   if (needQuest) {
     if (map.id === 'taoyuan') {

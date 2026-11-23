@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "山海奇谭 —— 大话西游式 2D 回合制 RPG（战斗核心 / 2.5D 画面 / 大地图 / 装备等级 / 召唤兽 / 师门法术）",
+  "description": "封神演义 —— 大话西游式 2D 回合制 RPG（战斗核心 / 2.5D 画面 / 大地图 / 装备等级 / 召唤兽 / 师门法术）",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
