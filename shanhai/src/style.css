@@ -285,6 +285,10 @@ body.shot-mode .scene-host {
   background: #f3e9cf; border-radius: 6px; padding: 2px 0;
 }
 .bag-item { flex: 1; }
+/* 装备品阶色标：凡品灰 / 良品靛青 / 极品赭金（★稀有词条仍以金色覆盖） */
+.eq-t1 { color: #8a7f6e; }
+.eq-t2 { color: #3d6b8a; }
+.eq-t3 { color: #a06428; }
 .bag-sep { height: 6px; }
 
 /* ===== 国风主题（原创国风西游风格素材接入，模块 8） =====

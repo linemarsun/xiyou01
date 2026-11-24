@@ -31,11 +31,18 @@ export const RARE_AFFIX_CHANCE = 0.25;
 export const RARE_AFFIX_MULT = 2;
 
 const TIER_NAMES = ['', '凡品', '良品', '极品'];
-const BASE_NAMES: Record<EquipSlot, string[]> = {
-  weapon: ['铁剑', '青锋剑', '游龙剑'],
-  armor: ['布甲', '精钢甲', '云锦仙衣'],
-  accessory: ['铜铃', '碧玉佩', '紫金葫芦'],
+/** 封神法宝谱：三部位 × 三品阶的命名（与世界观统一） */
+export const BASE_NAMES: Record<EquipSlot, string[]> = {
+  weapon: ['虎头枪', '雌雄双股剑', '斩将封神枪'],
+  armor: ['玄色皮甲', '连环锁子甲', '莲华宝甲'],
+  accessory: ['护心铜镜', '碧玉葫芦', '八卦紫绶'],
 };
+
+/** 词条数随品阶成长：凡品 1 条 / 良品 2 条 / 极品 3 条 */
+export const AFFIX_COUNT: Record<1 | 2 | 3, number> = { 1: 1, 2: 2, 3: 3 };
+/** 出售回收价（基础价按品阶；含 ★稀有词条另加） */
+export const SELL_VALUE: Record<1 | 2 | 3, number> = { 1: 20, 2: 60, 3: 150 };
+export const RARE_SELL_BONUS = 60;
 
 export const STAT_NAMES: Record<StatKey, string> = { atk: '攻', def: '防', mag: '法', spd: '速', hp: '气血' };
 
@@ -58,7 +65,10 @@ export function generateEquipment(tier: 1 | 2 | 3): EquipmentItem {
   const name = `${TIER_NAMES[tier]}·${BASE_NAMES[slot][t]}`;
   const item: EquipmentItem = {
     uid: `eq_${(++uidSeq).toString(36)}${Math.random().toString(36).slice(2, 6)}`,
-    slot, tier, name, base, affixes: [],
+    slot, tier, name,
+    base,
+    // 词条数随品阶：先用占位词条占位，重掷时按同数量生成
+    affixes: Array.from({ length: AFFIX_COUNT[tier] }, () => ({ stat: 'atk' as StatKey, value: 0 })),
   };
   rerollAffixes(item);
   return item;
@@ -83,6 +93,11 @@ export function rerollAffixes(it: EquipmentItem): string {
 /** 是否含稀有词条（背包列表标记用） */
 export function hasRareAffix(it: EquipmentItem): boolean {
   return it.affixes.some((a) => a.rare === true);
+}
+
+/** 出售回收价：品阶基础价 + ★稀有词条加成 */
+export function sellValue(it: EquipmentItem): number {
+  return SELL_VALUE[it.tier] + (hasRareAffix(it) ? RARE_SELL_BONUS : 0);
 }
 
 export function itemBonus(it: EquipmentItem): StatBonus {

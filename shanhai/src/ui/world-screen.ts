@@ -35,13 +35,14 @@ import {
   questReady,
   registerBattleInventory,
   saveGame,
+  sellEquipment,
   settleBattle,
   skillLevel,
   totalBonus,
   useRespecPill,
 } from '../core/world';
 import {
-  PET_EQUIP_SLOTS, describeItem, rerollAffixes, hasRareAffix,
+  PET_EQUIP_SLOTS, describeItem, rerollAffixes, hasRareAffix, sellValue,
   SLOT_NAMES, STAT_NAMES, type EquipSlot, type EquipmentItem,
 } from '../core/equipment';
 import { SKILL_MAX_LEVEL, describeSkillAt, effectiveSkill, skillUpgradeCost } from '../core/skill';
@@ -692,6 +693,11 @@ export class WorldScreen {
     const pet = activePet(this.gs);
     if (pet) {
       rows.append(h('div', { class: 'bag-sep' }));
+      const pb = petEquipBonus(this.gs);
+      const petBonusText = (Object.keys(pb) as Array<keyof typeof pb>)
+        .filter((k) => pb[k] !== 0)
+        .map((k) => `${k === 'mp' ? '法力' : k === 'hp' ? '气血' : STAT_NAMES[k]}+${pb[k]}`)
+        .join(' ');
       for (const slot of PET_EQUIP_SLOTS) {
         const uid = pet.equipped?.[slot];
         const pit = uid ? this.gs.bag.find((i) => i.uid === uid) : undefined;
@@ -703,6 +709,10 @@ export class WorldScreen {
             : '',
         ));
       }
+      rows.append(h('div', { class: 'bag-row' },
+        h('span', { class: 'bag-slot' }, '🐾 加成'),
+        h('span', { class: 'bag-item', style: 'color:#8a7a5a' }, petBonusText || '—— 无 ——'),
+      ));
     }
     rows.append(h('div', { class: 'bag-sep' }));
 
@@ -713,7 +723,7 @@ export class WorldScreen {
     }
     for (const it of free) {
       rows.append(h('div', { class: 'bag-row' },
-        h('span', { class: 'bag-item', style: hasRareAffix(it) ? 'color:#b8892f' : '' }, describeItem(it)),
+        h('span', { class: `bag-item eq-t${it.tier}`, style: hasRareAffix(it) ? 'color:#b8892f' : '' }, describeItem(it)),
         h('button', { class: 'btn small', onclick: () => this.equip(it) }, '装备'),
         PET_EQUIP_SLOTS.includes(it.slot)
           ? h('button', {
@@ -727,6 +737,11 @@ export class WorldScreen {
           title: `重掷词条（花费 ${REFINE_COST} 银两）；极品有概率掷出 ★稀有词条`,
           onclick: () => this.refine(it),
         }, `炼化 ${REFINE_COST}银`),
+        h('button', {
+          class: 'btn small',
+          title: '出售换银两（已穿戴的装备需先卸下）',
+          onclick: () => this.sell(it),
+        }, `出售 ${sellValue(it)}银`),
       ));
     }
 
@@ -778,6 +793,14 @@ export class WorldScreen {
     delete this.gs.equipped[slot];
     saveGame(this.gs);
     this.renderBagPanel();
+  }
+
+  /** 出售装备换银两（已穿戴的被 world.sellEquipment 拒绝并提示） */
+  private sell(it: EquipmentItem): void {
+    const r = sellEquipment(this.gs, it.uid);
+    if (!r.ok) { this.toast(r.reason ?? '无法出售'); this.renderBagPanel(); return; }
+    this.renderBagPanel();
+    this.toast(`已出售 ${it.name}，获得银两 ${r.silver}`);
   }
 
   private refine(it: EquipmentItem): void {

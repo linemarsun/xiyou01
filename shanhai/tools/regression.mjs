@@ -383,6 +383,56 @@ test('掉落池品阶按怪物难度权重', () => {
   eq(withRandom(0.99, () => world.dropTierFor(['yelang', 'shanxiaowang'])), 3, '一组怪取最强权重');
 });
 
+test('词条数随品阶成长：凡品1 / 良品2 / 极品3', () => {
+  eq(equipment.AFFIX_COUNT[1], 1, '凡品词条数');
+  eq(equipment.AFFIX_COUNT[2], 2, '良品词条数');
+  eq(equipment.AFFIX_COUNT[3], 3, '极品词条数');
+  const t1 = withRandom(0.5, () => equipment.generateEquipment(1));
+  eq(t1.affixes.length, 1, '凡品实得 1 条');
+  const t2 = withRandom(0.5, () => equipment.generateEquipment(2));
+  eq(t2.affixes.length, 2, '良品实得 2 条');
+  const t3 = withRandom(0.5, () => equipment.generateEquipment(3));
+  eq(t3.affixes.length, 3, '极品实得 3 条');
+  // 炼化重掷保持词条数不变
+  const n3 = t3.affixes.length;
+  withRandom(0.5, () => equipment.rerollAffixes(t3));
+  eq(t3.affixes.length, n3, '重掷不改词条数');
+});
+
+test('封神法宝谱：装备命名与世界观统一', () => {
+  eq(equipment.BASE_NAMES.weapon[2], '斩将封神枪', '极品武器');
+  eq(equipment.BASE_NAMES.armor[2], '莲华宝甲', '极品护甲');
+  eq(equipment.BASE_NAMES.accessory[2], '八卦紫绶', '极品饰品');
+  const all = Object.values(equipment.BASE_NAMES).flat();
+  const oldWords = ['桃源镇', '黑风岭', '乱葬岗', '山魈岭', '缉妖司', '骷髅兵', '灵狐', '岩甲兽', '雷隼', '黑熊精', '游方巫祝', '云游灵官', '北荒刀客', '酒馆老板'];
+  for (const w of oldWords) for (const n of all) ok(!n.includes(w), `装备名残留旧词「${w}」于「${n}」`);
+});
+
+test('出售装备：按品阶回收、已穿戴被拒、★另计加成', () => {
+  const gs = fresh();
+  const it = withRandom(0.9, () => equipment.generateEquipment(2));
+  gs.bag.push(it);
+  const expect = equipment.sellValue(it);
+  ok(expect >= 60, '良品回收价下限');
+  const r = world.sellEquipment(gs, it.uid);
+  ok(r.ok && r.silver === expect, `回收 ${expect} 银两`);
+  eq(gs.silver, 50 + expect, '银两入账');
+  eq(gs.bag.length, 0, '背包移除');
+  // 已穿戴不可出售
+  const it2 = withRandom(0.9, () => equipment.generateEquipment(1));
+  it2.slot = 'armor';
+  gs.bag.push(it2);
+  gs.equipped.armor = it2.uid;
+  const r2 = world.sellEquipment(gs, it2.uid);
+  ok(!r2.ok, '已穿戴被拒');
+  eq(gs.bag.length, 1, '背包不变');
+  gs.equipped.armor = undefined;
+  // ★稀有词条加成
+  const rare = withRandom(0.01, () => equipment.generateEquipment(3));
+  ok(equipment.hasRareAffix(rare), '极品含稀有词条');
+  eq(equipment.sellValue(rare), 150 + 60, '★回收价 150+60');
+});
+
 test('洗点丹：全额退还潜能点并清空四维', () => {
   const gs = fresh();
   ok(!world.useRespecPill(gs).ok, '无洗点丹时被拒');

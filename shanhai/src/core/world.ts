@@ -5,7 +5,7 @@
 import { MONSTERS, PETS, CLASSES, SKILLS, classById } from './content';
 import type { AllySpec } from './battle';
 import {
-  PET_EQUIP_SLOTS, emptyBonus, generateEquipment, describeItem, itemBonus, rollTier,
+  PET_EQUIP_SLOTS, emptyBonus, generateEquipment, describeItem, itemBonus, rollTier, sellValue,
   type EquipSlot, type EquipmentItem, type StatBonus,
 } from './equipment';
 import { SKILL_MAX_LEVEL, skillUpgradeCost } from './skill';
@@ -608,6 +608,18 @@ export function petEquipBonus(gs: GameState): StatBonus {
 export function isEquippedAnywhere(gs: GameState, uid: string): boolean {
   if (Object.values(gs.equipped).includes(uid)) return true;
   return gs.petInstances.some((p) => p.equipped && Object.values(p.equipped).includes(uid));
+}
+
+/** 出售装备换银两：已穿戴的不允许出售；按品阶回收（★稀有词条另计） */
+export function sellEquipment(gs: GameState, uid: string): { ok: boolean; reason?: string; silver?: number } {
+  const idx = gs.bag.findIndex((i) => i.uid === uid);
+  if (idx < 0) return { ok: false, reason: '装备不存在' };
+  if (isEquippedAnywhere(gs, uid)) return { ok: false, reason: '已穿戴的装备请先卸下再出售' };
+  const silver = sellValue(gs.bag[idx]);
+  gs.bag.splice(idx, 1);
+  gs.silver += silver;
+  saveGame(gs);
+  return { ok: true, silver };
 }
 
 /** 使用洗点丹：清空四维加点并全额退还潜能点（世界侧消耗品，不进战斗） */
