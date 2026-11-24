@@ -43,6 +43,8 @@ export const PET_ART: Record<string, { portrait: string; character: string }> = 
   linghu: { portrait: 'portraits/pet_baize.png', character: 'characters/pet_baize.png' },
   yanjia: { portrait: 'portraits/pet_chiyan_lingsuan.png', character: 'characters/pet_chiyan_lingsuan.png' },
   leisun: { portrait: 'portraits/pet_baize.png', character: 'characters/pet_baize.png' },
+  moqilin: { portrait: 'portraits/pet_chiyan_lingsuan.png', character: 'characters/pet_chiyan_lingsuan.png' },
+  wusheniu: { portrait: 'portraits/pet_baize.png', character: 'characters/pet_baize.png' },
 };
 
 /** 酒馆同伴 / 长老可用的额外立绘 */
@@ -57,6 +59,8 @@ export const SCENE_ART: Record<string, string> = {
   heifengling: 'backgrounds/bg_qingya_shandao.png',
   luanzanggang: 'backgrounds/bg_du_wangchuan.png',
   shanxiao: 'backgrounds/bg_linglong_dongtian.png',
+  yunmengze: 'backgrounds/bg_du_wangchuan.png',
+  lutai: 'backgrounds/bg_du_wangchuan.png',
   taoyuan: 'backgrounds/bg_yunjing.png',
   wild_heifeng: 'backgrounds/bg_qingya_shandao.png',
   wild_luanzang: 'backgrounds/bg_du_wangchuan.png',

@@ -849,17 +849,29 @@ export class WorldScreen {
     this.renderQuestBoard(false);
   }
 
-  /** 地府孟婆：战败重生后的对话（不参与悬赏链） */
+  /** 朝歌鹿台 · 妲己：按剧情阶段变化的对话（不参与悬赏链） */
   private renderMengpo(): void {
+    const q = activeQuest(this.gs);
+    const allDone = this.gs.questStep > QUESTS.length;
+    let text: string;
+    if (allDone) {
+      text = '妲己残魂渐渐淡去：「成汤气数已尽，我不过是天数里的一枚棋子……罢了，封神榜上再会。鹿台的火，好冷……」';
+    } else if (q?.id === 'q5' && questReady(this.gs)) {
+      text = '「好狠的道行……千年修行，竟散于鹿台之火……」九尾狐妖的身影在妖火中淡去。回西岐城向姜子牙复命吧！';
+    } else if (q?.id === 'q5') {
+      text = '妲己凭栏浅笑：「西岐来的小东西，也敢上鹿台？大王的新酒正缺一味魂魄——你来得正好。」击败鹿台深处的九尾狐妖真身！';
+    } else {
+      text = '妲己浅酌一杯酒：「大王在鹿台等着新鲜魂魄呢……你既阳寿未尽，便沿黄泉道往南还阳回西岐城；往北过奈何桥，又是黄泉了。」';
+    }
     this.dialogueEl.innerHTML = '';
     this.dialogueEl.style.display = '';
     this.dialogueEl.append(
       h('div', { class: 'quest-body' },
-        h('div', { class: 'quest-title' }, '地府 · 忘川渡口'),
-        h('div', { class: 'quest-text' }, '妲己浅酌一杯酒：「大王在鹿台等着新鲜魂魄呢……你既阳寿未尽，便沿黄泉道往南还阳回西岐城；往北过奈何桥，又是忘川了。」'),
+        h('div', { class: 'quest-title' }, '朝歌 · 鹿台'),
+        h('div', { class: 'quest-text' }, text),
       ),
       h('div', { class: 'cmd-row' },
-        h('button', { class: 'btn small', onclick: () => this.closeDialogue() }, '谢过孟婆'),
+        h('button', { class: 'btn small', onclick: () => this.closeDialogue() }, '退下'),
       ),
     );
   }

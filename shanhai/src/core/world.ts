@@ -212,27 +212,30 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     ],
     exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '穿云岭古道')],
   },
-  /** 地府 80×112：一条黄泉直道贯穿南北，北口回黄泉、南口还阳回西岐城 */
+  /** 地府 80×112：一条黄泉直道贯穿南北，北口回黄泉、南口还阳回西岐城；鹿台深处妖火中藏着妲己真身 */
   difu: {
     name: '朝歌 · 鹿台', scene: 'difu',
     iso: { layout: 'iso/difu.json' },
-    spawns: [],
+    spawns: [
+      isoSpawn('difu', 40, 90, ['daji']),
+    ],
     exits: [
       isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '黄泉鬼渡'),
       isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 西岐城'),
     ],
     npc: isoNpc('difu', 40, 72, '妲己'),
   },
-  /** 云梦泽 112×90：烟波大泽居中，环湖道路成环，北口通西岐城南门 */
+  /** 云梦泽 112×90：烟波大泽居中，环湖道路成环，北口通西岐城南门；蛟妖盘踞泽中 */
   wild_yunmeng: {
     name: '云梦泽', scene: 'wild_yunmeng',
     iso: { layout: 'iso/wild_yunmeng.json' },
     spawns: [
-      isoSpawn('wild_yunmeng', 30, 24, ['kulou']),
-      isoSpawn('wild_yunmeng', 80, 24, ['kulou', 'kulou']),
+      isoSpawn('wild_yunmeng', 30, 24, ['shuiyao']),
+      isoSpawn('wild_yunmeng', 80, 24, ['shuiyao', 'shuiyao']),
       isoSpawn('wild_yunmeng', 94, 40, ['yelang']),
-      isoSpawn('wild_yunmeng', 26, 36, ['kulou']),
-      isoSpawn('wild_yunmeng', 30, 64, ['yelang', 'kulou']),
+      isoSpawn('wild_yunmeng', 26, 36, ['shuiyao']),
+      isoSpawn('wild_yunmeng', 30, 64, ['yelang', 'shuiyao']),
+      isoSpawn('wild_yunmeng', 70, 70, ['kulou', 'shuiyao']),
     ],
     exits: [isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '西岐城')],
   },
@@ -320,6 +323,22 @@ export const QUESTS: QuestDef[] = [
     targets: { defIds: ['shanxiaowang'], need: 1, label: '讨伐白骨洞妖王' },
     rewardSilver: 300,
     rewardItems: { heal: 2, mana: 1 },
+  },
+  {
+    id: 'q4',
+    name: '云梦泽靖泽',
+    desc: '云梦泽烟波之下妖氛翻涌，截教门人驱蛟布阵，欲断西岐水路粮道。少侠驾舟入泽，扫平妖群，靖我泽国！',
+    targets: { defIds: ['shuiyao', 'yelang'], need: 5, label: '清缴云梦蛟妖或穿云妖狼' },
+    rewardSilver: 220,
+    rewardItems: { heal: 2, mana: 2 },
+  },
+  {
+    id: 'q5',
+    name: '鹿台决战',
+    desc: '狐妖妲己现身朝歌鹿台，妖火照彻夜空，纣王昏聩不朝。子牙先生敕令：登台讨妖，代天封神！',
+    targets: { defIds: ['daji'], need: 1, label: '讨伐九尾狐妖·妲己' },
+    rewardSilver: 500,
+    rewardItems: { heal: 3, mana: 3, respec: 1 },
   },
 ];
 
@@ -627,6 +646,7 @@ export const COMPANION_TEMPLATES: CompanionTemplate[] = [
   { id: 'wuzhu', name: '黄泉引灯人', classId: 'wuzhu', desc: '遗忘 / 三尸蛊 / 鬼火，擅长压制', price: HIRE_COST },
   { id: 'lingguan', name: '玉虚仙官', classId: 'lingguan', desc: '打神鞭与四系仙法，群体输出', price: HIRE_COST },
   { id: 'moshi', name: '碧游妖刀客', classId: 'moshi', desc: '加攻 / 重击 / 摄血，能扛能打', price: HIRE_COST },
+  { id: 'neza', name: '陈塘先锋官', classId: 'xiake', desc: '火尖枪刺与乾坤圈封印，近战强控', price: HIRE_COST },
 ];
 
 export function companionGrowth(level: number): number {
@@ -764,6 +784,8 @@ const SILVER_PER_KILL: Record<string, number> = {
   zhizhu: 26,
   heixiong: 36,
   shanxiaowang: 90,
+  shuiyao: 22,
+  daji: 250,
 };
 
 /**
@@ -778,6 +800,8 @@ export const DROP_TIER_WEIGHTS: Record<string, [number, number, number]> = {
   zhizhu: [35, 50, 15],
   heixiong: [40, 50, 10],
   shanxiaowang: [0, 20, 80],
+  shuiyao: [55, 38, 7],
+  daji: [0, 5, 95],
 };
 
 /** 洗点丹掉落：头目必掉，普通战斗 8% */
@@ -848,7 +872,7 @@ export function settleBattle(
     if (Math.random() < 0.35) drops.push({ itemId: 'heal', n: 1 });
     else if (Math.random() < 0.25) drops.push({ itemId: 'mana', n: 1 });
   }
-  if (info.enemyIds.includes('shanxiaowang')) drops.push({ itemId: 'mana', n: 2 });
+  if (info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji')) drops.push({ itemId: 'mana', n: 2 });
   gs.silver += silver;
   for (const d of drops) gs.inv[d.itemId] += d.n;
   lines.push(`获得银两 ${silver}`);
@@ -856,7 +880,7 @@ export function settleBattle(
     const name = d.itemId === 'heal' ? '金疮药' : '凝气丹';
     lines.push(`获得 ${name} ×${d.n}`);
   }
-  const isBossFight = info.enemyIds.includes('shanxiaowang');
+  const isBossFight = info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji');
   if (isBossFight || Math.random() < RESPEC_DROP_CHANCE) {
     gs.inv.respec = (gs.inv.respec ?? 0) + 1;
     lines.push('获得 洗点丹 ×1');
@@ -875,7 +899,7 @@ export function settleBattle(
   }
 
   // 5. 经验与升级（每级 +5 潜能点）
-  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120 };
+  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260 };
   let exp = 0;
   for (const id of info.enemyIds) exp += EXP_PER_KILL[id] ?? 12;
   gs.exp += exp;
@@ -933,14 +957,14 @@ export function dialogueFor(gs: GameState): Dialogue {
   if (gs.questStep === 0) {
     return {
       name,
-      text: `${gs.playerName}，来得正好！司礼府正缺人手。第一桩差事：穿云岭古道妖狼伤人，去清剿它们！`,
+      text: `${gs.playerName}，来得正好！纣王失德，鹿台高筑酒池肉林，妲己惑主，妖氛四起，天下苦不堪言。吾奉师命下山扶周灭商，司礼府正缺人手。第一桩差事：穿云岭古道妖狼伤人，去清剿它们！`,
       actions: [{ label: `接下${QUESTS[0].name}`, kind: 'accept' }],
     };
   }
   if (gs.questStep > QUESTS.length) {
     return {
       name,
-      text: '妖物暂退，西岐城恢复安宁。少侠威名，丞相记下了！',
+      text: '鹿台火熄，狐妖授首，纣王自焚于摘星楼，成汤气数至此而尽。天下既定，少侠随吾登封神台——姜某奉告：上榜诸神，各归其位！西岐城的百姓，都会记住你的功勋。',
       actions: [{ label: '告辞', kind: 'close' }],
     };
   }
@@ -952,7 +976,7 @@ export function dialogueFor(gs: GameState): Dialogue {
       actions: [{ label: '领取赏银', kind: 'claim' }],
     };
   }
-  const place = q.id === 'q1' ? '穿云岭古道' : q.id === 'q2' ? '黄泉鬼渡' : '骷髅山白骨洞';
+  const place = { q1: '穿云岭古道', q2: '黄泉鬼渡', q3: '骷髅山白骨洞', q4: '云梦泽', q5: '朝歌 · 鹿台' }[q.id] ?? '野外';
   return {
     name,
     text: `「${q.name}」尚未完成——${q.targets.label} ${gs.questKills}/${q.targets.need}。${place}妖物众多，小心行事。`,

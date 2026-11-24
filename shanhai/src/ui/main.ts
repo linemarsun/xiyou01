@@ -65,7 +65,7 @@ function renderSim(): void {
   const pre = h('pre', { class: 'sim-report' }, '仿真中…');
   app.append(
     h('div', { class: 'setup' },
-      h('h1', { class: 'game-title' }, '山 海 奇 谭'),
+      h('h1', { class: 'game-title' }, '封 神 演 义'),
       h('div', { class: 'game-sub' }, '数值仿真 · AI 执挥双方'),
       pre,
       h('div', { style: 'text-align:center;margin-top:16px' },

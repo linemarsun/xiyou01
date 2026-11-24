@@ -112,7 +112,7 @@ test('接缉狼令 → 击杀野狼×3 → 达成 → 交付', () => {
   eq(gs.questKills, 0, '击杀数重置');
 });
 
-test('净乱葬：骷髅/蜘蛛×4 → 交付 → 讨山魈 → 全链完成', () => {
+test('封神全链：狼×3 → 镇魂×4 → 讨妖王 → 靖泽×5 → 鹿台决战 → 全链完成', () => {
   const gs = fresh();
   world.acceptQuest(gs);
   world.onKilled(gs, ['yelang', 'yelang', 'yelang']);
@@ -134,9 +134,24 @@ test('净乱葬：骷髅/蜘蛛×4 → 交付 → 讨山魈 → 全链完成', (
   eq(gs.silver, 610, '累计银两');
   eq(gs.inv.heal, 7, 'q3 奖励金疮药×2');
   eq(gs.inv.mana, 6, 'q3 奖励凝气丹×1');
-  eq(gs.questStep, 4, '超出任务链');
+  eq(gs.questStep, 4, '进入 q4');
+  eq(world.activeQuest(gs).id, 'q4', '第四环靖泽');
+  ok(world.onKilled(gs, ['shuiyao', 'shuiyao']) === null, '未达 5 只');
+  const d4 = world.onKilled(gs, ['shuiyao', 'yelang', 'shuiyao']);
+  eq(d4?.id, 'q4', 'q4 达成');
+  const r4 = world.claimQuest(gs);
+  eq(r4.silver, 220, 'q4 赏银');
+  eq(gs.silver, 830, '累计银两');
+  eq(gs.questStep, 5, '进入 q5');
+  eq(world.activeQuest(gs).id, 'q5', '终章鹿台决战');
+  const d5 = world.onKilled(gs, ['daji']);
+  eq(d5?.id, 'q5', 'q5 达成');
+  const r5 = world.claimQuest(gs);
+  eq(r5.silver, 500, 'q5 赏银');
+  eq(gs.silver, 1330, '累计银两');
+  eq(gs.questStep, 6, '超出任务链');
   eq(world.activeQuest(gs), null, '无激活任务');
-  ok(world.dialogueFor(gs).text.includes('安宁'), '收尾对话');
+  ok(world.dialogueFor(gs).text.includes('封神台'), '封神收尾对话');
 });
 
 test('非目标怪不计入任务进度', () => {
@@ -528,7 +543,7 @@ test('companionSpec：复用职业数值与技能，按等级缩放', () => {
   eq(s.defId, 'lingguan', '复用职业精灵 id');
   eq(s.skillIds.join(','), cls.skillIds.join(','), '复用职业技能');
   eq(s.stats.hp, Math.round(cls.stats.hp * world.companionGrowth(3)), '等级缩放');
-  eq(world.COMPANION_TEMPLATES.length, 3, '三种模板');
+  eq(world.COMPANION_TEMPLATES.length, 4, '四种模板');
 });
 
 test('胜利结算把同伴等级同步到人物等级', () => {
@@ -1309,12 +1324,12 @@ test('所有显示文案已无旧世界观词', () => {
 
 test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
   eq(content.CLASSES.map((c) => c.id).join(','), 'xiake,lingguan,moshi,wuzhu', '职业 id');
-  eq(content.PETS.map((p) => p.id).join(','), 'linghu,yanjia,leisun', '宠物 id');
-  eq(Object.keys(content.MONSTERS).join(','), 'yelang,heixiong,kulou,zhizhu,shanxiao,shanxiaowang', '怪物 id');
+  eq(content.PETS.map((p) => p.id).join(','), 'linghu,yanjia,leisun,moqilin,wusheniu', '宠物 id');
+  eq(Object.keys(content.MONSTERS).join(','), 'yelang,heixiong,kulou,zhizhu,shanxiao,shanxiaowang,shuiyao,daji', '怪物 id');
   eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu,wild_yunmeng', '地图 id（新增云梦泽扩展）');
-  eq(world.QUESTS.map((q) => q.id).join(','), 'q1,q2,q3', '任务 id');
-  eq(world.QUESTS.map((q) => q.targets.need).join(','), '3,4,1', '任务目标数');
-  eq(world.QUESTS.map((q) => q.rewardSilver).join(','), '100,160,300', '任务赏银');
+  eq(world.QUESTS.map((q) => q.id).join(','), 'q1,q2,q3,q4,q5', '任务 id');
+  eq(world.QUESTS.map((q) => q.targets.need).join(','), '3,4,1,5,1', '任务目标数');
+  eq(world.QUESTS.map((q) => q.rewardSilver).join(','), '100,160,300,220,500', '任务赏银');
   eq(content.CLASSES[0].stats.hp, 620, '职业数值');
   eq(content.MONSTERS.yelang.stats.hp, 230, '怪物数值');
   eq(world.DEFAULT_SEGMENTS, 8, '地图区段');
@@ -1332,6 +1347,15 @@ test('新世界观命名与 NPC 对话到位', () => {
   ok(world.dialogueFor(fresh()).text.includes('穿云岭古道'), '接任务对话含新地名');
   const done = fresh(); done.questStep = world.QUESTS.length + 1;
   ok(world.dialogueFor(done).text.includes('西岐城'), '收尾对话含主城');
+  ok(world.dialogueFor(done).text.includes('封神台'), '收尾对话含封神台');
+  eq(world.QUESTS[3].name, '云梦泽靖泽', '第四环任务');
+  eq(world.QUESTS[4].name, '鹿台决战', '终章任务');
+  eq(content.MONSTERS.daji.name, '九尾狐妖·妲己', '终章 Boss');
+  ok(world.WORLD_MAPS.difu.spawns.some((s) => s.group.includes('daji')), '鹿台刷新妲己');
+  ok(world.WORLD_MAPS.wild_yunmeng.spawns.some((s) => s.group.includes('shuiyao')), '云梦泽刷新蛟妖');
+  eq(content.PETS.length, 5, '五宠齐全');
+  ok(content.SKILLS.jy_zhao && content.SKILLS.zx_fengshen && content.SKILLS.xl_leizhu && content.SKILLS.fd_san, '四门派高阶神通到位');
+  ok(content.ENCOUNTERS.some((e) => e.id === 'lutai'), '终章遭遇注册');
   ok(world.WORLD_MAPS.taoyuan.exits[0].label === '穿云岭古道', '路牌文案统一');
 });
 
