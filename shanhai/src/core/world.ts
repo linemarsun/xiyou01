@@ -98,6 +98,9 @@ export const ISO_GRIDS: Record<string, IsoGrid> = {
   wild_shanxiao: { cols: 104, rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
   difu:          { cols: 80,  rows: 112, tileW: 64, tileH: 32, ox: 3584, oy: 16 },
   wild_yunmeng:  { cols: 112, rows: 90,  tileW: 64, tileH: 32, ox: 2880, oy: 16 },
+  wild_kunlun:   { cols: 120, rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
+  yuxugong:      { cols: 72,  rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
+  chentangguan:  { cols: 88,  rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
 };
 /** 西岐城格网：保留旧名以兼容外部引用与历史存档换算 */
 export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
@@ -179,6 +182,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoExit('wild_heifeng', 32, 1, 'taoyuan', 62, 3, '西岐城'),
       isoExit('wild_heifeng', 1, 62, 'wild_luanzang', 11, 1, '黄泉鬼渡'),
       isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '骷髅山白骨洞'),
+      isoExit('wild_heifeng', 64, 94, 'wild_kunlun', 60, 1, '昆仑山道'),
     ],
   },
   /** 黄泉鬼渡 96×128：黄泉斜贯，北渡口通山道、南渡口通朝歌 */
@@ -237,7 +241,43 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_yunmeng', 30, 64, ['yelang', 'shuiyao']),
       isoSpawn('wild_yunmeng', 70, 70, ['kulou', 'shuiyao']),
     ],
-    exits: [isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '西岐城')],
+    exits: [
+      isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '西岐城'),
+      isoExit('wild_yunmeng', 110, 44, 'chentangguan', 1, 36, '陈塘关'),
+    ],
+  },
+  /** 昆仑山道 120×88：仙阶之字上山，北口通穿云岭、东口通玉虚宫；截教妖修伏道 */
+  wild_kunlun: {
+    name: '昆仑山道', scene: 'wild_kunlun',
+    iso: { layout: 'iso/wild_kunlun.json' },
+    spawns: [
+      isoSpawn('wild_kunlun', 44, 26, ['jiaotu']),
+      isoSpawn('wild_kunlun', 82, 22, ['jiaotu', 'jiaotu']),
+      isoSpawn('wild_kunlun', 28, 50, ['zhizhu']),
+      isoSpawn('wild_kunlun', 92, 58, ['jiaotu']),
+      isoSpawn('wild_kunlun', 44, 72, ['jiaotu', 'zhizhu']),
+      isoSpawn('wild_kunlun', 76, 70, ['heixiong']),
+    ],
+    exits: [
+      isoExit('wild_kunlun', 60, 1, 'wild_heifeng', 64, 94, '穿云岭古道'),
+      isoExit('wild_kunlun', 118, 44, 'yuxugong', 1, 44, '玉虚宫'),
+    ],
+  },
+  /** 玉虚宫 72×88：阐教圣地，安全图无刷怪，元始天尊坐镇宫前丹陛 */
+  yuxugong: {
+    name: '玉虚宫', scene: 'yuxugong',
+    iso: { layout: 'iso/yuxugong.json' },
+    spawns: [],
+    exits: [isoExit('yuxugong', 1, 44, 'wild_kunlun', 118, 44, '昆仑山道')],
+    npc: isoNpc('yuxugong', 36, 36, '元始天尊'),
+  },
+  /** 陈塘关 88×72：哪吒故里海滨关城，安全图，李靖总兵坐镇 */
+  chentangguan: {
+    name: '陈塘关', scene: 'chentangguan',
+    iso: { layout: 'iso/chentangguan.json' },
+    spawns: [],
+    exits: [isoExit('chentangguan', 1, 36, 'wild_yunmeng', 110, 44, '云梦泽')],
+    npc: isoNpc('chentangguan', 52, 32, '李靖'),
   },
 };
 
@@ -798,6 +838,7 @@ const SILVER_PER_KILL: Record<string, number> = {
   shanxiaowang: 90,
   shuiyao: 22,
   daji: 250,
+  jiaotu: 24,
 };
 
 /**
@@ -814,6 +855,7 @@ export const DROP_TIER_WEIGHTS: Record<string, [number, number, number]> = {
   shanxiaowang: [0, 20, 80],
   shuiyao: [55, 38, 7],
   daji: [0, 5, 95],
+  jiaotu: [45, 45, 10],
 };
 
 /** 洗点丹掉落：头目必掉，普通战斗 8% */
@@ -911,7 +953,7 @@ export function settleBattle(
   }
 
   // 5. 经验与升级（每级 +5 潜能点）
-  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260 };
+  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260, jiaotu: 30 };
   let exp = 0;
   for (const id of info.enemyIds) exp += EXP_PER_KILL[id] ?? 12;
   gs.exp += exp;

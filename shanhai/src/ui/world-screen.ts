@@ -66,6 +66,20 @@ import { h } from './dom';
 /** 挂机总开关：模块级状态，切图 / 战斗返回重建 WorldScreen 时保持；刷新页面后重置为关 */
 let autoPlayEnabled = false;
 
+/** 特定地图 NPC 的专属剧情对话（安全图，不参与悬赏链） */
+const MAP_NPC_LORE: Record<string, { title: string; text: string; btn: string }> = {
+  yuxugong: {
+    title: '昆仑山 · 玉虚宫',
+    text: '元始天尊端坐云台：「西方杀劫已起，成汤当灭，周室当兴。你既为西岐效力，便随子牙好好修行——封神榜上，自有你的名字。」',
+    btn: '叩谢圣训',
+  },
+  chentangguan: {
+    title: '陈塘关 · 总兵府',
+    text: '李靖抚须叹道：「犬子哪吒闹海闯祸，幸得乾元山莲花化身重塑真身，如今随师修行去了。壮士若沿横街走走，替老夫看看这海滨关城的太平。」',
+    btn: '告辞',
+  },
+};
+
 export class WorldScreen {
   private root: HTMLElement;
   private gs: GameState;
@@ -869,7 +883,27 @@ export class WorldScreen {
       this.renderMengpo();
       return;
     }
+    const lore = MAP_NPC_LORE[this.map.id];
+    if (lore) {
+      this.renderMapNpc(lore);
+      return;
+    }
     this.renderQuestBoard(false);
+  }
+
+  /** 陈塘关 / 玉虚宫：地图 NPC 专属剧情对话 */
+  private renderMapNpc(lore: { title: string; text: string; btn: string }): void {
+    this.dialogueEl.innerHTML = '';
+    this.dialogueEl.style.display = '';
+    this.dialogueEl.append(
+      h('div', { class: 'quest-body' },
+        h('div', { class: 'quest-title' }, lore.title),
+        h('div', { class: 'quest-text' }, lore.text),
+      ),
+      h('div', { class: 'cmd-row' },
+        h('button', { class: 'btn small', onclick: () => this.closeDialogue() }, lore.btn),
+      ),
+    );
   }
 
   /** 朝歌鹿台 · 妲己：按剧情阶段变化的对话（不参与悬赏链） */

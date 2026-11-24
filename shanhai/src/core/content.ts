@@ -245,6 +245,12 @@ export const MONSTERS: Record<string, MonsterDef> = {
     resists: r(45, 45, 35, 35, 60, 30, 30, 30, 30),
     skillIds: ['m_huhuo', 'm_meihuo', 'm_hou'],
   },
+  jiaotu: {
+    id: 'jiaotu', name: '截教妖修', emoji: '🧿',
+    stats: { hp: 280, mp: 90, atk: 60, def: 40, mag: 50, spd: 58 },
+    resists: r(25, 20, 15, 15, 20, 12, 12, 12, 12),
+    skillIds: ['m_chui', 'm_hou'],
+  },
 };
 
 // ===== 遭遇战 =====
@@ -254,6 +260,7 @@ export const ENCOUNTERS: EncounterDef[] = [
   { id: 'luanzanggang', name: '黄泉鬼渡 · 魅影', desc: '两具黄泉骨卒与一只幽冥蛛妖游荡', members: ['kulou', 'kulou', 'zhizhu'] },
   { id: 'shanxiao', name: '骷髅山 · 妖王', desc: '两只骷髅山妖魈护卫着白骨洞妖王', members: ['shanxiao', 'shanxiao', 'shanxiaowang'] },
   { id: 'yunmengze', name: '云梦泽 · 蛟踪', desc: '一头云梦蛟妖率妖狼出没烟波', members: ['shuiyao', 'yelang', 'shuiyao'] },
+  { id: 'kunlunxian', name: '昆仑山道 · 妖修拦路', desc: '两名截教妖修与一只幽冥蛛妖伏于仙阶', members: ['jiaotu', 'jiaotu', 'zhizhu'] },
   { id: 'lutai', name: '朝歌鹿台 · 狐妖现形', desc: '九尾狐妖妲己现出真形，妖火照彻鹿台', members: ['daji'] },
 ];
 

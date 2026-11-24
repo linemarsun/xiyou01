@@ -1024,5 +1024,62 @@
     "loop": false
    }
   }
+ },
+ "jiaotu": {
+  "frameSize": [
+   128,
+   128
+  ],
+  "anims": {
+   "idle": {
+    "frames": [
+     "sprites/shanxiao/idle_0.png",
+     "sprites/shanxiao/idle_1.png"
+    ],
+    "fps": 2.5,
+    "loop": true
+   },
+   "walk": {
+    "frames": [
+     "sprites/shanxiao/walk_0.png",
+     "sprites/shanxiao/walk_1.png",
+     "sprites/shanxiao/walk_2.png",
+     "sprites/shanxiao/walk_3.png"
+    ],
+    "fps": 9,
+    "loop": true
+   },
+   "attack": {
+    "frames": [
+     "sprites/shanxiao/attack_0.png",
+     "sprites/shanxiao/attack_1.png",
+     "sprites/shanxiao/attack_2.png",
+     "sprites/shanxiao/attack_3.png",
+     "sprites/shanxiao/attack_4.png",
+     "sprites/shanxiao/attack_5.png"
+    ],
+    "fps": 12,
+    "loop": false
+   },
+   "cast": {
+    "frames": [
+     "sprites/shanxiao/cast_0.png",
+     "sprites/shanxiao/cast_1.png",
+     "sprites/shanxiao/cast_2.png",
+     "sprites/shanxiao/cast_3.png"
+    ],
+    "fps": 8,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/shanxiao/dead_0.png",
+     "sprites/shanxiao/dead_1.png",
+     "sprites/shanxiao/dead_2.png"
+    ],
+    "fps": 8,
+    "loop": false
+   }
+  }
  }
 }
