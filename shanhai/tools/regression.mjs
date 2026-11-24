@@ -1136,7 +1136,7 @@ test('战斗背景存在（art/battle/<region>.png）', () => {
 });
 
 console.log('\n[12b] 一景一制：独立格网 / 边界出入口 / 专属路网（模块 12）');
-const ISO_REGIONS = ['wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu', 'wild_kunlun', 'yuxugong', 'chentangguan'];
+const ISO_REGIONS = ['wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu', 'wild_kunlun', 'yuxugong', 'chentangguan', 'qianyuan', 'jinaodao', 'zhaoge'];
 const sceneCache = new Map();
 /** 读布局 → 展开 → 碰撞；同一张图只解析一次 */
 function isoScene(id) {
@@ -1180,7 +1180,7 @@ test('一景一制：五图各有独立格网，尺寸/形状参考云京但互�
     ok(m.h >= 4096 * 0.6 && m.h <= 4096, `${m.name} 高 ${m.h} 与云京同量级`);
     shapes.add(`${g.cols}x${g.rows}`);
   }
-  eq(shapes.size, 9, `九张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
+  eq(shapes.size, 12, `十二张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
   for (const id of ISO_REGIONS) {
     const { raw, layout } = isoScene(id);
     ok(Array.isArray(raw.anchors?.spawns) && Array.isArray(raw.anchors?.exits), `${id} 布局带玩法锚点`);
@@ -1295,10 +1295,10 @@ test('四张布局：构件不越界、全部边界出入口与玩法点两两 B
 
 test('四景路网与地标各具特色，不再共用十字广场 / 中心券门', () => {
   const sigs = new Set(ISO_REGIONS.map((id) => isoScene(id).raw.signature));
-  eq(sigs.size, 7, `七种专属路网签名（${[...sigs].join(' / ')}）`);
+  eq(sigs.size, 10, `十种专属路网签名（${[...sigs].join(' / ')}）`);
   const mixes = ISO_REGIONS.map((id) =>
     ['ground_grass', 'ground_dirt', 'ground_stone', 'ground_water'].map((t) => countType(id, t)).join('/'));
-  eq(new Set(mixes).size, 7, '七图地表铺装组合互不相同');
+  eq(new Set(mixes).size, 10, '十图地表铺装组合互不相同');
   for (const id of ISO_REGIONS) {
     eq(countType(id, 'gate_arch'), 0, `${id} 不再摆统一中心券门`);
     ok(countType(id, 'hall') >= 1, `${id} 有专属大殿地标`);
@@ -1388,7 +1388,7 @@ test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
   eq(content.CLASSES.map((c) => c.id).join(','), 'xiake,lingguan,moshi,wuzhu', '职业 id');
   eq(content.PETS.map((p) => p.id).join(','), 'linghu,yanjia,leisun,moqilin,wusheniu', '宠物 id');
   eq(Object.keys(content.MONSTERS).join(','), 'yelang,heixiong,kulou,zhizhu,shanxiao,shanxiaowang,shuiyao,daji,jiaotu', '怪物 id');
-  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu,wild_yunmeng,wild_kunlun,yuxugong,chentangguan', '地图 id（新增昆仑山道/玉虚宫/陈塘关扩展）');
+  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu,wild_yunmeng,wild_kunlun,yuxugong,chentangguan,qianyuan,jinaodao,zhaoge', '地图 id（新增昆仑/玉虚/陈塘/乾元/金鳌/朝歌）');
   eq(world.QUESTS.map((q) => q.id).join(','), 'q1,q2,q3,q4,q5', '任务 id');
   eq(world.QUESTS.map((q) => q.targets.need).join(','), '3,4,1,5,1', '任务目标数');
   eq(world.QUESTS.map((q) => q.rewardSilver).join(','), '100,160,300,220,500', '任务赏银');
@@ -1413,12 +1413,23 @@ test('新世界观命名与 NPC 对话到位', () => {
   eq(world.QUESTS[3].name, '云梦泽靖泽', '第四环任务');
   eq(world.QUESTS[4].name, '鹿台决战', '终章任务');
   eq(content.MONSTERS.daji.name, '九尾狐妖·妲己', '终章 Boss');
-  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu,wild_yunmeng,wild_kunlun,yuxugong,chentangguan', '地图 id（新增昆仑山道/玉虚宫/陈塘关）');
+  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu,wild_yunmeng,wild_kunlun,yuxugong,chentangguan,qianyuan,jinaodao,zhaoge', '地图 id（十二图）');
   eq(world.WORLD_MAPS.wild_kunlun.name, '昆仑山道', '昆仑山道');
   eq(world.WORLD_MAPS.yuxugong.name, '玉虚宫', '玉虚宫');
   eq(world.WORLD_MAPS.chentangguan.name, '陈塘关', '陈塘关');
   eq(world.WORLD_MAPS.yuxugong.npc?.name, '元始天尊', '玉虚宫 NPC');
   eq(world.WORLD_MAPS.chentangguan.npc?.name, '李靖', '陈塘关 NPC');
+  eq(world.WORLD_MAPS.qianyuan.name, '乾元山金光洞', '乾元山');
+  eq(world.WORLD_MAPS.jinaodao.name, '金鳌岛碧游宫', '金鳌岛');
+  eq(world.WORLD_MAPS.zhaoge.name, '朝歌城', '朝歌城');
+  eq(world.WORLD_MAPS.qianyuan.npc?.name, '太乙真人', '乾元山 NPC');
+  eq(world.WORLD_MAPS.jinaodao.npc?.name, '通天教主', '金鳌岛 NPC');
+  eq(world.WORLD_MAPS.zhaoge.npc?.name, '比干', '朝歌城 NPC');
+  ok(world.WORLD_MAPS.jinaodao.spawns.some((s) => s.group.includes('jiaotu')), '金鳌岛刷新妖修');
+  ok(world.WORLD_MAPS.zhaoge.spawns.some((s) => s.group.includes('kulou')), '朝歌城刷新妖卒');
+  ok(world.WORLD_MAPS.chentangguan.exits.some((e) => e.to === 'qianyuan'), '陈塘关新增乾元山口');
+  ok(world.WORLD_MAPS.wild_yunmeng.exits.some((e) => e.to === 'jinaodao'), '云梦泽新增金鳌岛口');
+  ok(world.WORLD_MAPS.difu.exits.some((e) => e.to === 'zhaoge'), '鹿台新增朝歌城口');
   ok(world.WORLD_MAPS.wild_kunlun.spawns.some((s) => s.group.includes('jiaotu')), '昆仑山道刷新截教妖修');
   eq(content.MONSTERS.jiaotu.name, '截教妖修', '截教妖修');
   ok(world.WORLD_MAPS.wild_heifeng.exits.some((e) => e.to === 'wild_kunlun'), '穿云岭新增昆仑口');
@@ -1439,7 +1450,7 @@ test('每张世界地图都有对应的国风满幅背景', () => {
     ok(art.WORLD_TILE_ART[m.scene], `${m.name} 缺背景映射`);
     ok(existsSync(path.join(ROOT, 'public/assets/art', art.WORLD_TILE_ART[m.scene])), `缺背景文件 ${m.scene}`);
   }
-  eq(Object.keys(art.WORLD_TILE_ART).length, 9, '满幅背景图各一张');
+  eq(Object.keys(art.WORLD_TILE_ART).length, 12, '满幅背景图各一张');
   ok(art.allArtFiles().includes(art.WORLD_TILE_ART.taoyuan), '纳入素材自检清单');
 });
 

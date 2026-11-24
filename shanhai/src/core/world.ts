@@ -101,6 +101,9 @@ export const ISO_GRIDS: Record<string, IsoGrid> = {
   wild_kunlun:   { cols: 120, rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
   yuxugong:      { cols: 72,  rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
   chentangguan:  { cols: 88,  rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
+  qianyuan:      { cols: 96,  rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
+  jinaodao:      { cols: 104, rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
+  zhaoge:        { cols: 96,  rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
 };
 /** 西岐城格网：保留旧名以兼容外部引用与历史存档换算 */
 export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
@@ -226,6 +229,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     exits: [
       isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '黄泉鬼渡'),
       isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 西岐城'),
+      isoExit('difu', 1, 40, 'zhaoge', 94, 48, '朝歌城'),
     ],
     npc: isoNpc('difu', 40, 72, '妲己'),
   },
@@ -244,6 +248,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     exits: [
       isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '西岐城'),
       isoExit('wild_yunmeng', 110, 44, 'chentangguan', 1, 36, '陈塘关'),
+      isoExit('wild_yunmeng', 50, 88, 'jinaodao', 52, 1, '金鳌岛碧游宫'),
     ],
   },
   /** 昆仑山道 120×88：仙阶之字上山，北口通穿云岭、东口通玉虚宫；截教妖修伏道 */
@@ -271,13 +276,53 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     exits: [isoExit('yuxugong', 1, 44, 'wild_kunlun', 118, 44, '昆仑山道')],
     npc: isoNpc('yuxugong', 36, 36, '元始天尊'),
   },
-  /** 陈塘关 88×72：哪吒故里海滨关城，安全图，李靖总兵坐镇 */
+  /** 陈塘关 88×72：哪吒故里海滨关城，安全图，李靖总兵坐镇；东口通乾元山 */
   chentangguan: {
     name: '陈塘关', scene: 'chentangguan',
     iso: { layout: 'iso/chentangguan.json' },
     spawns: [],
-    exits: [isoExit('chentangguan', 1, 36, 'wild_yunmeng', 110, 44, '云梦泽')],
+    exits: [
+      isoExit('chentangguan', 1, 36, 'wild_yunmeng', 110, 44, '云梦泽'),
+      isoExit('chentangguan', 86, 36, 'qianyuan', 1, 36, '乾元山金光洞'),
+    ],
     npc: isoNpc('chentangguan', 52, 32, '李靖'),
+  },
+  /** 乾元山金光洞 96×72：哪吒师门，安全图，太乙真人道场 */
+  qianyuan: {
+    name: '乾元山金光洞', scene: 'qianyuan',
+    iso: { layout: 'iso/qianyuan.json' },
+    spawns: [],
+    exits: [isoExit('qianyuan', 1, 36, 'chentangguan', 86, 36, '陈塘关')],
+    npc: isoNpc('qianyuan', 46, 34, '太乙真人'),
+  },
+  /** 金鳌岛碧游宫 104×88：截教总舵，东海仙岛妖修环伺，通天教主坐镇宫前 */
+  jinaodao: {
+    name: '金鳌岛碧游宫', scene: 'jinaodao',
+    iso: { layout: 'iso/jinaodao.json' },
+    spawns: [
+      isoSpawn('jinaodao', 30, 24, ['jiaotu']),
+      isoSpawn('jinaodao', 72, 20, ['jiaotu', 'jiaotu']),
+      isoSpawn('jinaodao', 22, 52, ['shanxiao']),
+      isoSpawn('jinaodao', 84, 54, ['jiaotu', 'zhizhu']),
+      isoSpawn('jinaodao', 48, 68, ['shanxiao', 'jiaotu']),
+    ],
+    exits: [isoExit('jinaodao', 52, 1, 'wild_yunmeng', 50, 88, '云梦泽')],
+    npc: isoNpc('jinaodao', 52, 38, '通天教主'),
+  },
+  /** 朝歌城 96×96：商都妖城，妖氛环伺，比干孤忠守街口 */
+  zhaoge: {
+    name: '朝歌城', scene: 'zhaoge',
+    iso: { layout: 'iso/zhaoge.json' },
+    spawns: [
+      isoSpawn('zhaoge', 28, 24, ['jiaotu', 'kulou']),
+      isoSpawn('zhaoge', 66, 22, ['kulou', 'kulou']),
+      isoSpawn('zhaoge', 22, 52, ['zhizhu']),
+      isoSpawn('zhaoge', 72, 54, ['jiaotu']),
+      isoSpawn('zhaoge', 40, 74, ['jiaotu', 'heixiong']),
+      isoSpawn('zhaoge', 66, 78, ['kulou', 'zhizhu']),
+    ],
+    exits: [isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台')],
+    npc: isoNpc('zhaoge', 48, 44, '比干'),
   },
 };
 

@@ -71,6 +71,9 @@ export const SCENE_ART: Record<string, string> = {
   wild_kunlun: 'backgrounds/bg_qingya_shandao.png',
   yuxugong: 'backgrounds/bg_linglong_dongtian.png',
   chentangguan: 'backgrounds/bg_yunjing.png',
+  qianyuan: 'backgrounds/bg_linglong_dongtian.png',
+  jinaodao: 'backgrounds/bg_du_wangchuan.png',
+  zhaoge: 'backgrounds/bg_du_wangchuan.png',
 };
 
 /**
@@ -86,6 +89,9 @@ export const WORLD_TILE_ART: Record<string, string> = {
   wild_kunlun: 'backgrounds/bg_qingya_shandao.png',
   yuxugong: 'backgrounds/bg_linglong_dongtian.png',
   chentangguan: 'backgrounds/bg_yunjing.png',
+  qianyuan: 'backgrounds/bg_linglong_dongtian.png',
+  jinaodao: 'backgrounds/bg_du_wangchuan.png',
+  zhaoge: 'backgrounds/bg_du_wangchuan.png',
 };
 
 export const UI_ART = {
