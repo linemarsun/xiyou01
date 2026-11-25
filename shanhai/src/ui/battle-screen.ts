@@ -194,7 +194,7 @@ export class BattleScreen {
 
     this.roundEl = h('span', {}, '第 1 回合');
     const header = h('div', { class: 'bheader' },
-      h('div', { class: 'btitle' }, `⚔ 封神演义 · ${this.battle.encounterName}`),
+      h('div', { class: 'btitle' }, `⚔ 封神奇谭 · ${this.battle.encounterName}`),
       h('div', { class: 'bround' }, this.roundEl, ` · 种子 ${this.battle.seed}`),
       h('div', { class: 'bspace' }),
       this.autoBtn,

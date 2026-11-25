@@ -103,7 +103,7 @@ export function renderSetup(root: HTMLElement, handlers: SetupHandlers): void {
 
   root.append(
     h('div', { class: 'setup' },
-      h('h1', { class: 'game-title' }, '封 神 演 义'),
+      h('h1', { class: 'game-title' }, '封 神 奇 谭'),
       h('div', { class: 'game-sub' }, '国风回合制 · 朝歌风云 · 封神榜'),
       h('div', { class: 'game-foot', style: 'font-size:13px;opacity:.9' }, '纣王失德，妖狐乱政；昆仑玉虚姜子牙奉师命下山，封神榜现世——你的传奇，从朝歌开始。'),
       hasSave && onContinue
