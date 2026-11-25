@@ -97,6 +97,9 @@ export const ISO_GRIDS: Record<string, IsoGrid> = {
   wild_luanzang: { cols: 96,  rows: 128, tileW: 64, tileH: 32, ox: 4096, oy: 16 },
   wild_shanxiao: { cols: 104, rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
   difu:          { cols: 80,  rows: 112, tileW: 64, tileH: 32, ox: 3584, oy: 16 },
+  lintong:       { cols: 112, rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
+  xiqi:          { cols: 112, rows: 112, tileW: 64, tileH: 32, ox: 3584, oy: 16 },
+  kunlun:        { cols: 104, rows: 120, tileW: 64, tileH: 32, ox: 3840, oy: 16 },
 };
 /** 云京格网：保留旧名以兼容外部引用与历史存档换算 */
 export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
@@ -206,7 +209,51 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_shanxiao', 84, 52, ['shanxiao', 'shanxiao']),
       isoSpawn('wild_shanxiao', 20, 52, ['shanxiao']),
     ],
-    exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '轩辕坟道')],
+    exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '轩辕坟道'),
+            isoExit('wild_shanxiao', 102, 52, 'lintong', 1, 48, '临潼关')],
+  },
+  /** 临潼关 112×96：两崖夹峙一线关道，西通白骨洞、东通西岐 */
+  lintong: {
+    name: '临潼关', scene: 'lintong',
+    iso: { layout: 'iso/lintong.json' },
+    spawns: [
+      isoSpawn('lintong', 20, 44, ['yelang']),
+      isoSpawn('lintong', 34, 50, ['yelang', 'yelang']),
+      isoSpawn('lintong', 44, 44, ['heixiong']),
+      isoSpawn('lintong', 66, 44, ['yelang', 'yelang']),
+      isoSpawn('lintong', 76, 52, ['kulou']),
+      isoSpawn('lintong', 88, 46, ['yelang']),
+      isoSpawn('lintong', 100, 52, ['heixiong', 'yelang']),
+    ],
+    exits: [
+      isoExit('lintong', 1, 48, 'wild_shanxiao', 102, 52, '骷髅山白骨洞'),
+      isoExit('lintong', 110, 48, 'xiqi', 110, 56, '西岐城'),
+    ],
+  },
+  /** 西岐城 112×112：西岐行营，武王姬发会盟之地（第二主城） */
+  xiqi: {
+    name: '西岐城', scene: 'xiqi',
+    iso: { layout: 'iso/xiqi.json' },
+    spawns: [],
+    exits: [
+      isoExit('xiqi', 110, 56, 'lintong', 110, 48, '临潼关'),
+      isoExit('xiqi', 1, 56, 'kunlun', 52, 118, '昆仑山 · 玉虚宫'),
+    ],
+    npc: isoNpc('xiqi', 56, 44, '武王姬发'),
+    tavern: isoNpc('xiqi', 44, 62, '西岐酒肆掌柜'),
+  },
+  /** 昆仑山玉虚宫 104×120：阐教圣地，试炼之阵上山寻仙 */
+  kunlun: {
+    name: '昆仑山玉虚宫', scene: 'kunlun',
+    iso: { layout: 'iso/kunlun.json' },
+    spawns: [
+      isoSpawn('kunlun', 52, 96, ['kulou', 'shanxiao']),
+      isoSpawn('kunlun', 40, 78, ['shanxiao']),
+      isoSpawn('kunlun', 64, 62, ['kulou', 'kulou']),
+      isoSpawn('kunlun', 52, 48, ['shanxiao', 'shanxiao']),
+    ],
+    exits: [isoExit('kunlun', 52, 118, 'xiqi', 1, 56, '西岐城')],
+    npc: isoNpc('kunlun', 52, 26, '南极仙翁'),
   },
   /** 幽冥 80×112：一条黄泉直道贯穿南北，北口回黄河阵、南口还阳回朝歌 */
   difu: {
@@ -303,6 +350,22 @@ export const QUESTS: QuestDef[] = [
     targets: { defIds: ['shanxiaowang'], need: 1, label: '讨伐白骨洞妖王' },
     rewardSilver: 300,
     rewardItems: { heal: 2, mana: 1 },
+  },
+  {
+    id: 'q4',
+    name: '临潼破关',
+    desc: '临潼关守将拥妖兵自重，截断朝歌西行要道。破关夺路，为西岐打开门户！',
+    targets: { defIds: ['yelang', 'heixiong'], need: 5, label: '破关斩妖兵' },
+    rewardSilver: 400,
+    rewardItems: { heal: 2, mana: 2 },
+  },
+  {
+    id: 'q5',
+    name: '昆仑问道',
+    desc: '武王广发英雄帖，请昆仑玉虚出山相助。玉虚宫设下试炼之阵，通过者可得真传。',
+    targets: { defIds: ['shanxiao', 'kulou'], need: 4, label: '通过玉虚试炼' },
+    rewardSilver: 500,
+    rewardItems: { mana: 3 },
   },
 ];
 
@@ -912,7 +975,7 @@ export interface Dialogue {
 }
 
 export function dialogueFor(gs: GameState): Dialogue {
-  const name = WORLD_MAPS.taoyuan.npc?.name ?? '姜子牙';
+  const name = WORLD_MAPS[gs.mapId]?.npc?.name ?? WORLD_MAPS.taoyuan.npc?.name ?? '姜子牙';
   if (gs.questStep === 0) {
     return {
       name,
@@ -923,7 +986,7 @@ export function dialogueFor(gs: GameState): Dialogue {
   if (gs.questStep > QUESTS.length) {
     return {
       name,
-      text: '妖物暂退，朝歌恢复安宁。道友威名，老朽记下了！日后商周鼎革、封神榜现世，还须道友相助。',
+      text: '封神之路，才刚刚开始。商周鼎革在即，道友威名，已入榜上!',
       actions: [{ label: '告辞', kind: 'close' }],
     };
   }
@@ -935,7 +998,10 @@ export function dialogueFor(gs: GameState): Dialogue {
       actions: [{ label: '领取赏银', kind: 'claim' }],
     };
   }
-  const place = q.id === 'q1' ? '轩辕坟道' : q.id === 'q2' ? '九曲黄河阵' : '骷髅山白骨洞';
+  const place = q.id === 'q1' ? '轩辕坟道'
+    : q.id === 'q2' ? '九曲黄河阵'
+    : q.id === 'q3' ? '骷髅山白骨洞'
+    : q.id === 'q4' ? '临潼关' : '昆仑山玉虚宫';
   return {
     name,
     text: `「${q.name}」尚未完成——${q.targets.label} ${gs.questKills}/${q.targets.need}。${place}妖物众多，小心行事。`,

@@ -112,7 +112,7 @@ test('接缉狼令 → 击杀野狼×3 → 达成 → 交付', () => {
   eq(gs.questKills, 0, '击杀数重置');
 });
 
-test('净乱葬：骷髅/蜘蛛×4 → 交付 → 讨山魈 → 全链完成', () => {
+test('净乱葬：骷髅/蜘蛛×4 → 交付 → 讨山魈 → 破临潼 → 昆仑试炼 → 全链完成', () => {
   const gs = fresh();
   world.acceptQuest(gs);
   world.onKilled(gs, ['yelang', 'yelang', 'yelang']);
@@ -134,9 +134,26 @@ test('净乱葬：骷髅/蜘蛛×4 → 交付 → 讨山魈 → 全链完成', (
   eq(gs.silver, 610, '累计银两');
   eq(gs.inv.heal, 7, 'q3 奖励金疮药×2');
   eq(gs.inv.mana, 6, 'q3 奖励凝气丹×1');
-  eq(gs.questStep, 4, '超出任务链');
+  eq(gs.questStep, 4, '进入 q4');
+  eq(world.activeQuest(gs).id, 'q4', '当前任务');
+  const d4 = world.onKilled(gs, ['yelang', 'heixiong', 'yelang', 'heixiong', 'yelang']);
+  eq(d4?.id, 'q4', 'q4 达成');
+  const r4 = world.claimQuest(gs);
+  eq(r4.silver, 400, 'q4 赏银');
+  eq(gs.silver, 1010, '累计银两');
+  eq(gs.inv.heal, 9, 'q4 奖励金疮药×2');
+  eq(gs.inv.mana, 8, 'q4 奖励凝气丹×2');
+  eq(gs.questStep, 5, '进入 q5');
+  eq(world.activeQuest(gs).id, 'q5', '当前任务');
+  const d5 = world.onKilled(gs, ['shanxiao', 'kulou', 'shanxiao', 'kulou']);
+  eq(d5?.id, 'q5', 'q5 达成');
+  const r5 = world.claimQuest(gs);
+  eq(r5.silver, 500, 'q5 赏银');
+  eq(gs.silver, 1510, '累计银两');
+  eq(gs.inv.mana, 11, 'q5 奖励凝气丹×3');
+  eq(gs.questStep, 6, '超出任务链');
   eq(world.activeQuest(gs), null, '无激活任务');
-  ok(world.dialogueFor(gs).text.includes('安宁'), '收尾对话');
+  ok(world.dialogueFor(gs).text.includes('封神之路'), '收尾对话');
 });
 
 test('非目标怪不计入任务进度', () => {
@@ -1082,7 +1099,7 @@ test('战斗背景存在（art/battle/<region>.png）', () => {
 });
 
 console.log('\n[12b] 一景一制：独立格网 / 边界出入口 / 专属路网（模块 12）');
-const ISO_REGIONS = ['wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu'];
+const ISO_REGIONS = ['wild_heifeng', 'wild_luanzang', 'wild_shanxiao', 'difu', 'lintong', 'xiqi', 'kunlun'];
 const sceneCache = new Map();
 /** 读布局 → 展开 → 碰撞；同一张图只解析一次 */
 function isoScene(id) {
@@ -1109,7 +1126,7 @@ const isBorder = (id, gx, gy) => {
   return gx <= 1 || gy <= 1 || gx >= g.cols - 2 || gy >= g.rows - 2;
 };
 
-test('一景一制：五图各有独立格网，尺寸/形状参考云京但互不相同', () => {
+test('一景一制：八图各有独立格网，尺寸/形状参考云京但互不相同', () => {
   const city = world.ISO_GRIDS.taoyuan;
   eq(city.cols, 128, '云京列（基准）'); eq(city.rows, 128, '云京行（基准）');
   eq(world.ISO_GRID, city, '旧 ISO_GRID 别名仍指向云京');
@@ -1126,7 +1143,7 @@ test('一景一制：五图各有独立格网，尺寸/形状参考云京但互�
     ok(m.h >= 4096 * 0.7 && m.h <= 4096, `${m.name} 高 ${m.h} 与云京同量级`);
     shapes.add(`${g.cols}x${g.rows}`);
   }
-  eq(shapes.size, 5, `五张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
+  eq(shapes.size, 8, `八张图的格网形状互不相同（${[...shapes].join(' / ')}）`);
   for (const id of ISO_REGIONS) {
     const { raw, layout } = isoScene(id);
     ok(Array.isArray(raw.anchors?.spawns) && Array.isArray(raw.anchors?.exits), `${id} 布局带玩法锚点`);
@@ -1241,7 +1258,7 @@ test('四张布局：构件不越界、全部边界出入口与玩法点两两 B
 
 test('四景路网与地标各具特色，不再共用十字广场 / 中心券门', () => {
   const sigs = new Set(ISO_REGIONS.map((id) => isoScene(id).raw.signature));
-  eq(sigs.size, 4, `四种专属路网签名（${[...sigs].join(' / ')}）`);
+  eq(sigs.size, 7, `七种专属路网签名（${[...sigs].join(' / ')}）`);
   const mixes = ISO_REGIONS.map((id) =>
     ['ground_grass', 'ground_dirt', 'ground_stone', 'ground_water'].map((t) => countType(id, t)).join('/'));
   eq(new Set(mixes).size, 4, '四图地表铺装组合互不相同');
@@ -1299,7 +1316,7 @@ console.log('\n[14] 世界观文案统一（模块 9）');
 const OLD_LORE = [
   '桃源镇', '黑风岭', '乱葬岗', '山魈岭', '缉妖司', '野狼', '骷髅兵', '蜘蛛精',
   '缉狼令', '净乱葬', '讨山魈', '灵狐', '岩甲兽', '雷隼', '黑熊精',
-  '游方巫祝', '云游灵官', '北荒刀客', '酒馆老板',
+  '游方巫祝', '云游灵官', '北荒刀客', '酒馆老板', '云京', '玄鹤长老', '青崖山道', '渡忘川', '玲珑洞天', '司礼府', '山海奇谭',
 ];
 test('所有显示文案已无旧世界观词', () => {
   const texts = [
@@ -1322,10 +1339,10 @@ test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
   eq(content.CLASSES.map((c) => c.id).join(','), 'xiake,lingguan,moshi,wuzhu', '职业 id');
   eq(content.PETS.map((p) => p.id).join(','), 'linghu,yanjia,leisun', '宠物 id');
   eq(Object.keys(content.MONSTERS).join(','), 'yelang,heixiong,kulou,zhizhu,shanxiao,shanxiaowang', '怪物 id');
-  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,difu', '地图 id（新增地府重生点）');
-  eq(world.QUESTS.map((q) => q.id).join(','), 'q1,q2,q3', '任务 id');
-  eq(world.QUESTS.map((q) => q.targets.need).join(','), '3,4,1', '任务目标数');
-  eq(world.QUESTS.map((q) => q.rewardSilver).join(','), '100,160,300', '任务赏银');
+  eq(Object.keys(world.WORLD_MAPS).join(','), 'taoyuan,wild_heifeng,wild_luanzang,wild_shanxiao,lintong,xiqi,kunlun,difu', '地图 id（新增临潼关/西岐城/昆仑山）');
+  eq(world.QUESTS.map((q) => q.id).join(','), 'q1,q2,q3,q4,q5', '任务 id');
+  eq(world.QUESTS.map((q) => q.targets.need).join(','), '3,4,1,5,4', '任务目标数');
+  eq(world.QUESTS.map((q) => q.rewardSilver).join(','), '100,160,300,400,500', '任务赏银');
   eq(content.CLASSES[0].stats.hp, 620, '职业数值');
   eq(content.MONSTERS.yelang.stats.hp, 230, '怪物数值');
   eq(world.DEFAULT_SEGMENTS, 8, '地图区段');
@@ -1337,12 +1354,16 @@ test('新世界观命名与 NPC 对话到位', () => {
   eq(world.WORLD_MAPS.wild_heifeng.name, '轩辕坟道', '山野');
   eq(world.WORLD_MAPS.wild_luanzang.name, '九曲黄河阵', '幽冥');
   eq(world.WORLD_MAPS.wild_shanxiao.name, '骷髅山白骨洞', '洞府');
+  eq(world.WORLD_MAPS.lintong.name, '临潼关', '关隘');
+  eq(world.WORLD_MAPS.xiqi.name, '西岐城', '西岐');
+  eq(world.WORLD_MAPS.kunlun.name, '昆仑山玉虚宫', '昆仑');
+  eq(world.WORLD_MAPS.xiqi.npc?.name, '武王姬发', '西岐 NPC');
   eq(world.WORLD_MAPS.taoyuan.npc?.name, '姜子牙', 'NPC');
   eq(world.QUESTS[0].name, '坟道斩狼', '首环任务');
   eq(content.CLASSES[0].name, '云岚', '人族角色');
   ok(world.dialogueFor(fresh()).text.includes('轩辕坟道'), '接任务对话含新地名');
   const done = fresh(); done.questStep = world.QUESTS.length + 1;
-  ok(world.dialogueFor(done).text.includes('朝歌'), '收尾对话含朝歌');
+  ok(world.dialogueFor(done).text.includes('封神之路'), '收尾对话含封神之路');
   ok(world.WORLD_MAPS.taoyuan.exits[0].label === '轩辕坟道', '路牌文案统一');
 });
 
@@ -1354,7 +1375,7 @@ test('每张世界地图都有对应的国风满幅背景', () => {
     ok(art.WORLD_TILE_ART[m.scene], `${m.name} 缺背景映射`);
     ok(existsSync(path.join(ROOT, 'public/assets/art', art.WORLD_TILE_ART[m.scene])), `缺背景文件 ${m.scene}`);
   }
-  eq(Object.keys(art.WORLD_TILE_ART).length, 4, '四张地图各一张');
+  eq(Object.keys(art.WORLD_TILE_ART).length, 7, '七张地图各一张');
   ok(art.allArtFiles().includes(art.WORLD_TILE_ART.taoyuan), '纳入素材自检清单');
 });
 

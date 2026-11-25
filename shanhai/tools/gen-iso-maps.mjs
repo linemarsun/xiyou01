@@ -51,7 +51,7 @@ function mulberry32(seed) {
  */
 const THEMES = [
   {
-    id: 'wild_heifeng', name: '青崖山道', seed: 20261109,
+    id: 'wild_heifeng', name: '轩辕坟道', seed: 20261109,
     cols: 128, rows: 96,
     base: 'ground_grass', signature: 'switchback-ridge',
     tagline: '盘山之字栈道 · 三溪石桥 · 林海',
@@ -70,9 +70,9 @@ const THEMES = [
         { gx: 116, gy: 62, group: ['heixiong'] },
       ],
       exits: [
-        { gx: 32, gy: 1, to: 'taoyuan', toGx: 62, toGy: 3, label: '云京' },
-        { gx: 1, gy: 62, to: 'wild_luanzang', toGx: 11, toGy: 1, label: '渡忘川' },
-        { gx: 126, gy: 62, to: 'wild_shanxiao', toGx: 1, toGy: 52, label: '玲珑洞天' },
+        { gx: 32, gy: 1, to: 'taoyuan', toGx: 62, toGy: 3, label: '朝歌' },
+        { gx: 1, gy: 62, to: 'wild_luanzang', toGx: 11, toGy: 1, label: '九曲黄河阵' },
+        { gx: 126, gy: 62, to: 'wild_shanxiao', toGx: 1, toGy: 52, label: '骷髅山白骨洞' },
       ],
     },
     build(c) {
@@ -111,10 +111,10 @@ const THEMES = [
   },
 
   {
-    id: 'wild_luanzang', name: '渡忘川', seed: 20261110,
+    id: 'wild_luanzang', name: '九曲黄河阵', seed: 20261110,
     cols: 96, rows: 128,
     base: 'ground_dirt', signature: 'diagonal-river',
-    tagline: '忘川斜贯 · 两岸石堤 · 六渡石桥',
+    tagline: '黄河斜贯 · 两岸石堤 · 六渡石桥',
     treeVariant: 'dead', rockVariant: 'dark', bridgeVariant: 'dark',
     decoDensity: 0.032, lampStep: 14,
     deco: [['tree', 0.44], ['rock', 0.38], ['fence', 0.10], ['lantern_post', 0.05], ['stele', 0.03]],
@@ -128,8 +128,8 @@ const THEMES = [
         { gx: 65, gy: 116, group: ['zhizhu'] },
       ],
       exits: [
-        { gx: 11, gy: 1, to: 'wild_heifeng', toGx: 1, toGy: 62, label: '青崖山道' },
-        { gx: 73, gy: 126, to: 'difu', toGx: 40, toGy: 1, label: '幽都 · 忘川渡口' },
+        { gx: 11, gy: 1, to: 'wild_heifeng', toGx: 1, toGy: 62, label: '轩辕坟道' },
+        { gx: 73, gy: 126, to: 'difu', toGx: 40, toGy: 1, label: '幽冥 · 黄泉道' },
       ],
     },
     build(c) {
@@ -175,7 +175,7 @@ const THEMES = [
   },
 
   {
-    id: 'wild_shanxiao', name: '玲珑洞天', seed: 20261111,
+    id: 'wild_shanxiao', name: '骷髅山白骨洞', seed: 20261111,
     cols: 104, rows: 104,
     base: 'ground_dirt', signature: 'ring-cavern',
     tagline: '青苔环廊 · 青石圆厅 · 四条放射石阶 · 晶壁围合',
@@ -199,7 +199,8 @@ const THEMES = [
         { gx: 20, gy: 52, group: ['shanxiao'] },
       ],
       exits: [
-        { gx: 1, gy: 52, to: 'wild_heifeng', toGx: 126, toGy: 62, label: '青崖山道' },
+        { gx: 1, gy: 52, to: 'wild_heifeng', toGx: 126, toGy: 62, label: '轩辕坟道' },
+        { gx: 102, gy: 52, to: 'lintong', toGx: 1, toGy: 48, label: '临潼关' },
       ],
     },
     build(c) {
@@ -214,7 +215,7 @@ const THEMES = [
         }
       }
       // 四条青石放射阶道通往四条边界（与土色洞底区分，玩家一眼能看出路）；
-      // 只有西口是路牌，其余三口为观景死路
+      // 西口通山道、东口通临潼关，南北两口为观景死路
       line([[cx, 1], [cx, cy]], 5, 'ground_stone');
       line([[cx, cy], [cx, rows - 2]], 5, 'ground_stone');
       line([[1, cy], [cx, cy]], 5, 'ground_stone');
@@ -253,7 +254,7 @@ const THEMES = [
   },
 
   {
-    id: 'difu', name: '地府 · 忘川渡口', seed: 20261112,
+    id: 'difu', name: '幽冥 · 黄泉道', seed: 20261112,
     cols: 80, rows: 112,
     base: 'ground_dirt', signature: 'straight-road',
     tagline: '黄泉直道 · 忘川横河 · 奈何桥 · 碑阵引魂灯',
@@ -263,8 +264,8 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 40, gy: 1, to: 'wild_luanzang', toGx: 73, toGy: 126, label: '渡忘川' },
-        { gx: 40, gy: 110, to: 'taoyuan', toGx: 62, toGy: 3, label: '还阳 · 云京' },
+        { gx: 40, gy: 1, to: 'wild_luanzang', toGx: 73, toGy: 126, label: '九曲黄河阵' },
+        { gx: 40, gy: 110, to: 'taoyuan', toGx: 62, toGy: 3, label: '还阳 · 朝歌' },
       ],
       npc: { gx: 40, gy: 72, name: '孟婆' },
     },
@@ -296,6 +297,147 @@ const THEMES = [
       placeNear('hell_palace', 52, 18, 6, 6);
       // 引魂灯：碑阵间隙再立四盏，幽绿魂火呼应碑阵纵深（避开碑/灯的固定步进位）
       for (const [gx, gy] of [[34, 22], [46, 34], [34, 94], [46, 100]]) tryProp('soul_lantern', gx, gy);
+    },
+  },
+
+  {
+    id: 'lintong', name: '临潼关', seed: 20261113,
+    cols: 112, rows: 96,
+    base: 'ground_dirt', signature: 'fortress-pass',
+    tagline: '两崖夹峙 · 一线关道 · 城台锁谷',
+    treeVariant: 'pine', rockVariant: 'moss',
+    decoDensityAt: (gx, gy) => (gy < 26 || gy > 70 ? 0.12 : 0.028),
+    decoDensity: 0.05,
+    deco: [['rock', 0.60], ['tree', 0.22], ['crate', 0.06], ['stele', 0.05], ['lantern_post', 0.07]],
+    anchors: {
+      spawns: [
+        { gx: 20, gy: 44, group: ['yelang'] },
+        { gx: 34, gy: 50, group: ['yelang', 'yelang'] },
+        { gx: 44, gy: 44, group: ['heixiong'] },
+        { gx: 66, gy: 44, group: ['yelang', 'yelang'] },
+        { gx: 76, gy: 52, group: ['kulou'] },
+        { gx: 88, gy: 46, group: ['yelang'] },
+        { gx: 100, gy: 52, group: ['heixiong', 'yelang'] },
+      ],
+      exits: [
+        { gx: 1, gy: 48, to: 'wild_shanxiao', toGx: 102, toGy: 52, label: '骷髅山白骨洞' },
+        { gx: 110, gy: 48, to: 'xiqi', toGx: 110, toGy: 56, label: '西岐城' },
+      ],
+    },
+    build(c) {
+      const { setT, line, rect, markR, prop, tryProp, placeNear } = c;
+      // 一线关道：西口 → 关城 → 东口，中段微折（穿关而过的唯一主路）
+      line([[1, 48], [30, 44], [56, 48], [80, 52], [110, 48]], 7, 'ground_stone');
+      // 关城城台：城台门楼踞关道中段北侧，道路自城南侧通行
+      placeNear('gate_keep', 50, 36, 12, 6);
+      // 关前牌坊 + 石碑/井/粮车
+      placeNear('paifang', 40, 46, 3, 3);
+      for (const [type, gx, gy] of [['stele', 46, 52], ['stele', 66, 44], ['well', 70, 56], ['crate', 36, 56], ['crate', 84, 42]]) {
+        placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
+      }
+      // 关墙短垣两段夹峙主路
+      placeNear('city_wall_u2', 44, 40, 2, 2);
+      placeNear('city_wall_u2', 60, 40, 2, 2);
+      // 关内校场（东段石面开阔地）
+      rect(88, 40, 14, 16, (x, y) => markR(x, y, 'ground_stone'));
+      // 崖壁松柏由 decoDensityAt 两侧加密铺出
+    },
+  },
+
+  {
+    id: 'xiqi', name: '西岐城', seed: 20261114,
+    cols: 112, rows: 112,
+    base: 'ground_grass', signature: 'garrison-city',
+    tagline: '城墙环峙 · 十字大街 · 明堂校场 · 市井初成',
+    treeVariant: 'leaf', rockVariant: 'moss',
+    decoDensity: 0.02, lampStep: 10,
+    deco: [['lantern_post', 0.30], ['crate', 0.25], ['stall', 0.20], ['stele', 0.10], ['well', 0.15]],
+    anchors: {
+      spawns: [],
+      exits: [
+        { gx: 110, gy: 56, to: 'lintong', toGx: 110, toGy: 48, label: '临潼关' },
+        { gx: 1, gy: 56, to: 'kunlun', toGx: 52, toGy: 118, label: '昆仑山 · 玉虚宫' },
+      ],
+      npc: { gx: 56, gy: 44, name: '武王姬发' },
+    },
+    build(c) {
+      const { setT, line, rect, markR, prop, tryProp, placeNear, rows } = c;
+      // 十字大街贯通东西南北城门
+      line([[1, 56], [110, 56]], 7, 'ground_stone');
+      line([[56, 1], [56, 110]], 7, 'ground_stone');
+      // 环城内路（矩形回环）
+      line([[14, 20], [96, 20], [96, 92], [14, 92], [14, 20]], 5, 'ground_stone');
+      // 明堂广场（中央偏北）
+      rect(42, 28, 30, 22, (x, y) => markR(x, y, 'ground_stone'));
+      placeNear('hall', 50, 24, 6, 6);
+      // 城墙环：四角城台 + 四边城墙段，东西大街各留城门口
+      placeNear('city_wall_corner', 6, 6, 2, 2);
+      placeNear('city_wall_corner', 104, 6, 2, 2);
+      placeNear('city_wall_corner', 6, 104, 2, 2);
+      placeNear('city_wall_corner', 104, 104, 2, 2);
+      for (let i = 0; i < 16; i++) {
+        const gx = 8 + i * 6;
+        tryProp('city_wall_u6', gx, 6, 6, 2);
+        tryProp('city_wall_u6', gx, 104, 6, 2);
+      }
+      for (let i = 0; i < 16; i++) {
+        const gy = 8 + i * 6;
+        if (gy === 50 || gy === 56) continue;        // 东西城门口缺口
+        tryProp('city_wall_v6', 6, gy, 2, 6);
+        tryProp('city_wall_v6', 104, gy, 2, 6);
+      }
+      // 东西城门楼：缺口内侧各一座（不压大街）
+      placeNear('city_gate_tower', 98, 46, 4, 3);
+      placeNear('city_gate_tower', 8, 46, 4, 3);
+      // 市井：东西大街两侧摊棚/井/粮车
+      for (const [type, gx, gy, w, h] of [['stall', 40, 60, 2, 2], ['stall', 66, 52, 2, 2], ['stall', 72, 62, 2, 2], ['well', 48, 64], ['crate', 62, 62]]) {
+        placeNear(type, gx, gy, w ?? 1, h ?? 1);
+      }
+      // 兵营校场（东南象限）+ 武库
+      rect(76, 76, 20, 20, (x, y) => markR(x, y, 'ground_stone'));
+      placeNear('hall', 82, 80, 6, 6);
+      for (const [gx, gy] of [[78, 90], [90, 90]]) tryProp('crate', gx, gy);
+    },
+  },
+
+  {
+    id: 'kunlun', name: '昆仑山玉虚宫', seed: 20261115,
+    cols: 104, rows: 120,
+    base: 'ground_grass', signature: 'holy-mountain',
+    tagline: '松径盘升 · 白玉广场 · 玉虚宫阙 · 试炼之阵',
+    treeVariant: 'pine', rockVariant: 'moss',
+    decoDensityAt: (gx, gy) => (gy > 60 ? 0.06 : 0.03),
+    decoDensity: 0.05,
+    deco: [['tree', 0.50], ['rock', 0.28], ['lantern_post', 0.10], ['stele', 0.12]],
+    anchors: {
+      spawns: [
+        { gx: 52, gy: 96, group: ['kulou', 'shanxiao'] },
+        { gx: 40, gy: 78, group: ['shanxiao'] },
+        { gx: 64, gy: 62, group: ['kulou', 'kulou'] },
+        { gx: 52, gy: 48, group: ['shanxiao', 'shanxiao'] },
+      ],
+      exits: [
+        { gx: 52, gy: 118, to: 'xiqi', toGx: 1, toGy: 56, label: '西岐城' },
+      ],
+      npc: { gx: 52, gy: 26, name: '南极仙翁' },
+    },
+    build(c) {
+      const { setT, line, rect, markR, prop, tryProp, placeNear } = c;
+      // 玉虚宫白玉广场（北部高地）
+      rect(30, 8, 44, 34, (x, y) => markR(x, y, 'ground_marble'));
+      // 盘山道：南口 → 三折升坡 → 白玉广场
+      line([[52, 118], [52, 100], [30, 88], [30, 68], [66, 60], [66, 46], [52, 40]], 6, 'ground_stone');
+      // 玉虚宫主殿（金顶大殿踞广场正北）
+      placeNear('palace_hall', 47, 12, 10, 10);
+      // 宫前石阶
+      prop('stairs', 50, 42, 3, 1);
+      for (const [gx, gy] of [[38, 30], [64, 30]]) placeNear('lantern_post', gx, gy);
+      // 山门牌坊（南口内侧）
+      placeNear('paifang', 48, 112, 3, 3);
+      // 试炼碑阵：盘山道沿线四碑
+      for (const [gx, gy] of [[44, 88], [60, 74], [40, 66], [62, 50]]) placeNear('stele', gx, gy, 1, 2);
+      // 引路灯：南段直道两侧
+      for (const [gx, gy] of [[46, 108], [58, 108], [46, 94], [58, 94]]) tryProp('lantern_post', gx, gy);
     },
   },
 ];

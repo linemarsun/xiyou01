@@ -62,6 +62,9 @@ export const SCENE_ART: Record<string, string> = {
   wild_luanzang: 'backgrounds/bg_du_wangchuan.png',
   wild_shanxiao: 'backgrounds/bg_linglong_dongtian.png',
   difu: 'backgrounds/bg_du_wangchuan.png',
+  lintong: 'backgrounds/bg_qingya_shandao.png',
+  xiqi: 'backgrounds/bg_yunjing.png',
+  kunlun: 'backgrounds/bg_qingya_shandao.png',
 };
 
 /**
@@ -72,6 +75,9 @@ export const WORLD_TILE_ART: Record<string, string> = {
   wild_heifeng: 'backgrounds/bg_qingya_shandao.png',
   wild_luanzang: 'backgrounds/bg_du_wangchuan.png',
   wild_shanxiao: 'backgrounds/bg_linglong_dongtian.png',
+  lintong: 'backgrounds/bg_qingya_shandao.png',
+  xiqi: 'backgrounds/bg_yunjing.png',
+  kunlun: 'backgrounds/bg_qingya_shandao.png',
 };
 
 export const UI_ART = {

@@ -413,7 +413,7 @@ export class WorldScreen {
     }
 
     this.tavernPanelEl.append(
-      h('div', { class: 'dname' }, `【朝歌酒肆】雇佣同道（最多 ${COMPANION_CAP} 名）· 同道不食经验，境界始终跟随少侠`),
+      h('div', { class: 'dname' }, `【${WORLD_MAPS[this.gs.mapId]?.name ?? '朝歌'}酒肆】雇佣同道（最多 ${COMPANION_CAP} 名）· 同道不食经验，境界始终跟随少侠`),
       rows,
       h('div', { style: 'text-align:right;margin-top:8px' },
         h('button', { class: 'btn small', onclick: () => { this.tavernPanelEl.style.display = 'none'; } }, '关闭'),
