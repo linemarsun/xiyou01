@@ -99,7 +99,7 @@ export const ITEMS: Record<'heal' | 'mana', ItemDef> = {
 export const CLASSES: ClassDef[] = [
   {
     id: 'xiake', name: '云岚', race: '人族', sect: '青崖剑宗', emoji: '⚔️',
-    desc: '云京剑府出身的人族剑客，一柄青锋、一道朱符，封得住身、乱得了心。',
+    desc: '朝歌剑府出身的人族剑客，一柄青锋、一道朱符，封得住身、乱得了心。',
     stats: { hp: 620, mp: 150, atk: 96, def: 62, mag: 30, spd: 55 },
     resists: r(30, 30, 28, 28, 20, 10, 10, 10, 10),
     skillIds: ['jy_zhan', 'jy_ding', 'jy_luan', 'jy_mi'],
@@ -157,7 +157,7 @@ export const PETS: PetDef[] = [
 
 export const MONSTERS: Record<string, MonsterDef> = {
   yelang: {
-    id: 'yelang', name: '青崖苍狼', emoji: '🐺',
+    id: 'yelang', name: '轩辕坟妖狼', emoji: '🐺',
     stats: { hp: 230, mp: 50, atk: 52, def: 30, mag: 20, spd: 66 },
     resists: r(10, 10, 8, 8, 20, 8, 8, 8, 8),
     skillIds: ['m_yao'],
@@ -169,7 +169,7 @@ export const MONSTERS: Record<string, MonsterDef> = {
     skillIds: ['m_xiong'],
   },
   kulou: {
-    id: 'kulou', name: '忘川骨卒', emoji: '💀',
+    id: 'kulou', name: '阵中骨卒', emoji: '💀',
     stats: { hp: 220, mp: 40, atk: 48, def: 28, mag: 20, spd: 48 },
     resists: r(15, 30, 10, 50, 60, 8, 8, 8, 8),
     skillIds: ['m_guci'],
@@ -181,13 +181,13 @@ export const MONSTERS: Record<string, MonsterDef> = {
     skillIds: ['m_duwu'],
   },
   shanxiao: {
-    id: 'shanxiao', name: '玲珑山魈', emoji: '🐵',
+    id: 'shanxiao', name: '白骨山魈', emoji: '🐵',
     stats: { hp: 240, mp: 50, atk: 54, def: 34, mag: 20, spd: 58 },
     resists: r(12, 12, 10, 10, 15, 10, 10, 10, 10),
     skillIds: ['m_zhua'],
   },
   shanxiaowang: {
-    id: 'shanxiaowang', name: '洞天山魈王', emoji: '🦍',
+    id: 'shanxiaowang', name: '白骨洞妖王', emoji: '🦍',
     stats: { hp: 560, mp: 120, atk: 72, def: 52, mag: 40, spd: 52 },
     resists: r(40, 25, 15, 15, 30, 15, 15, 15, 15),
     skillIds: ['m_chui', 'm_hou'],
@@ -197,9 +197,9 @@ export const MONSTERS: Record<string, MonsterDef> = {
 // ===== 遭遇战 =====
 
 export const ENCOUNTERS: EncounterDef[] = [
-  { id: 'heifengling', name: '青崖山道 · 拦路', desc: '两头青崖苍狼与一头玄石熊罴拦路', members: ['yelang', 'yelang', 'heixiong'] },
-  { id: 'luanzanggang', name: '渡忘川 · 魅影', desc: '两具忘川骨卒与一只幽丝蛛妖游荡', members: ['kulou', 'kulou', 'zhizhu'] },
-  { id: 'shanxiao', name: '玲珑洞天 · 山魈', desc: '两只玲珑山魈护卫着洞天山魈王', members: ['shanxiao', 'shanxiao', 'shanxiaowang'] },
+  { id: 'heifengling', name: '轩辕坟道 · 妖狼拦路', desc: '两头轩辕坟妖狼与一头玄石熊罴拦路', members: ['yelang', 'yelang', 'heixiong'] },
+  { id: 'luanzanggang', name: '九曲黄河阵 · 魅影', desc: '两具阵中骨卒与一只幽丝蛛妖游荡', members: ['kulou', 'kulou', 'zhizhu'] },
+  { id: 'shanxiao', name: '骷髅山白骨洞 · 妖魈', desc: '两只白骨山魈护卫着白骨洞妖王', members: ['shanxiao', 'shanxiao', 'shanxiaowang'] },
 ];
 
 export function classById(id: string): ClassDef {

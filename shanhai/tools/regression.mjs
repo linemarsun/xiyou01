@@ -264,7 +264,7 @@ test('师门修炼：费用、上限与非本门派拦截', () => {
 console.log('\n[4] 召唤兽');
 test('petBase 兼容 PETS 与 MONSTERS；成长与经验曲线', () => {
   ok(world.petBase('linghu').name.includes('白泽幼兽'), '初始宠物');
-  ok(world.petBase('kulou').name.includes('忘川骨卒'), '收服的怪');
+  ok(world.petBase('kulou').name.includes('阵中骨卒'), '收服的怪');
   eq(world.petGrowth(1), 1, 'Lv1 无加成');
   ok(Math.abs(world.petGrowth(3) - 1.16) < 1e-9, '每级 +8%');
   eq(world.petExpNeeded(1), 55, 'Lv1 升级需求');
@@ -1333,17 +1333,17 @@ test('id 与数值完全不变（存档兼容 / 平衡不变）', () => {
 });
 
 test('新世界观命名与 NPC 对话到位', () => {
-  eq(world.WORLD_MAPS.taoyuan.name, '云京', '主城');
-  eq(world.WORLD_MAPS.wild_heifeng.name, '青崖山道', '山野');
-  eq(world.WORLD_MAPS.wild_luanzang.name, '渡忘川', '幽冥');
-  eq(world.WORLD_MAPS.wild_shanxiao.name, '玲珑洞天', '洞府');
-  eq(world.WORLD_MAPS.taoyuan.npc?.name, '玄鹤长老', 'NPC');
-  eq(world.QUESTS[0].name, '青崖清狼', '首环任务');
+  eq(world.WORLD_MAPS.taoyuan.name, '朝歌', '主城');
+  eq(world.WORLD_MAPS.wild_heifeng.name, '轩辕坟道', '山野');
+  eq(world.WORLD_MAPS.wild_luanzang.name, '九曲黄河阵', '幽冥');
+  eq(world.WORLD_MAPS.wild_shanxiao.name, '骷髅山白骨洞', '洞府');
+  eq(world.WORLD_MAPS.taoyuan.npc?.name, '姜子牙', 'NPC');
+  eq(world.QUESTS[0].name, '坟道斩狼', '首环任务');
   eq(content.CLASSES[0].name, '云岚', '人族角色');
-  ok(world.dialogueFor(fresh()).text.includes('青崖山道'), '接任务对话含新地名');
+  ok(world.dialogueFor(fresh()).text.includes('轩辕坟道'), '接任务对话含新地名');
   const done = fresh(); done.questStep = world.QUESTS.length + 1;
-  ok(world.dialogueFor(done).text.includes('云京'), '收尾对话含云京');
-  ok(world.WORLD_MAPS.taoyuan.exits[0].label === '青崖山道', '路牌文案统一');
+  ok(world.dialogueFor(done).text.includes('朝歌'), '收尾对话含朝歌');
+  ok(world.WORLD_MAPS.taoyuan.exits[0].label === '轩辕坟道', '路牌文案统一');
 });
 
 console.log('\n[15] 国风地图与悬赏榜（模块 10）');

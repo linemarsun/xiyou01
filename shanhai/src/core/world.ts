@@ -148,18 +148,18 @@ interface BaseLayout {
  */
 const BASE_MAPS: Record<string, BaseLayout> = {
   taoyuan: {
-    name: '云京', scene: 'taoyuan',
+    name: '朝歌', scene: 'taoyuan',
     // 128×128 城制样板；北城门券洞在 cell(62,4)（城墙线 gy≈4），
     // 路牌放门洞北沿 cell(62,3)：城内北上穿过券洞即触发，与画面城门严格对齐
     iso: { layout: 'iso/taoyuan.json' },
     spawns: [],
-    exits: [isoExit('taoyuan', 62, 3, 'wild_heifeng', 32, 1, '青崖山道')],
-    npc: isoNpc('taoyuan', 32, 32, '玄鹤长老'),
-    tavern: isoNpc('taoyuan', 32, 20, '云京酒肆掌柜'),
+    exits: [isoExit('taoyuan', 62, 3, 'wild_heifeng', 32, 1, '轩辕坟道')],
+    npc: isoNpc('taoyuan', 32, 32, '姜子牙'),
+    tavern: isoNpc('taoyuan', 32, 20, '朝歌酒肆掌柜'),
   },
-  /** 青崖山道 128×96：盘山之字栈道，三口分别在北 / 西 / 东边界 */
+  /** 轩辕坟道 128×96：盘山之字栈道，三口分别在北 / 西 / 东边界 */
   wild_heifeng: {
-    name: '青崖山道', scene: 'wild_heifeng',
+    name: '轩辕坟道', scene: 'wild_heifeng',
     iso: { layout: 'iso/wild_heifeng.json' },
     spawns: [
       isoSpawn('wild_heifeng', 32, 12, ['yelang']),
@@ -172,14 +172,14 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_heifeng', 116, 62, ['heixiong']),
     ],
     exits: [
-      isoExit('wild_heifeng', 32, 1, 'taoyuan', 62, 3, '云京'),
-      isoExit('wild_heifeng', 1, 62, 'wild_luanzang', 11, 1, '渡忘川'),
-      isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '玲珑洞天'),
+      isoExit('wild_heifeng', 32, 1, 'taoyuan', 62, 3, '朝歌'),
+      isoExit('wild_heifeng', 1, 62, 'wild_luanzang', 11, 1, '九曲黄河阵'),
+      isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '骷髅山白骨洞'),
     ],
   },
-  /** 渡忘川 96×128：忘川斜贯，北渡口通山道、南渡口通幽都 */
+  /** 九曲黄河阵 96×128：黄河斜贯，北渡口通山道、南渡口通幽冥 */
   wild_luanzang: {
-    name: '渡忘川', scene: 'wild_luanzang',
+    name: '九曲黄河阵', scene: 'wild_luanzang',
     iso: { layout: 'iso/wild_luanzang.json' },
     spawns: [
       isoSpawn('wild_luanzang', 17, 20, ['kulou']),
@@ -190,13 +190,13 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_luanzang', 65, 116, ['zhizhu']),
     ],
     exits: [
-      isoExit('wild_luanzang', 11, 1, 'wild_heifeng', 1, 62, '青崖山道'),
-      isoExit('wild_luanzang', 73, 126, 'difu', 40, 1, '幽都 · 忘川渡口'),
+      isoExit('wild_luanzang', 11, 1, 'wild_heifeng', 1, 62, '轩辕坟道'),
+      isoExit('wild_luanzang', 73, 126, 'difu', 40, 1, '幽冥 · 黄泉道'),
     ],
   },
-  /** 玲珑洞天 104×104：环形洞厅 + 四向放射石阶，只有西口通山道 */
+  /** 骷髅山白骨洞 104×104：环形洞厅 + 四向放射石阶，只有西口通山道 */
   wild_shanxiao: {
-    name: '玲珑洞天', scene: 'wild_shanxiao',
+    name: '骷髅山白骨洞', scene: 'wild_shanxiao',
     iso: { layout: 'iso/wild_shanxiao.json' },
     spawns: [
       isoSpawn('wild_shanxiao', 52, 20, ['shanxiao']),
@@ -206,16 +206,16 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_shanxiao', 84, 52, ['shanxiao', 'shanxiao']),
       isoSpawn('wild_shanxiao', 20, 52, ['shanxiao']),
     ],
-    exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '青崖山道')],
+    exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '轩辕坟道')],
   },
-  /** 地府 80×112：一条黄泉直道贯穿南北，北口回忘川、南口还阳回云京 */
+  /** 幽冥 80×112：一条黄泉直道贯穿南北，北口回黄河阵、南口还阳回朝歌 */
   difu: {
-    name: '地府 · 忘川渡口', scene: 'difu',
+    name: '幽冥 · 黄泉道', scene: 'difu',
     iso: { layout: 'iso/difu.json' },
     spawns: [],
     exits: [
-      isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '渡忘川'),
-      isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 云京'),
+      isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '九曲黄河阵'),
+      isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 朝歌'),
     ],
     npc: isoNpc('difu', 40, 72, '孟婆'),
   },
@@ -282,25 +282,25 @@ export interface QuestDef {
 export const QUESTS: QuestDef[] = [
   {
     id: 'q1',
-    name: '青崖清狼',
-    desc: '近来青崖山道的苍狼频频下山伤人，少侠替云京乡亲清剿几头，司礼府必有重谢。',
-    targets: { defIds: ['yelang'], need: 3, label: '清剿青崖苍狼' },
+    name: '坟道斩狼',
+    desc: '近来轩辕坟道常有妖狼下山伤人，据传是轩辕坟三妖豢养的爪牙。道友替朝歌百姓清剿几头，子牙命馆必有重谢。',
+    targets: { defIds: ['yelang'], need: 3, label: '清剿轩辕坟妖狼' },
     rewardSilver: 100,
     rewardItems: { heal: 2, respec: 1 },
   },
   {
     id: 'q2',
-    name: '忘川镇骨',
-    desc: '渡忘川阴气冲天，忘川骨卒与幽丝蛛妖日夜作祟。少侠道法已成，前去净化此地。',
-    targets: { defIds: ['kulou', 'zhizhu'], need: 4, label: '镇压忘川骨卒或幽丝蛛妖' },
+    name: '黄河镇魂',
+    desc: '九曲黄河阵阴气冲天，阵中骨卒与幽丝蛛妖日夜作祟。道友道法已成，前去净化此地。',
+    targets: { defIds: ['kulou', 'zhizhu'], need: 4, label: '镇压阵中骨卒或幽丝蛛妖' },
     rewardSilver: 160,
     rewardItems: { mana: 2 },
   },
   {
     id: 'q3',
-    name: '洞天讨魈',
-    desc: '洞天山魈王率众占据玲珑洞天，气焰嚣张。司礼府张榜悬赏，讨伐此獠！',
-    targets: { defIds: ['shanxiaowang'], need: 1, label: '讨伐洞天山魈王' },
+    name: '白骨讨妖',
+    desc: '骷髅山白骨洞妖王率众占据洞府，气焰嚣张。子牙命馆张榜悬赏，讨伐此獠！',
+    targets: { defIds: ['shanxiaowang'], need: 1, label: '讨伐白骨洞妖王' },
     rewardSilver: 300,
     rewardItems: { heal: 2, mana: 1 },
   },
@@ -886,7 +886,7 @@ export function settleBattle(
 
   // 6. 任务进度
   const done = onKilled(gs, info.enemyIds);
-  if (done) lines.push(`任务达成：「${done.name}」—— 回云京向玄鹤长老交付！`);
+  if (done) lines.push(`任务达成：「${done.name}」—— 回朝歌向姜子牙交付！`);
 
   saveGame(gs);
   return { lines, questCompleted: done?.name };
@@ -912,18 +912,18 @@ export interface Dialogue {
 }
 
 export function dialogueFor(gs: GameState): Dialogue {
-  const name = WORLD_MAPS.taoyuan.npc?.name ?? '玄鹤长老';
+  const name = WORLD_MAPS.taoyuan.npc?.name ?? '姜子牙';
   if (gs.questStep === 0) {
     return {
       name,
-      text: `${gs.playerName}，来得正好！司礼府正缺人手。第一桩差事：青崖山道苍狼伤人，去清剿它们！`,
+      text: `${gs.playerName}，来得正好！子牙命馆正缺人手。第一桩差事：轩辕坟道妖狼伤人，去清剿它们！`,
       actions: [{ label: `接下${QUESTS[0].name}`, kind: 'accept' }],
     };
   }
   if (gs.questStep > QUESTS.length) {
     return {
       name,
-      text: '妖物暂退，云京恢复安宁。少侠威名，老朽记下了！',
+      text: '妖物暂退，朝歌恢复安宁。道友威名，老朽记下了！日后商周鼎革、封神榜现世，还须道友相助。',
       actions: [{ label: '告辞', kind: 'close' }],
     };
   }
@@ -935,7 +935,7 @@ export function dialogueFor(gs: GameState): Dialogue {
       actions: [{ label: '领取赏银', kind: 'claim' }],
     };
   }
-  const place = q.id === 'q1' ? '青崖山道' : q.id === 'q2' ? '渡忘川' : '玲珑洞天';
+  const place = q.id === 'q1' ? '轩辕坟道' : q.id === 'q2' ? '九曲黄河阵' : '骷髅山白骨洞';
   return {
     name,
     text: `「${q.name}」尚未完成——${q.targets.label} ${gs.questKills}/${q.targets.need}。${place}妖物众多，小心行事。`,
