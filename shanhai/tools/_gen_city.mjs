@@ -1,100 +1,129 @@
-// 临时布局生成器：按城市结构重排 128×128 云京，产物写入 art/iso/taoyuan.json。
-// 本轮规则：十字主街 10 格直通四门 / 次级巷道 4 格 / 建筑 60~80 栋 /
-// 四坊成组留空且无 >4×4 纯草地 / 靛青瓦为主、朱红瓦点缀 10~20% / 鼓楼为制高点。
-// 仅本次使用，生成后可删除。
+// 云京 128×128 城制布局生成器（v2 · 参考图风格重排）· 唯一真源
+//
+// 与 v1 的区别：朱红城墙制式下的「窄券洞四门 + 四角角楼」、居中 40×40 完整宫城、
+// 棋盘街巷 + 高密民居、移除环城护城河、城外草地/两片蜿蜒河湾/针叶林。
+// 鼓楼删除，中心广场清空重建；玩法坐标 (62,3) / (16,32) 保持可走且不动。
+//
+// 运行：node tools/_gen_city.mjs   → 覆写 public/assets/art/iso/taoyuan.json
+// 注意：格网与 rules 保持不变；world.ts 的出口/落点坐标不在此文件里，不要联动修改。
 import { writeFileSync } from 'node:fs';
 
 const OUT = new URL('../public/assets/art/iso/taoyuan.json', import.meta.url);
 const N = 128;
 const GRID = { cols: N, rows: N, tileW: 64, tileH: 32, ox: 4096, oy: 16 };
+const RULES = { streetWidth: 10, houseClearanceFromStreetCenter: 5, roofLift: 0 };
 
-// 瓦色：靛青为主，朱红只作点缀（乘法着色，图本身的靛青顶被压暖后读作红褐瓦）
-const COOL = 0xdde6ff;
-const WARM = 0xff8f6b;
+// 参考图民居为深灰瓦 + 红木构：贴图本身已是深灰，tint 只做极轻的暖/冷差，
+// 不再用旧版的靛青乘法染色（0xdde6ff 会把瓦压成蓝灰）。
+const COOL = 0xffffff;
+const WARM = 0xffead6;
 let tintI = 0;
-/** 每 7 栋取 1 栋暖色（≈14%），同一坊内混色，不按坊整片换色 */
-const tintPick = () => {
-  const i = tintI++;
-  return i % 7 === 0 ? WARM : COOL;
-};
+const tintPick = () => (tintI++ % 7 === 0 ? WARM : COOL);
 
-const items = [];
-const placed = new Set();
+const ground = [];                 // 地面层矩形
+const items = [];                  // 构件层
+const placed = new Set();          // 构件已占格
 const stoneCells = new Set();
-const waterCells = new Set();
 const dirtCells = new Set();
+const waterCells = new Set();
+const marbleCells = new Set();
+const reserved = new Set();        // 玩法点位：禁止放任何阻挡构件
+// 窄带石板格：min(w,h)≤6 的 ground_stone 矩形（街巷，建筑不得压占）；宽的广场石板允许
+const stoneNarrowCells = new Set();
 const key = (x, y) => `${x},${y}`;
 
-const ground = [];
-const groundRect = (x, y, w, h, type) => ground.push({ type, gx: x, gy: y, w, h });
+const groundRect = (x, y, w, h, type) => {
+  if (x < 0 || y < 0 || x + w > N || y + h > N) throw new Error(`ground out of bounds ${x},${y},${w},${h}`);
+  ground.push({ type, gx: x, gy: y, w, h });
+};
+const fillCells = (set, x, y, w, h) => {
+  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) set.add(key(x + dx, y + dy));
+};
+const STONE = (x, y, w, h) => {
+  groundRect(x, y, w, h, 'ground_stone'); fillCells(stoneCells, x, y, w, h);
+  if (Math.min(w, h) <= 6) fillCells(stoneNarrowCells, x, y, w, h);
+};
+const DIRT = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_dirt'); fillCells(dirtCells, x, y, w, h); };
+const WATER = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_water'); fillCells(waterCells, x, y, w, h); };
+const MARBLE = (x, y, w, h) => { groundRect(x, y, w, h, 'ground_marble'); fillCells(marbleCells, x, y, w, h); };
 
-// ---------- 地面 ----------
+const markReserved = (x, y, r = 1) => {
+  for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) reserved.add(key(x + dx, y + dy));
+};
+// 北门出口路牌 (62,3) 与 A* 起点 (16,32)：周围保持空旷可走
+markReserved(62, 3, 2);
+markReserved(16, 32, 2);
+
+// ---------------------------------------------------------------- 地面
 groundRect(0, 0, N, N, 'ground_grass');
 
-// 十字主街：从四门门庭直通中心，路面连续、同轴对齐（EW 沿 y59..68，NS 沿 x59..68）
-// 广场与门庭也按 4 格网格对齐，避免"随机补丁"感。
-const STONE = [
-  [4, 59, 117, 10],   // 东西主街：西门外门庭 → 东门内
-  [59, 4, 10, 117],   // 南北主街：北门内 → 南门外门庭
-  [56, 56, 16, 16],   // 中心广场（与主街同轴 16×16，边界整齐）
-  [34, 34, 14, 14],   // 市集广场
-  [34, 69, 12, 12],   // 庙署前广场（接月台甬道）
-  [2, 62, 4, 6],      // 西门外门庭
-  [122, 62, 4, 6],    // 东门外门庭
-  [62, 119, 6, 5],    // 南门外门庭
-  // 次级巷道 4 格：市集
-  [28, 7, 4, 52],     // 市集纵巷（接东西主街）
-  [7, 28, 46, 4],     // 市集横巷（接南北主街）
-  // 次级巷道 4 格：宅院（院落组之间，接东西主街）
-  [84, 7, 4, 52],     // 宅院纵巷 x84..87
-  [70, 22, 48, 4],    // 宅院横巷 y22..25
-  [70, 40, 48, 4],    // 宅院横巷 y40..43
-  // 园林坊 3 格曲径
+// 城外：右上 / 左下两片蜿蜒河湾（参考图城外水系，取代原环城护城河）
+const RIVER = [
+  // 右上：贴东侧外缘的竖河 + 北缘横河湾，阶梯状蜿蜒
+  [100, 0, 28, 3], [110, 3, 18, 4], [118, 7, 10, 6], [123, 13, 5, 10], [124, 23, 4, 10],
+  // 左下：贴南侧外缘的横河 + 西缘竖河湾
+  [0, 100, 4, 28], [4, 110, 4, 18], [8, 118, 6, 10], [14, 123, 10, 5], [24, 124, 12, 4],
 ];
-for (const [x, y, w, h] of STONE) {
-  groundRect(x, y, w, h, 'ground_stone');
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) stoneCells.add(key(x + dx, y + dy));
+for (const [x, y, w, h] of RIVER) WATER(x, y, w, h);
+
+// 城外土路：四门外的通路 + 沿边蜿蜒小径（不覆盖水体）
+for (const [x, y, w, h] of [
+  [60, 0, 4, 5], [0, 60, 5, 4], [123, 60, 5, 4], [60, 123, 4, 5],
+  [20, 1, 4, 3], [40, 2, 5, 3], [80, 1, 4, 3], [1, 24, 3, 5], [2, 80, 3, 5],
+  [36, 125, 6, 3], [60, 125, 6, 3], [125, 40, 3, 6], [126, 80, 2, 6],
+]) {
+  // 跳过与水重叠的格子，避免把水改成不可走又不可读的补丁
+  let ok = true;
+  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) if (waterCells.has(key(x + dx, y + dy))) ok = false;
+  if (ok) DIRT(x, y, w, h);
 }
 
-const DIRT = [
-  // 庙署：甬道（广场尽端 → 月台）与后院
-  [40, 81, 3, 5],
-  [7, 84, 26, 4],
-  [7, 106, 26, 3],
-  // 园林：曲径
-  [72, 74, 10, 4],
-  [114, 88, 3, 22],
-  [70, 104, 26, 4],
-  [72, 112, 3, 8],
-];
-const dirtRect = (x, y, w, h) => {
-  groundRect(x, y, w, h, 'ground_dirt');
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) dirtCells.add(key(x + dx, y + dy));
-};
-for (const [x, y, w, h] of DIRT) dirtRect(x, y, w, h);
-
-const WATER = [
-  [88, 86, 26, 18],   // 园林主水面（扩大）
-  [70, 94, 14, 10],   // 曲池
-  [86, 74, 4, 12],    // 水渠
-  [96, 108, 16, 8],   // 南池（扩大）
-];
-for (const [x, y, w, h] of WATER) {
-  groundRect(x, y, w, h, 'ground_water');
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) waterCells.add(key(x + dx, y + dy));
+// 城内：环宫城环路 + 四条门内主街 + 棋盘巷道（宫城范围内不铺巷道）
+// 环路宽 6 格，围住 40×40 宫城（x44..83 / y44..83）
+STONE(38, 38, 52, 6);   // 北环 x38..89 / y38..43
+STONE(38, 84, 52, 6);   // 南环 y84..89
+STONE(38, 38, 6, 52);   // 西环 x38..43
+STONE(84, 38, 6, 52);   // 东环 x84..89
+// 四门内主街（6 格宽），从城墙门洞直通环路
+STONE(61, 5, 6, 38);    // 北门 → 北环
+STONE(61, 85, 6, 38);   // 南环 → 南门
+STONE(5, 61, 38, 6);    // 西门 → 西环
+STONE(85, 61, 38, 6);   // 东环 → 东门
+// 棋盘巷道：4 格宽，分象限贯通，避开宫城
+const LANES = [16, 30, 54, 70, 94, 108];
+for (const x of LANES) {
+  STONE(x, 7, 4, 35);    // 北半 y7..41
+  STONE(x, 86, 4, 35);   // 南半 y86..120
 }
+for (const y of LANES) {
+  STONE(7, y, 35, 4);    // 西半 x7..41
+  STONE(86, y, 35, 4);   // 东半 x86..120
+}
+// 宫城内院：汉白玉地面（x44..83，直抵环路内缘，不留裸草缝）
+MARBLE(44, 44, 40, 40);
+// 宫内曲水（参考图宫城内的水池/水渠；高度对齐 2×2 分块，避免边缘块被汉白玉吞行）
+WATER(50, 64, 10, 4);
+WATER(68, 66, 8, 4);
+// 宫门前月台（8×4 对齐 2×2 分块网格：块内 stone 与 marble 打平时按先入序会输，半块会被吞）
+STONE(60, 82, 8, 4);
 
-// ---------- 构件 ----------
-const boundsOk = (x, y, w, h, interior = true) => {
-  if (interior) return x >= 7 && y >= 7 && x + w <= 121 && y + h <= 121;
-  return x >= 0 && y >= 0 && x + w <= N && y + h <= N;
-};
-const cellBlocked = (x, y, w, h, allowStone, clearance, allowWater) => {
+// ---------------------------------------------------------------- 构件
+const boundsOk = (x, y, w, h, interior = true) => interior
+  ? x >= 7 && y >= 7 && x + w <= 121 && y + h <= 121
+  : x >= 0 && y >= 0 && x + w <= N && y + h <= N;
+
+const cellBlocked = (x, y, w, h, opt) => {
+  const { allowStone = false, allowWater = false, clearance = 0, interior = true, allowNarrow = false } = opt;
   for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) {
     const gx = x + dx, gy = y + dy, k = key(gx, gy);
-    if (placed.has(k)) return true;
-    if (!allowWater && waterCells.has(k)) return true;
-    if (!allowStone && stoneCells.has(k)) return true;
+    if (placed.has(k) || reserved.has(k)) return true;
+    if (!allowWater && (waterCells.has(k) || marbleCells.has(k))) return true;
+    if (stoneCells.has(k)) {
+      // 窄带石板（min(矩形边长)≤6）是街巷，必须保持净空；宽块是广场，可放建筑
+      const isNarrow = stoneNarrowCells.has(k);
+      if (!allowStone || (isNarrow && !allowNarrow)) return true;
+    }
+    if (clearance > 0 && !interior) continue;
     if (clearance > 0) {
       for (const [nx, ny] of [[gx - 1, gy], [gx + 1, gy], [gx, gy - 1], [gx, gy + 1]]) {
         if (stoneCells.has(key(nx, ny))) return true;
@@ -106,23 +135,20 @@ const cellBlocked = (x, y, w, h, allowStone, clearance, allowWater) => {
 const put = (item, opt = {}) => {
   const w = item.w ?? 1, h = item.h ?? 1;
   const interior = opt.interior ?? true;
-  const allowStone = opt.allowStone ?? false;
-  const allowWater = opt.allowWater ?? false;
-  const clearance = opt.clearance ?? 0;
   if (!boundsOk(item.gx, item.gy, w, h, interior)) return false;
-  if (cellBlocked(item.gx, item.gy, w, h, allowStone, clearance, allowWater)) return false;
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) placed.add(key(item.gx + dx, item.gy + dy));
+  if (cellBlocked(item.gx, item.gy, w, h, { ...opt, interior })) return false;
+  fillCells(placed, item.gx, item.gy, w, h);
   items.push(item);
   return true;
 };
-
-// ---------- 城墙与城门（合围 + 四门；城门对准十字主街轴线） ----------
-const wallSeg = (x, y, w, h, type) => {
-  items.push({ type, gx: x, gy: y, w, h });
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) placed.add(key(x + dx, y + dy));
+// 城墙/宫墙是「制式铺排」，允许压地面矩形，不检查碰撞
+const rigid = (type, gx, gy, w, h, extra = {}) => {
+  items.push({ type, gx, gy, w, h, ...extra });
+  fillCells(placed, gx, gy, w, h);
 };
-// 美术直段只有 6 格 / 2 格两种模块：先铺 6 格，余下用 2 格；
-// 奇数尾（余 1 格）用 2 格模块与前一段重叠 1 格。
+
+// ---------------------------------------------------------------- 城墙与四门
+const wallSeg = (x, y, w, h, type) => rigid(type, x, y, w, h);
 const wallRun = (x, y, w, h) => {
   const horizontal = w >= h;
   const len = horizontal ? w : h;
@@ -135,352 +161,176 @@ const wallRun = (x, y, w, h) => {
   for (; len - i >= 2; i += 2) seg(i, 2);
   if (len - i === 1) seg(i - 1, 2);
 };
-// 四门统一制式：城台外侧与城墙外面齐平、向城内凸出 1 排（内侧读作凸出的城台），
-// 券洞开在朝城内的立面上；开口与对应主街同轴同宽。
-// 北门开口与南北主街（x59..68）同宽：西段 7..58 / 东段 69..120，宽城门楼跨 x59..68
-wallRun(7, 5, 52, 2);     // 北墙西段 7..58
-wallRun(69, 5, 52, 2);    // 北墙东段 69..120
-wallRun(7, 121, 55, 2);   // 南墙西段 7..61
-wallRun(66, 121, 55, 2);  // 南墙东段 66..120
-// 东西墙开口与东西主街（y59..68）同宽：北段 7..58 / 南段 69..120
-wallRun(5, 7, 2, 52);     // 西墙北段 7..58
-wallRun(5, 69, 2, 52);    // 西墙南段 69..120
-wallRun(121, 7, 2, 52);   // 东墙北段 7..58
-wallRun(121, 69, 2, 52);  // 东墙南段 69..120
+// 四门为参考图制式城台门楼（gate_keep 12×6）：城台垛口顶高出城墙垛口 ~26px，
+// 城墙在 x58..69 / y58..69 断开（豁口 12 格），gate_keep 券洞通道 6 格宽与主街同宽（中列/中行 ±3）
+wallRun(7, 5, 51, 2);       // 北墙西段 x7..57
+wallRun(70, 5, 51, 2);      // 北墙东段 x70..120（城台开口 x58..69）
+wallRun(7, 121, 51, 2);     // 南墙西段
+wallRun(70, 121, 51, 2);    // 南墙东段
+wallRun(5, 7, 2, 51);       // 西墙北段 y7..57
+wallRun(5, 70, 2, 51);      // 西墙南段 y70..120（城台开口 y58..69）
+wallRun(121, 7, 2, 51);     // 东墙北段
+wallRun(121, 70, 2, 51);    // 东墙南段
+// 四角：朱红角台 + 内侧朱墙黄瓦角楼（参考图四角楼）
 for (const [x, y] of [[5, 5], [121, 5], [5, 121], [121, 121]]) {
-  items.push({ type: 'city_wall_corner', gx: x, gy: y, w: 2, h: 2 });
-  for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) placed.add(key(x + dx, y + dy));
+  rigid('city_wall_corner', x, y, 2, 2);
 }
-// 北门：宽城门楼 10×3，落位 gy5..7 —— 外侧（gy5）与北墙外面齐平，向城内凸出 1 排（gy7）
-items.push({ type: 'city_gate_wide', gx: 59, gy: 5, w: 10, h: 3, facing: 'sw' });
-// 西/东门：宽城门楼 v 向 3×10，开口与东西主街（y59..68）同宽；
-// 西门落位 gx5..7（外侧 gx5 与西墙外面齐平、向城内凸 1 列），东门 gx120..122（外侧 gx123 齐平）
-items.push({ type: 'city_gate_wide_v', gx: 5, gy: 59, w: 3, h: 10, facing: 'se' });
-items.push({ type: 'city_gate_wide_v', gx: 120, gy: 59, w: 3, h: 10, facing: 'se' });
-// 南门：城门楼 4×3，落位 gy120..122 —— 外侧（gy123）与南墙外面齐平，向城内凸 1 排（gy120）
-items.push({ type: 'city_gate_tower', gx: 62, gy: 120, w: 4, h: 3, facing: 'sw' });
-for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 10; dx++) placed.add(key(59 + dx, 5 + dy));
-for (let dy = 0; dy < 10; dy++) for (let dx = 0; dx < 3; dx++) {
-  placed.add(key(5 + dx, 59 + dy));
-  placed.add(key(120 + dx, 59 + dy));
+for (const [x, y] of [[7, 7], [119, 7], [7, 119], [119, 119]]) {
+  rigid('palace_corner', x, y, 2, 2);
 }
-for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(62 + dx, 120 + dy));
+// 四门城台门楼（灰白石城台 + 朱红券洞 + 黄瓦重檐门楼，足迹 12×6 / 6×12，与主街同轴居中）
+rigid('gate_keep', 58, 5, 12, 6, { facing: 'sw' });
+rigid('gate_keep', 58, 121, 12, 6, { facing: 'sw' });
+rigid('gate_keep', 5, 58, 6, 12, { facing: 'se' });
+rigid('gate_keep', 121, 58, 6, 12, { facing: 'se' });
 
-// ---------- 中心：鼓楼（7×7 三层）+ 环绕广场 + 牌坊 ----------
-// 暂用 gate_arch 城门贴图别名（art.ts），等专用 paifang 美术（两柱一枋、无两侧墙垛）到位后再换图。
-const bellOk = put({ type: 'bell_tower', gx: 60, gy: 60, w: 7, h: 7 }, { allowStone: true });
-for (const [x, y] of [[52, 57], [70, 57], [52, 66], [70, 66]]) {
-  put({ type: 'paifang', gx: x, gy: y, w: 3, h: 3, facing: 'sw' }, { allowStone: true });
+// ---------------------------------------------------------------- 宫城 40×40（居中，用户反馈增大避免堆叠）
+// 工笔围墙：朱红宫墙 + 金琉璃帽（AI 重绘，palace_wall_u6/u2 及 v 系镜像），四角工笔角楼、南面工笔宫门
+for (const [x, y] of [[44, 44], [82, 44], [44, 82], [82, 82]]) rigid('palace_corner', x, y, 2, 2);
+// 北墙 y44 / x46..81（36 格 = 6×u6）
+for (const x of [46, 52, 58, 64, 70, 76]) rigid('palace_wall_u6', x, 44, 6, 2);
+// 南墙 y82：宫门贴图（palace_gate.png，2026-11-14 已水平镜像为 u 向版：拱门朝 SW、
+// 塔楼居中）。实测镜像后基座剪影横跨墙线 u≈57.9..69.25（画布 1..365），
+// 墙段只需接到剪影两端：西段 46..57 = 2×u6，东段 70..81 = 2×u6。
+// 2026-11-16：东段原用 u6+u2 收边，但 u2 墙身仅 127px、u6 为 211px，
+// 墙帽差 84px 导致截图里墙顶错位 → 改为纯 u6（70,76），墙帽等高连续。
+for (const x of [46, 52, 70, 76]) rigid('palace_wall_u6', x, 82, 6, 2);
+rigid('palace_gate', 62, 82, 4, 2, { facing: 'sw' });
+// 东西墙 x44 / x82，y46..81（各 36 格 = 6×v6）
+for (const y of [46, 52, 58, 64, 70, 76]) {
+  rigid('palace_wall_v6', 44, y, 2, 6);
+  rigid('palace_wall_v6', 82, y, 2, 6);
 }
-put({ type: 'well', gx: 56, gy: 58 }, { allowStone: true });
-put({ type: 'stele', gx: 56, gy: 56, w: 1, h: 2 }, { allowStone: true });
-put({ type: 'stele', gx: 71, gy: 56, w: 1, h: 2 }, { allowStone: true });
-for (const [x, y] of [[54, 54], [73, 54], [54, 73], [73, 73]]) {
-  put({ type: 'lantern_post', gx: x, gy: y }, { allowStone: true });
+// 内院：主殿居中偏北；配殿南移到庭院两侧（主殿贴图 880px 宽、檐角出挑 ±120px，
+// 配殿贴在主殿侧翼会被檐角盖住或反盖主殿 → 深南位对称 (50,72)/(73,72)，檐角与主殿
+// 精灵 y 带 [1288,2032] 完全错开）；白塔在西北水园 (48,59)——基座出挑 ±56px，
+// 距西墙 2 格、距主殿精灵 144px、角楼精灵 ±164px 全部无碰
+rigid('palace_hall', 59, 56, 10, 10);  // AI 宏伟版：足迹 10×10，内院北部居中
+rigid('palace_hall_s', 50, 72, 4, 4);  // 西配殿（庭院西南，朝东迎主轴）
+rigid('palace_hall_s', 73, 72, 4, 4);  // 东配殿（庭院东南，与西配殿关于 x63.5 对称）
+rigid('pagoda', 49, 60, 3, 3);   // 塔 764px 高（西北水园地标），西墙/主殿/角楼精灵已核算无碰
+rigid('bridge', 54, 63, 3, 5);
+rigid('bridge', 70, 66, 3, 5);
+// 宫内行列树 / 灯（避开主殿精灵带 [-88,792]×[1288,2032] 与各建筑足迹）
+for (const [x, y] of [
+  [54, 58], [56, 62], [74, 56], [77, 62], [57, 72], [66, 74],
+]) put({ type: 'tree', gx: x, gy: y, variant: 'pine' }, { interior: false, allowWater: true });
+for (const [x, y] of [[60, 70], [64, 70], [60, 74], [66, 74]]) {
+  put({ type: 'lantern_post', gx: x, gy: y }, { interior: false, allowWater: true });
+}
+for (const [x, y] of [[58, 76], [68, 76]]) {
+  put({ type: 'incense', gx: x, gy: y }, { interior: false, allowWater: true });
 }
 
-// ---------- 市集坊（西北）：四组街区 + 市集广场，铺面密、摊棚成排、货箱堆叠 ----------
-const FACINGS = ['sw', 'se', 'nw', 'ne'];
-const M_VAR = ['shop', 'shop', 'lattice', 'carved'];
-let mi = 0;
-const marketBlock = (x0, y0, x1, y1, cap) => {
-  let n = 0;
-  for (let y = y0; y + 4 <= y1 && n < cap; y += 6) {
-    for (let x = x0; x + 4 <= x1 && n < cap; x += 6) {
-      const ok = put({
-        type: 'house', gx: x, gy: y, w: 4, h: 4,
-        facing: FACINGS[mi % 4], variant: M_VAR[mi % 4], tint: tintPick(),
-      }, { clearance: 1 });
-      mi++;
-      if (ok) n++;
-    }
-  }
-  return n;
-};
-const marketCount =
-  marketBlock(8, 8, 27, 27, 9) +
-  marketBlock(32, 8, 53, 27, 9) +
-  marketBlock(8, 32, 27, 53, 9);
-
-// 市集广场：摊棚成行成列（3 列 × 4 行），货箱沿摊棚堆叠
-for (let y = 36; y <= 48; y += 3) {
-  for (let x = 36; x <= 48; x += 3) {
-    put({ type: 'stall', gx: x, gy: y, w: 2, h: 2, facing: (x + y) % 2 ? 'sw' : 'se' }, { allowStone: true });
-  }
+// 宫前坊：放在街坊空地，不压石板路（旧版压在十字主街轴线上会挡住通路）
+for (const [x, y] of [[50, 20], [74, 20], [20, 74], [104, 74]]) {
+  put({ type: 'paifang', gx: x, gy: y, w: 3, h: 3, facing: 'sw' });
 }
-let crates = 0;
-const crateSpots = [
-  [35, 37], [35, 40], [35, 43], [35, 46], [35, 49],
-  [38, 35], [41, 35], [44, 35], [47, 35],
-  [50, 37], [50, 40], [50, 43], [50, 46], [50, 49],
-  [38, 50], [41, 50], [44, 50], [47, 50],
-  [39, 39], [45, 45], [39, 45], [45, 39],
-  [37, 48], [48, 37],
+// 井 / 碑：固定坐标地标，先于民居撒点落位（8×8 合院体量大，后放会被占位）
+for (const [x, y] of [[20, 20], [104, 20], [20, 104], [104, 104], [46, 20], [80, 104]]) {
+  put({ type: 'well', gx: x, gy: y });
+}
+for (const [x, y] of [[36, 20], [92, 20], [36, 108], [92, 108], [20, 62], [108, 62]]) {
+  put({ type: 'stele', gx: x, gy: y, w: 1, h: 2 });
+}
+
+// ---------------------------------------------------------------- 功能建筑（打破民居同款重复）
+// 2026-11-16：用户反馈民居元素重复、需按场景放不同建筑。只用现有工笔资产：
+// 钟楼（市集坊地标）、庙署正殿 hall（庙署坊）、青石殿 hall+stone（园林坊）。
+// 先于合院落位占据格位，合院撒点自动避让；这些大件也纳入下方投影间距约束。
+const landmarks = [
+  { type: 'bell_tower', gx: 22, gy: 22, w: 7, h: 7 },
+  { type: 'hall', gx: 98, gy: 22, w: 5, h: 5 },              // 东北坊：庙署正殿（临街）
+  { type: 'hall', gx: 34, gy: 98, w: 5, h: 5, variant: 'stone' }, // 西南坊：青石殿
 ];
-for (const [x, y] of crateSpots) {
-  if (put({ type: 'crate', gx: x, gy: y }, { allowStone: true })) crates++;
-}
-put({ type: 'well', gx: 35, gy: 35 }, { allowStone: true });
-for (const [x, y] of [[13, 13], [51, 13], [13, 51], [51, 51], [30, 12], [12, 30], [31, 50], [50, 31]]) {
-  put({ type: 'lantern_post', gx: x, gy: y });
-}
-// 临街铺面：贴两条主街排一列，读作"市集大街"，同时把主街两侧立面补齐
-for (let y = 8; y <= 50; y += 6) {
-  put({ type: 'house', gx: 54, gy: y, w: 4, h: 4, facing: 'se', variant: 'shop', tint: tintPick() }, { clearance: 1 });
-}
-for (const x of [8, 20, 38, 44, 50]) {
-  put({ type: 'house', gx: x, gy: 54, w: 4, h: 4, facing: 'sw', variant: 'shop', tint: tintPick() }, { clearance: 1 });
-}
-// 市集坊南侧巷道旁：手推货摊补空
-for (const [x, y] of [[8, 57], [30, 57], [46, 57]]) {
-  put({ type: 'stall', gx: x, gy: y, w: 2, h: 2, facing: 'sw' });
-}
+for (const lm of landmarks) put(lm, { allowStone: true });
 
-// ---------- 宅院坊（东北）：院落成组，巷道 4 格贯通主街 ----------
-let resHouses = 0, resFence = 0;
-const compound = (x0, y0, tag) => {
-  dirtRect(x0 + 1, y0 + 1, 12, 12);
-  // 外围院墙（南墙留门洞）
-  for (let x = x0; x < x0 + 14; x += 2) {
-    const gate = x >= x0 + 5 && x <= x0 + 8;
-    if (!gate) { if (put({ type: 'fence', gx: x, gy: y0, w: 2, h: 1 })) resFence++; }
-    if (put({ type: 'fence', gx: x, gy: y0 + 13, w: 2, h: 1 })) resFence++;
-  }
-  for (let y = y0; y < y0 + 14; y += 2) {
-    if (put({ type: 'fence', gx: x0, gy: y, w: 1, h: 2 })) resFence++;
-    if (put({ type: 'fence', gx: x0 + 13, gy: y, w: 1, h: 2 })) resFence++;
-  }
-  // 院套院：四座 4×4 屋身围出中央天井（前厅 / 后房 / 东西厢）
-  for (const [hx, hy] of [[x0 + 2, y0 + 2], [x0 + 8, y0 + 2], [x0 + 2, y0 + 8], [x0 + 8, y0 + 8]]) {
-    if (put({
-      type: 'house', gx: hx, gy: hy, w: 4, h: 4,
-      facing: 'sw', variant: tag, tint: tintPick(),
-    }, { clearance: 0 })) resHouses++;
-  }
-  put({ type: 'tree', gx: x0 + 6, gy: y0 + 6, variant: (x0 + y0) % 2 ? 'pine' : 'leaf' });
-  // 天井水井 + 巷道灯
-  put({ type: 'well', gx: x0 + 6, gy: y0 + 4 });
-  put({ type: 'lantern_post', gx: x0 + 6, gy: y0 + 12 });
-};
-const compoundTags = ['carved', 'lattice', 'carved', 'lattice', 'carved', 'lattice', 'carved', 'lattice'];
-let ci = 0;
-for (const [x0, y0] of [
-  [70, 8], [70, 26], [70, 44],
-  [88, 8], [88, 26], [88, 44],
-  [104, 8], [104, 44],
-]) {
-  compound(x0, y0, compoundTags[ci % compoundTags.length]);
-  ci++;
-}
-// 宅院坊东侧空档：竹林小院 + 界墙
-for (const [x, y] of [[104, 30], [110, 26], [116, 32], [104, 38], [112, 40], [118, 36]]) {
-  put({ type: 'tree', gx: x, gy: y, variant: x % 2 ? 'pine' : 'leaf' });
-}
-for (const [x, y, w, h] of [[102, 26, 2, 2], [102, 30, 1, 8], [118, 26, 1, 8]]) {
-  put({ type: 'fence', gx: x, gy: y, w, h });
-}
-
-// ---------- 庙署坊（西南）：甬道 + 月台 + 香炉列 + 碑列，低密度大体量 ----------
-let templeLarge = 0, templeMedium = 0;
-for (const [x, y, w, h, v] of [
-  [36, 94, 8, 8, 'stone'],   // 大殿
-  [22, 104, 6, 6, 'stone'],  // 藏经阁
-  [12, 86, 6, 6, 'stone'],   // 衙署
-]) {
-  if (put({ type: 'hall', gx: x, gy: y, w, h, variant: v, tint: tintPick() }, { allowStone: true, clearance: 0 })) templeLarge++;
-}
-put({ type: 'paifang', gx: 41, gy: 69, w: 3, h: 3, facing: 'sw' }, { allowStone: true });
-// 月台：大殿前石台（甬道尽端）
-for (const [x, y, w, h] of [[34, 86, 12, 8]]) {
-  groundRect(x, y, w, h, 'ground_stone');
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) stoneCells.add(key(x + dx, y + dy));
-}
-// 香炉列（甬道两侧，3 对）
-for (const [x, y] of [[38, 76], [38, 80], [38, 84], [44, 76], [44, 80], [44, 84]]) {
-  put({ type: 'incense', gx: x, gy: y }, { allowStone: true });
-}
-// 碑列：甬道两侧各 3 通
-for (const x of [37, 45]) {
-  for (const y of [72, 76, 80]) put({ type: 'stele', gx: x, gy: y, w: 1, h: 2 }, { allowStone: true });
-}
-// 庙署院内甬道界墙
-for (const [x, y, w, h] of [[33, 70, 1, 18], [46, 70, 1, 18], [33, 104, 1, 8], [8, 84, 1, 4], [8, 106, 1, 3]]) {
-  put({ type: 'fence', gx: x, gy: y, w, h });
-}
-for (const [x, y] of [[12, 106], [48, 108], [30, 112], [8, 116], [44, 116], [18, 96]]) {
-  if (put({ type: 'house', gx: x, gy: y, w: 4, h: 4, facing: 'sw', variant: 'lattice', tint: tintPick() }, { clearance: 1 })) templeMedium++;
-}
-put({ type: 'well', gx: 30, gy: 84 }, { allowStone: true });
-for (const [x, y] of [[8, 74], [8, 96], [8, 112], [20, 74], [28, 92], [32, 76], [50, 88], [50, 102], [44, 108], [18, 118], [34, 118], [52, 96]]) {
-  put({ type: 'tree', gx: x, gy: y, variant: x % 2 ? 'pine' : 'leaf' });
-}
-
-// ---------- 园林坊（东南）：大水面 + 竹林假山 + 曲径，房屋零星 ----------
-let gardenHouse = 0;
-for (const [x, y] of [[74, 72], [112, 74], [76, 114], [116, 90]]) {
-  if (put({ type: 'house', gx: x, gy: y, w: 4, h: 4, facing: 'nw', variant: 'lattice', tint: tintPick() })) gardenHouse++;
-}
-put({ type: 'bridge', gx: 86, gy: 88, w: 3, h: 5 }, { allowWater: true });
-put({ type: 'bridge', gx: 96, gy: 108, w: 3, h: 5 }, { allowWater: true });
-put({ type: 'bridge', gx: 70, gy: 98, w: 3, h: 5 }, { allowWater: true });
-
-let gardenTrees = 0;
-for (let y = 70; y <= 118; y += 3) {
-  for (let x = 70; x <= 118; x += 3) {
-    if (waterCells.has(key(x, y)) || placed.has(key(x, y))) continue;
-    if (put({ type: 'tree', gx: x, gy: y, variant: (x + y) % 2 ? 'pine' : 'leaf' })) gardenTrees++;
+// ---------------------------------------------------------------- 民居（一进四合院，AI 合院贴图）
+// 合院体量 9×9（菱形 576px，画布 581×520，×1.21 加大版）：旧 4×4/5 步长不再适用。
+// 细步长全枚举候选点 + 哈希序抢占（put 自动避让道路/水面/宫城/玩法点位与已占格），
+// 每个街坊块落 1 座合院，数量约为旧版 1/4（体量 5 倍）。
+// 只做 se/sw 两向（院门朝镜头一侧），sw 为 se 的水平镜像；无 variant（直取 house_4x4_se/_sw.png）。
+const candidates = [];
+for (let y = 8; y + 9 <= 121; y += 2) {
+  for (let x = 8; x + 9 <= 121; x += 2) {
+    candidates.push({ x, y, h: ((x * 73 + y * 151) % 1009) });
   }
 }
-let rocks = 0;
-for (let y = 72; y <= 118; y += 7) {
-  for (let x = 72; x <= 118; x += 7) {
-    if (rocks >= 30) break;
-    if (waterCells.has(key(x, y)) || placed.has(key(x, y))) continue;
-    if (put({ type: 'rock', gx: x, gy: y })) rocks++;
+candidates.sort((a, b) => a.h - b.h);
+let houseCount = 0;
+const housesPlaced = landmarks.filter((l) => placed.has(key(l.gx, l.gy)))
+  .map((l) => ({ gx: l.gx + Math.floor(l.w / 2), gy: l.gy + Math.floor(l.h / 2) }));
+for (const { x, y } of candidates) {
+  if (houseCount >= 80) break;
+  // 宫城与环路范围不撒民居（x38..89 / y38..89）
+  if (x >= 38 && x <= 89 && y >= 38 && y <= 89) continue;
+  // 投影遮挡约束（2026-11-16）：9×9 合院视觉高 476px，排得太近后排会被前排盖住。
+  // Δ(u+v) < 15 且 Δ(u-v) < 10 的两座视为遮挡，抢占时跳过该候选点。
+  const tooClose = housesPlaced.some((h) => {
+    const du = Math.abs((x + y) - (h.gx + h.gy));
+    const dv = Math.abs((x - y) - (h.gx - h.gy));
+    return du < 15 && dv < 10;
+  });
+  if (tooClose) continue;
+  const ok = put({
+    type: 'house', gx: x, gy: y, w: 9, h: 9,
+    facing: ((x + y) >> 1) % 2 ? 'sw' : 'se',   // 枚举步长为 2，x+y 恒偶 → 取半再取奇偶才两向都有
+    tint: houseCount % 7 === 3 ? WARM : COOL,   // 按成功落位计数取暖色，约 14%（枚举有失败尝试，不能用递增序号）
+  });
+  if (ok) { housesPlaced.push({ gx: x, gy: y }); houseCount++; }
+}
+
+// ---------------------------------------------------------------- 绿化与市井点缀
+// 旧平涂摊棚/货箱已清理（用户反馈风格不统一）：街巷点缀保留工笔灯笼/山石/井/碑
+// 灯笼（宫城外围四向主轴；井/碑已前移至民居撒点前）
+let lanternCount = 0;
+for (let y = 9; y <= 118; y += 11) {
+  for (let x = 9; x <= 118; x += 11) { if (put({ type: 'lantern_post', gx: x, gy: y })) lanternCount++; }
+}
+// 行道树 / 街坊绿化：针叶为主（参考图城内外成片针叶林）。
+// 用户反馈太密：步长 3+1/3 过滤 → 步长 6 全枚举，密度约减半；宽冠树冠交叠留足空隙。
+let innerTrees = 0;
+for (let y = 9; y <= 119; y += 6) {
+  for (let x = 9; x <= 119; x += 6) {
+    if (x >= 38 && x <= 89 && y >= 38 && y <= 89) continue;
+    if (put({ type: 'tree', gx: x, gy: y, variant: (x + y) % 5 === 0 ? 'leaf' : 'pine' })) innerTrees++;
+  }
+}
+// 假山点缀
+let rockCount = 0;
+for (let y = 12; y <= 116; y += 13) {
+  for (let x = 12; x <= 116; x += 13) {
+    if (put({ type: 'rock', gx: x, gy: y })) rockCount++;
   }
 }
 
-// ---------- 宫城（中心广场南侧）----------
-// 宫城区域 x50..65, y72..85（16×14）：四角角楼 + 四面宫墙 + 主殿 + 配殿 + 白塔 + 汉白玉内院
-// 不放在中心广场上（鼓楼保留为制高点），不阻断主街，不侵入四坊建筑密度
-const PG = { x: 50, y: 72, w: 16, h: 14 };
-const pGround = (x, y, w, h) => {
-  groundRect(x, y, w, h, 'ground_marble');
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) placed.add(key(x + dx, y + dy));
-};
-const pWall = (type, x, y, w, h) => {
-  items.push({ type, gx: x, gy: y, w, h });
-  for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) placed.add(key(x + dx, y + dy));
-};
-// 内院汉白玉地面（宫墙内侧 x52..63, y74..83）
-pGround(PG.x + 2, PG.y + 2, PG.w - 4, PG.h - 4);
-// 四角角楼
-for (const [x, y] of [[50, 72], [64, 72], [50, 84], [64, 84]]) pWall('palace_corner', x, y, 2, 2);
-// 北墙（角楼之间 x52..63, y72..73）
-pWall('palace_wall_u6', 52, 72, 6, 2);
-pWall('palace_wall_u6', 58, 72, 6, 2);
-// 南墙（角楼之间 x52..63, y84..85）：palace_wall_u2 + palace_wall_u6 + 宫门
-pWall('palace_wall_u2', 52, 84, 2, 2);
-pWall('palace_wall_u6', 54, 84, 6, 2);
-// 宫门朝南（palace_gate 券门通道走中间两列）
-items.push({ type: 'palace_gate', gx: 60, gy: 84, w: 4, h: 2, facing: 'sw' });
-for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 4; dx++) placed.add(key(60 + dx, 84 + dy));
-// 西墙（角楼之间 y74..83, x50..51）
-pWall('palace_wall_v6', 50, 74, 2, 6);
-pWall('palace_wall_v2', 50, 80, 2, 2);
-pWall('palace_wall_v2', 50, 82, 2, 2);
-// 东墙（角楼之间 y74..83, x64..65）
-pWall('palace_wall_v6', 64, 74, 2, 6);
-pWall('palace_wall_v2', 64, 80, 2, 2);
-pWall('palace_wall_v2', 64, 82, 2, 2);
-// 主殿（内院北部 6×6，金顶三重檐）
-pWall('palace_hall', 52, 74, 6, 6);
-// 配殿（主殿东侧 4×4）
-pWall('palace_hall_s', 58, 74, 4, 4);
-// 白塔（内院西南 3×3，新城制高点）
-pWall('pagoda', 52, 80, 3, 3);
-
-// ---------- 收尾：消灭 >4×4 纯草地（城内每 4×4 窗口至少一处内容） ----------
-const isBare = (k) =>
-  !placed.has(k) && !stoneCells.has(k) && !waterCells.has(k) && !dirtCells.has(k);
-let fillTrees = 0, fillRocks = 0;
-for (let yy = 7; yy + 4 <= 121; yy++) {
-  for (let xx = 7; xx + 4 <= 121; xx++) {
-    let bare = true;
-    for (let dy = 0; dy < 4 && bare; dy++) {
-      for (let dx = 0; dx < 4; dx++) {
-        if (!isBare(key(xx + dx, yy + dy))) { bare = false; break; }
-      }
-    }
-    if (!bare) continue;
-    // 窗口内全空：中心优先，失败再试四角
-    const spots = [[2, 2], [1, 1], [0, 0], [3, 3], [2, 0], [0, 2], [1, 3], [3, 1]];
-    for (const [ox, oy] of spots) {
-      const it = (xx + yy) % 5 === 0
-        ? { type: 'rock', gx: xx + ox, gy: yy + oy }
-        : { type: 'tree', gx: xx + ox, gy: yy + oy, variant: (xx + oy) % 2 ? 'pine' : 'leaf' };
-      if (!put(it)) continue;
-      if (it.type === 'rock') fillRocks++; else fillTrees++;
-      break;
-    }
-  }
-}
-
-// ---------- 城外林带（4~6 格空地，房屋不贴边界） ----------
+// ---------------------------------------------------------------- 城外针叶林
+// 5 格外缘带（避开水体、土路、四门通路与玩法点位）
 let outerTrees = 0;
-for (let i = 3; i < N; i += 6) {
+for (let i = 1; i < N; i += 2) {
   for (const [x, y] of [[i, 1], [i, 3], [i, 125], [i, 127], [1, i], [3, i], [125, i], [127, i]]) {
     if (x < 0 || y < 0 || x >= N || y >= N) continue;
-    if (!put({ type: 'tree', gx: x, gy: y, variant: (x + y) % 2 ? 'pine' : 'leaf' }, { interior: false })) continue;
-    outerTrees++;
+    if ((x + y) % 4 !== 0) continue;
+    if (put({ type: 'tree', gx: x, gy: y, variant: 'pine' }, { interior: false })) outerTrees++;
   }
 }
 
-const layout = {
-  grid: GRID,
-  rules: { streetWidth: 10, houseClearanceFromStreetCenter: 5, roofLift: 0 },
-  items: [...ground, ...items],
-};
+// ---------------------------------------------------------------- 输出
+const layout = { grid: GRID, rules: RULES, items: [...ground, ...items] };
 writeFileSync(OUT, `${JSON.stringify(layout, null, 2)}\n`);
 
-// ---------- 统计 ----------
 const count = (t) => items.filter((i) => i.type === t).length;
-const BUILDING = ['house', 'house_large', 'hall'];
-const region = (i) => {
-  const cx = i.gx + (i.w ?? 1) / 2, cy = i.gy + (i.h ?? 1) / 2;
-  if (cx >= 55 && cx <= 72 && cy >= 55 && cy <= 72) return 'center';
-  if (cx < 64 && cy < 64) return 'market';
-  if (cx >= 64 && cy < 64) return 'residence';
-  if (cx < 64 && cy >= 64) return 'temple';
-  if (cx >= 64 && cy >= 64) return 'garden';
-  return 'other';
-};
-const quarters = ['market', 'residence', 'temple', 'garden'];
-const detail = {};
-for (const q of quarters) detail[q] = {};
-for (const it of items) {
-  const q = region(it);
-  if (!detail[q]) continue;
-  detail[q][it.type] = (detail[q][it.type] ?? 0) + 1;
-}
-
-// 剩余 >4×4 纯草地：扫描每个 4×4 窗口是否有内容（与收尾逻辑同判据）
-let emptyWindows = 0;
-for (let yy = 7; yy + 4 <= 121; yy++) {
-  for (let xx = 7; xx + 4 <= 121; xx++) {
-    let bare = true;
-    for (let dy = 0; dy < 4 && bare; dy++) {
-      for (let dx = 0; dx < 4; dx++) {
-        if (!isBare(key(xx + dx, yy + dy))) { bare = false; break; }
-      }
-    }
-    if (bare) emptyWindows++;
-  }
-}
-
+const all = layout.items.filter((i) => !['ground_grass', 'ground_stone', 'ground_dirt', 'ground_water', 'ground_marble'].includes(i.type));
 console.log(JSON.stringify({
-  total: layout.items.length,
-  ground: ground.length,
-  props: items.length,
-  counts: {
-    buildings: BUILDING.reduce((a, t) => a + count(t), 0),
-    house: count('house'), hall: count('hall'),
-    bellTower: count('bell_tower'),
-    gate: count('gate_arch'), gateTower: count('city_gate_tower'),
-    cityWall: count('city_wall_u6') + count('city_wall_u2') + count('city_wall_v6') + count('city_wall_v2'),
-    wallCorner: count('city_wall_corner'),
-    fence: count('fence'), tree: count('tree'), rock: count('rock'),
-    stall: count('stall'), crate: count('crate'),
-    paifang: count('paifang'), stele: count('stele'), incense: count('incense'),
-    well: count('well'), lantern: count('lantern_post'), bridge: count('bridge'),
-    water: count('ground_water'),
-    tintWarm: items.filter((i) => i.tint === WARM).length,
-    tintCool: items.filter((i) => i.tint === COOL).length,
-  },
-  empty4x4: emptyWindows,
-  bellOk,
-  fillTrees, fillRocks,
-  compoundHouses: resHouses,
-  marketCount,
+  total: layout.items.length, ground: ground.length, props: items.length,
+  houses: houseCount, lanterns: lanternCount,
+  innerTrees, outerTrees, rocks: rockCount,
+  bellTower: count('bell_tower'),
+  gates: count('gate_keep'), wideGate: count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'),
+  wallCorner: count('city_wall_corner'), cornerTower: count('palace_corner'),
+  palaceWalls: count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'),
+  bridges: count('bridge'), paifang: count('paifang'),
+  waterRects: ground.filter((g) => g.type === 'ground_water').length,
+  warmTint: all.filter((i) => i.tint === WARM).length,
+  coolTint: all.filter((i) => i.tint === COOL).length,
 }, null, 2));
-console.log('QUARTERS ' + JSON.stringify(detail));

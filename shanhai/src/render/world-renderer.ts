@@ -9,8 +9,8 @@ import {
   artUrl, foregroundImageUrl, foregroundJsonUrl, isoHouseCandidates, isoModuleCandidates, mapArtLegacyUrl, mapArtUrl, WORLD_TILE_ART,
 } from '../core/art';
 import {
-  ISO_ANCHOR_OFFSET, ISO_TYPES, buildCollision, cellAt, cellRange, cellToWorld, expandLayout, findIsoPath, footprintPolygon,
-  frontVertex, housePieces, isGroundType, isoLineWalkable, isoSize, isoWalkable, keyOf, nearestWalkableCell, simplifyIsoPath,
+  ISO_TYPES, buildCollision, cellAt, cellRange, cellToWorld, expandLayout, findIsoPath, footprintPolygon,
+  frontVertex, housePieces, isGroundType, isoAnchorOffset, isoLineWalkable, isoSize, isoWalkable, keyOf, nearestWalkableCell, simplifyIsoPath,
   type IsoCollision, type IsoItem, type IsoLayout,
 } from '../core/iso';
 import { planPath, type Point } from '../core/path';
@@ -318,8 +318,9 @@ export class WorldRenderer {
       // 沿街自动填房（rules.streetFill）在这里展开；手写条目优先级更高
       this.isoLayout = expandLayout(layout);
       this.isoCollision = buildCollision(this.isoLayout);
-      this.buildIsoUnits();
-      await this.loadIsoModules();
+    this.buildIsoUnits();
+    await this.loadIsoModules();
+    this.assignHouseVariants();
       if (this.destroyed) return;
       this.world.sortableChildren = true;
       // 旧存档可能停在构图范围外：就近吸附到可走格，避免开局卡死
@@ -343,7 +344,7 @@ export class WorldRenderer {
       // 房屋走成套屋身图（含门脸变体）；其余构件：朝向 → sw → 无朝向旧图
       return this.loadIsoTexture(k, type === 'house'
         ? isoHouseCandidates(facing || undefined, variant || undefined)
-        : isoModuleCandidates(type, variant || undefined, facing || undefined));
+        : isoModuleCandidates(type, variant || undefined, facing || undefined, this.map.id));
     }));
 
     // 房屋缺成套屋身时补取旧构件图（rules.roofLift 兜底路径才会用到）
@@ -357,8 +358,18 @@ export class WorldRenderer {
     }
     await Promise.all([...pieceKeys].map((k) => {
       const [type, , facing] = k.split('|');
-      return this.loadIsoTexture(k, isoModuleCandidates(type, undefined, facing || undefined));
+      return this.loadIsoTexture(k, isoModuleCandidates(type, undefined, facing || undefined, this.map.id));
     }));
+
+    // 云京合院工笔变体池：house_4x4_{se|sw}_v2/v3.png（按格哈希分发消除同款镜像感）。
+    // 缺图静默跳过，池自动退化为基础图；布局不带 variant（回归锁定），分发纯在渲染层。
+    if (this.map.id === 'taoyuan') {
+      await Promise.all(
+        ['se', 'sw'].flatMap((f) => ['v2', 'v3'].map((v) =>
+          this.loadIsoTexture(this.moduleKey('house', v, f), [artUrl(`iso/house_4x4_${f}_${v}.png`)]),
+        )),
+      );
+    }
   }
 
   /** 按候选顺序取第一张真图；Vite 的 SPA 回退会让缺图返回 200 的 index.html，必须校验 Content-Type */
@@ -379,6 +390,25 @@ export class WorldRenderer {
 
   private moduleKey(type: string, variant?: string, facing?: string): string {
     return `${type}|${variant ?? ''}|${facing ?? ''}`;
+  }
+
+  private houseVariantAssign = new Map<string, number>();
+
+  /** 云京合院变体贪心分配：按 (u+v) 画家序遍历，14 格内邻居已用的变体不再重复（消除同款连排） */
+  private assignHouseVariants(): void {
+    if (this.map.id !== 'taoyuan') return;
+    const houses = [...this.isoUnits.values()].filter((u) => u.item.type === 'house');
+    houses.sort((a, b) => (a.item.gx + a.item.gy) - (b.item.gx + b.item.gy));
+    for (const u of houses) {
+      const used = new Set<number>();
+      for (const [k, idx] of this.houseVariantAssign) {
+        const o = this.isoUnits.get(k);
+        if (!o) continue;
+        if (Math.max(Math.abs(o.item.gx - u.item.gx), Math.abs(o.item.gy - u.item.gy)) < 14) used.add(idx);
+      }
+      const pick = [0, 1, 2].find((i) => !used.has(i)) ?? 0;
+      this.houseVariantAssign.set(u.key, pick);
+    }
   }
 
   /** 布局展开成可渲染单元：地面按 2×2 块铺，构件整条登记到足迹覆盖格 */
@@ -436,7 +466,26 @@ export class WorldRenderer {
         const score = n * 10 + (groundPriority[t] ?? 0);
         if (score > bestScore) { bestScore = score; best = t; }
       }
-      blocks.set(keyOf(bx, by), { type: best, gx: bx, gy: by, w: 2, h: 2 });
+      // 地面块变体与微色差：确定性哈希（AI 工笔贴图：草 4 变体 / 石板·土路·水各 2 +
+      // 亮度 ±7%），避免整图同一张贴图平铺的重复感；缺变体图时回退基础图或纯色批。
+      // 变体与亮度抖动仅云京启用（本地工笔贴图的防平铺机制）；其余四图走
+      // main 手绘线（hw/ 候选），保持 main 原行为（无变体、无 tint）
+      const yunjing = this.map.id === 'taoyuan';
+      const gh = (Math.imul(bx, 2654435761) ^ Math.imul(by, 668265263)) >>> 0;
+      const GROUND_VARIANTS: Record<string, string[]> = {
+        ground_grass: ['a', 'b', 'c', 'd'],
+        ground_stone: ['a', 'b'],
+        ground_dirt: ['a', 'b'],
+        ground_water: ['a', 'b'],
+      };
+      const vopts = yunjing ? GROUND_VARIANTS[best] : undefined;
+      const variant = vopts ? vopts[gh % vopts.length] : undefined;
+      // 汉白玉是单张贴图的纯色大平层，随机明暗会显成色斑 → 只留极轻微变化；
+      // 其余地面（草/石/土/水）保留下确定性亮度抖动避免平铺重复感
+      const lum = !yunjing ? 255
+        : best === 'ground_marble' ? 252 + (gh % 4) : 236 + (gh % 20);
+      const tint = yunjing ? (lum << 16) | (lum << 8) | lum : undefined;
+      blocks.set(keyOf(bx, by), { type: best, gx: bx, gy: by, w: 2, h: 2, variant, tint });
     }
     // 草地先画、街道最后画：区块边缘多为奇数列/行，压过去更像真实街沿
     const ordered = [...blocks.entries()].sort(
@@ -525,11 +574,11 @@ export class WorldRenderer {
     const g = this.isoLayout?.grid;
     if (!g) return;
     const palette: Record<string, number> = {
-      ground_grass: 0x3c5a3c,
-      ground_stone: 0x585461,
-      ground_dirt: 0x695440,
-      ground_water: 0x2e6a8c,
-      ground_marble: 0xbcb4a4,
+      ground_grass: 0x6fa84c,   // 参考图：明亮鲜绿草地
+      ground_stone: 0x8d8574,   // 暖灰石板街
+      ground_dirt: 0x9c7c50,    // 土黄小路
+      ground_water: 0x3a8cc0,   // 明亮河蓝
+      ground_marble: 0xd8d2c2,  // 汉白玉内院
     };
     const groups = new Map<string, number[][]>();
     for (const k of needed) {
@@ -557,14 +606,23 @@ export class WorldRenderer {
    */
   private buildIsoVisual(unit: IsoUnit): Container {
     const key = this.moduleKey(unit.type, unit.variant, unit.facing);
-    const tex = this.isoTextures.get(key);
+    let tex = this.isoTextures.get(key);
+    // 云京合院变体池：贪心分配表驱动（相邻 14 格内不同变体，消除同款连排）；
+    // tint（分坊瓦色）是布局数据，与本选择正交，继续生效
+    if (unit.item.type === 'house' && tex) {
+      const f = unit.facing ?? 'se';
+      const idx = this.houseVariantAssign.get(unit.key) ?? 0;
+      const vname = idx === 1 ? 'v2' : idx === 2 ? 'v3' : '';
+      const alt = vname ? this.isoTextures.get(this.moduleKey('house', vname, f)) : undefined;
+      if (alt) tex = alt;
+    }
     if (tex) {
       // 城墙直段/角台已改为拼接版：长度方向两端不再描边（出血后裁回名义范围），
       // 相邻段直接贴合即可，无需再裁边或外扩压边。
       const sp = new Sprite(tex);
       sp.anchor.set(0.5, 1);
       // 非正方足迹（城墙 6×2 / 2×6、城门楼 4×3）的锚点在精灵内不在底边中点，按模块元数据回正
-      const off = ISO_ANCHOR_OFFSET[unit.item.type];
+      const off = isoAnchorOffset(unit.item.type, unit.item.facing);
       if (off) { sp.x = -off.ax; sp.y = -off.ay; }
       // 分坊瓦色/墙色：对整张精灵做乘法着色（不改原图）
       if (unit.item.tint !== undefined) sp.tint = unit.item.tint;
@@ -618,11 +676,11 @@ export class WorldRenderer {
   private buildGroundPlaceholder(unit: IsoUnit): Container {
     const g = this.isoLayout!.grid;
     const palette: Record<string, number> = {
-      ground_grass: 0x3c5a3c,
-      ground_stone: 0x585461,
-      ground_dirt: 0x695440,
-      ground_water: 0x2e6a8c,
-      ground_marble: 0xbcb4a4,
+      ground_grass: 0x6fa84c,   // 参考图：明亮鲜绿草地
+      ground_stone: 0x8d8574,   // 暖灰石板街
+      ground_dirt: 0x9c7c50,    // 土黄小路
+      ground_water: 0x3a8cc0,   // 明亮河蓝
+      ground_marble: 0xd8d2c2,  // 汉白玉内院
     };
     const fill = palette[unit.item.type] ?? 0x4a4450;
     const gfx = new Graphics();
@@ -1157,11 +1215,18 @@ export class WorldRenderer {
   private buildActor(x: number, y: number, defId: string, scale: number, manifest: Manifest): Actor {
     const cm = manifest[defId];
     const frames: Record<string, Texture[]> = {};
-    if (cm) {
-      for (const [name, def] of Object.entries(cm.anims)) {
-        frames[name] = def.frames
+    let anims = cm?.anims;
+    if (cm && anims) {
+      for (const [name, def] of Object.entries(anims)) {
+        let list = def.frames
           .map((f) => Assets.get(new URL(`/assets/${f}`, location.origin).href) as Texture | undefined)
           .filter((t): t is Texture => !!t);
+        if (name === 'walk' && list.length === 4) {
+          // —— walk 步态净化 ——（远端 main 修复：只留 f0/f2 迈步帧，fps 7 同步移速）
+          list = [list[0], list[2]];
+          anims = { ...anims, walk: { ...anims.walk, fps: 7 } };
+        }
+        frames[name] = list;
       }
     }
     const idle = frames.idle ?? [];
@@ -1181,7 +1246,7 @@ export class WorldRenderer {
     shadow.ellipse(0, -2, 30 * sh, 9 * sh).fill({ color: 0x0a0a10, alpha: 0.28 });
     root.addChild(shadow, sprite);
     const actor: Actor = {
-      root, sprite, baseScale: scale, anims: cm?.anims, frames,
+      root, sprite, baseScale: scale, anims, frames,
       animName: idle.length > 0 ? 'idle' : undefined,
     };
     return actor;
@@ -1334,10 +1399,20 @@ export class WorldRenderer {
         if (Math.abs(dx) > 2) this.player.sprite.scale.x = Math.abs(this.player.baseScale) * (dx < 0 ? -1 : 1);
       }
     } else {
-      this.playAnim(this.player, 'idle');
-      this.player.sprite.scale.x = Math.abs(this.player.sprite.scale.x);
       const next = this.path.shift();
-      if (next) { this.targetX = next.x; this.targetY = next.y; }
+      if (next) {
+        // 中途 waypoint：吸附到格点消除逐段死区偏差，并保持 walk 动画连续推进。
+        // 旧实现在此先切 idle 再切回 walk，gotoAndPlay(0) 会把步态反复重置到第 0 帧，
+        // 路径拐点越多走起来越"一顿一顿"；改为只有路径终点才回到待机姿态。
+        this.player.root.x = this.targetX;
+        this.player.root.y = this.targetY;
+        this.targetX = next.x;
+        this.targetY = next.y;
+        this.playAnim(this.player, 'walk');
+      } else {
+        this.playAnim(this.player, 'idle');
+        this.player.sprite.scale.x = Math.abs(this.player.sprite.scale.x);
+      }
     }
     this.player.root.zIndex = this.player.root.y;
 

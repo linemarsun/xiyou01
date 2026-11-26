@@ -1,0 +1,10 @@
+# 独立工作副本：依赖与构建产物不入库，文件仍保留在磁盘供直接运行
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+
+# 预览/诊断产物：保留文件，不进版本库
+_restyle_samples/
+generated-images/

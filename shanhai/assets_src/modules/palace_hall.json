@@ -1,0 +1,53 @@
+{
+ "name": "palace_hall",
+ "facing": "SE",
+ "footprint": [
+  10,
+  10
+ ],
+ "footprint_w": 10,
+ "footprint_h": 10,
+ "anchor": [
+  0.5,
+  1.0
+ ],
+ "anchor_cell": [
+  10,
+  10
+ ],
+ "anchor_px": [
+  440,
+  742
+ ],
+ "anchor_note": "足迹前底顶点 p(umax,vmax)；AI 生成图的台基前底角即 bbox 最低点，落地即对齐",
+ "tile": [
+  64,
+  32
+ ],
+ "sprite_size": [
+  880,
+  744
+ ],
+ "sprite_h_px": 740,
+ "ratio_to_char": 6.61,
+ "margins_px": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "source": "宫城主殿 10×10：以故宫太和殿为原型的 AI 素材（重檐庑殿顶、单层宽扁十一间、菱花格扇门窗、朱红墙柱金瓦、三层汉白玉须弥座台基与丹陛石阶、十样脊兽）；标准 2:1 等距视角（正面朝左下、屋脊沿左上→右下对角线、垂直线竖直、平行线不收敛），与宫城其余素材同朝向；抠底后按建筑 bbox 等比对齐到 880×744 画布，无留白、不变形",
+ "outline_px": 2.4,
+ "outline_rule": "可见外沿描边；沿长度方向的两端面不描边，拼接后不与邻居墙体混色（仅留结构分缝）",
+ "mirror_derived": true,
+ "derive_op": "ai_generated + matte + anchor_align + flip_facing_sw2se",
+ "derived_from": "generated-images/palace_hall_taihe_iso_raw.png",
+ "tileable": false,
+ "elevation": {
+  "terrace_top_z": 228,
+  "lower_eave_z": 448,
+  "upper_eave_z": 598,
+  "ridge_z": 733
+ },
+ "note": "参考故宫太和殿形制；标准等距视角修正版（原透视版另存 palace_hall_taihe_raw）；足迹 10×10，旧版素材分别另存为 palace_hall_wide.png（宽扁重檐）与 palace_hall_tower.png（三重檐楼阁）"
+}

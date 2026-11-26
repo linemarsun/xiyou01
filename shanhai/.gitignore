@@ -11,3 +11,7 @@ temp_2026*/
 # Python 中间产物（assets_src/tools/modv2 出图脚本）
 __pycache__/
 *.pyc
+
+# 手绘风替换前的原像素素材本地备份（git 历史即备份，不入库）
+_pixel_backup/
+public/assets_legacy/
