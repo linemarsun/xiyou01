@@ -1261,10 +1261,10 @@ test('四景路网与地标各具特色，不再共用十字广场 / 中心券�
   eq(sigs.size, 7, `七种专属路网签名（${[...sigs].join(' / ')}）`);
   const mixes = ISO_REGIONS.map((id) =>
     ['ground_grass', 'ground_dirt', 'ground_stone', 'ground_water'].map((t) => countType(id, t)).join('/'));
-  eq(new Set(mixes).size, 4, '四图地表铺装组合互不相同');
+  eq(new Set(mixes).size, 7, '七图地表铺装组合互不相同');
   for (const id of ISO_REGIONS) {
     eq(countType(id, 'gate_arch'), 0, `${id} 不再摆统一中心券门`);
-    ok(countType(id, 'hall') >= 1, `${id} 有专属大殿地标`);
+    ok(countType(id, 'hall') >= 1 || countType(id, 'palace_hall') >= 1, `${id} 有专属大殿/宫阙地标`);
   }
   ok(countType('wild_heifeng', 'tree') > countType('wild_heifeng', 'rock') * 1.5, '青崖山道：林海');
   eq(countType('wild_heifeng', 'paifang'), 3, '青崖山道：三个山口各一牌坊');

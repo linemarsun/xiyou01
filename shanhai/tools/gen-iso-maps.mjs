@@ -338,6 +338,8 @@ const THEMES = [
       // 关墙短垣两段夹峙主路
       placeNear('city_wall_u2', 44, 40, 2, 2);
       placeNear('city_wall_u2', 60, 40, 2, 2);
+      // 关城守备府（城台东侧，别于朝歌宫殿的武备殿宇）
+      placeNear('hall', 68, 36, 6, 6);
       // 关内校场（东段石面开阔地）
       rect(88, 40, 14, 16, (x, y) => markR(x, y, 'ground_stone'));
       // 崖壁松柏由 decoDensityAt 两侧加密铺出
@@ -423,12 +425,12 @@ const THEMES = [
     },
     build(c) {
       const { setT, line, rect, markR, prop, tryProp, placeNear } = c;
+      // 玉虚宫主殿（金顶大殿踞广场正北）：先落殿再铺白玉广场，避免广场地面标记挤占落位
+      placeNear('palace_hall', 47, 12, 10, 10);
       // 玉虚宫白玉广场（北部高地）
       rect(30, 8, 44, 34, (x, y) => markR(x, y, 'ground_marble'));
       // 盘山道：南口 → 三折升坡 → 白玉广场
       line([[52, 118], [52, 100], [30, 88], [30, 68], [66, 60], [66, 46], [52, 40]], 6, 'ground_stone');
-      // 玉虚宫主殿（金顶大殿踞广场正北）
-      placeNear('palace_hall', 47, 12, 10, 10);
       // 宫前石阶
       prop('stairs', 50, 42, 3, 1);
       for (const [gx, gy] of [[38, 30], [64, 30]]) placeNear('lantern_post', gx, gy);
