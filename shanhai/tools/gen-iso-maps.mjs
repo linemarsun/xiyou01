@@ -315,6 +315,7 @@ const THEMES = [
         { gx: 50, gy: 1, to: 'taoyuan', toGx: 62, toGy: 126, label: '西岐城' },
         { gx: 110, gy: 44, to: 'chentangguan', toGx: 1, toGy: 36, label: '陈塘关' },
         { gx: 50, gy: 88, to: 'jinaodao', toGx: 52, toGy: 1, label: '金鳌岛碧游宫' },
+        { gx: 1, gy: 44, to: 'panxi', toGx: 86, toGy: 44, label: '磻溪' },
       ],
     },
     build(c) {
@@ -330,6 +331,8 @@ const THEMES = [
       line([[94, 56], [104, 50], [110, 44]], 5, 'ground_dirt');
       // 南支路：西支路南下经泽畔苇荡，出南水口通往金鳌岛海路
       line([[26, 44], [30, 70], [50, 88]], 5, 'ground_dirt');
+      // 西支路：西岸小径向西，通往渭水磻溪
+      line([[26, 44], [1, 44]], 5, 'ground_dirt');
       // 湖畔歇坪 × 2 + 曲岸栈桥跨水
       rect(40, 24, 12, 10, (x, y) => markR(x, y, 'ground_stone'));
       rect(84, 40, 10, 8, (x, y) => markR(x, y, 'ground_stone'));
@@ -550,6 +553,8 @@ const THEMES = [
       ],
       exits: [
         { gx: 94, gy: 48, to: 'difu', toGx: 1, toGy: 40, label: '朝歌 · 鹿台' },
+        { gx: 48, gy: 1, to: 'nvwagong', toGx: 44, toGy: 86, label: '女娲宫' },
+        { gx: 1, gy: 30, to: 'sishuiguan', toGx: 94, toGy: 44, label: '汜水关' },
       ],
       npc: { gx: 48, gy: 44, name: '比干' },
     },
@@ -559,12 +564,179 @@ const THEMES = [
       line([[94, 48], [64, 48], [64, 30], [40, 30]], 6, 'ground_dirt');
       line([[64, 48], [64, 66], [36, 74], [14, 74]], 5, 'ground_dirt');
       line([[40, 30], [14, 30]], 5, 'ground_dirt');
+      // 北支路：宫城东北上出北口，通女娲宫
+      line([[64, 30], [48, 1]], 5, 'ground_dirt');
+      // 西支路：西北坊市西出西口，通汜水关
+      line([[14, 30], [1, 30]], 5, 'ground_dirt');
       // 鹿台宫城平台 + 大殿
       rect(52, 36, 20, 16, (x, y) => markR(x, y, 'ground_stone'));
       placeNear('hall', 56, 26, 7, 6);
       // 城门牌坊 + 坊市栅栏 + 酒池碑
       placeNear('paifang', 88, 44, 3, 3);
       for (const [type, gx, gy] of [['stele', 40, 40], ['stele', 60, 56], ['crate', 20, 34], ['crate', 26, 66], ['well', 46, 62]]) {
+        placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
+      }
+    },
+  },
+
+  {
+    id: 'nvwagong', name: '女娲宫', seed: 20261141,
+    cols: 88, rows: 88,
+    base: 'ground_stone', signature: 'sacred-temple',
+    tagline: '圣庙香庭 · 娲皇宫阙 · 七宝池畔',
+    treeVariant: 'pine', rockVariant: 'crystal',
+    decoDensity: 0.040, lampStep: 10,
+    deco: [['lantern_post', 0.30], ['incense', 0.26], ['tree', 0.22], ['stele', 0.14], ['rock', 0.08]],
+    anchors: {
+      spawns: [],
+      exits: [
+        { gx: 44, gy: 86, to: 'zhaoge', toGx: 48, toGy: 1, label: '朝歌城' },
+      ],
+      npc: { gx: 44, gy: 40, name: '女娲娘娘' },
+    },
+    build(c) {
+      const { line, rect, markR, prop, placeNear, setT } = c;
+      // 南口 → 三重阶陛 → 宫前广场 → 娲皇大殿
+      line([[44, 86], [44, 64]], 6, 'ground_stone');
+      rect(34, 58, 22, 12, (x, y) => markR(x, y, 'ground_stone'));
+      line([[44, 58], [44, 46]], 6, 'ground_stone');
+      rect(32, 34, 26, 18, (x, y) => markR(x, y, 'ground_stone'));
+      // 娲皇大殿居中高台
+      placeNear('hall', 41, 22, 7, 6);
+      // 山门牌坊 + 七宝池（浅水方池）+ 香炉阵
+      placeNear('paifang', 38, 62, 3, 3);
+      for (const [gx, gy] of [[30, 44], [58, 44]]) rect(gx - 3, gy - 2, 7, 5, (x, y) => setT(x, y, 'ground_water'));
+      for (const [type, gx, gy] of [['incense', 36, 42], ['incense', 52, 42], ['stele', 26, 56], ['stele', 62, 56], ['well', 44, 70]]) {
+        placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
+      }
+    },
+  },
+
+  {
+    id: 'sishuiguan', name: '汜水关', seed: 20261142,
+    cols: 96, rows: 88,
+    base: 'ground_dirt', signature: 'border-pass',
+    tagline: '一夫当关 · 关楼横贯 · 妖兵列阵',
+    treeVariant: 'dead', rockVariant: 'dark',
+    decoDensity: 0.030, lampStep: 10,
+    deco: [['rock', 0.34], ['fence', 0.26], ['tree', 0.16], ['stele', 0.14], ['lantern_post', 0.10]],
+    anchors: {
+      spawns: [
+        { gx: 24, gy: 22, group: ['jiaotu', 'kulou'] },
+        { gx: 70, gy: 20, group: ['kulou', 'kulou'] },
+        { gx: 30, gy: 44, group: ['jiaotu'] },
+        { gx: 66, gy: 44, group: ['jiaotu', 'zhizhu'] },
+        { gx: 24, gy: 64, group: ['kulou'] },
+        { gx: 72, gy: 66, group: ['jiaotu', 'heixiong'] },
+      ],
+      exits: [
+        { gx: 94, gy: 44, to: 'zhaoge', toGx: 1, toGy: 30, label: '朝歌城' },
+        { gx: 1, gy: 44, to: 'juelongling', toGx: 118, toGy: 52, label: '绝龙岭' },
+      ],
+    },
+    build(c) {
+      const { line, rect, markR, prop, placeNear } = c;
+      // 关道横贯东西：东口 → 关楼广场 → 西口
+      line([[94, 44], [1, 44]], 7, 'ground_stone');
+      rect(38, 36, 20, 16, (x, y) => markR(x, y, 'ground_stone'));
+      // 关楼居中（一夫当关）+ 两侧城墙段
+      placeNear('hall', 44, 30, 7, 6);
+      for (const w of [
+        { type: 'city_wall_u6', gx: 24, gy: 30, w: 6, h: 2 },
+        { type: 'city_wall_v6', gx: 24, gy: 34, w: 2, h: 6 },
+        { type: 'city_wall_u6', gx: 66, gy: 30, w: 6, h: 2 },
+        { type: 'city_wall_v6', gx: 70, gy: 34, w: 2, h: 6 },
+        { type: 'city_wall_u6', gx: 24, gy: 56, w: 6, h: 2 },
+        { type: 'city_wall_v6', gx: 24, gy: 50, w: 2, h: 6 },
+        { type: 'city_wall_u6', gx: 66, gy: 56, w: 6, h: 2 },
+        { type: 'city_wall_v6', gx: 70, gy: 50, w: 2, h: 6 },
+      ]) placeNear(w.type, w.gx, w.gy, w.w, w.h);
+      // 关门牌坊 + 关厢石碑
+      placeNear('paifang', 86, 40, 3, 3);
+      for (const [type, gx, gy] of [['stele', 40, 50], ['crate', 32, 52], ['well', 58, 52]]) {
+        placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
+      }
+    },
+  },
+
+  {
+    id: 'panxi', name: '磻溪', seed: 20261143,
+    cols: 88, rows: 96,
+    base: 'ground_grass', signature: 'angling-creek',
+    tagline: '渭水一湾 · 直钩钓台 · 柳岸柴扉',
+    treeVariant: 'leaf', rockVariant: 'moss',
+    decoDensity: 0.052, lampStep: 14,
+    deco: [['tree', 0.46], ['fence', 0.20], ['rock', 0.14], ['stall', 0.10], ['well', 0.10]],
+    anchors: {
+      spawns: [],
+      exits: [
+        { gx: 86, gy: 44, to: 'wild_yunmeng', toGx: 1, toGy: 44, label: '云梦泽' },
+      ],
+      npc: { gx: 56, gy: 40, name: '武吉' },
+    },
+    build(c) {
+      const { waterLine, line, rect, markR, prop, placeNear, tryProp } = c;
+      // 渭水一湾：斜贯西南的溪流
+      waterLine([[0, 70], [24, 60], [52, 66], [87, 58]], 9);
+      // 东口 → 溪畔小径 → 钓台坪
+      line([[86, 44], [56, 40], [40, 52]], 5, 'ground_dirt');
+      rect(34, 48, 14, 10, (x, y) => markR(x, y, 'ground_stone'));
+      // 直钩钓台（临水石台）+ 茅屋柴扉 + 溪畔草堂
+      prop('bridge', 36, 60, 3, 5);
+      placeNear('house', 62, 52, 4, 4, { variant: 'wood', facing: 'sw' });
+      placeNear('house', 22, 40, 4, 4, { variant: 'lattice', facing: 'se' });
+      placeNear('hall', 66, 34, 6, 6);
+      // 溪畔石碑与栅栏
+      for (const [type, gx, gy] of [['stele', 46, 54], ['well', 64, 44], ['crate', 70, 48]]) {
+        placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
+      }
+      // 沿溪栅栏点缀
+      for (let gx = 8; gx < 80; gx += 9) tryProp('fence', gx, 66, 2, 1);
+    },
+  },
+
+  {
+    id: 'juelongling', name: '绝龙岭', seed: 20261144,
+    cols: 120, rows: 104,
+    base: 'ground_dirt', signature: 'dead-dragon-ridge',
+    tagline: '枯木怪岭 · 石阵天绝 · 太师亲征之地',
+    treeVariant: 'dead', rockVariant: 'dark', bridgeVariant: 'dark',
+    decoDensity: 0.046, lampStep: 0,
+    deco: [['rock', 0.44], ['tree', 0.34], ['stele', 0.12], ['fence', 0.10]],
+    decoDensityAt: (gx, gy) => {
+      const d = Math.hypot(gx - 30, gy - 52);
+      if (d < 14) return 0.012;
+      if (d < 24) return 0.030;
+      return 0.075;
+    },
+    anchors: {
+      spawns: [
+        { gx: 60, gy: 20, group: ['jiaotu', 'jiaotu'] },
+        { gx: 92, gy: 36, group: ['jiaotu'] },
+        { gx: 88, gy: 70, group: ['zhizhu', 'kulou'] },
+        { gx: 56, gy: 82, group: ['jiaotu', 'heixiong'] },
+        { gx: 20, gy: 52, group: ['wenzhong'] },
+      ],
+      exits: [
+        { gx: 118, gy: 52, to: 'sishuiguan', toGx: 1, toGy: 44, label: '汜水关' },
+      ],
+    },
+    build(c) {
+      const { line, rect, markR, prop, placeNear, setT } = c;
+      // 东口 → 岭脊干道 → 深谷场坪（太师结阵处）
+      line([[118, 52], [76, 52]], 6, 'ground_dirt');
+      line([[76, 52], [60, 36], [44, 52]], 5, 'ground_dirt');
+      line([[44, 52], [30, 52]], 6, 'ground_stone');
+      rect(16, 42, 26, 20, (x, y) => markR(x, y, 'ground_stone'));
+      // 岭上石阵（八方位黑石柱）
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        placeNear('rock', Math.round(29 + Math.cos(a) * 9), Math.round(52 + Math.sin(a) * 9), 1, 1, { variant: 'dark' });
+      }
+      // 枯木关隘牌坊 + 殒命碑 + 太师行辕
+      placeNear('paifang', 108, 48, 3, 3);
+      placeNear('hall', 48, 34, 6, 6);
+      for (const [type, gx, gy] of [['stele', 24, 48], ['stele', 24, 56], ['crate', 70, 48]]) {
         placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
       }
     },

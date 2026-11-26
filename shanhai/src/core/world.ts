@@ -104,6 +104,10 @@ export const ISO_GRIDS: Record<string, IsoGrid> = {
   qianyuan:      { cols: 96,  rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
   jinaodao:      { cols: 104, rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
   zhaoge:        { cols: 96,  rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
+  nvwagong:      { cols: 88,  rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
+  sishuiguan:    { cols: 96,  rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
+  panxi:         { cols: 88,  rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
+  juelongling:   { cols: 120, rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
 };
 /** 西岐城格网：保留旧名以兼容外部引用与历史存档换算 */
 export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
@@ -249,6 +253,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '西岐城'),
       isoExit('wild_yunmeng', 110, 44, 'chentangguan', 1, 36, '陈塘关'),
       isoExit('wild_yunmeng', 50, 88, 'jinaodao', 52, 1, '金鳌岛碧游宫'),
+      isoExit('wild_yunmeng', 1, 44, 'panxi', 86, 44, '磻溪'),
     ],
   },
   /** 昆仑山道 120×88：仙阶之字上山，北口通穿云岭、东口通玉虚宫；截教妖修伏道 */
@@ -306,7 +311,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('jinaodao', 84, 54, ['jiaotu', 'zhizhu']),
       isoSpawn('jinaodao', 48, 68, ['shanxiao', 'jiaotu']),
     ],
-    exits: [isoExit('jinaodao', 52, 1, 'wild_yunmeng', 50, 88, '云梦泽')],
+  exits: [isoExit('jinaodao', 52, 1, 'wild_yunmeng', 50, 88, '云梦泽')],
     npc: isoNpc('jinaodao', 52, 38, '通天教主'),
   },
   /** 朝歌城 96×96：商都妖城，妖氛环伺，比干孤忠守街口 */
@@ -321,8 +326,58 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('zhaoge', 40, 74, ['jiaotu', 'heixiong']),
       isoSpawn('zhaoge', 66, 78, ['kulou', 'zhizhu']),
     ],
-    exits: [isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台')],
+    exits: [
+      isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台'),
+      isoExit('zhaoge', 48, 1, 'nvwagong', 44, 86, '女娲宫'),
+      isoExit('zhaoge', 1, 30, 'sishuiguan', 94, 44, '汜水关'),
+    ],
     npc: isoNpc('zhaoge', 48, 44, '比干'),
+  },
+  /** 女娲宫 88×88：朝歌圣庙，安全图，女娲娘娘坐镇娲皇大殿 */
+  nvwagong: {
+    name: '女娲宫', scene: 'nvwagong',
+    iso: { layout: 'iso/nvwagong.json' },
+    spawns: [],
+    exits: [isoExit('nvwagong', 44, 86, 'zhaoge', 48, 1, '朝歌城')],
+    npc: isoNpc('nvwagong', 44, 40, '女娲娘娘'),
+  },
+  /** 汜水关 96×88：关隘重地，妖兵列阵，西通绝龙岭 */
+  sishuiguan: {
+    name: '汜水关', scene: 'sishuiguan',
+    iso: { layout: 'iso/sishuiguan.json' },
+    spawns: [
+      isoSpawn('sishuiguan', 24, 22, ['jiaotu', 'kulou']),
+      isoSpawn('sishuiguan', 70, 20, ['kulou', 'kulou']),
+      isoSpawn('sishuiguan', 30, 44, ['jiaotu']),
+      isoSpawn('sishuiguan', 66, 44, ['jiaotu', 'zhizhu']),
+      isoSpawn('sishuiguan', 24, 64, ['kulou']),
+      isoSpawn('sishuiguan', 72, 66, ['jiaotu', 'heixiong']),
+    ],
+    exits: [
+      isoExit('sishuiguan', 94, 44, 'zhaoge', 1, 30, '朝歌城'),
+      isoExit('sishuiguan', 1, 44, 'juelongling', 118, 52, '绝龙岭'),
+    ],
+  },
+  /** 磻溪 88×96：渭水钓台安全图，武吉守着子牙先生当年的钓竿 */
+  panxi: {
+    name: '磻溪', scene: 'panxi',
+    iso: { layout: 'iso/panxi.json' },
+    spawns: [],
+    exits: [isoExit('panxi', 86, 44, 'wild_yunmeng', 1, 44, '云梦泽')],
+    npc: isoNpc('panxi', 56, 40, '武吉'),
+  },
+  /** 绝龙岭 120×104：闻太师亲征结阵之地，深谷 Boss 场坪 */
+  juelongling: {
+    name: '绝龙岭', scene: 'juelongling',
+    iso: { layout: 'iso/juelongling.json' },
+    spawns: [
+      isoSpawn('juelongling', 60, 20, ['jiaotu', 'jiaotu']),
+      isoSpawn('juelongling', 92, 36, ['jiaotu']),
+      isoSpawn('juelongling', 88, 70, ['zhizhu', 'kulou']),
+      isoSpawn('juelongling', 56, 82, ['jiaotu', 'heixiong']),
+      isoSpawn('juelongling', 20, 52, ['wenzhong']),
+    ],
+    exits: [isoExit('juelongling', 118, 52, 'sishuiguan', 1, 44, '汜水关')],
   },
 };
 
@@ -883,6 +938,7 @@ const SILVER_PER_KILL: Record<string, number> = {
   shanxiaowang: 90,
   shuiyao: 22,
   daji: 250,
+  wenzhong: 180,
   jiaotu: 24,
 };
 
@@ -900,6 +956,7 @@ export const DROP_TIER_WEIGHTS: Record<string, [number, number, number]> = {
   shanxiaowang: [0, 20, 80],
   shuiyao: [55, 38, 7],
   daji: [0, 5, 95],
+  wenzhong: [0, 10, 90],
   jiaotu: [45, 45, 10],
 };
 
@@ -971,7 +1028,7 @@ export function settleBattle(
     if (Math.random() < 0.35) drops.push({ itemId: 'heal', n: 1 });
     else if (Math.random() < 0.25) drops.push({ itemId: 'mana', n: 1 });
   }
-  if (info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji')) drops.push({ itemId: 'mana', n: 2 });
+  if (info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji') || info.enemyIds.includes('wenzhong')) drops.push({ itemId: 'mana', n: 2 });
   gs.silver += silver;
   for (const d of drops) gs.inv[d.itemId] += d.n;
   lines.push(`获得银两 ${silver}`);
@@ -979,7 +1036,7 @@ export function settleBattle(
     const name = d.itemId === 'heal' ? '金疮药' : '凝气丹';
     lines.push(`获得 ${name} ×${d.n}`);
   }
-  const isBossFight = info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji');
+  const isBossFight = info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji') || info.enemyIds.includes('wenzhong');
   if (isBossFight || Math.random() < RESPEC_DROP_CHANCE) {
     gs.inv.respec = (gs.inv.respec ?? 0) + 1;
     lines.push('获得 洗点丹 ×1');
@@ -998,7 +1055,7 @@ export function settleBattle(
   }
 
   // 5. 经验与升级（每级 +5 潜能点）
-  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260, jiaotu: 30 };
+  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260, jiaotu: 30, wenzhong: 180 };
   let exp = 0;
   for (const id of info.enemyIds) exp += EXP_PER_KILL[id] ?? 12;
   gs.exp += exp;

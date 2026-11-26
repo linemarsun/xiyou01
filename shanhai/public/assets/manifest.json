@@ -1081,5 +1081,62 @@
     "loop": false
    }
   }
+ },
+ "wenzhong": {
+  "frameSize": [
+   128,
+   128
+  ],
+  "anims": {
+   "idle": {
+    "frames": [
+     "sprites/lingguan/idle_0.png",
+     "sprites/lingguan/idle_1.png"
+    ],
+    "fps": 2.5,
+    "loop": true
+   },
+   "walk": {
+    "frames": [
+     "sprites/lingguan/walk_0.png",
+     "sprites/lingguan/walk_1.png",
+     "sprites/lingguan/walk_2.png",
+     "sprites/lingguan/walk_3.png"
+    ],
+    "fps": 9,
+    "loop": true
+   },
+   "attack": {
+    "frames": [
+     "sprites/lingguan/attack_0.png",
+     "sprites/lingguan/attack_1.png",
+     "sprites/lingguan/attack_2.png",
+     "sprites/lingguan/attack_3.png",
+     "sprites/lingguan/attack_4.png",
+     "sprites/lingguan/attack_5.png"
+    ],
+    "fps": 12,
+    "loop": false
+   },
+   "cast": {
+    "frames": [
+     "sprites/lingguan/cast_0.png",
+     "sprites/lingguan/cast_1.png",
+     "sprites/lingguan/cast_2.png",
+     "sprites/lingguan/cast_3.png"
+    ],
+    "fps": 8,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/lingguan/dead_0.png",
+     "sprites/lingguan/dead_1.png",
+     "sprites/lingguan/dead_2.png"
+    ],
+    "fps": 8,
+    "loop": false
+   }
+  }
  }
 }
