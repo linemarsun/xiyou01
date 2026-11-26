@@ -121,7 +121,9 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   ground_dirt: { w: 1, h: 1, ground: true },
   /** 水面：地面的一种，但不可行走（石桥的桥面格例外，见 buildCollision） */
   ground_water: { w: 1, h: 1, ground: true },
-  house: { w: 4, h: 4, height: 190 },
+  /** 一进四合院民居（AI 合院贴图 581×520）：正房在后、院门倒座在前、中间青砖院子；
+   *  贴图底座菱形 576px → 足迹 9×9；三十图布局构件均带显式 w/h，此默认值仅影响西岐城 9×9 合院 */
+  house: { w: 9, h: 9, height: 475 },
   /** 大档建筑：跨 3~4 格的两层楼阁/大宅（层高抬到 280，暂无美术，走程序化占位盒） */
   house_large: { w: 4, h: 4, height: 280 },
   /** 小档建筑：单间铺面/偏房（跨 2 格） */
@@ -168,8 +170,8 @@ export const ISO_TYPES: Record<string, IsoTypeDef> = {
   rock: { w: 1, h: 1, height: 44 },
   /** 参考图制式城台门楼：灰白石城台 + 朱红券洞 + 黄瓦重檐门楼（12×6，垛口顶高出城墙 ~26px，券洞 6 格宽与主街同宽） */
   gate_keep: { w: 12, h: 6, height: 650 },
-  /** 宫城主殿（故宫太和殿版）：三层汉白玉台基（烘焙进贴图）+ 朱红殿身 + 金色重檐 */
-  palace_hall: { w: 6, h: 6, height: 680 },
+  /** 宫城主殿（故宫太和殿版 10×10）：三层汉白玉台基（烘焙进贴图）+ 朱红殿身 + 金色重檐 */
+  palace_hall: { w: 10, h: 10, height: 680 },
   /** 宫城配殿 4×4：一层台基 + 红身金顶，正脊 ~316 */
   palace_hall_s: { w: 4, h: 4, height: 320 },
   /** 宫门 4×2：AI 工笔重绘（城台券洞右下 + 重檐金瓦门楼） */

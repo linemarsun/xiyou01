@@ -809,43 +809,96 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   const count = (t) => layout.items.filter((i) => i.type === t).length;
   const pick = (t) => layout.items.filter((i) => i.type === t);
 
-  // —— 城墙闭合：四边两格厚，四门单独处理，城外 4~6 格空地 ——
+  // —— 参考图制式：城墙闭合 / 四门 6 格城台门楼 / 四角角台 + 角楼 ——
   const wallSegs = count('city_wall_u6') + count('city_wall_u2') + count('city_wall_v6') + count('city_wall_v2');
   ok(wallSegs >= 60, `城墙段 ${wallSegs} 件（6 格 ${count('city_wall_u6') + count('city_wall_v6')} + 2 格 ${count('city_wall_u2') + count('city_wall_v2')}）`);
   ok(count('city_wall_u6') > 0 && count('city_wall_v6') > 0, '直段 u/v 两向都用到美术模块');
-  eq(count('city_wall_corner'), 4, '四角转角构件（美术 city_wall_corner）');
-  eq(count('gate_arch') + count('city_gate_tower') + count('city_gate_wide') + count('city_gate_wide_v'), 4,
-    '四向城门各一座（四门统一宽城门楼城台制式）');
-  const gateSet = new Set([...pick('gate_arch'), ...pick('city_gate_tower'), ...pick('city_gate_wide'),
-    ...pick('city_gate_wide_v')].map((g) => `${g.gx},${g.gy}`));
-  ok(gateSet.has('59,5'), '北门 = 宽城门楼，开口与南北主街同宽 (x59..68)、外侧与城墙齐平 (gy5..7)');
-  // 宽城门楼高于城墙：正脊 406 > 城墙垛口 224（城门比城墙矮不合理）
-  ok(iso.ISO_TYPES.city_gate_wide.height > iso.ISO_TYPES.city_wall_u6.height,
-    '北城门楼标高高于城墙');
-  ok(gateSet.has('59,120') && gateSet.has('5,59') && gateSet.has('120,59'),
-    '南（宽城门楼，开口与南北主街同宽 x59..68、外侧与城墙齐平 gy120..122）/ 西 / 东门（v 向宽城门楼，开口与东西主街同宽 y59..68）');
-  // 四门城台外侧都与城墙外面齐平：北/南门凸向城内 1 排，西/东门凸向城内 1 列
-  ok(iso.ISO_TYPES.city_gate_wide_v.height === iso.ISO_TYPES.city_gate_wide.height,
-    '东西门与北门同一标高体系');
+  eq(count('city_wall_corner'), 4, '四角转角构件（朱红角台）');
+  eq(count('gate_keep'), 4, '四向城门各一座城台门楼（灰白城台 + 朱红券洞 + 黄瓦门楼，12×6 等比放大版）');
+  const gateSet = new Set(pick('gate_keep').map((g) => `${g.gx},${g.gy},${iso.isoSize(g).w}x${iso.isoSize(g).h}`));
+  ok(gateSet.has('58,5,12x6'), '北门城台 (58,5,12×6) 与 (62,3) 出口路牌同轴，玩法坐标不变');
+  ok(gateSet.has('58,121,12x6') && gateSet.has('5,58,6x12') && gateSet.has('121,58,6x12'),
+    '南（58,121,12×6）/ 西（5,58,6×12）/ 东（121,58,6×12）门城台各自对准主街');
+  ok(iso.ISO_TYPES.gate_keep.height > iso.ISO_TYPES.city_wall_u6.height,
+    '城台门楼标高高于城墙（含台上门楼）');
+  eq(count('gate_arch'), 0, '旧 3 格窄券洞城门不再作为城门使用（贴图保留给牌坊）');
+  eq(count('city_gate_wide') + count('city_gate_wide_v') + count('city_gate_tower'), 0,
+    '旧宽城门楼（10×3）已全部移除');
+  eq(count('palace_corner'), 8, '四角角楼 4 座（城墙角）+ 宫城四角楼 4 座');
+  // 2026-11-16 差异化建筑：钟楼移驻西北市集坊作地标（不再占宫城中心），
+  // 原「中心鼓楼已删除」语义演进为「宫城中心无钟楼、坊间有 1 座」
+  eq(count('bell_tower'), 1, '钟楼 1 座（西北市集坊地标，非宫城中心）');
+  ok(pick('bell_tower').every((b) => b.gx < 38 && b.gy < 38), '钟楼位于西北市集坊（不占宫城中心）');
+  eq(count('hall'), 2, '庙署正殿 2 座（东北灰瓦 hall + 西南青石殿 hall/stone）');
+  ok(count('house') <= 26, `差异化建筑替换后合院减量（${count('house')} 座）`);
+  // 功能建筑不得压窄带道路（与 [17] 一致）
+  for (const b of [...pick('bell_tower'), ...pick('hall')]) {
+    ok(iso.isoSize(b).w <= 7, `地标足迹不过大 ${b.type}`);
+  }
   for (const b of [...pick('house'), ...pick('house_large'), ...pick('hall')]) {
     ok(b.gx >= 7 && b.gy >= 7 && b.gx + iso.isoSize(b).w <= 121 && b.gy + iso.isoSize(b).h <= 121,
       `房屋不得贴边/入墙: ${b.type} (${b.gx},${b.gy})`);
   }
-  // 缺图建筑不生成：不再出现无顶方盒占位（旧 shop_small 67 件已从布局移除）
   eq(count('shop_small'), 0, '缺图小档铺面不再生成（避免无顶方盒）');
 
-  // —— 中心：鼓楼制高点 + 广场 ——
-  const bell = pick('bell_tower')[0];
-  ok(bell, '中心鼓楼存在');
-  eq(iso.ISO_TYPES.bell_tower.w, 7, '鼓楼足迹 7 格宽（≥5 的中心建筑）');
-  eq(iso.ISO_TYPES.bell_tower.h, 7, '鼓楼足迹 7 格深（≥5 的中心建筑）');
-  ok(iso.ISO_TYPES.bell_tower.height > iso.ISO_TYPES.city_gate_tower.height, '鼓楼宝顶为全城最高（高于南门楼）');
-  ok(iso.ISO_TYPES.bell_tower.height > iso.ISO_TYPES.house.height * 2, '鼓楼高于民居两倍以上');
-  // 牌坊暂用 gate_arch 贴图别名，等专用美术（两柱一枋、无两侧墙垛）到位后换图
-  ok(count('paifang') >= 4, `牌坊 ${count('paifang')} 座（中心四向 + 庙前）`);
-  ok(pick('paifang').some((p) => Math.abs(p.gx - 54) <= 20 && Math.abs(p.gy - 63) <= 12), '中心广场有牌坊');
+  // —— 中心：40×40 完整宫城（开放式台地，取代鼓楼广场）——
+  ok(pick('palace_hall').length === 1, '宫城主殿 1 座（10×10 宏伟金顶三重檐）');
+  ok(iso.ISO_TYPES.palace_hall.w === 10 && iso.ISO_TYPES.palace_hall.h === 10,
+    '主殿足迹 10×10（相对人物整体放大，门洞/台基随之放大）');
+  ok(pick('palace_hall_s').length >= 2, '东西配殿各 1 座');
+  ok(pick('pagoda').length === 1, '白塔 1 座（宫城一侧）');
+  ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔为全城制高点');
+  ok(pick('palace_gate').length === 1, '南面宫门 1 座');
+  // 宫墙回归（AI 工笔朱红宫墙金琉璃帽）：北 6+南 4+东西各 6 = 22 段；
+  // 南墙接宫门镜像贴图两端（基座剪影跨 u57.9..69.25）：
+  // 西段 46..57 = 2×u6，东段 70..81 = 2×u6（2026-11-16 去 u2：墙身 127px 与 u6 的 211px
+  // 差 84px 导致墙帽错位，改纯 u6 等高连续）
+  eq(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2'), 22,
+    '工笔宫墙 22 段四边闭合（北6 u6 / 南4 u6 / 东西各6 v6，墙帽等高）');
+  eq(count('palace_wall_u6'), 10, '北墙 6 段 + 南墙 4 段 u6');
+  eq(count('palace_wall_u2'), 0, '矮 u2 段已移除（避免与 u6 墙帽错位）');
+  eq(count('palace_wall_v6'), 12, '东西墙各 6 段 v6');
+  // 无缝墙段（2026-11-16 用户反馈墙面不平整）：u6/v6 右端翘檐端头已裁齐，
+  // 多段拼接墙帽连续；用 PNG alpha 检查最右列为空（端头已去），且 json 标注 seam_note
+  for (const name of ['palace_wall_u6', 'palace_wall_v6']) {
+    const buf = readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.png`));
+    eq(buf.readUInt32BE(16), 256, `${name} 画布宽 256`);
+    const meta = JSON.parse(readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.json`), 'utf8'));
+    ok(!!meta.seam_note && meta.seam_note.includes('v4'), `${name} 元数据含 v4 全长无缝标注`);
+    const img = readFileSync(path.join(ROOT, 'public/assets/art/iso', `${name}.png`));
+    ok(img.length > 20000, `${name} 贴图体积完整（非裁切空版）`);
+  }
 
-  // —— 四坊密度分化 ——
+  // 主殿不再压北墙（2026-11-16 用户截图反馈）：足迹南边距北墙 y44 ≥12 格
+  const hall = pick('palace_hall')[0];
+  ok(hall && hall.gy >= 54, `主殿南移后不压北墙（gy=${hall?.gy}，原 48 压墙）`);
+  // 合院投影遮挡约束：任意两座 Δ(u+v)≥15 或 Δ(u-v)≥10（后排不被前排盖住）
+  const housePairs = pick('house');
+  let occludedPairs = 0;
+  for (let a = 0; a < housePairs.length; a++) for (let b = a + 1; b < housePairs.length; b++) {
+    const p = housePairs[a], q = housePairs[b];
+    const du = Math.abs((p.gx + p.gy) - (q.gx + q.gy));
+    const dv = Math.abs((p.gx - p.gy) - (q.gx - q.gy));
+    if (du < 15 && dv < 10) occludedPairs++;
+  }
+  eq(occludedPairs, 0, '合院无投影遮挡对（Δu+v<15 且 Δu-v<10 为零）');
+  // 宫门贴图剪影覆盖区（u58..69 墙线）不得再放墙段，避免双重墙
+  const southWallCells = [...pick('palace_wall_u6'), ...pick('palace_wall_u2')]
+    .filter((w) => w.gy === 82)
+    .flatMap((w) => Array.from({ length: iso.isoSize(w).w }, (_, i) => w.gx + i));
+  ok(southWallCells.every((x) => x < 58 || x >= 69),
+    `南墙墙段不进入宫门贴图覆盖区 u58..68（实际 ${southWallCells.join(',')}）`);
+  // 配殿南移到庭院两侧（用户反馈摆放不合理：旧 (50,50)/(74,50) 被角楼/主殿檐角压住）
+  const sideHalls = pick('palace_hall_s');
+  ok(sideHalls.every((h) => h.gy >= 70), `配殿位于庭院南部（${sideHalls.map((h) => `${h.gx},${h.gy}`).join(' / ')}）`);
+  // 白塔脱离西墙（旧 (46,68) 足迹贴墙被墙段穿插）：距西墙 ≥2 格
+  const pag = pick('pagoda')[0];
+  ok(pag && pag.gx >= 48 && pag.gy <= 66, `白塔位于西北水园、不贴墙（${pag.gx},${pag.gy}）`);
+  ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
+  ok(count('bridge') >= 1 && count('ground_water') >= 2, '宫内曲水与石桥（参考图水系）');
+  ok(count('paifang') >= 4, '宫前坊 4 座（街坊空地，不压主街轴线）');
+
+  // —— 高密棋盘街坊（参考图民居沿街密集排布）——
   const regionOf = (i) => {
     const w = iso.isoSize(i).w, h = iso.isoSize(i).h;
     const cx = i.gx + w / 2, cy = i.gy + h / 2;
@@ -858,94 +911,79 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   const byRegion = { market: 0, residence: 0, temple: 0, garden: 0 };
   for (const it of layout.items) if (BUILDING.has(it.type)) byRegion[regionOf(it)]++;
   const totalBuildings = byRegion.market + byRegion.residence + byRegion.temple + byRegion.garden;
-  ok(totalBuildings >= 60 && totalBuildings <= 80, `建筑总数 ${totalBuildings}（目标 60~80，旧版 152/200）`);
-  ok(byRegion.market >= 24, `市集坊建筑 ${byRegion.market}（最密）`);
-  ok(byRegion.residence >= 24, `宅院坊建筑 ${byRegion.residence}（成组院落）`);
-  ok(byRegion.market + byRegion.residence > byRegion.temple + byRegion.garden,
-    `四坊密度分化 市集 ${byRegion.market} / 宅院 ${byRegion.residence} / 庙署 ${byRegion.temple} / 园林 ${byRegion.garden}`);
-  ok(byRegion.temple <= 10, `庙署坊建筑 ${byRegion.temple}（低密度）`);
-  ok(byRegion.garden <= 6, `园林坊建筑 ${byRegion.garden}（低密度）`);
-  ok(pick('hall').length >= 3, `庙署大体量殿宇 ${pick('hall').length} 座`);
-  ok(count('fence') >= 100, `宅院院墙 ${count('fence')} 件`);
-  ok(count('ground_water') >= 3, `园林水面 ${count('ground_water')} 处`);
-  ok(count('well') >= 1 && count('incense') >= 1 && count('stele') >= 2, '水井/香炉/石碑');
-  ok(count('tree') >= 60, `树 ${count('tree')} 棵`);
-  ok(count('stall') >= 8, `摊位 ${count('stall')} 个`);
-  ok(count('crate') >= 10, `货箱 ${count('crate')} 个`);
-  ok(count('ground_stone') >= 8 && count('ground_dirt') >= 8, '石街与土路/院落');
+  ok(totalBuildings >= 20 && totalBuildings <= 90, `民居总数 ${totalBuildings} 栋（9×9 合院体量 5 倍于旧 4×4，密度相应下降）`);
+  ok(Object.values(byRegion).every((n) => n >= 4),
+    `四象限都成坊 市集 ${byRegion.market} / 宅院 ${byRegion.residence} / 庙署 ${byRegion.temple} / 园林 ${byRegion.garden}`);
+  eq(count('fence'), 0, '旧版院墙制式随重排移除，改为棋盘街坊');
+  ok(count('ground_water') >= 8, `城外两片蜿蜒河湾 ${count('ground_water')} 段（取代环城护城河）`);
+  ok(count('well') >= 1 && count('incense') >= 1 && count('stele') >= 1, '水井/香炉/石碑');
+  ok(count('tree') >= 180 && count('tree') <= 400, `针叶林与行道树 ${count('tree')} 棵（用户反馈减密后约为旧一半）`);
+  ok(count('stall') + count('crate') >= 8 && count('stall') + count('crate') <= 30,
+    `工笔版市集摊棚货箱回驻主街（烟火气回归）${count('stall') + count('crate')} 件`);
+  ok(count('ground_stone') >= 20 && count('ground_dirt') >= 8, '棋盘街巷与城外土路');
 
-  // —— 尺度：大档（庙署大殿）+ 中档（4×4 屋身）；house_large/shop_small 缺图暂不生成 ——
-  const large = count('hall');
+  // —— 尺度：8×8 一进四合院民居（AI 合院贴图，正房+倒座+院子）——
   const medium = count('house');
-  const small = count('shop_small');
-  ok(large >= 3, `大档 ${large} 座`);
-  ok(medium >= 50, `中档 ${medium} 座`);
-  eq(small, 0, '小档缺成套屋身，先不生成');
+  ok(medium >= 15 && medium <= 80, `一进四合院民居 ${medium} 座（9×9 合院体量为旧 4×4 的 5 倍，密度相应下降）`);
+  eq(count('shop_small'), 0, '小档缺成套屋身，先不生成');
   eq(count('house_large'), 0, '大宅缺成套屋身，先不生成（避免空白墙面占位）');
-  const lr = large / medium;
-  ok(lr >= 0.03 && lr <= 0.2, `大:中 = 1:${(1 / lr).toFixed(1)}`);
   eq(iso.ISO_TYPES.house_large.w, 4, '大档跨 4 格（两三层楼阁）');
-  ok(iso.ISO_TYPES.house_large.height > iso.ISO_TYPES.house.height, '大档层高高于中档');
+  ok(iso.ISO_TYPES.house.height > iso.ISO_TYPES.house_large.height, '合院含前后两进双重屋顶，标高高于旧楼阁屋身');
   eq(iso.ISO_TYPES.shop_small.w, 2, '小档跨 2 格');
-  eq(iso.ISO_TYPES.house.w, 4, '中档沿用 4×4 屋身');
+  eq(iso.ISO_TYPES.house.w, 9, '合院 9×9 足迹（菱形 576px 与贴图底座吻合，×1.21 加大版）');
+  ok(pick('house').every((b) => b.facing === 'se' || b.facing === 'sw'),
+    '合院只做 se/sw 两向（院门朝镜头侧，sw 为 se 水平镜像）');
+  ok(pick('house').every((b) => b.variant === undefined), '合院不带 variant（直取 house_4x4_se/_sw.png 成对贴图）');
 
-  // —— 瓦色：靛青为主，朱红仅作点缀（10~20%），同一坊内混色（不按坊整片换色） ——
-  const COOL = 0xdde6ff;
-  const WARM = 0xff8f6b;
+  // —— 配色：贴图已是深灰瓦 / 红木构，tint 只做极轻的暖冷差（不再靛青乘法染色）——
+  const COOL = 0xffffff;
+  const WARM = 0xffead6;
   const tinted = layout.items.filter((i) => BUILDING.has(i.type) && i.tint !== undefined);
-  ok(tinted.length >= 60, `着色建筑 ${tinted.length} 座`);
-  ok(tinted.every((i) => i.tint === COOL || i.tint === WARM), '瓦色只分靛青主色与朱红点缀两档');
+  ok(tinted.length >= 20, `着色建筑 ${tinted.length} 座`);
+  ok(tinted.every((i) => i.tint === COOL || i.tint === WARM), '瓦色只分中性主色与暖色点缀两档');
   const warm = tinted.filter((i) => i.tint === WARM).length;
   const warmRatio = warm / tinted.length;
-  ok(warmRatio >= 0.1 && warmRatio <= 0.2, `朱红瓦点缀 ${warm}/${tinted.length} = ${(warmRatio * 100).toFixed(1)}%（目标 10~20%）`);
+  ok(warmRatio >= 0.1 && warmRatio <= 0.2, `暖色点缀 ${warm}/${tinted.length} = ${(warmRatio * 100).toFixed(1)}%（目标 10~20%）`);
   for (const q of ['market', 'residence', 'temple', 'garden']) {
     const mine = tinted.filter((i) => regionOf(i) === q);
     ok(mine.length > 0, `${q} 坊有瓦色`);
-    ok(mine.some((i) => i.tint === COOL), `${q} 坊以靛青为主`);
-    ok(mine.some((i) => i.tint === WARM), `${q} 坊内混入朱红点缀（不按坊整片换色）`);
+    ok(mine.some((i) => i.tint === COOL), `${q} 坊以中性深灰瓦为主`);
   }
+  ok(['market', 'residence', 'temple', 'garden'].filter((q) =>
+    tinted.some((i) => regionOf(i) === q && i.tint === WARM)).length >= 2,
+  '暖色点缀散布在多个坊，不按坊整片换色');
 
-  // —— 街道骨架：10 格主街十字 + 4 格市集巷 + 5 格北门内街 ——
+  // —— 街道骨架：环宫城环路 + 四门内主街 + 棋盘巷道（宫城阻断旧十字主轴）——
   const stone = new Set();
   for (const it of layout.items) {
     if (it.type !== 'ground_stone') continue;
     const s = iso.isoSize(it);
     for (let dy = 0; dy < s.h; dy++) for (let dx = 0; dx < s.w; dx++) stone.add(`${it.gx + dx},${it.gy + dy}`);
   }
-  const streetRows = Array.from({ length: 10 }, (_, i) => 59 + i);
-  for (const gx of [10, 40, 80, 110]) {
-    eq(streetRows.filter((y) => stone.has(`${gx},${y}`)).length, 10, `东西主街 gx=${gx} 宽 10`);
-  }
-  const streetCols = Array.from({ length: 10 }, (_, i) => 59 + i);
-  for (const gy of [10, 50, 80, 110]) {
-    eq(streetCols.filter((x) => stone.has(`${x},${gy}`)).length, 10, `南北主街 gy=${gy} 宽 10`);
-  }
-  // 十字主街自四向门庭连续贯通到中心广场，宽 10 格且无断点
-  for (const gx of [62, 63, 64, 65, 66]) {
-    eq([5, 30, 45, 55, 70, 90, 110, 118].filter((y) => stone.has(`${gx},${y}`)).length, 8, `南北主街 gx=${gx} 自北门连续到南门`);
-  }
-  for (const gy of [62, 63, 64, 65, 66]) {
-    eq([5, 30, 45, 55, 70, 90, 110, 118].filter((x) => stone.has(`${x},${gy}`)).length, 8, `东西主街 gy=${gy} 自西门连续到东门`);
-  }
-  for (const gy of [10, 45]) {
-    eq([28, 29, 30, 31].filter((x) => stone.has(`${x},${gy}`)).length, 4, `市集纵巷 gy=${gy} 宽 4`);
-  }
-  for (const gx of [10, 45]) {
-    eq([28, 29, 30, 31].filter((y) => stone.has(`${gx},${y}`)).length, 4, `市集横巷 gx=${gx} 宽 4`);
-  }
+  const rowN = (y, x0, x1) => { let n = 0; for (let x = x0; x <= x1; x++) if (stone.has(`${x},${y}`)) n++; return n; };
+  const colN = (x, y0, y1) => { let n = 0; for (let y = y0; y <= y1; y++) if (stone.has(`${x},${y}`)) n++; return n; };
+  eq(rowN(40, 38, 89), 52, '北环 x38..89 全线铺石（环路贯通）');
+  eq(rowN(87, 38, 89), 52, '南环 x38..89 全线铺石');
+  eq(colN(40, 38, 89), 52, '西环 y38..89 全线铺石');
+  eq(colN(87, 38, 89), 52, '东环 y38..89 全线铺石');
+  eq(colN(62, 8, 41), 34, '北门内主街 x=62 自 y8 贯通到北环');
+  eq(colN(62, 86, 119), 34, '南环至南门主街 x=62 贯通');
+  eq(rowN(62, 8, 41), 34, '西门内主街 y=62 贯通到西环');
+  eq(rowN(62, 86, 119), 34, '东环至东门主街 y=62 贯通');
+  eq([16, 17, 18, 19].filter((x) => stone.has(`${x},10`)).length, 4, '棋盘纵巷宽 4');
+  eq([30, 31, 32, 33].filter((x) => stone.has(`${x},10`)).length, 4, '棋盘纵巷第二列宽 4');
+  eq([16, 17, 18, 19].filter((y) => stone.has(`10,${y}`)).length, 4, '棋盘横巷宽 4');
+  ok(!stone.has('63,63'), '宫城内为汉白玉内院，石板街不穿宫墙');
 
-  // 退檐：中屋四邻不得直接贴街道
-  let adjacent = 0;
+  // 道路净空：民居 / 树都不压石板街（参考图临街立面靠边排布）
+  let houseOnStone = 0;
   for (const it of pick('house')) {
     const s = iso.isoSize(it);
     for (let dy = 0; dy < s.h; dy++) for (let dx = 0; dx < s.w; dx++) {
-      const gx = it.gx + dx, gy = it.gy + dy;
-      for (const [nx, ny] of [[gx - 1, gy], [gx + 1, gy], [gx, gy - 1], [gx, gy + 1]]) if (stone.has(`${nx},${ny}`)) adjacent++;
+      if (stone.has(`${it.gx + dx},${it.gy + dy}`)) houseOnStone++;
     }
   }
-  eq(adjacent, 0, '房屋退檐，不与街道直接相邻');
-
-  // 树不长在石街上（摊位允许落在市集广场石面）
+  eq(houseOnStone, 0, '民居不压石板街（道路净空）');
   for (const it of pick('tree')) {
     const s = iso.isoSize(it);
     for (let dy = 0; dy < s.h; dy++) for (let dx = 0; dx < s.w; dx++) {
@@ -953,71 +991,44 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
     }
   }
 
-  // —— 碰撞：城墙不可走、四门十字通道可走、中心广场可走、水面不可走、桥面可走 ——
+  // —— 碰撞：玩法坐标不变 / 四门窄券洞 / 环路 / 宫城 / 河湾水面 ——
   const col = iso.buildCollision(layout);
   const walk = (gx, gy) => {
     const p = iso.cellToWorld(layout.grid, gx, gy);
     return iso.isoWalkable(col, layout.grid, p.x, p.y);
   };
-  ok(walk(63, 5), '北门内主街街心可走');
-  ok(walk(10, 29) && walk(29, 16), '坊内次级巷道可走');
-  ok(walk(40, 34), '市集广场石面可走');
-  ok(walk(64, 100), '南向主街可走');
-  ok(walk(100, 64), '东西主街可走');
-  ok(walk(57, 64) && walk(70, 64) && walk(64, 57) && walk(64, 70), '鼓楼四周环绕广场可走');
-  ok(!walk(bell.gx, bell.gy), '鼓楼足迹不可走');
-  ok(walk(62, 62) && walk(63, 63) && walk(64, 64), '鼓楼底层券门中心 3×3 可穿行（中线与足迹中心 63.5 重合）');
-  ok(walk(60, 63) && walk(66, 63) && walk(63, 60) && walk(63, 66), '券门四向 3 格通道贯通到足迹边缘');
-  ok(!walk(61, 61) && !walk(66, 66), '券门通道以外的鼓楼足迹仍阻挡');
-  for (const [fx, fy, tx, ty, name] of [[63, 57, 63, 66, '南北'], [57, 63, 66, 63, '东西']]) {
-    ok(iso.findIsoPath(col, layout.grid, { gx: fx, gy: fy }, { gx: tx, gy: ty }) !== null, `鼓楼 ${name} 方向 BFS 可穿行`);
-  }
-  // 四门券洞通道：北门（x60..67 × gy5..7）/ 南门（x60..67 × gy120..122）/ 西东门（y60..67 × gx5..7 / gx120..122）
-  for (const [gx, gy, name] of [[63, 6, '北门'], [63, 121, '南门'], [6, 63, '西门'], [121, 63, '东门']]) {
-    ok(walk(gx, gy), `${name}券洞通道可走`);
-  }
-  // 宽城门楼：券洞与主街同宽（北/南门 x60..67 全部可穿，东西门 y60..67 全部可穿），两侧墩柱阻挡
-  for (const [gx, gy] of [[60, 6], [67, 5], [60, 7], [67, 7], [60, 120], [67, 120], [60, 122], [67, 122],
-    [5, 60], [7, 67], [120, 60], [122, 67]]) {
-    ok(walk(gx, gy), `宽券洞 (${gx},${gy}) 可走`);
-  }
-  for (const [gx, gy] of [[8, 5], [59, 5], [68, 5], [30, 121], [121, 20], [6, 30], [122, 100], [30, 5],
-    [59, 6], [68, 7], [5, 59], [7, 59], [120, 59], [122, 68], [59, 121], [68, 121]]) {
-    ok(!walk(gx, gy), `城墙/墩柱 (${gx},${gy}) 应阻挡`);
-  }
-
-  // —— 宫城（中心广场南侧）：构件齐全 / 制高点 / 碰撞 ——
-  ok(pick('palace_hall').length === 1, '宫城主殿 1 座（6×6 金顶三重檐）');
-  ok(iso.ISO_TYPES.palace_hall.w === 6 && iso.ISO_TYPES.palace_hall.h === 6, '主殿足迹 6×6');
-  ok(iso.ISO_TYPES.palace_hall.height > iso.ISO_TYPES.bell_tower.height, '主殿高于鼓楼');
-  ok(pick('palace_hall_s').length >= 1, '宫城配殿存在');
-  ok(pick('pagoda').length === 1, '白塔 1 座');
-  ok(iso.ISO_TYPES.pagoda.height > iso.ISO_TYPES.palace_hall.height, '白塔高于主殿（新城制高点）');
-  ok(pick('palace_gate').length === 1, '宫门 1 座（朝南）');
-  eq(count('palace_corner'), 4, '宫城四角角楼 4 座');
-  ok(count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2') >= 8,
-    `宫墙段 ${count('palace_wall_u6') + count('palace_wall_u2') + count('palace_wall_v6') + count('palace_wall_v2')} 件`);
-  ok(count('ground_marble') >= 1, '宫城内院汉白玉地面');
-  const phall = pick('palace_hall')[0];
-  ok(!walk(phall.gx, phall.gy), '宫城主殿足迹不可走');
-  const pgate2 = pick('palace_gate')[0];
-  ok(walk(pgate2.gx + 1, pgate2.gy) && walk(pgate2.gx + 2, pgate2.gy), '宫门券门中间两列可走');
-  ok(!walk(pgate2.gx, pgate2.gy), '宫门门柱格不可走');
-  const pcorner = pick('palace_corner')[0];
-  ok(!walk(pcorner.gx, pcorner.gy), '宫城角楼足迹不可走');
-
-  const house = pick('house')[0];
-  ok(!walk(house.gx, house.gy), `房屋足迹 (${house.gx},${house.gy}) 不可走`);
-  const gate = pick('paifang')[0];   // 牌坊复用 3×3 拱门贴图，拱洞机制与旧 gate_arch 一致
-  const arch = iso.archCell(gate);
-  ok(walk(arch.gx, arch.gy), '拱洞格可走');
-  ok(!walk(gate.gx, gate.gy), '门柱格不可走');
-  ok(!walk(-2, 20) && !walk(130, 20), '网格外不可走');
-  ok(!walk(0, 130), '网格下方不可走');
+  ok(walk(62, 3), '北门出口路牌 (62,3) 可走 —— 玩法坐标保持不变');
+  ok(walk(16, 32), '出生点 (16,32) 可走');
+  ok(walk(62, 5) && walk(62, 6) && walk(62, 7), '北门城台券洞贯通（城外→城内）');
+  ok(walk(65, 6) && walk(63, 6) && walk(64, 7) && walk(61, 6) && walk(66, 6), '北门券洞 6 列宽全通（与主街同宽的中间 6 列）');
+  ok(!walk(60, 6) && !walk(67, 6), '北门城台边缘两列阻挡（券洞居中 6 列）');
+  ok(walk(62, 120) && walk(62, 121) && walk(62, 122), '南门券洞贯通');
+  ok(walk(6, 62) && walk(6, 63) && walk(6, 65) && walk(6, 61) && walk(6, 66), '西门券洞 6 行宽贯通（gy61..66）');
+  ok(walk(121, 62) && walk(121, 63) && walk(121, 65), '东门券洞贯通');
+  ok(!walk(6, 60) && !walk(6, 67), '东西门城台边缘两行阻挡（券洞居中 6 行）');
+  ok(walk(63, 40) && walk(40, 63) && walk(63, 87) && walk(87, 63), '环宫城四段环路可走（40×40 宫城，环路 x/y38..89）');
+  ok(walk(63, 82) && walk(64, 82), '宫门中间两列券洞可走');
+  ok(!walk(62, 82), '宫门门柱格阻挡');
+  ok(!walk(61, 61), '宫城主殿足迹阻挡（2026-11-16 南移至 y56，避开北墙）');
+  ok(!walk(44, 44), '宫城角楼足迹阻挡');
+  ok(!walk(5, 5), '城墙角台阻挡');
+  ok(!walk(8, 5) && !walk(30, 5) && !walk(8, 121), '朱红城墙连续阻挡（旧十字直穿已改为绕行）');
+  ok(!walk(100, 2) && !walk(0, 100), '城外右上 / 左下河湾水面不可走');
   const water = layout.items.find((i) => i.type === 'ground_water');
   ok(!walk(water.gx, water.gy), `水面 (${water.gx},${water.gy}) 不可走`);
   const brg = layout.items.find((i) => i.type === 'bridge');
-  ok(walk(brg.gx + 1, brg.gy + 2), `桥面 (${brg.gx + 1},${brg.gy + 2}) 可走`);
+  ok(walk(brg.gx + 1, brg.gy + 2), `桥面 (${brg.gx + 1},${brg.gy + 2}) 可走（注销水面阻挡）`);
+  const house = pick('house')[0];
+  ok(!walk(house.gx, house.gy), `房屋足迹 (${house.gx},${house.gy}) 不可走`);
+  const gate = pick('paifang')[0];   // 牌坊复用 3×3 拱门贴图
+  const arch = iso.archCell(gate);
+  ok(walk(arch.gx, arch.gy), '牌坊拱洞格可走');
+  ok(!walk(gate.gx, gate.gy), '牌坊门柱格阻挡');
+  ok(!walk(-2, 20) && !walk(130, 20) && !walk(0, 130), '网格外不可走');
+  ok(iso.findIsoPath(col, layout.grid, { gx: 16, gy: 32 }, { gx: 62, gy: 3 }) !== null,
+    'A* 从出生点绕宫城与城墙走到北门路牌');
+  ok(iso.findIsoPath(col, layout.grid, { gx: 62, gy: 3 }, { gx: 63, gy: 82 }) !== null,
+    '北门可沿环路绕到宫城南侧');
 
   // 出生点 / NPC / 酒肆 / 路牌都落在可走街面
   const gs = world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '回归测试' });
@@ -1029,8 +1040,8 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
 
   // 城门拱洞 222px（与 gate_arch 真实美术一致），角色通行高度不受影响
   eq(iso.ISO_TYPES.gate_arch.height, 222, '城门拱洞 222px');
-  eq(iso.ISO_TYPES.house.w, 4, '屋身 4 格宽（与 4 格墙板一致）');
-  eq(iso.ISO_TYPES.house.h, 4, '屋身 4 格深（两面墙各 4 格）');
+  eq(iso.ISO_TYPES.house.w, 9, '合院 9 格宽（菱形 576px 与 AI 合院贴图底座吻合）');
+  eq(iso.ISO_TYPES.house.h, 9, '合院 9 格深');
 
   // 组合式房屋：墙 sw+se、前后坡、屋脊、山墙端面共 7 件，且脊线方向随朝向变化
   const houseItem = layout.items.find((i) => i.type === 'house');
@@ -1053,9 +1064,9 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   eq(liftedRidge.dy - plainRidge.dy, -170, 'rules.roofLift 仅对旧屋面构件兜底抬升');
   eq(raw.rules?.roofLift ?? 0, 0, '屋面兜底抬升默认 0（成套屋身落地即贴墙顶）');
 
-  // 门脸变体：四坊手摆也混用三套门脸，房屋带 variant 字段
+  // 合院民居不带门脸变体（整座合院一张贴图，直取 house_4x4_se/_sw.png）
   const houseVariants = new Set(layout.items.filter((i) => i.type === 'house').map((i) => i.variant).filter(Boolean));
-  ok(houseVariants.size >= 3, `四坊实际混用 ${houseVariants.size} 套门脸`);
+  eq(houseVariants.size, 0, '合院民居不带 variant（旧门脸变体仅存于 difu/wild 布局）');
 
   // 模块 / 布局命名契约 + 四向贴图回退
   eq(art.isoLayoutUrl('taoyuan'), '/assets/art/iso/taoyuan.json', '布局路径');

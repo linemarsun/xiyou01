@@ -223,11 +223,19 @@ export function isoModuleCandidates(type: string, variant?: string, facing?: str
  */
 const HOUSE_BACK_FACINGS = new Set(['ne', 'nw']);
 
-export function isoHouseCandidates(facing?: string, variant?: string): string[] {
+/** 西岐城（taoyuan）照搬主线云京城：9×9 合院民居专用贴图（581×520，正房+倒座+院落整套） */
+const HOUSE_9X9_MAPS = new Set(['taoyuan']);
+
+export function isoHouseCandidates(facing?: string, variant?: string, mapId?: string): string[] {
   const f = facing ?? 'sw';
   const out: string[] = [];
-  if (variant && !HOUSE_BACK_FACINGS.has(f)) out.push(artUrl(`iso/house_4x4_${f}_${variant}.png`));
-  out.push(artUrl(`iso/house_4x4_${f}.png`));
+  const prefix = mapId && HOUSE_9X9_MAPS.has(mapId) ? 'house_9x9' : 'house_4x4';
+  if (variant && !HOUSE_BACK_FACINGS.has(f)) out.push(artUrl(`iso/${prefix}_${f}_${variant}.png`));
+  out.push(artUrl(`iso/${prefix}_${f}.png`));
+  if (mapId && HOUSE_9X9_MAPS.has(mapId) && f === 'sw') {
+    // 9×9 只有南向两张主贴图，北向回落 4×4 屋身（西岐城民居朝向均为 se/sw）
+    out.push(artUrl(`iso/house_4x4_${f}.png`));
+  }
   return out;
 }
 

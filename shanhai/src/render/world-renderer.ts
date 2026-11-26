@@ -343,7 +343,7 @@ export class WorldRenderer {
       const [type, variant, facing] = k.split('|');
       // 房屋走成套屋身图（含门脸变体）；其余构件：朝向 → sw → 无朝向旧图
       return this.loadIsoTexture(k, type === 'house'
-        ? isoHouseCandidates(facing || undefined, variant || undefined)
+        ? isoHouseCandidates(facing || undefined, variant || undefined, this.map.id)
         : isoModuleCandidates(type, variant || undefined, facing || undefined, this.map.id));
     }));
 
@@ -361,12 +361,12 @@ export class WorldRenderer {
       return this.loadIsoTexture(k, isoModuleCandidates(type, undefined, facing || undefined, this.map.id));
     }));
 
-    // 云京合院工笔变体池：house_4x4_{se|sw}_v2/v3.png（按格哈希分发消除同款镜像感）。
+    // 西岐城（云京 9×9 合院）工笔变体池：house_9x9_{se|sw}_v2/v3.png（按格哈希分发消除同款镜像感）。
     // 缺图静默跳过，池自动退化为基础图；布局不带 variant（回归锁定），分发纯在渲染层。
     if (this.map.id === 'taoyuan') {
       await Promise.all(
         ['se', 'sw'].flatMap((f) => ['v2', 'v3'].map((v) =>
-          this.loadIsoTexture(this.moduleKey('house', v, f), [artUrl(`iso/house_4x4_${f}_${v}.png`)]),
+          this.loadIsoTexture(this.moduleKey('house', v, f), [artUrl(`iso/house_9x9_${f}_${v}.png`)]),
         )),
       );
     }
