@@ -108,6 +108,20 @@ export const ISO_GRIDS: Record<string, IsoGrid> = {
   sishuiguan:    { cols: 96,  rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
   panxi:         { cols: 88,  rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
   juelongling:   { cols: 120, rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
+  fengmingshan:  { cols: 80,  rows: 80,  tileW: 64, tileH: 32, ox: 2560, oy: 16 },
+  xidacamp:      { cols: 100, rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
+  jiepaiguan:    { cols: 96,  rows: 80,  tileW: 64, tileH: 32, ox: 2560, oy: 16 },
+  yanshan:       { cols: 80,  rows: 88,  tileW: 64, tileH: 32, ox: 2816, oy: 16 },
+  zhongnanshan:  { cols: 96,  rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
+  lintongguan:   { cols: 80,  rows: 100, tileW: 64, tileH: 32, ox: 3200, oy: 16 },
+  chuanyunguan:  { cols: 88,  rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
+  mianchi:       { cols: 104, rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
+  jizhou:        { cols: 88,  rows: 112, tileW: 64, tileH: 32, ox: 3584, oy: 16 },
+  meishan:       { cols: 104, rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
+  sanxiandao:    { cols: 112, rows: 72,  tileW: 64, tileH: 32, ox: 2304, oy: 16 },
+  emeishan:      { cols: 72,  rows: 104, tileW: 64, tileH: 32, ox: 3328, oy: 16 },
+  beihai:        { cols: 112, rows: 80,  tileW: 64, tileH: 32, ox: 2560, oy: 16 },
+  zhaixinglou:   { cols: 72,  rows: 96,  tileW: 64, tileH: 32, ox: 3072, oy: 16 },
 };
 /** 西岐城格网：保留旧名以兼容外部引用与历史存档换算 */
 export const ISO_GRID: IsoGrid = ISO_GRIDS.taoyuan;
@@ -207,6 +221,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     exits: [
       isoExit('wild_luanzang', 11, 1, 'wild_heifeng', 1, 62, '穿云岭古道'),
       isoExit('wild_luanzang', 73, 126, 'difu', 40, 1, '朝歌 · 鹿台'),
+      isoExit('wild_luanzang', 1, 64, 'jizhou', 86, 52, '冀州'),
     ],
   },
   /** 骷髅山白骨洞 104×104：环形洞厅 + 四向放射石阶，只有西口通山道 */
@@ -221,7 +236,10 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_shanxiao', 84, 52, ['shanxiao', 'shanxiao']),
       isoSpawn('wild_shanxiao', 20, 52, ['shanxiao']),
     ],
-    exits: [isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '穿云岭古道')],
+    exits: [
+      isoExit('wild_shanxiao', 1, 52, 'wild_heifeng', 126, 62, '穿云岭古道'),
+      isoExit('wild_shanxiao', 102, 52, 'meishan', 1, 44, '梅山'),
+    ],
   },
   /** 地府 80×112：一条黄泉直道贯穿南北，北口回黄泉、南口还阳回西岐城；鹿台深处妖火中藏着妲己真身 */
   difu: {
@@ -271,6 +289,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     exits: [
       isoExit('wild_kunlun', 60, 1, 'wild_heifeng', 64, 94, '穿云岭古道'),
       isoExit('wild_kunlun', 118, 44, 'yuxugong', 1, 44, '玉虚宫'),
+      isoExit('wild_kunlun', 1, 44, 'emeishan', 70, 52, '罗浮洞'),
     ],
   },
   /** 玉虚宫 72×88：阐教圣地，安全图无刷怪，元始天尊坐镇宫前丹陛 */
@@ -311,7 +330,10 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('jinaodao', 84, 54, ['jiaotu', 'zhizhu']),
       isoSpawn('jinaodao', 48, 68, ['shanxiao', 'jiaotu']),
     ],
-  exits: [isoExit('jinaodao', 52, 1, 'wild_yunmeng', 50, 88, '云梦泽')],
+  exits: [
+    isoExit('jinaodao', 52, 1, 'wild_yunmeng', 50, 88, '云梦泽'),
+    isoExit('jinaodao', 102, 44, 'sanxiandao', 1, 36, '三仙岛'),
+  ],
     npc: isoNpc('jinaodao', 52, 38, '通天教主'),
   },
   /** 朝歌城 96×96：商都妖城，妖氛环伺，比干孤忠守街口 */
@@ -330,15 +352,192 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台'),
       isoExit('zhaoge', 48, 1, 'nvwagong', 44, 86, '女娲宫'),
       isoExit('zhaoge', 1, 30, 'sishuiguan', 94, 44, '汜水关'),
+      isoExit('zhaoge', 20, 1, 'mianchi', 44, 94, '渑池县'),
     ],
     npc: isoNpc('zhaoge', 48, 44, '比干'),
+  },
+  /** 凤鸣山 80×80：凤鸣岐山祥瑞地，安全图，散宜生观礼 */
+  fengmingshan: {
+    name: '凤鸣山', scene: 'fengmingshan',
+    iso: { layout: 'iso/fengmingshan.json' },
+    spawns: [],
+    exits: [
+      isoExit('fengmingshan', 40, 78, 'panxi', 44, 1, '磻溪'),
+      isoExit('fengmingshan', 78, 40, 'xidacamp', 1, 44, '西岐大营'),
+    ],
+    npc: isoNpc('fengmingshan', 40, 40, '散宜生'),
+  },
+  /** 西岐大营 100×72：伐商前线，安全图，南宫适练兵 */
+  xidacamp: {
+    name: '西岐大营', scene: 'xidacamp',
+    iso: { layout: 'iso/xidacamp.json' },
+    spawns: [],
+    exits: [
+      isoExit('xidacamp', 1, 44, 'fengmingshan', 78, 40, '凤鸣山'),
+      isoExit('xidacamp', 48, 1, 'jiepaiguan', 44, 78, '界牌关'),
+    ],
+    npc: isoNpc('xidacamp', 48, 40, '南宫适'),
+  },
+  /** 界牌关 96×80：五关首镇，妖兵前哨，西通燕山 */
+  jiepaiguan: {
+    name: '界牌关', scene: 'jiepaiguan',
+    iso: { layout: 'iso/jiepaiguan.json' },
+    spawns: [
+      isoSpawn('jiepaiguan', 26, 22, ['jiaotu', 'kulou']),
+      isoSpawn('jiepaiguan', 68, 20, ['kulou', 'kulou']),
+      isoSpawn('jiepaiguan', 26, 44, ['jiaotu']),
+      isoSpawn('jiepaiguan', 70, 46, ['jiaotu', 'zhizhu']),
+      isoSpawn('jiepaiguan', 46, 64, ['kulou', 'heixiong']),
+    ],
+    exits: [
+      isoExit('jiepaiguan', 44, 78, 'xidacamp', 48, 1, '西岐大营'),
+      isoExit('jiepaiguan', 44, 1, 'lintongguan', 40, 98, '临潼关'),
+      isoExit('jiepaiguan', 1, 44, 'yanshan', 78, 44, '燕山'),
+    ],
+  },
+  /** 燕山 80×88：栈道悬崖安全图，雷震子候命 */
+  yanshan: {
+    name: '燕山', scene: 'yanshan',
+    iso: { layout: 'iso/yanshan.json' },
+    spawns: [],
+    exits: [
+      isoExit('yanshan', 78, 44, 'jiepaiguan', 1, 44, '界牌关'),
+      isoExit('yanshan', 40, 1, 'zhongnanshan', 44, 102, '终南山'),
+    ],
+    npc: isoNpc('yanshan', 40, 44, '雷震子'),
+  },
+  /** 终南山 96×104：云中子洞府，安全图 */
+  zhongnanshan: {
+    name: '终南山', scene: 'zhongnanshan',
+    iso: { layout: 'iso/zhongnanshan.json' },
+    spawns: [],
+    exits: [isoExit('zhongnanshan', 44, 102, 'yanshan', 40, 1, '燕山')],
+    npc: isoNpc('zhongnanshan', 48, 44, '云中子'),
+  },
+  /** 临潼关 80×88：五关次镇，纵贯关道 */
+  lintongguan: {
+    name: '临潼关', scene: 'lintongguan',
+    iso: { layout: 'iso/lintongguan.json' },
+    spawns: [
+      isoSpawn('lintongguan', 30, 24, ['jiaotu', 'kulou']),
+      isoSpawn('lintongguan', 52, 22, ['kulou']),
+      isoSpawn('lintongguan', 30, 44, ['jiaotu']),
+      isoSpawn('lintongguan', 52, 46, ['kulou', 'zhizhu']),
+      isoSpawn('lintongguan', 40, 64, ['jiaotu', 'heixiong']),
+    ],
+    exits: [
+      isoExit('lintongguan', 40, 98, 'jiepaiguan', 44, 1, '界牌关'),
+      isoExit('lintongguan', 40, 1, 'chuanyunguan', 44, 102, '穿云关'),
+    ],
+  },
+  /** 穿云关 88×104：云雾锁关 */
+  chuanyunguan: {
+    name: '穿云关', scene: 'chuanyunguan',
+    iso: { layout: 'iso/chuanyunguan.json' },
+    spawns: [
+      isoSpawn('chuanyunguan', 36, 26, ['jiaotu', 'kulou']),
+      isoSpawn('chuanyunguan', 56, 28, ['kulou', 'kulou']),
+      isoSpawn('chuanyunguan', 34, 50, ['jiaotu']),
+      isoSpawn('chuanyunguan', 58, 52, ['jiaotu', 'zhizhu']),
+      isoSpawn('chuanyunguan', 44, 72, ['kulou', 'heixiong']),
+    ],
+    exits: [
+      isoExit('chuanyunguan', 44, 102, 'lintongguan', 40, 1, '临潼关'),
+      isoExit('chuanyunguan', 44, 1, 'mianchi', 44, 94, '渑池县'),
+    ],
+  },
+  /** 渑池县 104×96：五关最后一城，妖氛最重 */
+  mianchi: {
+    name: '渑池县', scene: 'mianchi',
+    iso: { layout: 'iso/mianchi.json' },
+    spawns: [
+      isoSpawn('mianchi', 28, 26, ['jiaotu', 'jiaotu']),
+      isoSpawn('mianchi', 74, 24, ['kulou', 'kulou']),
+      isoSpawn('mianchi', 26, 48, ['zhizhu']),
+      isoSpawn('mianchi', 78, 50, ['jiaotu', 'zhizhu']),
+      isoSpawn('mianchi', 34, 70, ['kulou', 'heixiong']),
+      isoSpawn('mianchi', 72, 72, ['jiaotu', 'kulou']),
+    ],
+    exits: [
+      isoExit('mianchi', 44, 94, 'chuanyunguan', 44, 1, '穿云关'),
+      isoExit('mianchi', 44, 1, 'zhaoge', 20, 1, '朝歌城'),
+    ],
+  },
+  /** 冀州 96×104：妲己故里，安全图，苏护坐镇侯府 */
+  jizhou: {
+    name: '冀州', scene: 'jizhou',
+    iso: { layout: 'iso/jizhou.json' },
+    spawns: [],
+    exits: [isoExit('jizhou', 86, 52, 'wild_luanzang', 1, 64, '黄泉鬼渡')],
+    npc: isoNpc('jizhou', 48, 44, '苏护'),
+  },
+  /** 梅山 104×72：七怪山寨，袁洪称尊 */
+  meishan: {
+    name: '梅山', scene: 'meishan',
+    iso: { layout: 'iso/meishan.json' },
+    spawns: [
+      isoSpawn('meishan', 40, 20, ['jiaotu']),
+      isoSpawn('meishan', 66, 24, ['jiaotu', 'zhizhu']),
+      isoSpawn('meishan', 26, 44, ['shanxiao']),
+      isoSpawn('meishan', 76, 48, ['jiaotu', 'shanxiao']),
+      isoSpawn('meishan', 24, 44, ['yuanhong']),
+    ],
+    exits: [isoExit('meishan', 1, 44, 'wild_shanxiao', 102, 52, '骷髅山白骨洞')],
+  },
+  /** 三仙岛 112×72：九曲黄河阵，云霄布阵 */
+  sanxiandao: {
+    name: '三仙岛', scene: 'sanxiandao',
+    iso: { layout: 'iso/sanxiandao.json' },
+    spawns: [
+      isoSpawn('sanxiandao', 30, 22, ['jiaotu', 'jiaotu']),
+      isoSpawn('sanxiandao', 78, 24, ['jiaotu', 'zhizhu']),
+      isoSpawn('sanxiandao', 28, 52, ['zhizhu']),
+      isoSpawn('sanxiandao', 80, 54, ['jiaotu']),
+      isoSpawn('sanxiandao', 84, 36, ['yunxiao']),
+    ],
+    exits: [isoExit('sanxiandao', 1, 36, 'jinaodao', 102, 44, '金鳌岛碧游宫')],
+  },
+  /** 峨眉山罗浮洞 72×104：赵公明财宝洞府，安全图 */
+  emeishan: {
+    name: '峨眉山罗浮洞', scene: 'emeishan',
+    iso: { layout: 'iso/emeishan.json' },
+    spawns: [],
+    exits: [isoExit('emeishan', 70, 52, 'wild_kunlun', 1, 44, '昆仑山道')],
+    npc: isoNpc('emeishan', 40, 44, '赵公明'),
+  },
+  /** 北海 112×80：闻仲十年征伐的冰海战场 */
+  beihai: {
+    name: '北海', scene: 'beihai',
+    iso: { layout: 'iso/beihai.json' },
+    spawns: [
+      isoSpawn('beihai', 30, 24, ['kulou', 'kulou']),
+      isoSpawn('beihai', 78, 22, ['jiaotu']),
+      isoSpawn('beihai', 26, 48, ['zhizhu', 'kulou']),
+      isoSpawn('beihai', 82, 50, ['jiaotu', 'heixiong']),
+      isoSpawn('beihai', 52, 64, ['kulou', 'zhizhu']),
+    ],
+    exits: [isoExit('beihai', 56, 78, 'juelongling', 60, 1, '绝龙岭')],
+  },
+  /** 摘星楼 72×96：纣王亲守高台 */
+  zhaixinglou: {
+    name: '摘星楼', scene: 'zhaixinglou',
+    iso: { layout: 'iso/zhaixinglou.json' },
+    spawns: [
+      isoSpawn('zhaixinglou', 40, 40, ['kulou', 'kulou']),
+      isoSpawn('zhaixinglou', 30, 62, ['jiaotu']),
+      isoSpawn('zhaixinglou', 36, 26, ['zhouwang']),
+    ],
+    exits: [isoExit('zhaixinglou', 1, 48, 'nvwagong', 86, 44, '女娲宫')],
   },
   /** 女娲宫 88×88：朝歌圣庙，安全图，女娲娘娘坐镇娲皇大殿 */
   nvwagong: {
     name: '女娲宫', scene: 'nvwagong',
     iso: { layout: 'iso/nvwagong.json' },
     spawns: [],
-    exits: [isoExit('nvwagong', 44, 86, 'zhaoge', 48, 1, '朝歌城')],
+    exits: [
+      isoExit('nvwagong', 44, 86, 'zhaoge', 48, 1, '朝歌城'),
+      isoExit('nvwagong', 86, 44, 'zhaixinglou', 1, 48, '摘星楼'),
+    ],
     npc: isoNpc('nvwagong', 44, 40, '女娲娘娘'),
   },
   /** 汜水关 96×88：关隘重地，妖兵列阵，西通绝龙岭 */
@@ -363,7 +562,10 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     name: '磻溪', scene: 'panxi',
     iso: { layout: 'iso/panxi.json' },
     spawns: [],
-    exits: [isoExit('panxi', 86, 44, 'wild_yunmeng', 1, 44, '云梦泽')],
+    exits: [
+      isoExit('panxi', 86, 44, 'wild_yunmeng', 1, 44, '云梦泽'),
+      isoExit('panxi', 44, 1, 'fengmingshan', 40, 78, '凤鸣山'),
+    ],
     npc: isoNpc('panxi', 56, 40, '武吉'),
   },
   /** 绝龙岭 120×104：闻太师亲征结阵之地，深谷 Boss 场坪 */
@@ -377,7 +579,10 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('juelongling', 56, 82, ['jiaotu', 'heixiong']),
       isoSpawn('juelongling', 20, 52, ['wenzhong']),
     ],
-    exits: [isoExit('juelongling', 118, 52, 'sishuiguan', 1, 44, '汜水关')],
+    exits: [
+      isoExit('juelongling', 118, 52, 'sishuiguan', 1, 44, '汜水关'),
+      isoExit('juelongling', 60, 1, 'beihai', 56, 78, '北海'),
+    ],
   },
 };
 
@@ -474,10 +679,34 @@ export const QUESTS: QuestDef[] = [
   },
   {
     id: 'q5',
+    name: '五关破阵',
+    desc: '界牌关、临潼关、穿云关一线妖兵列阵，五关不破，朝歌难进。少侠随大军攻关，扫平关隘妖氛！',
+    targets: { defIds: ['jiaotu', 'kulou'], need: 8, label: '破五关妖兵' },
+    rewardSilver: 400,
+    rewardItems: { heal: 3, mana: 2 },
+  },
+  {
+    id: 'q6',
+    name: '梅山收妖',
+    desc: '梅山七怪白猿袁洪称尊，九转玄功刀枪不入。子牙先生敕令：上山收伏此獠，绝大军后顾之忧！',
+    targets: { defIds: ['yuanhong'], need: 1, label: '收伏梅山袁洪' },
+    rewardSilver: 600,
+    rewardItems: { heal: 3, mana: 3, respec: 1 },
+  },
+  {
+    id: 'q7',
+    name: '三仙岛破阵',
+    desc: '三霄之首云霄仙子于三仙岛布下九曲黄河石阵，阵中仙光惑人。破阵者，方有资格登鹿台！',
+    targets: { defIds: ['yunxiao'], need: 1, label: '破三仙岛云霄阵' },
+    rewardSilver: 700,
+    rewardItems: { heal: 3, mana: 3 },
+  },
+  {
+    id: 'q8',
     name: '鹿台决战',
-    desc: '狐妖妲己现身朝歌鹿台，妖火照彻夜空，纣王昏聩不朝。子牙先生敕令：登台讨妖，代天封神！',
+    desc: '狐妖妲己现身朝歌鹿台，妖火照彻夜空。五关已破、梅山已平、黄河阵已破——登台讨妖，代天封神！',
     targets: { defIds: ['daji'], need: 1, label: '讨伐九尾狐妖·妲己' },
-    rewardSilver: 500,
+    rewardSilver: 800,
     rewardItems: { heal: 3, mana: 3, respec: 1 },
   },
 ];
@@ -940,6 +1169,9 @@ const SILVER_PER_KILL: Record<string, number> = {
   daji: 250,
   wenzhong: 180,
   jiaotu: 24,
+  yuanhong: 160,
+  yunxiao: 170,
+  zhouwang: 400,
 };
 
 /**
@@ -958,7 +1190,13 @@ export const DROP_TIER_WEIGHTS: Record<string, [number, number, number]> = {
   daji: [0, 5, 95],
   wenzhong: [0, 10, 90],
   jiaotu: [45, 45, 10],
+  yuanhong: [0, 10, 90],
+  yunxiao: [0, 10, 90],
+  zhouwang: [0, 0, 100],
 };
+
+/** 头目名单：必掉洗点丹/装备/凝气丹 */
+const BOSS_IDS = new Set(['shanxiaowang', 'daji', 'wenzhong', 'yuanhong', 'yunxiao', 'zhouwang']);
 
 /** 洗点丹掉落：头目必掉，普通战斗 8% */
 export const RESPEC_DROP_CHANCE = 0.08;
@@ -1028,7 +1266,7 @@ export function settleBattle(
     if (Math.random() < 0.35) drops.push({ itemId: 'heal', n: 1 });
     else if (Math.random() < 0.25) drops.push({ itemId: 'mana', n: 1 });
   }
-  if (info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji') || info.enemyIds.includes('wenzhong')) drops.push({ itemId: 'mana', n: 2 });
+  if (info.enemyIds.some((id) => BOSS_IDS.has(id))) drops.push({ itemId: 'mana', n: 2 });
   gs.silver += silver;
   for (const d of drops) gs.inv[d.itemId] += d.n;
   lines.push(`获得银两 ${silver}`);
@@ -1036,7 +1274,7 @@ export function settleBattle(
     const name = d.itemId === 'heal' ? '金疮药' : '凝气丹';
     lines.push(`获得 ${name} ×${d.n}`);
   }
-  const isBossFight = info.enemyIds.includes('shanxiaowang') || info.enemyIds.includes('daji') || info.enemyIds.includes('wenzhong');
+  const isBossFight = info.enemyIds.some((id) => BOSS_IDS.has(id));
   if (isBossFight || Math.random() < RESPEC_DROP_CHANCE) {
     gs.inv.respec = (gs.inv.respec ?? 0) + 1;
     lines.push('获得 洗点丹 ×1');
@@ -1055,7 +1293,7 @@ export function settleBattle(
   }
 
   // 5. 经验与升级（每级 +5 潜能点）
-  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260, jiaotu: 30, wenzhong: 180 };
+  const EXP_PER_KILL: Record<string, number> = { yelang: 18, kulou: 20, shanxiao: 24, zhizhu: 30, heixiong: 42, shanxiaowang: 120, shuiyao: 26, daji: 260, jiaotu: 30, wenzhong: 180, yuanhong: 160, yunxiao: 170, zhouwang: 400 };
   let exp = 0;
   for (const id of info.enemyIds) exp += EXP_PER_KILL[id] ?? 12;
   gs.exp += exp;
@@ -1113,14 +1351,14 @@ export function dialogueFor(gs: GameState): Dialogue {
   if (gs.questStep === 0) {
     return {
       name,
-      text: `${gs.playerName}，来得正好！纣王失德，鹿台高筑酒池肉林，妲己惑主，妖氛四起，天下苦不堪言。吾奉师命下山扶周灭商，司礼府正缺人手。第一桩差事：穿云岭古道妖狼伤人，去清剿它们！`,
+      text: `${gs.playerName}，来得正好！纣王失德，鹿台高筑酒池肉林，妲己惑主，妖氛四起，天下苦不堪言。吾奉师命下山扶周灭商——界牌关至穿云关五关妖兵列阵，梅山七怪称尊，三仙岛石阵惑人，正缺人手。第一桩差事：穿云岭古道妖狼伤人，去清剿它们！`,
       actions: [{ label: `接下${QUESTS[0].name}`, kind: 'accept' }],
     };
   }
   if (gs.questStep > QUESTS.length) {
     return {
       name,
-      text: '鹿台火熄，狐妖授首，纣王自焚于摘星楼，成汤气数至此而尽。天下既定，少侠随吾登封神台——姜某奉告：上榜诸神，各归其位！西岐城的百姓，都会记住你的功勋。',
+      text: '鹿台火熄，狐妖授首，成汤气数至此而尽。天下既定，西岐城的百姓已重归安宁，然四海妖氛未靖：西岐大营尚需南宫适练兵，梅山七怪余孽未清，三仙岛石阵仍待高人。少侠若有余兴，尽管游历——封神台上，姜某虚位以待！上榜诸神，各归其位！',
       actions: [{ label: '告辞', kind: 'close' }],
     };
   }
@@ -1132,7 +1370,7 @@ export function dialogueFor(gs: GameState): Dialogue {
       actions: [{ label: '领取赏银', kind: 'claim' }],
     };
   }
-  const place = { q1: '穿云岭古道', q2: '黄泉鬼渡', q3: '骷髅山白骨洞', q4: '云梦泽', q5: '朝歌 · 鹿台' }[q.id] ?? '野外';
+  const place = { q1: '穿云岭古道', q2: '黄泉鬼渡', q3: '骷髅山白骨洞', q4: '云梦泽', q5: '界牌关至穿云关一线', q6: '梅山', q7: '三仙岛', q8: '朝歌 · 鹿台' }[q.id] ?? '野外';
   return {
     name,
     text: `「${q.name}」尚未完成——${q.targets.label} ${gs.questKills}/${q.targets.need}。${place}妖物众多，小心行事。`,

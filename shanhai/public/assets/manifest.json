@@ -1138,5 +1138,176 @@
     "loop": false
    }
   }
+ },
+ "yuanhong": {
+  "frameSize": [
+   128,
+   128
+  ],
+  "anims": {
+   "idle": {
+    "frames": [
+     "sprites/shanxiao/idle_0.png",
+     "sprites/shanxiao/idle_1.png"
+    ],
+    "fps": 2.5,
+    "loop": true
+   },
+   "walk": {
+    "frames": [
+     "sprites/shanxiao/walk_0.png",
+     "sprites/shanxiao/walk_1.png",
+     "sprites/shanxiao/walk_2.png",
+     "sprites/shanxiao/walk_3.png"
+    ],
+    "fps": 9,
+    "loop": true
+   },
+   "attack": {
+    "frames": [
+     "sprites/shanxiao/attack_0.png",
+     "sprites/shanxiao/attack_1.png",
+     "sprites/shanxiao/attack_2.png",
+     "sprites/shanxiao/attack_3.png",
+     "sprites/shanxiao/attack_4.png",
+     "sprites/shanxiao/attack_5.png"
+    ],
+    "fps": 12,
+    "loop": false
+   },
+   "cast": {
+    "frames": [
+     "sprites/shanxiao/cast_0.png",
+     "sprites/shanxiao/cast_1.png",
+     "sprites/shanxiao/cast_2.png",
+     "sprites/shanxiao/cast_3.png"
+    ],
+    "fps": 8,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/shanxiao/dead_0.png",
+     "sprites/shanxiao/dead_1.png",
+     "sprites/shanxiao/dead_2.png"
+    ],
+    "fps": 8,
+    "loop": false
+   }
+  }
+ },
+ "yunxiao": {
+  "frameSize": [
+   128,
+   128
+  ],
+  "anims": {
+   "idle": {
+    "frames": [
+     "sprites/linghu/idle_0.png",
+     "sprites/linghu/idle_1.png"
+    ],
+    "fps": 2.5,
+    "loop": true
+   },
+   "walk": {
+    "frames": [
+     "sprites/linghu/walk_0.png",
+     "sprites/linghu/walk_1.png",
+     "sprites/linghu/walk_2.png",
+     "sprites/linghu/walk_3.png"
+    ],
+    "fps": 9,
+    "loop": true
+   },
+   "attack": {
+    "frames": [
+     "sprites/linghu/attack_0.png",
+     "sprites/linghu/attack_1.png",
+     "sprites/linghu/attack_2.png",
+     "sprites/linghu/attack_3.png",
+     "sprites/linghu/attack_4.png",
+     "sprites/linghu/attack_5.png"
+    ],
+    "fps": 12,
+    "loop": false
+   },
+   "cast": {
+    "frames": [
+     "sprites/linghu/cast_0.png",
+     "sprites/linghu/cast_1.png",
+     "sprites/linghu/cast_2.png",
+     "sprites/linghu/cast_3.png"
+    ],
+    "fps": 8,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/linghu/dead_0.png",
+     "sprites/linghu/dead_1.png",
+     "sprites/linghu/dead_2.png"
+    ],
+    "fps": 8,
+    "loop": false
+   }
+  }
+ },
+ "zhouwang": {
+  "frameSize": [
+   128,
+   128
+  ],
+  "anims": {
+   "idle": {
+    "frames": [
+     "sprites/shanxiaowang/idle_0.png",
+     "sprites/shanxiaowang/idle_1.png"
+    ],
+    "fps": 2.5,
+    "loop": true
+   },
+   "walk": {
+    "frames": [
+     "sprites/shanxiaowang/walk_0.png",
+     "sprites/shanxiaowang/walk_1.png",
+     "sprites/shanxiaowang/walk_2.png",
+     "sprites/shanxiaowang/walk_3.png"
+    ],
+    "fps": 9,
+    "loop": true
+   },
+   "attack": {
+    "frames": [
+     "sprites/shanxiaowang/attack_0.png",
+     "sprites/shanxiaowang/attack_1.png",
+     "sprites/shanxiaowang/attack_2.png",
+     "sprites/shanxiaowang/attack_3.png",
+     "sprites/shanxiaowang/attack_4.png",
+     "sprites/shanxiaowang/attack_5.png"
+    ],
+    "fps": 12,
+    "loop": false
+   },
+   "cast": {
+    "frames": [
+     "sprites/shanxiaowang/cast_0.png",
+     "sprites/shanxiaowang/cast_1.png",
+     "sprites/shanxiaowang/cast_2.png",
+     "sprites/shanxiaowang/cast_3.png"
+    ],
+    "fps": 8,
+    "loop": false
+   },
+   "dead": {
+    "frames": [
+     "sprites/shanxiaowang/dead_0.png",
+     "sprites/shanxiaowang/dead_1.png",
+     "sprites/shanxiaowang/dead_2.png"
+    ],
+    "fps": 8,
+    "loop": false
+   }
+  }
  }
 }

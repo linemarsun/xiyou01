@@ -257,6 +257,24 @@ export const MONSTERS: Record<string, MonsterDef> = {
     resists: r(40, 35, 30, 30, 45, 20, 20, 20, 30),
     skillIds: ['m_chui', 'm_hou', 'pt_lei'],
   },
+  yuanhong: {
+    id: 'yuanhong', name: '梅山袁洪', emoji: '🐒',
+    stats: { hp: 1000, mp: 240, atk: 88, def: 58, mag: 60, spd: 66 },
+    resists: r(35, 30, 30, 30, 25, 15, 15, 15, 15),
+    skillIds: ['m_yao', 'm_chui', 'm_hou'],
+  },
+  yunxiao: {
+    id: 'yunxiao', name: '云霄仙子', emoji: '🎐',
+    stats: { hp: 1100, mp: 300, atk: 70, def: 62, mag: 108, spd: 58 },
+    resists: r(45, 40, 35, 35, 45, 25, 25, 25, 25),
+    skillIds: ['zx_fengshen', 'm_hou'],
+  },
+  zhouwang: {
+    id: 'zhouwang', name: '纣王·帝辛', emoji: '👑',
+    stats: { hp: 1500, mp: 300, atk: 92, def: 70, mag: 80, spd: 54 },
+    resists: r(40, 40, 35, 35, 50, 25, 25, 25, 25),
+    skillIds: ['m_chui', 'm_hou', 'm_duwu'],
+  },
 };
 
 // ===== 遭遇战 =====
@@ -268,6 +286,9 @@ export const ENCOUNTERS: EncounterDef[] = [
   { id: 'yunmengze', name: '云梦泽 · 蛟踪', desc: '一头云梦蛟妖率妖狼出没烟波', members: ['shuiyao', 'yelang', 'shuiyao'] },
   { id: 'kunlunxian', name: '昆仑山道 · 妖修拦路', desc: '两名截教妖修与一只幽冥蛛妖伏于仙阶', members: ['jiaotu', 'jiaotu', 'zhizhu'] },
   { id: 'juelong', name: '绝龙岭 · 太师亲征', desc: '闻太师亲率妖修结阵于绝龙岭上', members: ['wenzhong', 'jiaotu'] },
+  { id: 'meishan', name: '梅山 · 七怪当道', desc: '白猿袁洪率梅山众把守山寨', members: ['yuanhong', 'jiaotu'] },
+  { id: 'sanxianzhen', name: '三仙岛 · 黄河阵', desc: '云霄仙子布下九曲黄河石阵', members: ['yunxiao', 'jiaotu', 'jiaotu'] },
+  { id: 'zhaixing', name: '摘星楼 · 帝辛亲守', desc: '纣王亲守摘星高楼，妖卒环伺', members: ['zhouwang', 'kulou', 'kulou'] },
   { id: 'lutai', name: '朝歌鹿台 · 狐妖现形', desc: '九尾狐妖妲己现出真形，妖火照彻鹿台', members: ['daji'] },
 ];
 
