@@ -155,6 +155,8 @@ export class WorldScreen {
   private skillPanelEl!: HTMLElement;
   private tavernPanelEl!: HTMLElement;
   private mapPanel: MapPanel | null = null;
+  /** 舆图点图跳转：寻路去土行孙身旁后要去的地图（抵达即执行，改道即作废） */
+  private pendingTeleport: string | null = null;
   private mapBtn: HTMLButtonElement | null = null;
   private keyHandler: ((e: KeyboardEvent) => void) | null = null;
 
@@ -173,7 +175,7 @@ export class WorldScreen {
       onEncounter: (group, groupKey) => screen.onEncounter(group, groupKey),
       onNpc: () => screen.openDialogue(),
       onTavern: () => screen.openTavern(),
-      onTeleporter: () => screen.openTeleportMenu(),
+      onTeleporter: () => screen.onTeleporterTouch(),
       onExit: (exit) => screen.travel(exit),
     });
     screen.refreshHud();
@@ -263,6 +265,7 @@ export class WorldScreen {
       getMonsters: () => this.renderer?.monsterPositions() ?? [],
       getOverview: () => this.renderer?.overviewData() ?? null,
       goto: (p) => this.renderer?.moveTo(p.x, p.y),
+      teleportVia: (mapId) => this.teleportViaNpc(mapId),
       toast: (text) => this.toast(text),
     });
     this.allocBtn = h('button', {
@@ -1127,6 +1130,34 @@ export class WorldScreen {
   }
 
   // ===== 切图 =====
+
+  /** 舆图点图跳转：寻路到本图土行孙身旁，抵达后自动遁地前往目标图。
+   *  已在土行孙身边时直接跳转；中途点击别处改道则 pending 自然作废（抵达判定要求仍在走向土行孙）。 */
+  private teleportViaNpc(mapId: string): void {
+    const target = WORLD_MAPS[mapId];
+    const t = this.map.teleporter;
+    if (!target || !t || mapId === this.map.id) return;
+    const pos = this.renderer?.getPlayerPos();
+    if (pos && Math.hypot(pos.x - t.x, pos.y - t.y) < 90) {
+      void this.teleportTo(mapId);
+      return;
+    }
+    this.pendingTeleport = mapId;
+    this.renderer?.moveTo(t.x, t.y);
+    this.toast(`寻路至土行孙，抵达后遁地前往「${target.name}」`);
+  }
+
+  /** 走到传送 NPC 触发圈：有舆图点图跳转请求且确是走向土行孙 → 直接遁地；否则打开传送菜单 */
+  private onTeleporterTouch(): void {
+    const target = this.pendingTeleport;
+    this.pendingTeleport = null;
+    if (target && target !== this.map.id && WORLD_MAPS[target]
+        && this.map.teleporter && this.renderer?.headingTo(this.map.teleporter)) {
+      void this.teleportTo(target);
+      return;
+    }
+    this.openTeleportMenu();
+  }
 
   /** 土行孙传送菜单：靠近传送 NPC 弹出，点选舆图直接遁地前往 */
   private openTeleportMenu(): void {

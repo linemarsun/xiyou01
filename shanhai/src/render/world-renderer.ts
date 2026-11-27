@@ -1572,6 +1572,11 @@ export class WorldRenderer {
   /** 舆图面板：当前移动目标（显示"寻路中"箭头） */
   getTargetPos(): Point { return { x: this.targetX, y: this.targetY }; }
 
+  /** 玩家当前寻路目标是否指向 p（用于舆图点图跳转：抵达土行孙身旁才执行遁地） */
+  headingTo(p: Point, eps = 56): boolean {
+    return Math.hypot(this.targetX - p.x, this.targetY - p.y) < eps;
+  }
+
   /** 舆图面板：怪物实时位置（会游荡，比出生点准确） */
   monsterPositions(): Point[] {
     return [...this.monsters.values()].map((a) => ({ x: a.root.x, y: a.root.y }));

@@ -4,7 +4,7 @@
  * - 当前图俯瞰：等距图按碰撞层画地形菱形格（草地/山径/石台/水面/建筑），
  *   横版图按区段画可行走带；标出玩家、NPC、酒肆、怪组、出口路牌与当前寻路目标。
  * - 点击俯瞰图 → 就近吸附到可走格并自动寻路（复用等距 A*）。
- * - 「本境通路」按钮 / 「四境全图」节点 → 直接寻路到对应出口路牌。
+ * - 「本境通路」按钮 → 寻路到对应出口路牌；「四境全图」节点 → 寻路到土行孙身旁后遁地直达。
  * - 纯 Canvas + CSS 绘制，不依赖任何图片素材；面板每 250ms 刷新位置。
  */
 import { WORLD_MAPS, type MapExit, type WorldMap } from '../core/world';
@@ -22,6 +22,8 @@ export interface MapPanelHooks {
   getOverview: () => { layout: IsoLayout; collision: IsoCollision } | null;
   /** 请求渲染器走到某世界坐标 */
   goto: (p: Point) => void;
+  /** 舆图点图跳转：寻路到本图土行孙身旁后遁地直达目标图 */
+  teleportVia: (mapId: string) => void;
   toast: (text: string) => void;
 }
 
@@ -173,7 +175,7 @@ export class MapPanel {
       ),
       h('div', { class: 'map-section-title' }, '本境通路'),
       this.exitsEl,
-      h('div', { class: 'map-section-title' }, '四境全图（以朝歌帝都为中心 · 点节点寻路到下一程）'),
+      h('div', { class: 'map-section-title' }, '四境全图（以朝歌帝都为中心 · 点节点由土行孙遁地直达）'),
       this.graphEl,
       h('div', { style: 'text-align:right;margin-top:8px' },
         h('button', { class: 'btn small', onclick: () => this.hide() }, '关闭'),
@@ -224,24 +226,6 @@ export class MapPanel {
     }
   }
 
-  /** 从当前图 BFS 找去目标图的第一程出口（支持跨多图导航） */
-  private routeTo(targetId: string): MapExit | null {
-    if (targetId === this.map.id) return null;
-    const queue = [this.map.id];
-    const seen = new Set(queue);
-    const first = new Map<string, MapExit>();
-    while (queue.length) {
-      const id = queue.shift()!;
-      for (const e of WORLD_MAPS[id]?.exits ?? []) {
-        if (!WORLD_MAPS[e.to]) continue;
-        if (!first.has(e.to)) first.set(e.to, id === this.map.id ? e : first.get(id)!);
-        if (e.to === targetId) return first.get(targetId) ?? null;
-        if (!seen.has(e.to)) { seen.add(e.to); queue.push(e.to); }
-      }
-    }
-    return null;
-  }
-
   private buildGraph(): void {
     const pos = computeGraphPos();
     const xs = Object.values(pos).map((p) => p.x);
@@ -282,10 +266,7 @@ export class MapPanel {
       g.addEventListener('click', () => {
         const id = g.getAttribute('data-map-id')!;
         if (id === this.map.id) { this.hooks.toast(`你正在「${this.map.name}」`); return; }
-        const exit = this.routeTo(id);
-        if (!exit) { this.hooks.toast('暂无可通行的路径'); return; }
-        this.hooks.goto({ x: exit.x, y: exit.y });
-        this.hooks.toast(`寻路前往「${exit.label}」路牌，前往${WORLD_MAPS[id].name}`);
+        this.hooks.teleportVia(id);
         this.hide();
       });
     });
