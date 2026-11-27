@@ -339,18 +339,11 @@ const BASE_MAPS: Record<string, BaseLayout> = {
   ],
     npc: isoNpc('jinaodao', 52, 38, '通天教主'),
   },
-  /** 朝歌城 96×96：商都妖城，妖氛环伺，比干孤忠守街口 */
+  /** 朝歌城 96×96：商都帝京，比干守街口；帝都重地不设妖物（安全城） */
   zhaoge: {
     name: '朝歌城', scene: 'zhaoge',
     iso: { layout: 'iso/zhaoge.json' },
-    spawns: [
-      isoSpawn('zhaoge', 28, 24, ['jiaotu', 'kulou']),
-      isoSpawn('zhaoge', 66, 22, ['kulou', 'kulou']),
-      isoSpawn('zhaoge', 22, 52, ['zhizhu']),
-      isoSpawn('zhaoge', 72, 54, ['jiaotu']),
-      isoSpawn('zhaoge', 40, 74, ['jiaotu', 'heixiong']),
-      isoSpawn('zhaoge', 66, 78, ['kulou', 'zhizhu']),
-    ],
+    spawns: [],
     exits: [
       isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台'),
       isoExit('zhaoge', 48, 1, 'nvwagong', 44, 86, '女娲宫'),

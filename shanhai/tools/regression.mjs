@@ -1142,6 +1142,11 @@ test('出生地迁至朝歌：新档出生在比干身旁的可走御街', () =>
   ok(Math.hypot(m.npc.x - gs.px, m.npc.y - gs.py) <= 140.5, '出生点在长老（比干）身旁 140px 内');
 });
 
+test('城池安全区：朝歌与西岐城不刷妖物', () => {
+  eq(world.WORLD_MAPS.zhaoge.spawns.length, 0, '朝歌城无怪组');
+  eq(world.WORLD_MAPS.taoyuan.spawns.length, 0, '西岐城无怪组');
+});
+
 test('地图原图契约：art/maps/<region>_0.png 为 1440×900 RGBA', () => {
   const dir = path.join(ROOT, 'public/assets/art/maps');
   for (const map of Object.values(world.WORLD_MAPS)) {
@@ -1480,7 +1485,7 @@ test('新世界观命名与 NPC 对话到位', () => {
   ok(world.WORLD_MAPS.wild_yunmeng.exits.some((e) => e.to === 'panxi'), '云梦泽新增磻溪口');
   eq(world.WORLD_MAPS.zhaoge.npc?.name, '比干', '朝歌城 NPC');
   ok(world.WORLD_MAPS.jinaodao.spawns.some((s) => s.group.includes('jiaotu')), '金鳌岛刷新妖修');
-  ok(world.WORLD_MAPS.zhaoge.spawns.some((s) => s.group.includes('kulou')), '朝歌城刷新妖卒');
+  eq(world.WORLD_MAPS.zhaoge.spawns.length, 0, '朝歌城为安全城，不刷妖物');
   ok(world.WORLD_MAPS.chentangguan.exits.some((e) => e.to === 'qianyuan'), '陈塘关新增乾元山口');
   ok(world.WORLD_MAPS.wild_yunmeng.exits.some((e) => e.to === 'jinaodao'), '云梦泽新增金鳌岛口');
   ok(world.WORLD_MAPS.difu.exits.some((e) => e.to === 'zhaoge'), '鹿台新增朝歌城口');
