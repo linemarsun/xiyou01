@@ -38,14 +38,63 @@ const GROUND_COLOR: Record<string, string> = {
   ground_snow: '#c9d5d4',
 };
 
-/** 四境全图的固定节点排布（世界坐标无关，仅示意连通关系） */
-const GRAPH_POS: Record<string, { x: number; y: number }> = {
-  taoyuan: { x: 300, y: 34 },
-  wild_heifeng: { x: 300, y: 106 },
-  wild_luanzang: { x: 130, y: 190 },
-  wild_shanxiao: { x: 470, y: 190 },
-  difu: { x: 300, y: 246 },
-};
+/** 四境全图节点排布：以出生城为根、按出口拓扑 BFS 分层的横向树状布局（世界坐标无关，仅示意连通关系）。
+ *  新增地图无需手工登记坐标——只要 exits 拓扑连通，就会自动出现在舆图上。 */
+function computeGraphPos(): Record<string, { x: number; y: number }> {
+  const ids = Object.keys(WORLD_MAPS);
+  const root = ids.includes('taoyuan') ? 'taoyuan' : ids[0];
+  const depth = new Map<string, number>([[root, 0]]);
+  const children = new Map<string, string[]>();
+  const queue = [root];
+  while (queue.length) {
+    const id = queue.shift()!;
+    for (const e of WORLD_MAPS[id]?.exits ?? []) {
+      if (!WORLD_MAPS[e.to] || depth.has(e.to)) continue;
+      depth.set(e.to, depth.get(id)! + 1);
+      const ch = children.get(id) ?? [];
+      ch.push(e.to);
+      children.set(id, ch);
+      queue.push(e.to);
+    }
+  }
+  // 兜底：极少数未连通的图挂到根节点（回归保证全图 BFS 可达，一般走不到这）
+  for (const id of ids) {
+    if (depth.has(id)) continue;
+    depth.set(id, 1);
+    (children.get(root) ?? children.set(root, []).get(root)!).push(id);
+  }
+  // 叶子计数 → 纵向区间分配（子树按叶子比例瓜分父区间，父节点居中）
+  const leaves = new Map<string, number>();
+  const countLeaves = (id: string): number => {
+    const ch = children.get(id) ?? [];
+    if (!ch.length) { leaves.set(id, 1); return 1; }
+    const n = ch.reduce((s, c) => s + countLeaves(c), 0);
+    leaves.set(id, n);
+    return n;
+  };
+  countLeaves(root);
+  const Y_STEP = 44;
+  const spanY = new Map<string, [number, number]>();
+  const assignY = (id: string, y0: number): number => {
+    const ch = children.get(id) ?? [];
+    if (!ch.length) {
+      spanY.set(id, [y0, y0 + Y_STEP]);
+      return y0 + Y_STEP;
+    }
+    let cur = y0;
+    for (const c of ch) cur = assignY(c, cur);
+    spanY.set(id, [y0, cur]);
+    return cur;
+  };
+  assignY(root, 0);
+  const X_STEP = 152;
+  const pos: Record<string, { x: number; y: number }> = {};
+  for (const [id, d] of depth) {
+    const [y0, y1] = spanY.get(id)!;
+    pos[id] = { x: d * X_STEP, y: (y0 + y1) / 2 };
+  }
+  return pos;
+}
 
 export class MapPanel {
   readonly el: HTMLElement;
@@ -155,13 +204,20 @@ export class MapPanel {
   }
 
   private buildGraph(): void {
-    const w = 600, hh = 280;
+    const pos = computeGraphPos();
+    const xs = Object.values(pos).map((p) => p.x);
+    const ys = Object.values(pos).map((p) => p.y);
+    const pad = 70;
+    const minX = Math.min(...xs) - pad;
+    const minY = Math.min(...ys) - pad;
+    const w = Math.max(...xs) + pad - minX;
+    const hh = Math.max(...ys) + pad - minY;
     const links: string[] = [];
     const drawn = new Set<string>();
     for (const m of Object.values(WORLD_MAPS)) {
-      const a = GRAPH_POS[m.id];
+      const a = pos[m.id];
       for (const e of m.exits) {
-        const b = GRAPH_POS[e.to];
+        const b = pos[e.to];
         if (!a || !b || !WORLD_MAPS[e.to]) continue;
         const k = [m.id, e.to].sort().join('|');
         if (drawn.has(k)) continue;
@@ -170,7 +226,7 @@ export class MapPanel {
       }
     }
     const nodes = Object.values(WORLD_MAPS).map((m) => {
-      const p = GRAPH_POS[m.id];
+      const p = pos[m.id];
       if (!p) return '';
       const cur = m.id === this.map.id;
       const fill = cur ? '#a63d2f' : '#2f4a5c';
@@ -180,7 +236,7 @@ export class MapPanel {
         ${cur ? `<text x="${p.x}" y="${p.y + 29}" text-anchor="middle" font-size="11" fill="#a63d2f" font-family="Microsoft YaHei, sans-serif">● 当前所在地</text>` : ''}
       </g>`;
     }).join('');
-    this.graphEl.innerHTML = `<svg viewBox="0 0 ${w} ${hh}" width="100%" height="180" role="img" aria-label="四境全图">${links.join('')}${nodes}</svg>`;
+    this.graphEl.innerHTML = `<svg viewBox="${minX} ${minY} ${w} ${hh}" style="width:100%;height:auto;max-height:440px;display:block" role="img" aria-label="四境全图">${links.join('')}${nodes}</svg>`;
     this.graphEl.querySelectorAll<SVGGElement>('[data-map-id]').forEach((g) => {
       g.addEventListener('click', () => {
         const id = g.getAttribute('data-map-id')!;
