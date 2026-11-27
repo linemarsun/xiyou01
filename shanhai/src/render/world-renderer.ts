@@ -97,6 +97,7 @@ export interface WorldHooks {
   onEncounter: (group: string[], groupKey: string) => void;
   onNpc: () => void;
   onTavern: () => void;
+  onTeleporter: () => void;
   onExit: (exit: MapExit) => void;
 }
 
@@ -128,6 +129,7 @@ export class WorldRenderer {
   private pet: Actor | null = null;
   private npc: Actor | null = null;
   private tavern: Actor | null = null;
+  private teleporter: Actor | null = null;
   private monsters = new Map<string, Actor>();
   private targetX: number;
   private targetY: number;
@@ -138,6 +140,7 @@ export class WorldRenderer {
   private engaged = false;
   private npcPrompted = false;
   private tavernPrompted = false;
+  private teleporterPrompted = false;
   /** 落地时压在触发圈内的出口下标：玩家先离开触发圈再重新武装，杜绝"落地即弹回" */
   private exitSuppressed = new Set<number>();
   private elapsed = 0;
@@ -239,6 +242,16 @@ export class WorldRenderer {
       this.world.addChild(this.tavern.root);
     }
 
+    // 传送 NPC（土行孙）：青色名牌便于与长老 / 酒肆区分，靠近弹出四境传送菜单
+    if (this.map.teleporter) {
+      this.teleporter = this.buildActor(this.map.teleporter.x, this.map.teleporter.y, 'elder', SCALE.npc, manifest);
+      const tag = new Text({ text: `🜁 ${this.map.teleporter.name}`, style: { fontFamily: 'Microsoft YaHei, sans-serif', fontSize: 13, fill: 0xa8e4ff, stroke: { color: 0x1c1810, width: 3 } } });
+      tag.anchor.set(0.5, 1);
+      tag.y = -70 * OFF * SCALE.npc;
+      this.teleporter.root.addChild(tag);
+      this.world.addChild(this.teleporter.root);
+    }
+
     // 怪物
     this.map.spawns.forEach((spawn, i) => {
       const key = `${this.map.id}:${i}`;
@@ -328,6 +341,11 @@ export class WorldRenderer {
         const p = this.nearestWalkable(this.gs.px, this.gs.py);
         this.gs.px = p.x;
         this.gs.py = p.y;
+      }
+      // 传送 NPC 默认站在格网中心（可能在建筑里）：吸附到最近可走格
+      if (this.teleporter && this.isoCollision) {
+        const t = this.nearestWalkable(this.teleporter.root.x, this.teleporter.root.y);
+        this.teleporter.root.position.set(t.x, t.y);
       }
     } catch {
       this.isoLayout = undefined;
@@ -1507,6 +1525,14 @@ export class WorldRenderer {
       this.hooks.onTavern();
     } else if (this.tavern && this.tavernPrompted && Math.hypot(this.tavern.root.x - pr.x, this.tavern.root.y - pr.y) > 120 * CHAR_RANGE) {
       this.tavernPrompted = false;
+    }
+    if (this.teleporter && !this.teleporterPrompted && Math.hypot(this.teleporter.root.x - pr.x, this.teleporter.root.y - pr.y) < 80 * CHAR_RANGE) {
+      this.teleporterPrompted = true;
+      this.targetX = pr.x;
+      this.targetY = pr.y;
+      this.hooks.onTeleporter();
+    } else if (this.teleporter && this.teleporterPrompted && Math.hypot(this.teleporter.root.x - pr.x, this.teleporter.root.y - pr.y) > 120 * CHAR_RANGE) {
+      this.teleporterPrompted = false;
     }
     for (let i = 0; i < this.map.exits.length; i++) {
       const ex = this.map.exits[i];

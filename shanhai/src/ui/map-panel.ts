@@ -38,11 +38,12 @@ const GROUND_COLOR: Record<string, string> = {
   ground_snow: '#c9d5d4',
 };
 
-/** 四境全图节点排布：以出生城为根、按出口拓扑 BFS 分层的横向树状布局（世界坐标无关，仅示意连通关系）。
+/** 四境全图节点排布：以朝歌（帝都）为中心的同心环放射布局。
+ *  按出口拓扑从中心 BFS 分层，环半径随层数递增；角度按子树叶子数瓜分，保证不重叠。
  *  新增地图无需手工登记坐标——只要 exits 拓扑连通，就会自动出现在舆图上。 */
 function computeGraphPos(): Record<string, { x: number; y: number }> {
   const ids = Object.keys(WORLD_MAPS);
-  const root = ids.includes('taoyuan') ? 'taoyuan' : ids[0];
+  const root = ids.includes('zhaoge') ? 'zhaoge' : ids[0];
   const depth = new Map<string, number>([[root, 0]]);
   const children = new Map<string, string[]>();
   const queue = [root];
@@ -63,7 +64,7 @@ function computeGraphPos(): Record<string, { x: number; y: number }> {
     depth.set(id, 1);
     (children.get(root) ?? children.set(root, []).get(root)!).push(id);
   }
-  // 叶子计数 → 纵向区间分配（子树按叶子比例瓜分父区间，父节点居中）
+  // 叶子计数 → 角度区间分配（子树按叶子比例瓜分圆周，父节点居中）
   const leaves = new Map<string, number>();
   const countLeaves = (id: string): number => {
     const ch = children.get(id) ?? [];
@@ -73,25 +74,62 @@ function computeGraphPos(): Record<string, { x: number; y: number }> {
     return n;
   };
   countLeaves(root);
-  const Y_STEP = 44;
-  const spanY = new Map<string, [number, number]>();
-  const assignY = (id: string, y0: number): number => {
+  const A_LEAF = (Math.PI * 2) / leaves.get(root)!;
+  const spanA = new Map<string, [number, number]>();
+  const assignA = (id: string, a0: number): number => {
     const ch = children.get(id) ?? [];
     if (!ch.length) {
-      spanY.set(id, [y0, y0 + Y_STEP]);
-      return y0 + Y_STEP;
+      spanA.set(id, [a0, a0 + A_LEAF]);
+      return a0 + A_LEAF;
     }
-    let cur = y0;
-    for (const c of ch) cur = assignY(c, cur);
-    spanY.set(id, [y0, cur]);
+    let cur = a0;
+    for (const c of ch) cur = assignA(c, cur);
+    spanA.set(id, [a0, cur]);
     return cur;
   };
-  assignY(root, 0);
-  const X_STEP = 152;
-  const pos: Record<string, { x: number; y: number }> = {};
-  for (const [id, d] of depth) {
-    const [y0, y1] = spanY.get(id)!;
-    pos[id] = { x: d * X_STEP, y: (y0 + y1) / 2 };
+  assignA(root, 0);
+  // 环半径逐层递增（外环间距渐缩），深链不再压扁到同一环
+  const RADII = [140, 250, 350, 435, 505, 565, 615];
+  const X_SCALE = 1.32;
+  const angle = new Map<string, number>();
+  for (const id of depth.keys()) {
+    if (id === root) continue;
+    const [a0, a1] = spanA.get(id)!;
+    angle.set(id, (a0 + a1) / 2);
+  }
+  const pos: Record<string, { x: number; y: number }> = {
+    [root]: { x: 0, y: 0 },
+  };
+  for (const id of angle.keys()) {
+    const a = angle.get(id)! - Math.PI / 2;
+    const d = depth.get(id)!;
+    const r = RADII[Math.min(d, RADII.length) - 1];
+    pos[id] = { x: Math.cos(a) * r * X_SCALE, y: Math.sin(a) * r };
+  }
+  // 全局松弛：成对推开重叠的节点框（140×38，与 buildGraph 一致），沿重叠较小的轴分离
+  const RW = 140, RH = 38;
+  const ids2 = Object.keys(pos);
+  for (let iter = 0; iter < 40; iter++) {
+    let moved = false;
+    for (let i = 0; i < ids2.length; i++) {
+      for (let j = i + 1; j < ids2.length; j++) {
+        const a = pos[ids2[i]], b = pos[ids2[j]];
+        const ox = RW - Math.abs(a.x - b.x);
+        const oy = RH - Math.abs(a.y - b.y);
+        if (ox <= 0 || oy <= 0) continue;
+        moved = true;
+        if (ox <= oy) {
+          const s = a.x === b.x ? (ids2[i] < ids2[j] ? 1 : -1) : Math.sign(a.x - b.x);
+          a.x += (s * ox) / 2;
+          b.x -= (s * ox) / 2;
+        } else {
+          const s = a.y === b.y ? (ids2[i] < ids2[j] ? 1 : -1) : Math.sign(a.y - b.y);
+          a.y += (s * oy) / 2;
+          b.y -= (s * oy) / 2;
+        }
+      }
+    }
+    if (!moved) break;
   }
   return pos;
 }
@@ -129,12 +167,13 @@ export class MapPanel {
         h('span', {}, '🟥 你'),
         h('span', {}, '🟩 出口路牌'),
         h('span', {}, '🟨 长老 / 酒肆'),
+        h('span', {}, '🟦 土行孙（传送）'),
         h('span', {}, '⬤ 妖物'),
         h('span', { class: 'map-hint' }, '点击舆图自动寻路 · 蓝为水面 · 深色为建筑'),
       ),
       h('div', { class: 'map-section-title' }, '本境通路'),
       this.exitsEl,
-      h('div', { class: 'map-section-title' }, '四境全图（点节点可寻路到下一程）'),
+      h('div', { class: 'map-section-title' }, '四境全图（以朝歌帝都为中心 · 点节点寻路到下一程）'),
       this.graphEl,
       h('div', { style: 'text-align:right;margin-top:8px' },
         h('button', { class: 'btn small', onclick: () => this.hide() }, '关闭'),
@@ -229,14 +268,16 @@ export class MapPanel {
       const p = pos[m.id];
       if (!p) return '';
       const cur = m.id === this.map.id;
-      const fill = cur ? '#a63d2f' : '#2f4a5c';
+      const center = m.id === 'zhaoge';
+      const fill = cur ? '#a63d2f' : center ? '#7a5426' : '#2f4a5c';
+      const label = center ? `👑 ${m.name}` : m.name;
       return `<g data-map-id="${m.id}" style="cursor:pointer">
-        <rect x="${p.x - 62}" y="${p.y - 17}" width="124" height="34" rx="8" fill="${fill}" stroke="#f0d9a0" stroke-width="${cur ? 2.5 : 1.2}"/>
-        <text x="${p.x}" y="${p.y + 5}" text-anchor="middle" font-size="14" fill="#f7f0dd" font-family="Microsoft YaHei, sans-serif">${m.name}</text>
-        ${cur ? `<text x="${p.x}" y="${p.y + 29}" text-anchor="middle" font-size="11" fill="#a63d2f" font-family="Microsoft YaHei, sans-serif">● 当前所在地</text>` : ''}
+        <rect x="${p.x - 70}" y="${p.y - 19}" width="140" height="38" rx="8" fill="${fill}" stroke="#f0d9a0" stroke-width="${cur ? 3 : center ? 2 : 1.2}"/>
+        <text x="${p.x}" y="${p.y + 6}" text-anchor="middle" font-size="17" fill="#f7f0dd" font-family="Microsoft YaHei, sans-serif">${label}</text>
+        ${cur ? `<text x="${p.x}" y="${p.y + 33}" text-anchor="middle" font-size="13" fill="#a63d2f" font-family="Microsoft YaHei, sans-serif">● 当前所在地</text>` : ''}
       </g>`;
     }).join('');
-    this.graphEl.innerHTML = `<svg viewBox="${minX} ${minY} ${w} ${hh}" style="width:100%;height:auto;max-height:440px;display:block" role="img" aria-label="四境全图">${links.join('')}${nodes}</svg>`;
+    this.graphEl.innerHTML = `<svg viewBox="${minX} ${minY} ${w} ${hh}" style="width:100%;height:auto;max-height:560px;display:block" role="img" aria-label="四境全图">${links.join('')}${nodes}</svg>`;
     this.graphEl.querySelectorAll<SVGGElement>('[data-map-id]').forEach((g) => {
       g.addEventListener('click', () => {
         const id = g.getAttribute('data-map-id')!;
@@ -419,6 +460,7 @@ export class MapPanel {
     }
     if (this.map.npc) this.marker(ctx, this.map.npc, '#e8c56a', 5, this.map.npc.name);
     if (this.map.tavern) this.marker(ctx, this.map.tavern, '#e8c56a', 5, this.map.tavern.name);
+    if (this.map.teleporter) this.marker(ctx, this.map.teleporter, '#4f9ee0', 5, this.map.teleporter.name);
     for (const m of this.hooks.getMonsters()) this.marker(ctx, m, '#c0453a', 3.5);
 
     const target = this.hooks.getTarget();

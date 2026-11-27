@@ -48,6 +48,8 @@ export interface WorldMap {
   npc?: { x: number; y: number; name: string };
   /** 酒馆（雇佣组队同伴），仅主城西岐城有 */
   tavern?: { x: number; y: number; name: string };
+  /** 传送 NPC（土行孙）：靠近即弹出四境传送菜单，可直达任意舆图 */
+  teleporter?: { x: number; y: number; name: string };
   /** 等距构件布局（相对 public/assets/art，例如 `iso/taoyuan.json`）；有值时按构件合成，尺寸仍由 w/h 决定 */
   iso?: { layout: string };
 }
@@ -156,6 +158,7 @@ interface BaseLayout {
   exits: MapExit[];
   npc?: { x: number; y: number; name: string };
   tavern?: { x: number; y: number; name: string };
+  teleporter?: { x: number; y: number; name: string };
 
   // —— 等距构件地图（给出 iso 时启用；尺寸仍由 width/height 决定）——
   /** 世界宽高（像素），省略时按 segments 推导 */
@@ -607,6 +610,7 @@ function expandMap(id: string, base: BaseLayout): WorldMap {
       exits: base.exits.map((e) => ({ ...e })),
       npc: base.npc ? { ...base.npc } : undefined,
       tavern: base.tavern ? { ...base.tavern } : undefined,
+      teleporter: base.teleporter ? { ...base.teleporter } : undefined,
       iso: { ...base.iso },
     };
   }
@@ -626,12 +630,23 @@ function expandMap(id: string, base: BaseLayout): WorldMap {
     spawns, exits,
     npc: base.npc ? { ...base.npc } : undefined,
     tavern: base.tavern ? { ...base.tavern } : undefined,
+    teleporter: base.teleporter ? { ...base.teleporter } : undefined,
   };
 }
 
 export const WORLD_MAPS: Record<string, WorldMap> = Object.fromEntries(
   Object.entries(BASE_MAPS).map(([id, base]) => [id, expandMap(id, base)]),
 );
+
+// 四境每图配一名「土行孙」传送 NPC：等距图默认站在格网中心（渲染时吸附到最近可走格），
+// 横版长卷站中央地带；靠近即弹出传送菜单直达任意舆图
+for (const m of Object.values(WORLD_MAPS)) {
+  if (m.teleporter) continue;
+  const mid = m.iso
+    ? at(m.id, isoGridOf(m.id).cols >> 1, isoGridOf(m.id).rows >> 1)
+    : { x: m.w / 2, y: (m.bounds.minY + m.bounds.maxY) / 2 };
+  m.teleporter = { ...mid, name: '土行孙' };
+}
 
 // ===== 任务链 =====
 

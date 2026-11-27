@@ -173,6 +173,7 @@ export class WorldScreen {
       onEncounter: (group, groupKey) => screen.onEncounter(group, groupKey),
       onNpc: () => screen.openDialogue(),
       onTavern: () => screen.openTavern(),
+      onTeleporter: () => screen.openTeleportMenu(),
       onExit: (exit) => screen.travel(exit),
     });
     screen.refreshHud();
@@ -1126,6 +1127,52 @@ export class WorldScreen {
   }
 
   // ===== 切图 =====
+
+  /** 土行孙传送菜单：靠近传送 NPC 弹出，点选舆图直接遁地前往 */
+  private openTeleportMenu(): void {
+    this.closePanels();
+    this.dialogueEl.innerHTML = '';
+    this.dialogueEl.style.display = '';
+    const panel = h('div', { class: 'quest-body' },
+      h('div', { class: 'quest-title' }, '🜁 土行孙 · 遁地术'),
+      h('div', { class: 'quest-text' }, '「地下四通八达，客官要去哪座山头？说个地名，俺老孙背你钻过去便是。」'),
+    );
+    const grid = h('div', { style: 'display:flex;flex-wrap:wrap;gap:6px;margin:10px 0' });
+    for (const m of Object.values(WORLD_MAPS)) {
+      if (m.id === this.map.id) continue;
+      grid.append(h('button', {
+        class: 'btn small',
+        onclick: () => void this.teleportTo(m.id),
+      }, m.name));
+    }
+    panel.append(grid);
+    this.dialogueEl.append(
+      panel,
+      h('div', { class: 'cmd-row' },
+        h('button', { class: 'btn small', onclick: () => this.closeDialogue() }, '先不走'),
+      ),
+    );
+  }
+
+  /** 直达传送：与 travel 同一套淡入淡出重建流程，落点为该图土行孙身旁（等距图会吸附到可走格） */
+  private async teleportTo(mapId: string): Promise<void> {
+    const target = WORLD_MAPS[mapId];
+    if (!target || mapId === this.map.id) return;
+    this.clearAutoStep();
+    this.closeDialogue();
+    this.teardownWorldUi();
+    await this.fade(true);
+    this.gs.mapId = mapId;
+    const t = target.teleporter;
+    if (t) { this.gs.px = t.x; this.gs.py = t.y; }
+    this.gs.killedGroups = {};
+    saveGame(this.gs);
+    this.renderer?.destroy();
+    this.renderer = null;
+    await WorldScreen.create(this.root, this.gs, this.hooks);
+    this.toast(`土行孙遁地 · 来到 ${target.name}`);
+    await this.fade(false);
+  }
 
   private async travel(exit: MapExit): Promise<void> {
     this.clearAutoStep();
