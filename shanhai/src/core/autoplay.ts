@@ -50,18 +50,23 @@ export function nextAutoAction(gs: GameState, playerPos?: Point): AutoAction {
     return { kind: 'stop', reason: '丹药耗尽，请手动补给' };
   }
 
-  // 2. 未接任务 / 任务可交付 → 回西岐城找姜子牙
+  // 2. 任务链完成即停（不再在城图上无意义刷怪）
+  if (gs.questStep > QUESTS.length) {
+    return { kind: 'stop', reason: '任务链已完成，挂机结束' };
+  }
+
+  // 3. 未接任务 / 任务可交付 → 找司礼长老（西岐姜子牙 / 朝歌比干，出生城即朝歌）
   const needQuest = gs.questStep === 0 || questReady(gs);
   if (needQuest) {
-    if (map.id === 'taoyuan') {
+    if (map.id === 'taoyuan' || map.id === 'zhaoge') {
       const npc = map.npc ?? { x: 920, y: 560 };
       return { kind: 'quest', target: clampToBounds(npc, map.bounds) };
     }
-    const exit = routeExit(map.id, 'taoyuan');
+    const exit = routeExit(map.id, 'taoyuan') ?? routeExit(map.id, 'zhaoge');
     if (exit) return { kind: 'travel', to: exit.to, exit, target: { x: exit.x, y: exit.y } };
   }
 
-  // 3. 当前地图还有未清怪组 → 打离玩家最近的一组
+  // 4. 当前地图还有未清怪组 → 打离玩家最近的一组
   const alive = map.spawns
     .map((spawn, index) => ({ spawn, index }))
     .filter((o) => !gs.killedGroups[`${map.id}:${o.index}`]);
@@ -74,9 +79,7 @@ export function nextAutoAction(gs: GameState, playerPos?: Point): AutoAction {
     };
   }
 
-  // 4. 当前图清空 → 按巡游顺序找下一张有怪的图，BFS 取第一跳出口
-  const allDone = gs.questStep > QUESTS.length;
-  if (allDone) return { kind: 'stop', reason: '任务链已完成，挂机结束' };
+  // 5. 当前图清空 → 按巡游顺序找下一张有怪的图，BFS 取第一跳出口
   const start = Math.max(0, AUTO_ROUTE.indexOf(map.id));
   for (let step = 1; step <= AUTO_ROUTE.length; step++) {
     const goal = AUTO_ROUTE[(start + step) % AUTO_ROUTE.length];

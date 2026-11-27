@@ -1095,6 +1095,9 @@ let petUidSeq = 0;
 
 export function newGame(setup: { classId: string; petId: string; playerName: string }): GameState {
   const first: PetInstance = { uid: `pet_${++petUidSeq}_${Math.random().toString(36).slice(2, 6)}`, defId: setup.petId, level: 1, exp: 0, equipped: {} };
+  // 出生地：朝歌帝都——落在比干身旁的御街（不可走时渲染器会就近吸附到可走格）
+  const zhao = WORLD_MAPS.zhaoge;
+  const zhaoHome = zhao.npc ?? zhao.teleporter!;
   return {
     classId: setup.classId,
     activePetUid: first.uid,
@@ -1112,9 +1115,9 @@ export function newGame(setup: { classId: string; petId: string; playerName: str
     skillLevels: {},
     questStep: 0,
     questKills: 0,
-    mapId: 'taoyuan',
-    px: 3584,
-    py: 784,
+    mapId: 'zhaoge',
+    px: zhaoHome.x,
+    py: zhaoHome.y + 140,
     killedGroups: {},
   };
 }

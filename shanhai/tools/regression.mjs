@@ -721,8 +721,9 @@ test('routeExit：BFS 返回通往目标地图的第一跳', () => {
 test('挂机决策：接任务 → 出城 → 打最近的怪', () => {
   const gs = fresh();
   let a = autoplay.nextAutoAction(gs);
-  eq(a.kind, 'quest', '未接任务先找长老');
+  eq(a.kind, 'quest', '未接任务先找长老（出生城朝歌即司礼所在）');
   world.acceptQuest(gs);
+  gs.mapId = 'taoyuan';
   a = autoplay.nextAutoAction(gs);
   eq(a.kind, 'travel', '接完任务出城');
   eq(a.to, 'wild_heifeng', '第一站黑风岭');
@@ -1030,10 +1031,9 @@ test('云京：128×128 城制样板 / 闭合城墙四门 / 中心鼓楼 / 四�
   ok(iso.findIsoPath(col, layout.grid, { gx: 62, gy: 3 }, { gx: 63, gy: 82 }) !== null,
     '北门可沿环路绕到宫城南侧');
 
-  // 出生点 / NPC / 酒肆 / 路牌都落在可走街面
-  const gs = world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '回归测试' });
-  ok(world.isWalkable(m, gs.px, gs.py), '出生点在 bounds 内（兜底区间）');
-  ok(iso.isoWalkable(col, layout.grid, gs.px, gs.py), '出生点在布局可走格');
+  // 西岐城固定老出生点（出生地已迁至朝歌，见「出生地迁至朝歌」测试）仍落在可走街面
+  ok(world.isWalkable(m, 3584, 784), '西岐老出生点 (3584,784) 在 bounds 内（兜底区间）');
+  ok(iso.isoWalkable(col, layout.grid, 3584, 784), '西岐老出生点在布局可走格');
   ok(iso.isoWalkable(col, layout.grid, m.npc.x, m.npc.y), 'NPC 站位可走');
   ok(iso.isoWalkable(col, layout.grid, m.tavern.x, m.tavern.y), '酒肆站位可走');
   for (const e of m.exits) ok(iso.isoWalkable(col, layout.grid, e.x, e.y), `路牌 ${e.label} 可走`);
@@ -1125,9 +1125,21 @@ test('跨图 BFS 在大地图上仍可达；旧存档坐标仍合法', () => {
     ok(autoplay.routeExit(id, 'taoyuan'), `${id} 能回到云京`);
   }
   ok(autoplay.routeExit('taoyuan', 'wild_heifeng'), '云京能出城');
-  const b = world.WORLD_MAPS.taoyuan.bounds;
   const g = world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '回归测试' });
+  const b = world.WORLD_MAPS[g.mapId].bounds;
   ok(g.px >= b.minX && g.px <= b.maxX && g.py >= b.minY && g.py <= b.maxY, '新档出生点落在可行走区内');
+});
+
+test('出生地迁至朝歌：新档出生在比干身旁的可走御街', () => {
+  const gs = world.newGame({ classId: 'xiake', petId: 'linghu', playerName: '回归测试' });
+  eq(gs.mapId, 'zhaoge', '出生地图为朝歌帝都');
+  const m = world.WORLD_MAPS.zhaoge;
+  const f = path.join(ROOT, 'public/assets/art', 'iso/zhaoge.json');
+  const layout = iso.expandLayout(JSON.parse(readFileSync(f, 'utf8')));
+  const col = iso.buildCollision(layout);
+  ok(world.isWalkable(m, gs.px, gs.py), '出生点在 bounds 内');
+  ok(iso.isoWalkable(col, layout.grid, gs.px, gs.py), '出生点在朝歌布局可走格');
+  ok(Math.hypot(m.npc.x - gs.px, m.npc.y - gs.py) <= 140.5, '出生点在长老（比干）身旁 140px 内');
 });
 
 test('地图原图契约：art/maps/<region>_0.png 为 1440×900 RGBA', () => {
