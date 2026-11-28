@@ -36,6 +36,7 @@ const entry = [
   './src/core/ai.ts', './src/core/rng.ts', './src/core/sim.ts',
   './src/core/audio-map.ts', './src/core/path.ts', './src/core/autoplay.ts',
   './src/core/art.ts', './src/core/iso.ts', './src/core/iso-path.ts',
+  './src/core/map-layout.ts',
 ].map((p, i) => `export * as m${i} from '${p}';`).join('\n');
 
 const bundled = await build({
@@ -44,8 +45,8 @@ const bundled = await build({
 });
 const code = bundled.outputFiles[0].text;
 const mod = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
-const [world, battle, content, types, equipment, skill, ai, rng, sim, audiomap, pathutil, autoplay, art, iso, isopath] =
-  [mod.m0, mod.m1, mod.m2, mod.m3, mod.m4, mod.m5, mod.m6, mod.m7, mod.m8, mod.m9, mod.m10, mod.m11, mod.m12, mod.m13, mod.m14];
+const [world, battle, content, types, equipment, skill, ai, rng, sim, audiomap, pathutil, autoplay, art, iso, isopath, maplayout] =
+  [mod.m0, mod.m1, mod.m2, mod.m3, mod.m4, mod.m5, mod.m6, mod.m7, mod.m8, mod.m9, mod.m10, mod.m11, mod.m12, mod.m13, mod.m14, mod.m15];
 
 // ---- 迷你测试框架 ----
 let passed = 0;
@@ -1848,6 +1849,32 @@ test('modv2 历史出图脚本不再绑定本机绝对路径，依赖与入口�
   }
 });
 
+console.log('\n[19] 舆图放射布局与土行孙传送（朝歌帝都基线）');
+test('全图土行孙传送 NPC：每图一名，名字统一', () => {
+  const maps = Object.values(world.WORLD_MAPS);
+  ok(maps.length >= 30, `三十图齐备（实际 ${maps.length}）`);
+  for (const m of maps) {
+    ok(m.teleporter, `${m.name} 缺土行孙`);
+    eq(m.teleporter?.name, '土行孙', `${m.name} 传送 NPC 名`);
+  }
+});
+test('舆图放射布局：朝歌为心 · 全图覆盖 · 节点无重叠', () => {
+  const pos = maplayout.computeGraphPos();
+  const ids = Object.keys(world.WORLD_MAPS);
+  eq(Object.keys(pos).length, ids.length, '三十图全部入图');
+  for (const id of ids) ok(pos[id], `${id} 缺坐标`);
+  eq(pos.zhaoge?.x, 0, '朝歌居中 x');
+  eq(pos.zhaoge?.y, 0, '朝歌居中 y');
+  // 节点框（140×38）经松弛后两两不重叠
+  const list = Object.entries(pos);
+  for (let i = 0; i < list.length; i++) {
+    for (let j = i + 1; j < list.length; j++) {
+      const [, a] = list[i]; const [, b] = list[j];
+      ok(Math.abs(a.x - b.x) >= 139 || Math.abs(a.y - b.y) >= 37,
+        `节点重叠：${list[i][0]} 与 ${list[j][0]}`);
+    }
+  }
+});
 console.log(`\n=== 结果：${passed} 通过 / ${failures.length} 失败 ===\n`);
 if (failures.length) {
   for (const f of failures) console.error(`  ✗ ${f.name}: ${f.message}`);
