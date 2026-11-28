@@ -183,7 +183,9 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     spawns: [],
     exits: [
       isoExit('taoyuan', 62, 3, 'wild_heifeng', 32, 1, '穿云岭古道'),
+isoExit('taoyuan', 126, 64, 'xidacamp', 48, 70, '西岐大营'),
       isoExit('taoyuan', 62, 126, 'wild_yunmeng', 50, 1, '云梦泽'),
+isoExit('taoyuan', 1, 64, 'panxi', 86, 44, '磻溪'),
     ],
     npc: isoNpc('taoyuan', 32, 32, '姜子牙'),
     tavern: isoNpc('taoyuan', 32, 20, '西岐酒肆掌柜'),
@@ -204,8 +206,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     ],
     exits: [
       isoExit('wild_heifeng', 32, 1, 'taoyuan', 62, 3, '西岐城'),
-      isoExit('wild_heifeng', 1, 62, 'wild_luanzang', 11, 1, '黄泉鬼渡'),
-      isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '骷髅山白骨洞'),
+            isoExit('wild_heifeng', 126, 62, 'wild_shanxiao', 1, 52, '骷髅山白骨洞'),
       isoExit('wild_heifeng', 64, 94, 'wild_kunlun', 60, 1, '昆仑山道'),
     ],
   },
@@ -222,10 +223,8 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('wild_luanzang', 65, 116, ['zhizhu']),
     ],
     exits: [
-      isoExit('wild_luanzang', 11, 1, 'wild_heifeng', 1, 62, '穿云岭古道'),
-      isoExit('wild_luanzang', 73, 126, 'difu', 40, 1, '朝歌 · 鹿台'),
-      isoExit('wild_luanzang', 1, 64, 'jizhou', 86, 52, '冀州'),
-    ],
+            isoExit('wild_luanzang', 73, 126, 'difu', 40, 1, '朝歌 · 鹿台'),
+          ],
   },
   /** 骷髅山白骨洞 104×104：环形洞厅 + 四向放射石阶，只有西口通山道 */
   wild_shanxiao: {
@@ -253,8 +252,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     ],
     exits: [
       isoExit('difu', 40, 1, 'wild_luanzang', 73, 126, '黄泉鬼渡'),
-      isoExit('difu', 40, 110, 'taoyuan', 62, 3, '还阳 · 西岐城'),
-      isoExit('difu', 1, 40, 'zhaoge', 94, 48, '朝歌城'),
+            isoExit('difu', 1, 40, 'zhaoge', 94, 48, '朝歌城'),
     ],
     npc: isoNpc('difu', 40, 72, '妲己'),
   },
@@ -272,10 +270,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     ],
     exits: [
       isoExit('wild_yunmeng', 50, 1, 'taoyuan', 62, 126, '西岐城'),
-      isoExit('wild_yunmeng', 110, 44, 'chentangguan', 1, 36, '陈塘关'),
-      isoExit('wild_yunmeng', 50, 88, 'jinaodao', 52, 1, '金鳌岛碧游宫'),
-      isoExit('wild_yunmeng', 1, 44, 'panxi', 86, 44, '磻溪'),
-    ],
+                      ],
   },
   /** 昆仑山道 120×88：仙阶之字上山，北口通穿云岭、东口通玉虚宫；截教妖修伏道 */
   wild_kunlun: {
@@ -309,8 +304,9 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     iso: { layout: 'iso/chentangguan.json' },
     spawns: [],
     exits: [
-      isoExit('chentangguan', 1, 36, 'wild_yunmeng', 110, 44, '云梦泽'),
+      isoExit('chentangguan', 1, 36, 'zhaixinglou', 70, 52, '摘星楼'),
       isoExit('chentangguan', 86, 36, 'qianyuan', 1, 36, '乾元山金光洞'),
+isoExit('chentangguan', 44, 70, 'jinaodao', 52, 1, '金鳌岛碧游宫'),
     ],
     npc: isoNpc('chentangguan', 52, 32, '李靖'),
   },
@@ -334,7 +330,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('jinaodao', 48, 68, ['shanxiao', 'jiaotu']),
     ],
   exits: [
-    isoExit('jinaodao', 52, 1, 'wild_yunmeng', 50, 88, '云梦泽'),
+    isoExit('jinaodao', 52, 1, 'chentangguan', 44, 70, '陈塘关'),
     isoExit('jinaodao', 102, 44, 'sanxiandao', 1, 36, '三仙岛'),
   ],
     npc: isoNpc('jinaodao', 52, 38, '通天教主'),
@@ -345,10 +341,11 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     iso: { layout: 'iso/zhaoge.json' },
     spawns: [],
     exits: [
-      isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台'),
       isoExit('zhaoge', 48, 1, 'nvwagong', 44, 86, '女娲宫'),
-      isoExit('zhaoge', 1, 30, 'sishuiguan', 94, 44, '汜水关'),
-      isoExit('zhaoge', 20, 1, 'mianchi', 44, 94, '渑池县'),
+      isoExit('zhaoge', 20, 1, 'jizhou', 86, 52, '冀州'),
+      isoExit('zhaoge', 94, 48, 'difu', 1, 40, '朝歌 · 鹿台'),
+      isoExit('zhaoge', 94, 70, 'zhaixinglou', 1, 48, '摘星楼'),
+      isoExit('zhaoge', 1, 30, 'mianchi', 102, 48, '渑池县'),
     ],
     npc: isoNpc('zhaoge', 48, 44, '比干'),
   },
@@ -369,8 +366,9 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     iso: { layout: 'iso/xidacamp.json' },
     spawns: [],
     exits: [
-      isoExit('xidacamp', 1, 44, 'fengmingshan', 78, 40, '凤鸣山'),
-      isoExit('xidacamp', 48, 1, 'jiepaiguan', 44, 78, '界牌关'),
+  isoExit('xidacamp', 48, 1, 'jiepaiguan', 44, 78, '界牌关'),
+  isoExit('xidacamp', 48, 70, 'taoyuan', 126, 64, '西岐城'),
+  isoExit('xidacamp', 1, 44, 'fengmingshan', 78, 40, '凤鸣山'),
     ],
     npc: isoNpc('xidacamp', 48, 40, '南宫适'),
   },
@@ -388,18 +386,14 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     exits: [
       isoExit('jiepaiguan', 44, 78, 'xidacamp', 48, 1, '西岐大营'),
       isoExit('jiepaiguan', 44, 1, 'lintongguan', 40, 98, '临潼关'),
-      isoExit('jiepaiguan', 1, 44, 'yanshan', 78, 44, '燕山'),
-    ],
+          ],
   },
   /** 燕山 80×88：栈道悬崖安全图，雷震子候命 */
   yanshan: {
     name: '燕山', scene: 'yanshan',
     iso: { layout: 'iso/yanshan.json' },
     spawns: [],
-    exits: [
-      isoExit('yanshan', 78, 44, 'jiepaiguan', 1, 44, '界牌关'),
-      isoExit('yanshan', 40, 1, 'zhongnanshan', 44, 102, '终南山'),
-    ],
+    exits: [isoExit('yanshan', 1, 44, 'jizhou', 1, 52, '冀州')],
     npc: isoNpc('yanshan', 40, 44, '雷震子'),
   },
   /** 终南山 96×104：云中子洞府，安全图 */
@@ -407,7 +401,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     name: '终南山', scene: 'zhongnanshan',
     iso: { layout: 'iso/zhongnanshan.json' },
     spawns: [],
-    exits: [isoExit('zhongnanshan', 44, 102, 'yanshan', 40, 1, '燕山')],
+    exits: [isoExit('zhongnanshan', 44, 102, 'panxi', 44, 94, '磻溪')],
     npc: isoNpc('zhongnanshan', 48, 44, '云中子'),
   },
   /** 临潼关 80×88：五关次镇，纵贯关道 */
@@ -439,8 +433,8 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     ],
     exits: [
       isoExit('chuanyunguan', 44, 102, 'lintongguan', 40, 1, '临潼关'),
-      isoExit('chuanyunguan', 44, 1, 'mianchi', 44, 94, '渑池县'),
-    ],
+isoExit('chuanyunguan', 86, 52, 'sishuiguan', 1, 44, '汜水关'),
+          ],
   },
   /** 渑池县 104×96：五关最后一城，妖氛最重 */
   mianchi: {
@@ -455,16 +449,20 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('mianchi', 72, 72, ['jiaotu', 'kulou']),
     ],
     exits: [
-      isoExit('mianchi', 44, 94, 'chuanyunguan', 44, 1, '穿云关'),
-      isoExit('mianchi', 44, 1, 'zhaoge', 20, 1, '朝歌城'),
-    ],
+      isoExit('mianchi', 1, 44, 'sishuiguan', 94, 44, '汜水关'),
+  isoExit('mianchi', 102, 48, 'zhaoge', 1, 30, '朝歌城'),
+          ],
   },
   /** 冀州 96×104：妲己故里，安全图，苏护坐镇侯府 */
   jizhou: {
     name: '冀州', scene: 'jizhou',
     iso: { layout: 'iso/jizhou.json' },
     spawns: [],
-    exits: [isoExit('jizhou', 86, 52, 'wild_luanzang', 1, 64, '黄泉鬼渡')],
+      exits: [
+    isoExit('jizhou', 44, 1, 'beihai', 56, 78, '北海'),
+    isoExit('jizhou', 86, 52, 'zhaoge', 20, 1, '朝歌城'),
+    isoExit('jizhou', 1, 52, 'yanshan', 1, 44, '燕山'),
+  ],
     npc: isoNpc('jizhou', 48, 44, '苏护'),
   },
   /** 梅山 104×72：七怪山寨，袁洪称尊 */
@@ -512,7 +510,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('beihai', 82, 50, ['jiaotu', 'heixiong']),
       isoSpawn('beihai', 52, 64, ['kulou', 'zhizhu']),
     ],
-    exits: [isoExit('beihai', 56, 78, 'juelongling', 60, 1, '绝龙岭')],
+    exits: [isoExit('beihai', 56, 78, 'jizhou', 44, 1, '冀州')],
   },
   /** 摘星楼 72×96：纣王亲守高台 */
   zhaixinglou: {
@@ -523,7 +521,10 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('zhaixinglou', 30, 62, ['jiaotu']),
       isoSpawn('zhaixinglou', 36, 26, ['zhouwang']),
     ],
-    exits: [isoExit('zhaixinglou', 1, 48, 'nvwagong', 86, 44, '女娲宫')],
+    exits: [
+      isoExit('zhaixinglou', 1, 48, 'zhaoge', 94, 70, '朝歌城'),
+      isoExit('zhaixinglou', 70, 52, 'chentangguan', 1, 36, '陈塘关'),
+    ],
   },
   /** 女娲宫 88×88：朝歌圣庙，安全图，女娲娘娘坐镇娲皇大殿 */
   nvwagong: {
@@ -532,8 +533,7 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     spawns: [],
     exits: [
       isoExit('nvwagong', 44, 86, 'zhaoge', 48, 1, '朝歌城'),
-      isoExit('nvwagong', 86, 44, 'zhaixinglou', 1, 48, '摘星楼'),
-    ],
+          ],
     npc: isoNpc('nvwagong', 44, 40, '女娲娘娘'),
   },
   /** 汜水关 96×88：关隘重地，妖兵列阵，西通绝龙岭 */
@@ -549,8 +549,9 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('sishuiguan', 72, 66, ['jiaotu', 'heixiong']),
     ],
     exits: [
-      isoExit('sishuiguan', 94, 44, 'zhaoge', 1, 30, '朝歌城'),
-      isoExit('sishuiguan', 1, 44, 'juelongling', 118, 52, '绝龙岭'),
+  isoExit('sishuiguan', 94, 44, 'mianchi', 1, 44, '渑池县'),
+  isoExit('sishuiguan', 1, 44, 'chuanyunguan', 86, 52, '穿云关'),
+  isoExit('sishuiguan', 48, 1, 'juelongling', 118, 52, '绝龙岭'),
     ],
   },
   /** 磻溪 88×96：渭水钓台安全图，武吉守着子牙先生当年的钓竿 */
@@ -559,8 +560,9 @@ const BASE_MAPS: Record<string, BaseLayout> = {
     iso: { layout: 'iso/panxi.json' },
     spawns: [],
     exits: [
-      isoExit('panxi', 86, 44, 'wild_yunmeng', 1, 44, '云梦泽'),
+      isoExit('panxi', 86, 44, 'taoyuan', 1, 64, '西岐城'),
       isoExit('panxi', 44, 1, 'fengmingshan', 40, 78, '凤鸣山'),
+isoExit('panxi', 44, 94, 'zhongnanshan', 44, 102, '终南山'),
     ],
     npc: isoNpc('panxi', 56, 40, '武吉'),
   },
@@ -576,9 +578,8 @@ const BASE_MAPS: Record<string, BaseLayout> = {
       isoSpawn('juelongling', 20, 52, ['wenzhong']),
     ],
     exits: [
-      isoExit('juelongling', 118, 52, 'sishuiguan', 1, 44, '汜水关'),
-      isoExit('juelongling', 60, 1, 'beihai', 56, 78, '北海'),
-    ],
+      isoExit('juelongling', 118, 52, 'sishuiguan', 48, 1, '汜水关'),
+          ],
   },
 };
 
@@ -1123,7 +1124,7 @@ export function saveGame(gs: GameState): void {
   } catch {
     // 隐私模式等场景下静默失败
   }
-}
+  }
 
 export function loadGame(): GameState | null {
   try {
@@ -1157,7 +1158,7 @@ export function loadGame(): GameState | null {
   } catch {
     return null;
   }
-}
+  }
 
 export function clearSave(): void {
   try {
@@ -1165,7 +1166,7 @@ export function clearSave(): void {
   } catch {
     // ignore
   }
-}
+  }
 
 // ===== 奖励与掉落 =====
 

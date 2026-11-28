@@ -71,7 +71,6 @@ const THEMES = [
       ],
       exits: [
         { gx: 32, gy: 1, to: 'taoyuan', toGx: 62, toGy: 3, label: '西岐城' },
-        { gx: 1, gy: 62, to: 'wild_luanzang', toGx: 11, toGy: 1, label: '黄泉鬼渡' },
         { gx: 126, gy: 62, to: 'wild_shanxiao', toGx: 1, toGy: 52, label: '骷髅山白骨洞' },
         { gx: 64, gy: 94, to: 'wild_kunlun', toGx: 60, toGy: 1, label: '昆仑山道' },
       ],
@@ -129,9 +128,7 @@ const THEMES = [
         { gx: 65, gy: 116, group: ['zhizhu'] },
       ],
       exits: [
-        { gx: 11, gy: 1, to: 'wild_heifeng', toGx: 1, toGy: 62, label: '穿云岭古道' },
         { gx: 73, gy: 126, to: 'difu', toGx: 40, toGy: 1, label: '朝歌 · 鹿台' },
-        { gx: 1, gy: 64, to: 'jizhou', toGx: 86, toGy: 52, label: '冀州' },
       ],
     },
     build(c) {
@@ -265,7 +262,6 @@ const THEMES = [
       spawns: [{ gx: 40, gy: 90, group: ['daji'] }],
       exits: [
         { gx: 40, gy: 1, to: 'wild_luanzang', toGx: 73, toGy: 126, label: '黄泉鬼渡' },
-        { gx: 40, gy: 110, to: 'taoyuan', toGx: 62, toGy: 3, label: '还阳 · 西岐城' },
         { gx: 1, gy: 40, to: 'zhaoge', toGx: 94, toGy: 48, label: '朝歌城' },
       ],
       npc: { gx: 40, gy: 72, name: '妲己' },
@@ -317,9 +313,6 @@ const THEMES = [
       ],
       exits: [
         { gx: 50, gy: 1, to: 'taoyuan', toGx: 62, toGy: 126, label: '西岐城' },
-        { gx: 110, gy: 44, to: 'chentangguan', toGx: 1, toGy: 36, label: '陈塘关' },
-        { gx: 50, gy: 88, to: 'jinaodao', toGx: 52, toGy: 1, label: '金鳌岛碧游宫' },
-        { gx: 1, gy: 44, to: 'panxi', toGx: 86, toGy: 44, label: '磻溪' },
       ],
     },
     build(c) {
@@ -441,8 +434,9 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 1, gy: 36, to: 'wild_yunmeng', toGx: 110, toGy: 44, label: '云梦泽' },
+        { gx: 1, gy: 36, to: 'zhaixinglou', toGx: 70, toGy: 52, label: '摘星楼' },
         { gx: 86, gy: 36, to: 'qianyuan', toGx: 1, toGy: 36, label: '乾元山金光洞' },
+        { gx: 44, gy: 70, to: 'jinaodao', toGx: 52, toGy: 1, label: '金鳌岛碧游宫' },
       ],
       npc: { gx: 52, gy: 32, name: '李靖' },
     },
@@ -452,6 +446,7 @@ const THEMES = [
       waterLine([[0, 64], [24, 62], [52, 66], [87, 62]], 10);
       // 横街：西关口 → 十里横街 → 东关厢
       line([[1, 36], [86, 36]], 6, 'ground_dirt');
+      line([[44, 58], [44, 70]], 4, 'ground_dirt');
       // 纵街：北门校场 → 横街 → 码头前街
       line([[44, 4], [44, 58]], 5, 'ground_dirt');
       line([[60, 36], [66, 56]], 4, 'ground_dirt');
@@ -517,7 +512,7 @@ const THEMES = [
         { gx: 48, gy: 68, group: ['shanxiao', 'jiaotu'] },
       ],
       exits: [
-        { gx: 52, gy: 1, to: 'wild_yunmeng', toGx: 50, toGy: 88, label: '云梦泽' },
+        { gx: 52, gy: 1, to: 'chentangguan', toGx: 44, toGy: 70, label: '陈塘关' },
         { gx: 102, gy: 44, to: 'sanxiandao', toGx: 1, toGy: 36, label: '三仙岛' },
       ],
       npc: { gx: 52, gy: 38, name: '通天教主' },
@@ -555,19 +550,13 @@ const THEMES = [
     decoDensity: 0.030, lampStep: 10,
     deco: [['rock', 0.30], ['fence', 0.24], ['tree', 0.18], ['stele', 0.14], ['lantern_post', 0.14]],
     anchors: {
-      spawns: [
-        { gx: 28, gy: 24, group: ['jiaotu', 'kulou'] },
-        { gx: 66, gy: 22, group: ['kulou', 'kulou'] },
-        { gx: 22, gy: 52, group: ['zhizhu'] },
-        { gx: 72, gy: 54, group: ['jiaotu'] },
-        { gx: 40, gy: 74, group: ['jiaotu', 'heixiong'] },
-        { gx: 66, gy: 78, group: ['kulou', 'zhizhu'] },
-      ],
+      spawns: [],
       exits: [
-        { gx: 94, gy: 48, to: 'difu', toGx: 1, toGy: 40, label: '朝歌 · 鹿台' },
         { gx: 48, gy: 1, to: 'nvwagong', toGx: 44, toGy: 86, label: '女娲宫' },
-        { gx: 1, gy: 30, to: 'sishuiguan', toGx: 94, toGy: 44, label: '汜水关' },
-        { gx: 20, gy: 1, to: 'mianchi', toGx: 44, toGy: 94, label: '渑池县' },
+        { gx: 20, gy: 1, to: 'jizhou', toGx: 86, toGy: 52, label: '冀州' },
+        { gx: 94, gy: 48, to: 'difu', toGx: 1, toGy: 40, label: '朝歌 · 鹿台' },
+        { gx: 94, gy: 70, to: 'zhaixinglou', toGx: 1, toGy: 48, label: '摘星楼' },
+        { gx: 1, gy: 30, to: 'mianchi', toGx: 102, toGy: 48, label: '渑池县' },
       ],
       npc: { gx: 48, gy: 44, name: '比干' },
     },
@@ -581,8 +570,10 @@ const THEMES = [
       line([[64, 30], [48, 1]], 5, 'ground_dirt');
       // 西支路：西北坊市西出西口，通汜水关
       line([[14, 30], [1, 30]], 5, 'ground_dirt');
-      // 西北支路：坊市北上北口偏西，通渑池县
+      // 西北支路：坊市北上北口偏西，通冀州
       line([[14, 30], [20, 1]], 5, 'ground_dirt');
+      // 东南支路：东门南下东南口，通摘星楼
+      line([[94, 48], [94, 70]], 5, 'ground_dirt');
       // 鹿台宫城平台 + 大殿
       rect(52, 36, 20, 16, (x, y) => markR(x, y, 'ground_stone'));
       placeNear('hall', 56, 26, 7, 6);
@@ -606,7 +597,6 @@ const THEMES = [
       spawns: [],
       exits: [
         { gx: 44, gy: 86, to: 'zhaoge', toGx: 48, toGy: 1, label: '朝歌城' },
-        { gx: 86, gy: 44, to: 'zhaixinglou', toGx: 1, toGy: 48, label: '摘星楼' },
       ],
       npc: { gx: 44, gy: 40, name: '女娲娘娘' },
     },
@@ -650,14 +640,16 @@ const THEMES = [
         { gx: 72, gy: 66, group: ['jiaotu', 'heixiong'] },
       ],
       exits: [
-        { gx: 94, gy: 44, to: 'zhaoge', toGx: 1, toGy: 30, label: '朝歌城' },
-        { gx: 1, gy: 44, to: 'juelongling', toGx: 118, toGy: 52, label: '绝龙岭' },
+        { gx: 94, gy: 44, to: 'mianchi', toGx: 1, toGy: 44, label: '渑池县' },
+        { gx: 1, gy: 44, to: 'chuanyunguan', toGx: 86, toGy: 52, label: '穿云关' },
+        { gx: 48, gy: 1, to: 'juelongling', toGx: 118, toGy: 52, label: '绝龙岭' },
       ],
     },
     build(c) {
       const { line, rect, markR, prop, placeNear } = c;
-      // 关道横贯东西：东口 → 关楼广场 → 西口
+      // 关道横贯东西：东口 → 关楼广场 → 西口；北支路：关楼北上，通绝龙岭
       line([[94, 44], [1, 44]], 7, 'ground_stone');
+      line([[48, 44], [48, 1]], 5, 'ground_stone');
       rect(38, 36, 20, 16, (x, y) => markR(x, y, 'ground_stone'));
       // 关楼居中（一夫当关）+ 两侧城墙段
       placeNear('hall', 44, 30, 7, 6);
@@ -690,8 +682,9 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 86, gy: 44, to: 'wild_yunmeng', toGx: 1, toGy: 44, label: '云梦泽' },
+        { gx: 86, gy: 44, to: 'taoyuan', toGx: 1, toGy: 64, label: '西岐城' },
         { gx: 44, gy: 1, to: 'fengmingshan', toGx: 40, toGy: 78, label: '凤鸣山' },
+        { gx: 44, gy: 94, to: 'zhongnanshan', toGx: 44, toGy: 102, label: '终南山' },
       ],
       npc: { gx: 56, gy: 40, name: '武吉' },
     },
@@ -699,9 +692,10 @@ const THEMES = [
       const { waterLine, line, rect, markR, prop, placeNear, tryProp } = c;
       // 渭水一湾：斜贯西南的溪流
       waterLine([[0, 70], [24, 60], [52, 66], [87, 58]], 9);
-      // 东口 → 溪畔小径 → 钓台坪；北支路：钓台北上，通凤鸣山
+      // 东口 → 溪畔小径 → 钓台坪；北支路：钓台北上，通凤鸣山；南支路：跨溪南渡，通终南山
       line([[86, 44], [56, 40], [40, 52]], 5, 'ground_dirt');
       line([[56, 40], [44, 1]], 5, 'ground_dirt');
+      line([[40, 52], [44, 94]], 5, 'ground_dirt');
       rect(34, 48, 14, 10, (x, y) => markR(x, y, 'ground_stone'));
       // 直钩钓台（临水石台）+ 茅屋柴扉 + 溪畔草堂
       prop('bridge', 36, 60, 3, 5);
@@ -740,15 +734,13 @@ const THEMES = [
         { gx: 20, gy: 52, group: ['wenzhong'] },
       ],
       exits: [
-        { gx: 118, gy: 52, to: 'sishuiguan', toGx: 1, toGy: 44, label: '汜水关' },
-        { gx: 60, gy: 1, to: 'beihai', toGx: 56, toGy: 78, label: '北海' },
+        { gx: 118, gy: 52, to: 'sishuiguan', toGx: 48, toGy: 1, label: '汜水关' },
       ],
     },
     build(c) {
       const { line, rect, markR, prop, placeNear, setT } = c;
-      // 东口 → 岭脊干道 → 深谷场坪（太师结阵处）；北支路：岭脊北上，通北海
+      // 东口 → 岭脊干道 → 深谷场坪（太师结阵处）
       line([[118, 52], [76, 52]], 6, 'ground_dirt');
-      line([[76, 52], [60, 1]], 5, 'ground_dirt');
       line([[76, 52], [60, 36], [44, 52]], 5, 'ground_dirt');
       line([[44, 52], [30, 52]], 6, 'ground_stone');
       rect(16, 42, 26, 20, (x, y) => markR(x, y, 'ground_stone'));
@@ -809,15 +801,17 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 1, gy: 44, to: 'fengmingshan', toGx: 78, toGy: 40, label: '凤鸣山' },
         { gx: 48, gy: 1, to: 'jiepaiguan', toGx: 44, toGy: 78, label: '界牌关' },
+        { gx: 48, gy: 70, to: 'taoyuan', toGx: 126, toGy: 64, label: '西岐城' },
+        { gx: 1, gy: 44, to: 'fengmingshan', toGx: 78, toGy: 40, label: '凤鸣山' },
       ],
       npc: { gx: 48, gy: 40, name: '南宫适' },
     },
     build(c) {
       const { line, rect, markR, prop, placeNear, tryProp } = c;
-      // 西口 → 营内主道 → 北口
+      // 西口 → 营内主道 → 北口；南支路：中军帐南出，通西岐城东门
       line([[1, 44], [48, 44], [48, 1]], 6, 'ground_dirt');
+      line([[48, 44], [48, 70]], 5, 'ground_dirt');
       // 校场与中军帐
       rect(30, 34, 36, 20, (x, y) => markR(x, y, 'ground_stone'));
       placeNear('hall', 40, 28, 7, 6);
@@ -849,7 +843,6 @@ const THEMES = [
       exits: [
         { gx: 44, gy: 78, to: 'xidacamp', toGx: 48, toGy: 1, label: '西岐大营' },
         { gx: 44, gy: 1, to: 'lintongguan', toGx: 40, toGy: 98, label: '临潼关' },
-        { gx: 1, gy: 44, to: 'yanshan', toGx: 78, toGy: 44, label: '燕山' },
       ],
     },
     build(c) {
@@ -884,15 +877,15 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 78, gy: 44, to: 'jiepaiguan', toGx: 1, toGy: 44, label: '界牌关' },
-        { gx: 40, gy: 1, to: 'zhongnanshan', toGx: 44, toGy: 102, label: '终南山' },
+        { gx: 1, gy: 44, to: 'jizhou', toGx: 1, toGy: 52, label: '冀州' },
       ],
       npc: { gx: 40, gy: 44, name: '雷震子' },
     },
     build(c) {
       const { line, rect, markR, prop, placeNear, setT } = c;
-      // 东口 → 栈道 → 山腰平台 → 北口
-      line([[78, 44], [40, 44], [40, 1]], 5, 'ground_dirt');
+      // 西口 → 栈道 → 山腰平台
+      line([[78, 44], [40, 44], [40, 20]], 5, 'ground_dirt');
+      line([[40, 44], [1, 44]], 5, 'ground_dirt');
       rect(32, 38, 18, 12, (x, y) => markR(x, y, 'ground_stone'));
       // 悬崖（东缘断崖水带意象）
       setT(74, 30, 'ground_water');
@@ -917,7 +910,7 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 44, gy: 102, to: 'yanshan', toGx: 40, toGy: 1, label: '燕山' },
+        { gx: 44, gy: 102, to: 'panxi', toGx: 44, toGy: 94, label: '磻溪' },
       ],
       npc: { gx: 48, gy: 44, name: '云中子' },
     },
@@ -994,7 +987,7 @@ const THEMES = [
       ],
       exits: [
         { gx: 44, gy: 102, to: 'lintongguan', toGx: 40, toGy: 1, label: '临潼关' },
-        { gx: 44, gy: 1, to: 'mianchi', toGx: 44, toGy: 94, label: '渑池县' },
+        { gx: 86, gy: 52, to: 'sishuiguan', toGx: 1, toGy: 44, label: '汜水关' },
       ],
     },
     build(c) {
@@ -1002,8 +995,9 @@ const THEMES = [
       // 云雾带（浅水意象横贯中部，关道穿雾而上）
       for (let gy = 22; gy < 38; gy++) for (let gx = 0; gx < 16; gx++) setT(gx, gy, 'ground_water');
       for (let gy = 24; gy < 36; gy++) for (let gx = 72; gx < 88; gx++) setT(gx, gy, 'ground_water');
-      // 纵贯关道
+      // 纵贯关道；东支路：关城东出，通汜水关
       line([[44, 102], [44, 1]], 6, 'ground_stone');
+      line([[44, 52], [86, 52]], 5, 'ground_stone');
       rect(32, 42, 26, 16, (x, y) => markR(x, y, 'ground_stone'));
       placeNear('hall', 36, 34, 7, 6);
       for (const w of [
@@ -1037,14 +1031,16 @@ const THEMES = [
         { gx: 72, gy: 72, group: ['jiaotu', 'kulou'] },
       ],
       exits: [
-        { gx: 44, gy: 94, to: 'chuanyunguan', toGx: 44, toGy: 1, label: '穿云关' },
-        { gx: 44, gy: 1, to: 'zhaoge', toGx: 20, toGy: 1, label: '朝歌城' },
+        { gx: 1, gy: 44, to: 'sishuiguan', toGx: 94, toGy: 44, label: '汜水关' },
+        { gx: 102, gy: 48, to: 'zhaoge', toGx: 1, toGy: 30, label: '朝歌城' },
       ],
     },
     build(c) {
       const { line, rect, markR, prop, placeNear } = c;
-      // 纵贯官道：南口 → 县城广场 → 北口
+      // 纵贯官道：南口 → 县城广场 → 北口；东官道：县城东出，直通朝歌城
       line([[44, 94], [44, 1]], 6, 'ground_stone');
+      line([[44, 48], [1, 44]], 5, 'ground_stone');
+      line([[44, 48], [102, 48]], 5, 'ground_stone');
       rect(32, 40, 28, 18, (x, y) => markR(x, y, 'ground_stone'));
       // 张奎行辕（守将府邸）
       placeNear('hall', 38, 32, 7, 6);
@@ -1076,16 +1072,20 @@ const THEMES = [
     anchors: {
       spawns: [],
       exits: [
-        { gx: 86, gy: 52, to: 'wild_luanzang', toGx: 1, toGy: 64, label: '黄泉鬼渡' },
+        { gx: 44, gy: 1, to: 'beihai', toGx: 56, toGy: 78, label: '北海' },
+        { gx: 86, gy: 52, to: 'zhaoge', toGx: 20, toGy: 1, label: '朝歌城' },
+        { gx: 1, gy: 52, to: 'yanshan', toGx: 1, toGy: 44, label: '燕山' },
       ],
       npc: { gx: 48, gy: 44, name: '苏护' },
     },
     build(c) {
       const { line, rect, markR, prop, placeNear } = c;
-      // 东口 → 十字街 → 侯府
+      // 东口 → 十字街 → 侯府；北支路：十字街北出，通北海；西支路：西出通燕山
       line([[86, 52], [48, 52], [48, 20]], 6, 'ground_dirt');
       line([[48, 52], [48, 96]], 5, 'ground_dirt');
       line([[48, 52], [16, 52]], 5, 'ground_dirt');
+      line([[48, 20], [44, 1]], 5, 'ground_dirt');
+      line([[16, 52], [1, 52]], 5, 'ground_dirt');
       rect(40, 36, 22, 16, (x, y) => markR(x, y, 'ground_stone'));
       // 冀州侯府
       placeNear('hall', 42, 24, 7, 6);
@@ -1220,7 +1220,7 @@ const THEMES = [
         { gx: 52, gy: 64, group: ['kulou', 'zhizhu'] },
       ],
       exits: [
-        { gx: 56, gy: 78, to: 'juelongling', toGx: 60, toGy: 1, label: '绝龙岭' },
+        { gx: 56, gy: 78, to: 'jizhou', toGx: 44, toGy: 1, label: '冀州' },
       ],
     },
     build(c) {
@@ -1255,7 +1255,8 @@ const THEMES = [
         { gx: 36, gy: 26, group: ['zhouwang'] },
       ],
       exits: [
-        { gx: 1, gy: 48, to: 'nvwagong', toGx: 86, toGy: 44, label: '女娲宫' },
+        { gx: 1, gy: 48, to: 'zhaoge', toGx: 94, toGy: 70, label: '朝歌城' },
+        { gx: 70, gy: 52, to: 'chentangguan', toGx: 1, toGy: 36, label: '陈塘关' },
       ],
     },
     build(c) {

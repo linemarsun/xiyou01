@@ -715,7 +715,7 @@ test('routeExit：BFS 返回通往目标地图的第一跳', () => {
   const direct = autoplay.routeExit('taoyuan', 'wild_heifeng');
   eq(direct?.to, 'wild_heifeng', '直达');
   const multi = autoplay.routeExit('wild_luanzang', 'wild_shanxiao');
-  eq(multi?.to, 'wild_heifeng', '乱葬岗→山魈岭需先经黑风岭');
+  eq(multi?.to, 'difu', '黄泉鬼渡→骷髅山需先经朝歌·鹿台');
   eq(autoplay.AUTO_ROUTE.length, 4, '巡游路线四张图');
 });
 
@@ -1468,7 +1468,6 @@ test('新世界观命名与 NPC 对话到位', () => {
   eq(world.WORLD_MAPS.jinaodao.name, '金鳌岛碧游宫', '金鳌岛');
   eq(world.WORLD_MAPS.zhaoge.name, '朝歌城', '朝歌城');
   eq(world.WORLD_MAPS.qianyuan.name, '乾元山金光洞', '乾元山');
-  eq(world.WORLD_MAPS.jinaodao.name, '金鳌岛碧游宫', '金鳌岛');
   eq(world.WORLD_MAPS.zhaoge.npc?.name, '比干', '朝歌城 NPC');
   eq(world.WORLD_MAPS.qianyuan.npc?.name, '太乙真人', '乾元山 NPC');
   eq(world.WORLD_MAPS.jinaodao.npc?.name, '通天教主', '金鳌岛 NPC');
@@ -1482,18 +1481,23 @@ test('新世界观命名与 NPC 对话到位', () => {
   ok(world.WORLD_MAPS.juelongling.spawns.some((s) => s.group.includes('wenzhong')), '绝龙岭刷新闻太师');
   ok(content.ENCOUNTERS.some((e) => e.id === 'juelong'), '绝龙遭遇战注册');
   ok(world.WORLD_MAPS.zhaoge.exits.some((e) => e.to === 'nvwagong'), '朝歌城新增女娲宫口');
-  ok(world.WORLD_MAPS.zhaoge.exits.some((e) => e.to === 'sishuiguan'), '朝歌城新增汜水关口');
-  ok(world.WORLD_MAPS.wild_yunmeng.exits.some((e) => e.to === 'panxi'), '云梦泽新增磻溪口');
+  ok(world.WORLD_MAPS.chuanyunguan.exits.some((e) => e.to === 'sishuiguan'), '穿云关东通汜水关');
+  ok(world.WORLD_MAPS.sishuiguan.exits.some((e) => e.to === 'mianchi'), '汜水关东通渑池县');
+  ok(world.WORLD_MAPS.taoyuan.exits.some((e) => e.to === 'xidacamp'), '西岐城东通西岐大营');
+  ok(world.WORLD_MAPS.xidacamp.exits.some((e) => e.to === 'taoyuan'), '西岐大营南通西岐城');
+  ok(world.WORLD_MAPS.beihai.exits.some((e) => e.to === 'jizhou'), '北海南通冀州');
+  ok(world.WORLD_MAPS.panxi.exits.some((e) => e.to === 'zhongnanshan'), '磻溪南通终南山');
+  ok(world.WORLD_MAPS.taoyuan.exits.some((e) => e.to === 'panxi'), '西岐城西通磻溪');
   eq(world.WORLD_MAPS.zhaoge.npc?.name, '比干', '朝歌城 NPC');
   ok(world.WORLD_MAPS.jinaodao.spawns.some((s) => s.group.includes('jiaotu')), '金鳌岛刷新妖修');
   eq(world.WORLD_MAPS.zhaoge.spawns.length, 0, '朝歌城为安全城，不刷妖物');
   ok(world.WORLD_MAPS.chentangguan.exits.some((e) => e.to === 'qianyuan'), '陈塘关新增乾元山口');
-  ok(world.WORLD_MAPS.wild_yunmeng.exits.some((e) => e.to === 'jinaodao'), '云梦泽新增金鳌岛口');
+  ok(world.WORLD_MAPS.chentangguan.exits.some((e) => e.to === 'jinaodao'), '陈塘关南通金鳌岛');
   ok(world.WORLD_MAPS.difu.exits.some((e) => e.to === 'zhaoge'), '鹿台新增朝歌城口');
   ok(world.WORLD_MAPS.wild_kunlun.spawns.some((s) => s.group.includes('jiaotu')), '昆仑山道刷新截教妖修');
   eq(content.MONSTERS.jiaotu.name, '截教妖修', '截教妖修');
   ok(world.WORLD_MAPS.wild_heifeng.exits.some((e) => e.to === 'wild_kunlun'), '穿云岭新增昆仑口');
-  ok(world.WORLD_MAPS.wild_yunmeng.exits.some((e) => e.to === 'chentangguan'), '云梦泽新增陈塘口');
+  ok(world.WORLD_MAPS.chentangguan.exits.some((e) => e.to === 'zhaixinglou'), '陈塘关西通摘星楼');
   ok(world.WORLD_MAPS.difu.spawns.some((s) => s.group.includes('daji')), '鹿台刷新妲己');
   ok(world.WORLD_MAPS.wild_yunmeng.spawns.some((s) => s.group.includes('shuiyao')), '云梦泽刷新蛟妖');
   eq(content.PETS.length, 5, '五宠齐全');
@@ -1556,8 +1560,8 @@ test('青崖山道主题构件齐全，怪组与出口按格网锚定', () => {
   ok(n('stele') >= 5 && n('lantern_post') >= 5, '石碑与灯柱点景');
   const heifeng = world.WORLD_MAPS.wild_heifeng;
   ok(heifeng.spawns.length >= 8, `怪组 ${heifeng.spawns.length} 组沿栈道铺开`);
-  eq(heifeng.exits.length, 4, '四个边界出口');
-  for (const src of ['wild_luanzang', 'wild_shanxiao']) {
+  eq(heifeng.exits.length, 3, '三个边界出口（北帝都 / 东梅山线 / 南昆仑）');
+  for (const src of ['wild_shanxiao', 'wild_kunlun']) {
     const back = world.WORLD_MAPS[src].exits.find((e) => e.to === 'wild_heifeng');
     ok(back && back.toX >= heifeng.bounds.minX && back.toX <= heifeng.bounds.maxX,
       `${src} 回山道落点在等距界内`);
@@ -1574,7 +1578,7 @@ test('山道怪组、出口与跨图落点都落在碰撞层可走格', () => {
   for (const e of m.exits) ok(walkable(e.x, e.y), `出口 (${e.x},${e.y}) 可走`);
   const entries = [
     world.WORLD_MAPS.taoyuan.exits[0],
-    ...['wild_luanzang', 'wild_shanxiao'].map((id) => world.WORLD_MAPS[id].exits.find((e) => e.to === 'wild_heifeng')),
+    ...['wild_shanxiao', 'wild_kunlun'].map((id) => world.WORLD_MAPS[id].exits.find((e) => e.to === 'wild_heifeng')),
   ];
   for (const e of entries) {
     ok(e && walkable(e.toX, e.toY), `入山道落点 (${e?.toX},${e?.toY}) 可走`);
