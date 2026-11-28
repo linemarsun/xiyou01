@@ -715,7 +715,7 @@ test('routeExit：BFS 返回通往目标地图的第一跳', () => {
   const direct = autoplay.routeExit('taoyuan', 'wild_heifeng');
   eq(direct?.to, 'wild_heifeng', '直达');
   const multi = autoplay.routeExit('wild_luanzang', 'wild_shanxiao');
-  eq(multi?.to, 'difu', '黄泉鬼渡→骷髅山需先经朝歌·鹿台');
+  eq(multi?.to, 'wild_shanxiao', '黄泉鬼渡西通骷髅山');
   eq(autoplay.AUTO_ROUTE.length, 4, '巡游路线四张图');
 });
 
@@ -1560,7 +1560,7 @@ test('青崖山道主题构件齐全，怪组与出口按格网锚定', () => {
   ok(n('stele') >= 5 && n('lantern_post') >= 5, '石碑与灯柱点景');
   const heifeng = world.WORLD_MAPS.wild_heifeng;
   ok(heifeng.spawns.length >= 8, `怪组 ${heifeng.spawns.length} 组沿栈道铺开`);
-  eq(heifeng.exits.length, 3, '三个边界出口（北帝都 / 东梅山线 / 南昆仑）');
+  eq(heifeng.exits.length, 4, '四个边界出口（北帝都 / 东梅山 / 南昆仑 / 西凤鸣山）');
   for (const src of ['wild_shanxiao', 'wild_kunlun']) {
     const back = world.WORLD_MAPS[src].exits.find((e) => e.to === 'wild_heifeng');
     ok(back && back.toX >= heifeng.bounds.minX && back.toX <= heifeng.bounds.maxX,
