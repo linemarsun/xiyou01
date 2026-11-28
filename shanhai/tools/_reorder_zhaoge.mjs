@@ -1,4 +1,3 @@
-/** zhaoge 出口按罗盘序重排（北女娲宫→西北冀州→东鹿台→东南摘星楼→西渑池） */
 import { readFileSync, writeFileSync } from 'node:fs';
 const p = new URL('../src/core/world.ts', import.meta.url);
 let s = readFileSync(p, 'utf8');
