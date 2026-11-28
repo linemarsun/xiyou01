@@ -141,19 +141,92 @@ export class MapPanel {
     const minY = Math.min(...ys) - pad;
     const w = Math.max(...xs) + pad - minX;
     const hh = Math.max(...ys) + pad - minY;
-    const links: string[] = [];
+    const ids = Object.keys(pos);
+    // —— 去重边（与旧逻辑一致） ——
+    const edges: Array<{ a: string; b: string }> = [];
     const drawn = new Set<string>();
     for (const m of Object.values(WORLD_MAPS)) {
-      const a = pos[m.id];
       for (const e of m.exits) {
-        const b = pos[e.to];
-        if (!a || !b || !WORLD_MAPS[e.to]) continue;
+        if (!pos[e.to] || !WORLD_MAPS[e.to]) continue;
         const k = [m.id, e.to].sort().join('|');
         if (drawn.has(k)) continue;
         drawn.add(k);
-        links.push(`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#c8ab6a" stroke-width="2" stroke-dasharray="5 4" opacity="0.8"/>`);
+        edges.push({ a: m.id, b: e.to });
       }
     }
+    // —— 几何工具：线段相交 / 节点框（140×38）命中 ——
+    type Pt = { x: number; y: number };
+    const segInt = (u1: Pt, u2: Pt, v1: Pt, v2: Pt): boolean => {
+      const d = (u2.x - u1.x) * (v2.y - v1.y) - (u2.y - u1.y) * (v2.x - v1.x);
+      if (d === 0) return false;
+      const t = ((v1.x - u1.x) * (v2.y - v1.y) - (v1.y - u1.y) * (v2.x - v1.x)) / d;
+      const u = ((v1.x - u1.x) * (u2.y - u1.y) - (v1.y - u1.y) * (u2.x - u1.x)) / d;
+      return t > 0.001 && t < 0.999 && u > 0.001 && u < 0.999;
+    };
+    const segHitsBox = (p1: Pt, p2: Pt, cx: number, cy: number): boolean => {
+      const minx = cx - 70, maxx = cx + 70, miny = cy - 19, maxy = cy + 19;
+      if (p1.x >= minx && p1.x <= maxx && p1.y >= miny && p1.y <= maxy) return true;
+      if (p2.x >= minx && p2.x <= maxx && p2.y >= miny && p2.y <= maxy) return true;
+      const c1 = { x: minx, y: miny }, c2 = { x: maxx, y: miny };
+      const c3 = { x: maxx, y: maxy }, c4 = { x: minx, y: maxy };
+      return segInt(p1, p2, c1, c2) || segInt(p1, p2, c2, c3) || segInt(p1, p2, c3, c4) || segInt(p1, p2, c4, c1);
+    };
+    /** 折线与其他边直连段的交叉数 / 与无关节点框的命中数（端点双方的框不算） */
+    const scorePoly = (poly: Pt[], ea: string, eb: string): { cross: number; box: number } => {
+      let cross = 0, box = 0;
+      for (let i = 0; i < poly.length - 1; i++) {
+        const p1 = poly[i], p2 = poly[i + 1];
+        for (const o of edges) {
+          if ((o.a === ea && o.b === eb) || (o.a === eb && o.b === ea)) continue;
+          if (o.a === ea || o.b === ea || o.a === eb || o.b === eb) continue;
+          if (segInt(p1, p2, pos[o.a], pos[o.b])) cross++;
+        }
+        for (const id of ids) {
+          if (id === ea || id === eb) continue;
+          if (segHitsBox(p1, p2, pos[id].x, pos[id].y)) box++;
+        }
+      }
+      return { cross, box };
+    };
+    /** 二次贝塞尔采样折线 */
+    const bezier = (a: Pt, ctrl: Pt, b: Pt): Pt[] => {
+      const pts: Pt[] = [];
+      for (let i = 0; i <= 36; i++) {
+        const t = i / 36, mt = 1 - t;
+        pts.push({
+          x: mt * mt * a.x + 2 * mt * t * ctrl.x + t * t * b.x,
+          y: mt * mt * a.y + 2 * mt * t * ctrl.y + t * t * b.y,
+        });
+      }
+      return pts;
+    };
+    // —— 先统计每条直连边的交叉 / 穿框，再对重灾区尝试绕行候选（直连 / ±150 / ±260） ——
+    const base = edges.map(({ a, b }) => scorePoly([pos[a], pos[b]], a, b));
+    const links: string[] = [];
+    edges.forEach(({ a, b }, idx) => {
+      const pa = pos[a], pb = pos[b];
+      const { cross, box } = base[idx];
+      let best = { score: 3 * box + cross, ctrl: null as Pt | null };
+      if (box >= 1 || cross >= 3) {
+        const dx = pb.x - pa.x, dy = pb.y - pa.y;
+        const len = Math.hypot(dx, dy) || 1;
+        const px = -dy / len, py = dx / len;
+        const mid = { x: (pa.x + pb.x) / 2, y: (pa.y + pb.y) / 2 };
+        for (const K of [150, 260, 500]) {
+          for (const s of [1, -1]) {
+            const ctrl = { x: mid.x + px * s * K, y: mid.y + py * s * K };
+            const r = scorePoly(bezier(pa, ctrl, pb), a, b);
+            const sc = 3 * r.box + r.cross + K / 520;
+            if (sc < best.score) best = { score: sc, ctrl };
+          }
+        }
+      }
+      if (best.ctrl) {
+        links.push(`<path d="M ${pa.x} ${pa.y} Q ${best.ctrl.x} ${best.ctrl.y} ${pb.x} ${pb.y}" fill="none" stroke="#c8ab6a" stroke-width="2" stroke-dasharray="5 4" opacity="0.8"/>`);
+      } else {
+        links.push(`<line x1="${pa.x}" y1="${pa.y}" x2="${pb.x}" y2="${pb.y}" stroke="#c8ab6a" stroke-width="2" stroke-dasharray="5 4" opacity="0.8"/>`);
+      }
+    });
     const nodes = Object.values(WORLD_MAPS).map((m) => {
       const p = pos[m.id];
       if (!p) return '';

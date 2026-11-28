@@ -563,11 +563,11 @@ npc: { gx: 46, gy: 34, name: '太乙真人' },
   {
     id: 'zhaoge', name: '朝歌城', seed: 20261133,
     cols: 96, rows: 96,
-    base: 'ground_dirt', signature: 'occupied-capital',
+    base: 'ground_grass', signature: 'occupied-capital',
     tagline: '商都妖城 · 鹿台宫阙 · 酒池肉林坊市',
     treeVariant: 'dead', rockVariant: 'dark', bridgeVariant: 'dark',
-    decoDensity: 0.030, lampStep: 10,
-    deco: [['rock', 0.30], ['fence', 0.24], ['tree', 0.18], ['stele', 0.14], ['lantern_post', 0.14]],
+    decoDensity: 0.026, lampStep: 8,
+    deco: [['tree', 0.34], ['rock', 0.28], ['fence', 0.14], ['stele', 0.10], ['lantern_post', 0.14]],
     anchors: {
       spawns: [],
       exits: [
@@ -580,25 +580,109 @@ npc: { gx: 46, gy: 34, name: '太乙真人' },
       npc: { gx: 48, gy: 44, name: '比干' },
     },
     build(c) {
-      const { line, rect, markR, prop, placeNear } = c;
-      // 东口 → 环城干道 → 宫城横街 → 西北坊市
-      line([[94, 48], [64, 48], [64, 30], [40, 30]], 6, 'ground_dirt');
-      line([[64, 48], [64, 66], [36, 74], [14, 74]], 5, 'ground_dirt');
-      line([[40, 30], [14, 30]], 5, 'ground_dirt');
-      // 北支路：宫城东北上出北口，通女娲宫
-      line([[64, 30], [48, 1]], 5, 'ground_dirt');
-      // 西支路：西北坊市西出西口，通汜水关
-      line([[14, 30], [1, 30]], 5, 'ground_dirt');
-      // 西北支路：坊市北上北口偏西，通冀州
-      line([[14, 30], [20, 1]], 5, 'ground_dirt');
-      // 东南支路：东门南下东南口，通摘星楼
-      line([[94, 48], [94, 70]], 5, 'ground_dirt');
-      // 鹿台宫城平台 + 大殿
-      rect(52, 36, 20, 16, (x, y) => markR(x, y, 'ground_stone'));
-      placeNear('hall', 56, 26, 7, 6);
-      // 城门牌坊 + 坊市栅栏 + 酒池碑
-      placeNear('paifang', 88, 44, 3, 3);
-      for (const [type, gx, gy] of [['stele', 40, 40], ['stele', 60, 56], ['crate', 20, 34], ['crate', 26, 66], ['well', 46, 62]]) {
+      const { line, rect, setT, prop, tryProp, placeNear } = c;
+
+      // ===== 路网（石板御街；建筑一律走 tryProp/placeNear 自动避让路面与预留区） =====
+      // 北环城路（冀州门 ⇄ 主门 ⇄ 东环）
+      line([[16, 10], [80, 10]], 5, 'ground_stone');
+      // 主门御街（北主门 → 环城路）与冀州门街
+      line([[48, 1], [48, 10]], 6, 'ground_stone');
+      line([[20, 1], [20, 10]], 5, 'ground_stone');
+      // 东环（北环 → 东门横街）
+      line([[80, 10], [80, 48]], 5, 'ground_stone');
+      // 东门横街（鹿台门 → 西竖街）与西门街（渑池门）
+      line([[94, 48], [28, 48]], 6, 'ground_stone');
+      line([[1, 30], [28, 30]], 5, 'ground_stone');
+      line([[28, 30], [28, 62]], 5, 'ground_stone');
+      // 御街（宫城正门 → 比干 → 南坊 → 摘星楼街口）与摘星楼街
+      line([[48, 38], [48, 70]], 6, 'ground_stone');
+      line([[94, 70], [48, 70]], 5, 'ground_stone');
+      // 南坊：横坊街 + 双竖巷
+      line([[28, 62], [72, 62]], 4, 'ground_stone');
+      line([[36, 62], [36, 84]], 3, 'ground_stone');
+      line([[60, 62], [60, 84]], 3, 'ground_stone');
+
+      // ===== 城墙环（西岐城制式：2 厚墙带 + 四角台 + 五座门楼，券洞与街道逐格对齐） =====
+      const fillU = (gy, gaps) => {
+        for (let x = 6; x < 90;) {
+          const g = gaps.find(([a, b]) => x <= b && x + 5 >= a);
+          if (g) { x = g[1] + 1; continue; }
+          if (x + 6 <= 90) { prop('city_wall_u6', x, gy, 6, 2); x += 6; }
+          else { prop('city_wall_u2', x, gy, 2, 2); x += 2; }
+        }
+      };
+      const fillV = (gx, gaps) => {
+        for (let y = 6; y < 90;) {
+          const g = gaps.find(([a, b]) => y <= b && y + 5 >= a);
+          if (g) { y = g[1] + 1; continue; }
+          if (y + 6 <= 90) { prop('city_wall_v6', gx, y, 2, 6); y += 6; }
+          else { prop('city_wall_v2', gx, y, 2, 2); y += 2; }
+        }
+      };
+      fillU(4, [[14, 25], [42, 53]]);
+      fillU(90, []);
+      fillV(4, [[24, 35]]);
+      fillV(90, [[42, 53], [66, 75]]);
+      prop('city_wall_corner', 4, 4, 2, 2);
+      prop('city_wall_corner', 90, 4, 2, 2);
+      prop('city_wall_corner', 4, 90, 2, 2);
+      prop('city_wall_corner', 90, 90, 2, 2);
+      // 五门：N 主门/次门（sw 原版）、W 门与 E 主门（se 镜像）、E 次门（v 向宽门楼）
+      prop('gate_keep', 42, 4, 12, 6, { facing: 'sw' });
+      prop('gate_keep', 14, 4, 12, 6, { facing: 'sw' });
+      prop('gate_keep', 4, 24, 6, 12, { facing: 'se' });
+      prop('gate_keep', 86, 42, 6, 12, { facing: 'se' });
+      prop('city_gate_wide_v', 89, 66, 3, 10);
+
+      // ===== 鹿台宫城（北城中央）：宫墙环 + 汉白玉广场 + 太和殿式主殿 + 双配殿 + 白塔 =====
+      rect(36, 18, 26, 20, (x, y) => setT(x, y, 'ground_marble'));
+      for (let x = 36; x < 62; x += 6) prop('palace_wall_u6', x, 16, 6, 2);
+      prop('palace_wall_u2', 60, 16, 2, 2);
+      prop('palace_wall_u6', 36, 38, 6, 2);
+      prop('palace_wall_u2', 42, 38, 2, 2);
+      prop('palace_wall_u2', 44, 38, 2, 2);
+      prop('palace_wall_u6', 50, 38, 6, 2);
+      prop('palace_wall_u6', 56, 38, 6, 2);
+      for (const gx of [34, 62]) {
+        for (let y = 18; y < 38; y += 6) prop('palace_wall_v6', gx, y, 2, 6);
+        prop('palace_wall_v2', gx, 36, 2, 2);
+      }
+      prop('palace_corner', 34, 16, 2, 2);
+      prop('palace_corner', 62, 16, 2, 2);
+      prop('palace_corner', 34, 38, 2, 2);
+      prop('palace_corner', 62, 38, 2, 2);
+      prop('palace_gate', 46, 38, 4, 2, { facing: 'sw' });
+      prop('palace_hall', 43, 20, 10, 10);
+      prop('palace_hall_s', 36, 26, 4, 4);
+      prop('palace_hall_s', 55, 26, 4, 4);
+      prop('pagoda', 57, 18, 3, 3);
+
+      // ===== 鼓楼与两翼大殿 =====
+      tryProp('bell_tower', 66, 38, 7, 7);
+      placeNear('hall', 24, 14, 5, 5);
+      placeNear('hall', 78, 58, 5, 5, { variant: 'stone' });
+
+      // ===== 四坊民居（西岐城 9×9 合院，坊市左右各成组团） =====
+      placeNear('house', 8, 14, 9, 9, { variant: 'lattice', facing: 'sw' });
+      placeNear('house', 18, 14, 9, 9, { variant: 'wood', facing: 'se' });
+      placeNear('house', 66, 14, 9, 9, { variant: 'carved', facing: 'sw' });
+      placeNear('house', 66, 24, 9, 9, { variant: 'lattice', facing: 'se' });
+      placeNear('house', 8, 42, 9, 9, { variant: 'wood', facing: 'sw' });
+      placeNear('house', 8, 50, 9, 9, { variant: 'lattice', facing: 'se' });
+      placeNear('house', 8, 68, 9, 9, { variant: 'wood', facing: 'sw' });
+      placeNear('house', 18, 78, 9, 9, { variant: 'carved', facing: 'sw' });
+      placeNear('house', 66, 76, 9, 9, { variant: 'lattice', facing: 'se' });
+      placeNear('house', 76, 54, 9, 9, { variant: 'wood', facing: 'se' });
+
+      // ===== 南坊市：酒池石桥 + 坊门 + 摊贩货箱 + 酒池碑 =====
+      rect(42, 53, 8, 5, (x, y) => setT(x, y, 'ground_water'));
+      prop('bridge', 44, 53, 3, 5, { variant: 'dark' });
+      tryProp('paifang', 39, 52, 3, 3, { facing: 'sw' });
+      tryProp('paifang', 52, 64, 3, 3, { facing: 'sw' });
+      for (const [gx, gy] of [[38, 58], [52, 58], [38, 64], [52, 64], [64, 64], [68, 64]]) {
+        tryProp('stall', gx, gy, 2, 2);
+      }
+      for (const [type, gx, gy] of [['stele', 41, 52], ['stele', 50, 52], ['crate', 50, 58], ['crate', 52, 52], ['crate', 64, 66], ['crate', 68, 66], ['well', 55, 55], ['stele', 64, 74], ['stele', 32, 66]]) {
         placeNear(type, gx, gy, 1, type === 'stele' ? 2 : 1);
       }
     },

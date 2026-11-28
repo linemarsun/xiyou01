@@ -1879,6 +1879,26 @@ test('舆图放射布局：朝歌为心 · 全图覆盖 · 节点无重叠', () 
     }
   }
 });
+test('舆图罗盘基线：五关走廊西东向 · 冀州东北 · 北海其北 · 东海线东南 · 阴间绕东', () => {
+  const pos = maplayout.computeGraphPos();
+  // 五关走廊自西向东（v0.27.0 设计基线）：西岐城→西岐大营→界牌关→临潼关→穿云关→汜水关→渑池县→朝歌城
+  const xs = ['taoyuan', 'xidacamp', 'jiepaiguan', 'lintongguan', 'chuanyunguan', 'sishuiguan', 'mianchi']
+    .map((id) => pos[id]?.x ?? NaN);
+  for (let i = 0; i < xs.length - 1; i++) ok(xs[i] <= xs[i + 1], `五关走廊第 ${i + 1} 段未自西向东`);
+  ok(xs[0] < xs[xs.length - 1], '走廊西端未在西、东端未在东');
+  ok(xs.every((x) => x < 0), '走廊整体在西半幅');
+  ok(pos.panxi.x < pos.taoyuan.x, '磻溪在西岐城西侧');
+  ok(pos.wild_yunmeng.y > pos.taoyuan.y, '云梦泽在西岐城南郊');
+  ok(pos.jizhou.x > 0 && pos.jizhou.y < 0, '冀州居东北');
+  ok(pos.beihai.y < pos.jizhou.y, '北海在冀州正北');
+  ok(pos.yanshan.x < pos.jizhou.x, '燕山在冀州西线');
+  ok(pos.nvwagong.y < 0, '女娲宫居朝歌北');
+  ok(pos.difu.x > 0, '朝歌·鹿台居东');
+  ok(pos.chentangguan.x > 0 && pos.chentangguan.y > 0, '陈塘关居东南');
+  ok(pos.jinaodao.y > pos.chentangguan.y, '金鳌岛在陈塘关南（东海线）');
+  ok(pos.sanxiandao.x > pos.jinaodao.x, '三仙岛在金鳌岛东侧');
+  ok(pos.wild_luanzang.x > 0 && pos.juelongling.x > pos.wild_luanzang.x, '阴间线（黄泉鬼渡—绝龙岭）绕东');
+});
 console.log(`\n=== 结果：${passed} 通过 / ${failures.length} 失败 ===\n`);
 if (failures.length) {
   for (const f of failures) console.error(`  ✗ ${f.name}: ${f.message}`);

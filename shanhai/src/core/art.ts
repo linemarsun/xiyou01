@@ -223,8 +223,8 @@ export function isoModuleCandidates(type: string, variant?: string, facing?: str
  */
 const HOUSE_BACK_FACINGS = new Set(['ne', 'nw']);
 
-/** 西岐城（taoyuan）照搬主线云京城：9×9 合院民居专用贴图（581×520，正房+倒座+院落整套） */
-const HOUSE_9X9_MAPS = new Set(['taoyuan']);
+/** 西岐城（taoyuan）与朝歌城（zhaoge）：9×9 合院民居专用贴图（581×520，正房+倒座+院落整套） */
+const HOUSE_9X9_MAPS = new Set(['taoyuan', 'zhaoge']);
 
 export function isoHouseCandidates(facing?: string, variant?: string, mapId?: string): string[] {
   const f = facing ?? 'sw';
